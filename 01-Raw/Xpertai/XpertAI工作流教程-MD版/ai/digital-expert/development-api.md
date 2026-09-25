@@ -1,0 +1,246 @@
+---
+title: Development SDK
+keywords:
+- XpertAI
+- AI-Agent
+- documentation
+state:
+  phase: raw
+  time_raw: '2026-05-08T00:00:00'
+  time_draft: '2026-09-23T00:53:35'
+  time_wiki: '2026-09-23T00:50:32'
+source_url: AI生成
+source_type: article
+source_platform: xpertai
+author: XpertAI
+fetch_date: '2026-05-08'
+priority: 3
+language: zh
+notes: XpertAI官方文档
+author_id: ''
+publish_date: ''
+---
+# Development SDK
+
+> 此文档为原始素材，请勿直接修改。编译后的知识请移步 `02-Draft/` 目录。
+
+## 原文内容
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Development SDK
+
+Digital Xpert provides a set of APIs and an [SDK](https://github.com/xpert-ai/xpertai-sdk) for developers to interact with Xpert intelligent agents. These APIs allow you to create custom applications to communicate with Digital Xpert's intelligent agents.
+
+The Xpert agent interface follows the [Agent Protocol](https://langchain-ai.github.io/agent-protocol/api.html) standard, which is a protocol for communication between agents. The Agent Protocol provides a universal way for agents to exchange messages, facilitating interoperability between agents.
+
+* First, create a Key for authentication to access the Xpert intelligent agent program.
+
+<img src="https://mintcdn.com/xpertai/KjFE_c3zPYs4Z9GJ/public/img/ai/xpert-develop-key.png?fit=max&auto=format&n=KjFE_c3zPYs4Z9GJ&q=85&s=513cbf93b3a340cb4141963f750dee51" alt="Develop key" width="2894" height="1614" data-path="public/img/ai/xpert-develop-key.png" />
+
+* Use the Key to access the Xpert intelligent agent's REST APIs or use the [LangGraph SDK](https://docs.langchain.com/langgraph-platform/sdk) to access the XpertAI platform.
+
+## Using the LangGraph SDK to Call the XpertAI Platform
+
+The XpertAI intelligent agent platform can be interacted with via the [LangGraph SDK](https://docs.langchain.com/langgraph-platform/sdk) (`@langchain/langgraph-sdk` (JS/TS SDK) / langgraph-sdk Python SDK). This SDK encapsulates the core capabilities for communicating with the LangGraph REST API, making it easy to manage core components such as assistants, threads, runs, and persistent storage (store).
+
+<Info>
+  Reference code: [XpertAI SDK Examples](https://github.com/xpert-ai/xpertai-sdk)
+</Info>
+
+### 1. Installation
+
+Ensure that the Node.js environment is installed, then install the SDK in your project:
+
+```bash theme={null}
+# Install with pnpm
+pnpm add @langchain/langgraph-sdk
+# Or install with npm
+npm install @langchain/langgraph-sdk
+```
+
+By default, the SDK connects to `http://localhost:8123` (e.g., when started locally with `langgraph-cli`). Otherwise, you need to specify the API URL or `apiKey` during configuration ([npm][1]).
+
+### 2. Initialize the Client
+
+In JavaScript/TypeScript, you can create a `Client` instance as follows:
+
+```ts theme={null}
+import { Client } from "@langchain/langgraph-sdk";
+
+const client = new Client({
+  apiUrl: "https://api.xpertai.cn/api/ai/", // Your baseUrl of XpertAI server.
+  apiKey: "your-api-key", // API Key of xpert
+})
+```
+
+If not explicitly configured, the SDK will connect to `http://localhost:8123` by default ([npm][2]).
+
+### 3. Managing Digital Xperts (Agents)
+
+#### List Existing Digital Xperts
+
+```ts theme={null}
+import { Client, Assistant } from "@langchain/langgraph-sdk";
+
+// List all xperts
+const xperts: Assistant[] = await client.assistants.search({
+  metadata: null,
+  offset: 0,
+  limit: 10,
+})
+console.log("Experts:", xperts);
+```
+
+Each Digital Xpert is an assistant ([npm][2], [LangGraph][3]).
+
+#### Retrieve a Single Digital Xpert
+
+```ts theme={null}
+const xpert = await client.assistants.get(xpertId);
+```
+
+### 4. Creating and Managing Threads
+
+#### Create a New Thread (Empty State)
+
+```ts theme={null}
+const thread = await client.threads.create(); // Or pass threadId, metadata, etc., as initialization parameters
+console.log("New Thread:", thread);
+```
+
+In the example, it returns properties such as `thread_id`, `status`, etc. ([LangGraph][4]).
+
+#### Pre-fill State
+
+```ts theme={null}
+const threadWithState = await client.threads.create({
+  threadId: "xxxxxxx",
+  ifExists: 'raise'
+});
+```
+
+This allows you to inject a thread ID during creation ([LangGraph][4]).
+
+#### Query Thread List & Retrieve State
+
+```ts theme={null}
+const list = await client.threads.search({ limit: 10, offset: 0 });
+const singleThread = await client.threads.get(thread.thread_id);
+const history = await client.threads.getHistory(thread.thread_id, { limit: 50 });
+```
+
+### 5. Starting Runs
+
+You can initiate a run for a specific Digital Xpert within a thread, including support for streaming responses.
+
+#### Start a Streaming Run
+
+```ts theme={null}
+const stream = client.runs.stream(thread.thread_id, assistant.assistant_id, {
+  input: { 
+    input: "Tell me a joke.", // more parameters 
+  },
+});
+for await (const chunk of streamResponse) {
+  const data = (<{ type: 'message', data: string | {type: 'text' | string; text?: string; data?: any} }>chunk.data)
+  // Output text messages only
+  if (data.type === 'message') {
+    if (typeof data.data === 'string') {
+      process.stdout.write(data.data)
+    } else if (data.data.type === 'text') {
+      process.stdout.write(data.data.text ?? '')
+    } else {
+      // console.log(`Component:`, data.data);
+    }
+  }
+}
+```
+
+This allows processing responses as they are generated, suitable for interactive scenarios ([npm][2]).
+
+#### Other Run Operation Examples
+
+```ts theme={null}
+const run = await client.runs.create(thread.thread_id, assistant.assistant_id, { input: { ... } });
+const result = await client.runs.join(thread.thread_id, run.run_id);
+await client.runs.cancel(thread.thread_id, run.run_id);
+const runsList = await client.runs.list(thread.thread_id, { limit: 10 });
+```
+
+### 6. Using Store (Persistent Storage)
+
+Store data that needs to be saved across requests in sessions or tasks.
+
+```ts theme={null}
+// Write
+await client.store.putItem([xpert_id], "key1", { value: 42 });
+
+// Read
+const item = await client.store.getItem([xpert_id], "key1");
+
+// List namespaces
+const namespaces = await client.store.listNamespaces({
+  prefix: [xpert_id],
+  maxDepth: 2,
+  limit: 10
+});
+
+// Search
+const found = await client.store.searchItems({ namespacePrefix: "my", query: "42" });
+```
+
+Detailed interfaces are defined in `StoreClient` ([LangGraph][3]).
+
+### 7. XpertAI Platform Integration Tips
+
+* **Configure Default API Address and Key**: The API address must be explicitly specified, and the key can be configured uniformly using the environment variable `LANGGRAPH_API_KEY`.
+* **Stream Output to Frontend**: Suitable for React and other frontends, you can use the SDK's streaming capabilities to build real-time conversational interfaces.
+* **Persistent Memory**: Use the Store feature to save key session data, enhancing the agent's memory capabilities.
+
+[1]: https://www.npmjs.com/package/%40langchain/langgraph-sdk "@langchain/langgraph-sdk - npm"
+
+[2]: https://www.npmjs.com/package/%40langchain/langgraph-sdk "@langchain/langgraph-sdk - npm"
+
+[3]: https://langgraph.com.cn/cloud/reference/sdk/js_ts_sdk_ref/index.html "SDK (JS/TS) - LangChain Framework"
+
+[4]: https://github.langchain.ac.cn/langgraph/cloud/how-tos/use_threads/ "Threads - LangChain Framework"
+
+[5]: https://github.langchain.ac.cn/langgraph/cloud/reference/sdk/js_ts_sdk_ref/ "Js ts sdk ref - LangChain Framework"
+
+## References
+
+* [Agent Protocol](https://langchain-ai.github.io/agent-protocol/api.html)
+* [Agent Protocol: Interoperability for LLM agents](https://blog.langchain.dev/agent-protocol-interoperability-for-llm-agents/)
+
+## More Information
+
+The SDK is still being improved. If you encounter any issues or have suggestions, please add WeChat: xpertai to contact us for technical discussions.
+
+
+## 核心摘录
+
+（在这里记录你阅读时的重点摘录）
+
+## 个人解读
+
+（在这里写下你的理解和思考）
+
+## 待验证点
+
+（记录文章中需要查证的信息）
+
+## 关联问题
+
+- 这个概念和其他知识有什么联系？
+- 这个观点和我的已有认知是否冲突？
+
+---
+
+## 抓取备注
+
+- 抓取时间：2026-05-08
+- 抓取工具：手动导入
+- 质量评分：

@@ -1,0 +1,284 @@
+---
+title: API
+source: XpertAI 官方文档
+related: []
+keywords:
+- XpertAI
+state:
+  phase: wiki
+  time_raw: '2026-07-01T12:42:24'
+  time_draft: '2026-07-01T12:42:24'
+  time_wiki: '2026-07-01T12:42:24'
+sources:
+- Xpertai/XpertAI工作流教程-MD版/ai/knowledge-base/api.md
+---
+# API
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# API
+
+This tutorial will provide a detailed guide on how to use the XperAI platform's Knowledgebase API to create a knowledgebase, upload files, and process documents.
+
+<Info>
+  Reference code: [XpertAI SDK Example](https://github.com/xpert-ai/xpertai-sdk)
+</Info>
+
+## Preparation
+
+Before making API calls, you need to prepare the following credentials and information, which can be configured in an environment variables file (`XPERTAI_API_URL` and `XPERTAI_API_KEY`):
+
+```javascript theme={null}
+const apiUrl = process.env.XPERTAI_API_URL; // XperAI API base URL
+const apiKey = process.env.XPERTAI_API_KEY; // Your API key
+const workspaceId = "your_workspace_id_here"; // Workspace ID
+const copilotId = "your_copilot_id_here"; // Copilot ID
+// const integrationId = 'your_integration_id_here' // Integration ID (required only for external knowledgebase)
+```
+
+### How to Obtain These Credentials
+
+1. **API\_URL and API\_KEY**
+   * Log in to the XperAI platform's Digital Expert or Knowledgebase.
+   * Navigate to the "Settings" -> "API Keys" page.
+   * Generate or copy your API key.
+   * The API base URL is typically `https://api.xpertai.cn/api/ai/`.
+
+2. **Workspace ID**
+   * In the XperAI console, access your workspace.
+   * The workspace ID can be found in the browser's address bar.
+   * The format is typically a UUID (e.g., `23f2b2ff-9318-43b6-a986-928fcf70d4ea`).
+
+3. **Copilot ID**
+   * In the XperAI settings page, go to the "AI Copilot" section.
+   * Select the copilot you want to associate.
+   * The ID can be found on the copilot provider icon.
+   * The format is typically a UUID (e.g., `9ff28c7c-3e63-4ced-b855-2782d79a21b3`).
+
+4. **Knowledgebase System Integration ID** (optional, required only for external knowledgebase)
+   * If you are using an external knowledgebase integration, find this ID in the integration settings.
+
+## Install Required Dependencies
+
+```bash theme={null}
+npm install axios dotenv form-data fs
+```
+
+## API Call Steps
+
+### 1. Create a Knowledgebase
+
+First, we need to create a knowledgebase container:
+
+```javascript theme={null}
+async function createKnowledgebase() {
+  const knowledgebase = {
+    workspaceId, // Workspace ID obtained from the console
+    name: "Customer service knowledgebase",
+    description: "Customer service knowledgebase",
+    permission: "organization",
+    type: "standard",
+    recall: {
+      topK: 10,
+      score: 0.5,
+    },
+    copilotModel: {
+      copilotId, // Copilot ID obtained from the console
+      modelType: "text-embedding",
+      model: "text-embedding-v4", // Select the appropriate embedding model
+    },
+    // integrationId, // Optional: External knowledgebase integration ID
+    // extKnowledgebaseId: "string", // Optional: External knowledgebase ID
+  };
+  
+  try {
+    const response = await axios.post(
+      `${apiUrl}v1/kb`,
+      knowledgebase,
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`, // Use your API key
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to create knowledgebase:", error.response?.data || error.message);
+    return null;
+  }
+}
+```
+
+### 2. Upload a File
+
+Upload a local file to the XperAI platform:
+
+```javascript theme={null}
+async function uploadFile(filePath) {
+  const formData = new FormData();
+  formData.append("file", fs.createReadStream(filePath));
+
+  const headers = {
+    ...formData.getHeaders(),
+    Authorization: `Bearer ${apiKey}`, // Use your API key
+  };
+
+  try {
+    const response = await axios.post(
+      `${apiUrl}v1/file`,
+      formData,
+      { headers }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("File upload failed:", error.response?.data || error.message);
+    return null;
+  }
+}
+```
+
+### 3. Create a Document Association
+
+Create a document in the knowledgebase from the uploaded file:
+
+```javascript theme={null}
+async function createDocument(knowledgebaseId, storageFileId) {
+  const document = {
+    knowledgebaseId, // ID of the knowledgebase created in the previous step
+    storageFileId, // ID of the file uploaded in the previous step
+    sourceType: "file",
+  };
+  
+  try {
+    const response = await axios.post(
+      `${apiUrl}v1/kb/${knowledgebaseId}/bulk`,
+      [document],
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`, // Use your API key
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to create document:", error.response?.data || error.message);
+    return null;
+  }
+}
+```
+
+### 4. Start Embedding Process
+
+Initiate the vectorization process for the document:
+
+```javascript theme={null}
+async function startEmbedding(knowledgebaseId, documentId) {
+  try {
+    const response = await axios.post(
+      `${apiUrl}v1/kb/${knowledgebaseId}/process`,
+      [documentId], // ID of the document created in the previous step
+      {
+        headers: {
+          Authorization: `Bearer ${apiKey}`, // Use your API key
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to process document:", error.response?.data || error.message);
+    return null;
+  }
+}
+```
+
+### 5. Check Processing Status
+
+Check the progress of document processing:
+
+```javascript theme={null}
+async function checkDocumentStatus(knowledgebaseId, documentId) {
+  try {
+    const response = await axios.get(
+      `${apiUrl}v1/kb/${knowledgebaseId}/status`,
+      {
+        params: { ids: documentId }, // ID of the document to check
+        headers: {
+          Authorization: `Bearer ${apiKey}`, // Use your API key
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to check status:", error.response?.data || error.message);
+    return null;
+  }
+}
+```
+
+## Complete Usage Example
+
+```javascript theme={null}
+// Initialize configuration
+const apiUrl = process.env.XPERTAI_API_URL;
+const apiKey = process.env.XPERTAI_API_KEY;
+const workspaceId = "your_workspace_id_here"; // Replace with your actual workspace ID
+const copilotId = "your_copilot_id_here"; // Replace with your actual copilot ID
+
+// Main execution function
+async function main() {
+  // 1. Create knowledgebase
+  const knowledgebase = await createKnowledgebase();
+  if (!knowledgebase) return;
+  const knowledgebaseId = knowledgebase.id;
+  console.log("Knowledgebase created successfully, ID:", knowledgebaseId);
+
+  // 2. Upload file
+  const storageFile = await uploadFile("./data/file.txt");
+  if (!storageFile) return;
+  console.log("File uploaded successfully, ID:", storageFile.id);
+
+  // 3. Create document association
+  const documents = await createDocument(knowledgebaseId, storageFile.id);
+  if (!documents || documents.length === 0) return;
+  const document = documents[0];
+  console.log("Document created successfully, ID:", document.id);
+
+  // 4. Start processing
+  const processedDocs = await startEmbedding(knowledgebaseId, document.id);
+  if (!processedDocs || processedDocs.length === 0) return;
+  let currentDoc = processedDocs[0];
+  
+  // 5. Poll for status
+  let status = currentDoc.status;
+  while (status === "running") {
+    process.stdout.write(`\rProcessing progress: ${currentDoc.progress}%`);
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    
+    const statusData = await checkDocumentStatus(knowledgebaseId, document.id);
+    if (!statusData || statusData.length === 0) {
+      console.error("Failed to retrieve status");
+      return;
+    }
+    
+    currentDoc = statusData[0];
+    status = currentDoc.status;
+  }
+  
+  console.log(`\nDocument processing completed, final status: ${status}`);
+}
+
+// Execute main function
+main().catch(console.error);
+```
+
+## Notes
+
+1. Ensure all ID parameters use the correct values obtained from the XperAI platform.
+2. Safeguard your API key and do not expose it or commit it to version control systems.
+3. File uploads have size limits; refer to the official documentation for specific restrictions.
+4. Document processing time depends on file size and content complexity.
+5. It is recommended to implement appropriate error handling and retry mechanisms for improved reliability.
+
+By following these steps, you can successfully create a knowledgebase, upload documents, and complete the vectorization process, preparing for subsequent intelligent Q\&A and retrieval functions.

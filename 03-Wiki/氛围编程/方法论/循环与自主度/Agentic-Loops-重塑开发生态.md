@@ -1,0 +1,48 @@
+---
+title: Agentic Loops 正在重塑软件开发生态
+source: Bilibili/bilibili-BV12SE965E7s-agentic-loops-reshaping-software-dev.md
+related: []
+keywords:
+- agentic-loop
+- AI-Agent
+- 软件开发
+- Codex
+- Claude
+state:
+  phase: wiki
+  time_raw: '2026-07-01T12:42:24'
+  time_draft: '2026-07-01T12:42:24'
+  time_wiki: '2026-07-01T12:42:24'
+sources:
+- Bilibili/bilibili-BV12SE965E7s-agentic-loops-reshaping-software-dev.md
+---
+# Agentic Loops 正在重塑软件开发生态
+
+## 核心知识点
+
+### **Agentic Loop 的概念：从手动验证到自动循环**
+Agentic Loop 是一种全新的 AI 工作模式，开发者只需设定目标，AI 会自动执行并自动验证结果，形成迭代循环直到任务完成。它替代了传统的“编写提示 → 手动验证 → 修改”流程，将开发者从重复校验中解放出来。核心组件包括 [[Goal命令]]、[[Harness]] 自动验证系统，以及可选的 [[Loop命令]] 定时触发机制。
+
+### **自动验证机制**
+Agentic Loop 的关键在于内置的自动验证能力。[[Harness]] 可以自动运行 [[端到端测试]]、[[Play Write MCP]]、甚至启动 [[Chrome 浏览器]] 截图比对，来确认任务结果是否符合预期。开发者无需手动检查，AI 会根据验证反馈自主调整输出，真正实现了“说出目标，AI 负责实现与校验”。
+
+### **Goal 命令：以目标驱动开发**
+[[Goal命令]] 允许开发者用自然语言描述期望的最终状态（如“增加一个 Digital Ocean 沙箱支持”），AI 自动将目标拆解为子任务并逐一执行、验证、迭代。过程中 AI 会截图反馈进度，形成透明执行链路。该模式适用于新功能实现、Bug 修复、UI 调整等复杂多步骤任务。
+
+### **Loop 命令：定时循环自动化**
+[[Loop命令]]（也可视为定时器/间隔器）让 Agentic Loop 可以按时间周期运行，例如每晚自动检查代码库并执行维护任务。这实现了类似 [[cron job]] 的 AI 驱动持续集成，确保代码质量无需人工介入即可长期保持在健康状态。
+
+### **传统流程与 Agentic Loop 流程的对比**
+| 方面 | 传统开发流程 | Agentic Loop 流程 |
+|------|-------------|------------------|
+| 工作方式 | 编写 Prompt → 手动验证 → 修改 | 设定目标 → AI 自动执行并验证 → 自动迭代 |
+| 验证角色 | 开发者手动端到端测试 | [[Harness]] 自动验证（测试、截图、浏览器操作） |
+| 迭代频率 | 依赖开发者介入，周期慢 | AI 自主快速循环，直至目标达成 |
+| 复杂任务处理 | 需要人工拆解步骤并逐步指导 | [[Goal命令]] 自动拆解并执行 |
+| 定时运维 | 需要手动设置脚本和检查 | [[Loop命令]] 可替代 cron 执行 AI 驱动的定时维护 |
+
+### **实际应用示例：扩展 Mission Control 沙箱支持**
+视频中演示者使用 Agentic Loop 在 [[Mission Control]] 中增加 [[Digital Ocean]] 沙箱支持。通过一个 Goal 命令，AI 自动识别现有 [[AWS]] 沙箱实现，设计新接口、生成代码、逐个模块验证并自动截图反馈。整个过程中开发者只需在关键节点确认，AI 自主完成了从设计到落地的完整开发循环。
+
+## 总结
+Agentic Loop 通过自动验证和循环迭代，将 AI 从“提示-响应”工具升级为能自主执行复杂任务的能力体。结合 Goal 命令、Loop 命令和 Harness 自动验证，它显著减少了开发者对重复校验的投入，为软件开发生态带来了从手动交付到自动闭环的范式转变。

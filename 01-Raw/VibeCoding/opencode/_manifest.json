@@ -1,0 +1,672 @@
+{
+ "pages": {
+  "https://opencode.ai/docs/zh-cn/github": {
+   "url": "https://opencode.ai/docs/zh-cn/github",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-github.md",
+   "title": "github",
+   "chars": 8117,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/custom-tools": {
+   "url": "https://opencode.ai/docs/custom-tools",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-custom-tools.md",
+   "title": "custom-tools",
+   "chars": 4579,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/tools": {
+   "url": "https://opencode.ai/docs/zh-cn/tools",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-tools.md",
+   "title": "tools",
+   "chars": 4929,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/custom-tools": {
+   "url": "https://opencode.ai/docs/zh-cn/custom-tools",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-custom-tools.md",
+   "title": "custom-tools",
+   "chars": 3527,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/tools": {
+   "url": "https://opencode.ai/docs/tools",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-tools.md",
+   "title": "or",
+   "chars": 8461,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/zen": {
+   "url": "https://opencode.ai/docs/zh-cn/zen",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-zen.md",
+   "title": "zen",
+   "chars": 26117,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/troubleshooting": {
+   "url": "https://opencode.ai/docs/zh-cn/troubleshooting",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-troubleshooting.md",
+   "title": "or",
+   "chars": 5323,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/github": {
+   "url": "https://opencode.ai/docs/github",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-github.md",
+   "title": "github",
+   "chars": 11252,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/providers": {
+   "url": "https://opencode.ai/docs/providers",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-providers.md",
+   "title": "providers",
+   "chars": 66287,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/troubleshooting": {
+   "url": "https://opencode.ai/docs/troubleshooting",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-troubleshooting.md",
+   "title": "or",
+   "chars": 9454,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/providers": {
+   "url": "https://opencode.ai/docs/zh-cn/providers",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-providers.md",
+   "title": "providers",
+   "chars": 33298,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/windows-wsl": {
+   "url": "https://opencode.ai/docs/windows-wsl",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-windows-wsl.md",
+   "title": "windows-wsl",
+   "chars": 2871,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/permissions": {
+   "url": "https://opencode.ai/docs/permissions",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-permissions.md",
+   "title": "permissions",
+   "chars": 7316,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/windows-wsl": {
+   "url": "https://opencode.ai/docs/zh-cn/windows-wsl",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-windows-wsl.md",
+   "title": "windows-wsl",
+   "chars": 1990,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/tui": {
+   "url": "https://opencode.ai/docs/tui",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-tui.md",
+   "title": "tui",
+   "chars": 9453,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/tui": {
+   "url": "https://opencode.ai/docs/zh-cn/tui",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-tui.md",
+   "title": "tui",
+   "chars": 5809,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/mcp-servers": {
+   "url": "https://opencode.ai/docs/mcp-servers",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-mcp-servers.md",
+   "title": "View auth status for all OAuth-capable servers",
+   "chars": 13917,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/permissions": {
+   "url": "https://opencode.ai/docs/zh-cn/permissions",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-permissions.md",
+   "title": "permissions",
+   "chars": 4215,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/policies": {
+   "url": "https://opencode.ai/docs/policies",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-policies.md",
+   "title": "policies",
+   "chars": 3593,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/commands": {
+   "url": "https://opencode.ai/docs/commands",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-commands.md",
+   "title": "commands",
+   "chars": 6682,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zen": {
+   "url": "https://opencode.ai/docs/zen",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zen.md",
+   "title": "zen",
+   "chars": 31374,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/commands": {
+   "url": "https://opencode.ai/docs/zh-cn/commands",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-commands.md",
+   "title": "commands",
+   "chars": 4873,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/gitlab": {
+   "url": "https://opencode.ai/docs/gitlab",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-gitlab.md",
+   "title": "gitlab",
+   "chars": 6445,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/gitlab": {
+   "url": "https://opencode.ai/docs/zh-cn/gitlab",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-gitlab.md",
+   "title": "gitlab",
+   "chars": 5238,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/mcp-servers": {
+   "url": "https://opencode.ai/docs/zh-cn/mcp-servers",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-mcp-servers.md",
+   "title": "查看所有支持 OAuth 的服务器的认证状态",
+   "chars": 10023,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/share": {
+   "url": "https://opencode.ai/docs/share",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-share.md",
+   "title": "share",
+   "chars": 2852,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/share": {
+   "url": "https://opencode.ai/docs/zh-cn/share",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-share.md",
+   "title": "share",
+   "chars": 1408,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/config": {
+   "url": "https://opencode.ai/docs/config",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-config.md",
+   "title": "config",
+   "chars": 26588,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/config": {
+   "url": "https://opencode.ai/docs/zh-cn/config",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-config.md",
+   "title": "config",
+   "chars": 12115,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/go": {
+   "url": "https://opencode.ai/docs/go",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-go.md",
+   "title": "go",
+   "chars": 31558,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/enterprise": {
+   "url": "https://opencode.ai/docs/enterprise",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-enterprise.md",
+   "title": "enterprise",
+   "chars": 5398,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/enterprise": {
+   "url": "https://opencode.ai/docs/zh-cn/enterprise",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-enterprise.md",
+   "title": "enterprise",
+   "chars": 2693,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/rules": {
+   "url": "https://opencode.ai/docs/rules",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-rules.md",
+   "title": "SST v3 Monorepo Project",
+   "chars": 6682,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/rules": {
+   "url": "https://opencode.ai/docs/zh-cn/rules",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-rules.md",
+   "title": "SST v3 Monorepo Project",
+   "chars": 4413,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/formatters": {
+   "url": "https://opencode.ai/docs/formatters",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-formatters.md",
+   "title": "formatters",
+   "chars": 9965,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/formatters": {
+   "url": "https://opencode.ai/docs/zh-cn/formatters",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-formatters.md",
+   "title": "formatters",
+   "chars": 7731,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/references": {
+   "url": "https://opencode.ai/docs/references",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-references.md",
+   "title": "references",
+   "chars": 4444,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/go": {
+   "url": "https://opencode.ai/docs/zh-cn/go",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-go.md",
+   "title": "go",
+   "chars": 26713,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/sdk": {
+   "url": "https://opencode.ai/docs/sdk",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-sdk.md",
+   "title": "sdk",
+   "chars": 19630,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/sdk": {
+   "url": "https://opencode.ai/docs/zh-cn/sdk",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-sdk.md",
+   "title": "sdk",
+   "chars": 16531,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/lsp": {
+   "url": "https://opencode.ai/docs/zh-cn/lsp",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-lsp.md",
+   "title": "lsp",
+   "chars": 7912,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/models": {
+   "url": "https://opencode.ai/docs/models",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-models.md",
+   "title": "models",
+   "chars": 5454,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/keybinds": {
+   "url": "https://opencode.ai/docs/keybinds",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-keybinds.md",
+   "title": "keybinds",
+   "chars": 9743,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/models": {
+   "url": "https://opencode.ai/docs/zh-cn/models",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-models.md",
+   "title": "models",
+   "chars": 3727,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/keybinds": {
+   "url": "https://opencode.ai/docs/zh-cn/keybinds",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-keybinds.md",
+   "title": "keybinds",
+   "chars": 5374,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/themes": {
+   "url": "https://opencode.ai/docs/themes",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-themes.md",
+   "title": "themes",
+   "chars": 9770,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/themes": {
+   "url": "https://opencode.ai/docs/zh-cn/themes",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-themes.md",
+   "title": "themes",
+   "chars": 7600,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/lsp": {
+   "url": "https://opencode.ai/docs/lsp",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-lsp.md",
+   "title": "lsp",
+   "chars": 10347,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/ecosystem": {
+   "url": "https://opencode.ai/docs/zh-cn/ecosystem",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-ecosystem.md",
+   "title": "ecosystem",
+   "chars": 8031,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/agents": {
+   "url": "https://opencode.ai/docs/agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-agents.md",
+   "title": "agents",
+   "chars": 20426,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/agents": {
+   "url": "https://opencode.ai/docs/zh-cn/agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-agents.md",
+   "title": "agents",
+   "chars": 11532,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/acp": {
+   "url": "https://opencode.ai/docs/acp",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-acp.md",
+   "title": "acp",
+   "chars": 3695,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/acp": {
+   "url": "https://opencode.ai/docs/zh-cn/acp",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-acp.md",
+   "title": "acp",
+   "chars": 2756,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/ecosystem": {
+   "url": "https://opencode.ai/docs/ecosystem",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-ecosystem.md",
+   "title": "ecosystem",
+   "chars": 11185,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/plugins": {
+   "url": "https://opencode.ai/docs/plugins",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-plugins.md",
+   "title": "plugins",
+   "chars": 9150,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/plugins": {
+   "url": "https://opencode.ai/docs/zh-cn/plugins",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-plugins.md",
+   "title": "plugins",
+   "chars": 6766,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/": {
+   "url": "https://opencode.ai/docs/zh-cn/",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh.md",
+   "title": "zh-cn",
+   "chars": 5218,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/policies": {
+   "url": "https://opencode.ai/docs/zh-cn/policies",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-policies.md",
+   "title": "Policies",
+   "chars": 3124,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/cli": {
+   "url": "https://opencode.ai/docs/cli",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-cli.md",
+   "title": "Start the backend server for web/mobile access",
+   "chars": 27166,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/cli": {
+   "url": "https://opencode.ai/docs/zh-cn/cli",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-cli.md",
+   "title": "Start the backend server for web/mobile access",
+   "chars": 16638,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/network": {
+   "url": "https://opencode.ai/docs/network",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-network.md",
+   "title": "HTTPS proxy (recommended)",
+   "chars": 1332,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/network": {
+   "url": "https://opencode.ai/docs/zh-cn/network",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-network.md",
+   "title": "HTTPS proxy (recommended)",
+   "chars": 813,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/references": {
+   "url": "https://opencode.ai/docs/zh-cn/references",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-references.md",
+   "title": "References",
+   "chars": 3873,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/web": {
+   "url": "https://opencode.ai/docs/web",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-web.md",
+   "title": "Start the web server",
+   "chars": 3214,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/web": {
+   "url": "https://opencode.ai/docs/zh-cn/web",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-web.md",
+   "title": "启动 Web 服务器",
+   "chars": 2021,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/skills": {
+   "url": "https://opencode.ai/docs/skills",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-skills.md",
+   "title": "skills",
+   "chars": 4538,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/skills": {
+   "url": "https://opencode.ai/docs/zh-cn/skills",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-skills.md",
+   "title": "skills",
+   "chars": 3142,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/server": {
+   "url": "https://opencode.ai/docs/server",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-server.md",
+   "title": "server",
+   "chars": 18112,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/ide": {
+   "url": "https://opencode.ai/docs/ide",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-ide.md",
+   "title": "ide",
+   "chars": 1806,
+   "lang": "en"
+  },
+  "https://opencode.ai/docs/zh-cn/ide": {
+   "url": "https://opencode.ai/docs/zh-cn/ide",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-ide.md",
+   "title": "ide",
+   "chars": 1062,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/zh-cn/server": {
+   "url": "https://opencode.ai/docs/zh-cn/server",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-zh-server.md",
+   "title": "server",
+   "chars": 14909,
+   "lang": "zh"
+  },
+  "https://opencode.ai/docs/": {
+   "url": "https://opencode.ai/docs/",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/opencode/opencode-.md",
+   "title": "Intro",
+   "chars": 6552,
+   "lang": "en"
+  }
+ },
+ "urls": [
+  "https://opencode.ai/docs/custom-tools",
+  "https://opencode.ai/docs/zh-cn/custom-tools",
+  "https://opencode.ai/docs/github",
+  "https://opencode.ai/docs/zh-cn/github",
+  "https://opencode.ai/docs/tools",
+  "https://opencode.ai/docs/zh-cn/tools",
+  "https://opencode.ai/docs/troubleshooting",
+  "https://opencode.ai/docs/zh-cn/troubleshooting",
+  "https://opencode.ai/docs/zen",
+  "https://opencode.ai/docs/zh-cn/zen",
+  "https://opencode.ai/docs/providers",
+  "https://opencode.ai/docs/zh-cn/providers",
+  "https://opencode.ai/docs/permissions",
+  "https://opencode.ai/docs/zh-cn/permissions",
+  "https://opencode.ai/docs/windows-wsl",
+  "https://opencode.ai/docs/zh-cn/windows-wsl",
+  "https://opencode.ai/docs/tui",
+  "https://opencode.ai/docs/zh-cn/tui",
+  "https://opencode.ai/docs/mcp-servers",
+  "https://opencode.ai/docs/zh-cn/mcp-servers",
+  "https://opencode.ai/docs/policies",
+  "https://opencode.ai/docs/zh-cn/policies",
+  "https://opencode.ai/docs/commands",
+  "https://opencode.ai/docs/zh-cn/commands",
+  "https://opencode.ai/docs/gitlab",
+  "https://opencode.ai/docs/zh-cn/gitlab",
+  "https://opencode.ai/docs/share",
+  "https://opencode.ai/docs/zh-cn/share",
+  "https://opencode.ai/docs/config",
+  "https://opencode.ai/docs/zh-cn/config",
+  "https://opencode.ai/docs/go",
+  "https://opencode.ai/docs/zh-cn/go",
+  "https://opencode.ai/docs/enterprise",
+  "https://opencode.ai/docs/zh-cn/enterprise",
+  "https://opencode.ai/docs/references",
+  "https://opencode.ai/docs/zh-cn/references",
+  "https://opencode.ai/docs/rules",
+  "https://opencode.ai/docs/zh-cn/rules",
+  "https://opencode.ai/docs/formatters",
+  "https://opencode.ai/docs/zh-cn/formatters",
+  "https://opencode.ai/docs/sdk",
+  "https://opencode.ai/docs/zh-cn/sdk",
+  "https://opencode.ai/docs/lsp",
+  "https://opencode.ai/docs/zh-cn/lsp",
+  "https://opencode.ai/docs/models",
+  "https://opencode.ai/docs/zh-cn/models",
+  "https://opencode.ai/docs/keybinds",
+  "https://opencode.ai/docs/zh-cn/keybinds",
+  "https://opencode.ai/docs/themes",
+  "https://opencode.ai/docs/zh-cn/themes",
+  "https://opencode.ai/docs/ecosystem",
+  "https://opencode.ai/docs/zh-cn/ecosystem",
+  "https://opencode.ai/docs/agents",
+  "https://opencode.ai/docs/zh-cn/agents",
+  "https://opencode.ai/docs/acp",
+  "https://opencode.ai/docs/zh-cn/acp",
+  "https://opencode.ai/docs/plugins",
+  "https://opencode.ai/docs/zh-cn/plugins",
+  "https://opencode.ai/docs/",
+  "https://opencode.ai/docs/zh-cn/",
+  "https://opencode.ai/docs/zh-tw/",
+  "https://opencode.ai/docs/ko/",
+  "https://opencode.ai/docs/de/",
+  "https://opencode.ai/docs/es/",
+  "https://opencode.ai/docs/fr/",
+  "https://opencode.ai/docs/it/",
+  "https://opencode.ai/docs/da/",
+  "https://opencode.ai/docs/ja/",
+  "https://opencode.ai/docs/pl/",
+  "https://opencode.ai/docs/ru/",
+  "https://opencode.ai/docs/uk/",
+  "https://opencode.ai/docs/ar/",
+  "https://opencode.ai/docs/nb/",
+  "https://opencode.ai/docs/pt-br/",
+  "https://opencode.ai/docs/th/",
+  "https://opencode.ai/docs/tr/",
+  "https://opencode.ai/docs/cli",
+  "https://opencode.ai/docs/zh-cn/cli",
+  "https://opencode.ai/docs/network",
+  "https://opencode.ai/docs/zh-cn/network",
+  "https://opencode.ai/docs/web",
+  "https://opencode.ai/docs/zh-cn/web",
+  "https://opencode.ai/docs/skills",
+  "https://opencode.ai/docs/zh-cn/skills",
+  "https://opencode.ai/docs/server",
+  "https://opencode.ai/docs/zh-cn/server",
+  "https://opencode.ai/docs/ide",
+  "https://opencode.ai/docs/zh-cn/ide"
+ ],
+ "discovered": 88,
+ "updated": "2026-09-23T02:44:23+08:00"
+}

@@ -1,0 +1,111 @@
+---
+title: Python Execution Tool
+source: XpertAI 官方文档
+related: []
+keywords:
+- XpertAI
+state:
+  phase: wiki
+  time_raw: '2026-07-01T12:42:25'
+  time_draft: '2026-07-01T12:42:25'
+  time_wiki: '2026-07-01T12:42:25'
+sources:
+- Xpertai/XpertAI工作流教程-MD版/ai/toolset/virtual-environment/python-execution.md
+---
+# Python Execution Tool
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Python Execution Tool
+
+<Tip>
+  **PRO**
+
+  This feature is supported in the **Professional Edition**.
+</Tip>
+
+**Python Execution Tool** is an intelligent tool that can **directly run Python script content** in the platform, supporting rapid data processing, calculation logic testing, script verification and other operations in the project.
+
+Whether it is a simple addition calculation or a quick verification of a certain logic, the user only needs to submit the code content, and the system can immediately execute and return the result, without relying on the local environment or additional configuration.
+
+## 🔧 Core functions
+
+### ✅ Run Python scripts online
+
+Users only need to enter any Python code, the platform will run immediately, and return visual output results.
+
+* Support single or multiple lines of code
+
+* Automatic execution and feedback results
+
+* Safe and isolated operation, without affecting the main system
+
+### 📤 Output is echo
+
+The tool displays the content output by `print` by default, which is convenient for users to quickly verify the execution logic or view the running effect.
+
+> 💡 Note: Function return values ​​are not automatically displayed, please use the `print` statement to get visual results.
+
+***
+
+## 🎯 Application scenarios
+
+| Scenario                     | Description                                                                     |
+| ---------------------------- | ------------------------------------------------------------------------------- |
+| 🔬 Data analysis             | Run a small code segment to quickly collect statistics and display results      |
+| 🧪 Logic test                | Verify a certain algorithm and determine whether the process meets expectations |
+| 🛠 Script preview            | Quickly preview the script running effect before deployment                     |
+| 👨‍🏫 Teaching demonstration | Used for interactive teaching or code explanation examples on the platform      |
+
+***
+
+## ✨ Feature highlights
+
+| Feature                                 | Advantages                                                                       |
+| --------------------------------------- | -------------------------------------------------------------------------------- |
+| ⚡ Write and run                         | Enter the script and execute it immediately, without waiting for deployment      |
+| 🧱 No need to configure the environment | No need to install Python, completely zero burden locally                        |
+| 📋 Clearly visible output               | All execution results are uniformly displayed through standard output            |
+| 🔒 Safe operation                       | Each run is processed in an isolated environment, safe and reliable              |
+| 📜 Automatic recording                  | All execution records can be used for subsequent debugging or archiving analysis |
+
+***
+
+## 🚀 Usage process
+
+1. **Enter code**
+   Fill in the Python script content in the platform input box.
+
+2. **One-click execution**
+   The system runs immediately after submission and returns the results within a few seconds.
+
+3. **View output**
+   The screen displays the code running results for easy verification or analysis.
+
+***
+
+## 📌 Tips
+
+* Please make sure that the code contains the `print(...)` statement, otherwise no output may be displayed.
+
+* If an error occurs, the system will also feedback detailed error information to help quickly locate the problem.
+
+***
+
+## 🧠 Use in conjunction with other tools
+
+The Python execution tool can be used in conjunction with other components of the platform (such as file managers, chart tools, deployment modules, etc.) to build more complex automation or data analysis processes. For example:
+
+* Analyze file data → Execute logic with Python → Output chart
+
+* Write analysis logic → View results in real time → Generate report
+
+***
+
+## ✅ Summary
+
+Python Execution Tool is a lightweight but powerful smart runner that helps users quickly write and run Python code in any scenario. It perfectly combines the flexibility of Python with the platform's visual operation, truly achieving:
+
+> **"Run anytime, anywhere"** - No need for environment configuration, just write and run directly!

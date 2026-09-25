@@ -1,0 +1,12 @@
+# 真实使用中沉淀的用例（kb_eval.py --add 自动追加；也可手写）
+# 格式：
+#   cases:
+#     - query: "客户为什么不续费了"        # 真实查询原话
+#       group: B                          # A 词面 / B 自然语句 / C 关键词 / E code / F 路由
+#       expect: ["单位经济", "流失"]       # 期望命中的路径特征（任一即可）
+#       note: "真实漏召回沉淀"
+#   或路由型（内容按设计不在 KB，期望路由到别的层）：
+#     - query: "品牌人设 规范"
+#       group: F
+#       route: brand-assets               # brand-assets / 01-Projects / entities
+cases: []

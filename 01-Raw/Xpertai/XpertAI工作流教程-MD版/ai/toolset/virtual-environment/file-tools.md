@@ -1,0 +1,194 @@
+---
+title: File Tools
+keywords:
+- XpertAI
+- AI-Agent
+- documentation
+state:
+  phase: raw
+  time_raw: '2026-05-08T00:00:00'
+  time_draft: '2026-09-23T00:53:35'
+  time_wiki: '2026-09-23T00:50:32'
+source_url: AI生成
+source_type: article
+source_platform: xpertai
+author: XpertAI
+fetch_date: '2026-05-08'
+priority: 3
+language: zh
+notes: XpertAI官方文档
+author_id: ''
+publish_date: ''
+---
+# File Tools
+
+> 此文档为原始素材，请勿直接修改。编译后的知识请移步 `02-Draft/` 目录。
+
+## 原文内容
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# File Tools
+
+<Tip>
+  **PRO**
+
+  This feature is supported in the **Professional Edition**.
+</Tip>
+
+XpertAI's agent system includes a powerful **File Tools Collection**, providing AI with programmable file operations in a virtual workspace, enabling agents to **read, create, edit, rewrite, delete, and list** workspace files during execution.
+
+These tools are integrated into the execution flow of digital expert agents, supporting workspaces tied to sessions/projects. They call backend file services through a unified interface, ensuring operations are both immediately visible and persistently stored.
+
+## 📦 Tools Overview
+
+| Tool Name           | Function Description                     |
+| ------------------- | ---------------------------------------- |
+| `list_files`        | Lists all files in the current workspace |
+| `create_file`       | Creates a new file with initial content  |
+| `str_replace`       | Replaces a unique string in a file       |
+| `full_file_rewrite` | Overwrites file content entirely         |
+| `delete_file`       | Deletes a file at the specified path     |
+| `read_file`         | Reads the content of a specified file    |
+
+## 🧰 Function Details
+
+### 🔍 `list_files`
+
+Lists all files in the current session or project workspace, returning a list with file paths, URLs, and basic metadata.
+
+* **Path Description**: Relative to the `/workspace` root directory (e.g., `src/main.py`).
+* **Output**: JSON list containing `filePath` and accessible `url`.
+* **Use Cases**: Browsing the AI workspace file structure, confirming existing filenames, etc.
+
+***
+
+### 📝 `create_file`
+
+Creates a new file and writes initial content.
+
+* **Parameters**:
+  * `file_path`: Relative file path from `/workspace` root (e.g., `src/main.py`)
+  * `file_contents`: Initial file content
+  * `file_description` (optional): File purpose description
+  * `permissions` (optional): Octal permissions (defaults to `644`)
+
+* **Use Cases**:
+  * Initializing programming or configuration files
+  * Generating code drafts for further modification
+
+***
+
+### 🔁 `str_replace`
+
+Replaces a unique string in a specified file with new content.
+
+* **Parameters**:
+  * `file_path`: Target file path relative to `/workspace` root (e.g., `src/main.py`)
+  * `old_str`: Original text to be replaced (must appear exactly once)
+  * `new_str`: Replacement text content
+
+* **Restriction**: For accuracy, `old_str` **must appear exactly once**; otherwise, an error is returned.
+
+* **Use Cases**:
+  * Precisely replacing variable names, function names, or configuration items
+  * Correcting spelling or logical errors
+
+***
+
+### 🧹 `full_file_rewrite`
+
+Completely overwrites a file's content with new content, suitable for structural or bulk modifications.
+
+* **Parameters**:
+  * `file_path`: Target file path relative to `/workspace` root (e.g., `src/main.py`)
+  * `file_contents`: New content to overwrite
+  * `permissions` (optional): Octal permissions (defaults to `644`)
+
+* **Use Cases**:
+  * Large-scale file updates
+  * Rewriting entire documents or code based on AI output
+
+***
+
+### 🗑️ `delete_file`
+
+Deletes a file at the specified path and synchronizes database record removal.
+
+* **Parameters**:
+  * `file_path`: Relative path of the file to delete from `/workspace` root (e.g., `src/main.py`)
+
+* **Use Cases**:
+  * Cleaning up unused files
+  * Removing erroneous or redundant generated results
+
+***
+
+### 📖 `read_file`
+
+Reads the current content of a file in the workspace.
+
+* **Use Cases**:
+  * AI retrieves context before analyzing or modifying a file
+  * Users review current content before deciding on actions
+
+***
+
+## ⚙️ Operational Mechanism
+
+* All file operations are performed within the agent's dedicated **Sandbox Workspace**, ensuring safe isolation.
+* Each workspace is tied to a session or project.
+* The file service relies on the `sandbox.fs` module, managing files through standardized interfaces.
+
+***
+
+## 🔗 Typical Use Cases
+
+* **AI Code Generation**: Creating and iteratively modifying `.py`, `.js`, or other source code files
+* **Collaborative Document Writing**: Gradually generating and adjusting `.md` files
+* **Data Processing Tasks**: Reading or replacing fields/rows in `.csv` files
+* **Project Auto-Configuration**: Batch-generating configuration files with replace/rewrite operations
+
+***
+
+## ✅ Usage Recommendations
+
+* Use `list_files` and `read_file` to gather context and avoid path or content errors.
+* Use `str_replace` for precise modifications and `full_file_rewrite` for major changes or refactoring.
+* Ensure all paths are relative to `/workspace` and avoid absolute paths or parent directory references (e.g., `../`).
+
+***
+
+## 🔐 Security and Permissions
+
+* File operation permissions default to `0644`, with optional custom permissions.
+* All AI operations are logged, supporting frontend display and auditing.
+* Version persistence and file recovery mechanisms are supported.
+
+
+## 核心摘录
+
+（在这里记录你阅读时的重点摘录）
+
+## 个人解读
+
+（在这里写下你的理解和思考）
+
+## 待验证点
+
+（记录文章中需要查证的信息）
+
+## 关联问题
+
+- 这个概念和其他知识有什么联系？
+- 这个观点和我的已有认知是否冲突？
+
+---
+
+## 抓取备注
+
+- 抓取时间：2026-05-08
+- 抓取工具：手动导入
+- 质量评分：

@@ -1,0 +1,22 @@
+# 关键词合并候选缓冲区
+#
+# 用途：LLM 在编译（ingest→Draft）时若发现「新词与现有规范词相似度 > 90%」，
+#       记录到这里，**不自动合并**——相似 ≠ 相同，误合并会静默破坏检索。
+#
+# 消费方式：
+#   - kb-organization 月度审计：扫本文件 + 全库 aliases 密度聚类 → 出合并建议清单
+#   - 用户确认后执行合并：源词标 merged_into + status: merged，全库引用批量替换
+#   - 积压超 30 天未处理的条目，审计时报警
+#
+# 写入字段：
+#   source        候选合并源（要被合并掉的词）
+#   target        候选合并目标（要并入的规范词）
+#   confidence    相似度 0-1
+#   discovered    发现时间 ISO8601
+#   discovered_by llm | user | audit
+#   note          为什么认为它们是一回事
+#
+# 当前状态：空。合并机制尚未启用（等词表规模变大后再开），
+#           本文件先建以免 skill 文档引用到不存在的路径。
+
+pending_merges: []

@@ -1,0 +1,147 @@
+---
+title: Code Project
+source: XpertAI 官方文档
+related: []
+keywords:
+- XpertAI
+state:
+  phase: wiki
+  time_raw: '2026-07-01T12:42:25'
+  time_draft: '2026-07-01T12:42:25'
+  time_wiki: '2026-07-01T12:42:25'
+sources:
+- Xpertai/XpertAI工作流教程-MD版/ai/toolset/virtual-environment/code-project.md
+---
+# Code Project
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Code Project
+
+<Tip>
+  **PRO**
+
+  This feature is supported in the **Pro Edition**.
+</Tip>
+
+This toolset provides a one-stop, end-to-end solution for building and managing **frontend code projects**, covering key functional modules such as project initialization, coding development, runtime debugging, deployment, and file management.
+
+📌 **The current version only supports React project templates**. More project types (e.g., Vue, Next.js, Svelte, Python, Node.js, etc.) will be gradually introduced to meet diverse development needs.
+
+Whether you're building frontend prototypes, previewing page components, or deploying lightweight web applications, this toolset enables efficient completion.
+
+**Example**:
+
+<iframe src="https://api.xpertai.cn/public/webapp/1fe6e815-1c7b-4879-9e95-670dfc78dc54/index.html" title="Go Game Project" width="100%" height="315" frameborder="0" allowfullscreen />
+
+## 📦 Tool Overview
+
+| Tool Name                 | Function Description                                                                            |
+| ------------------------- | ----------------------------------------------------------------------------------------------- |
+| `code_project_init`       | Initializes a React project structure, generating a basic code structure using preset templates |
+| `code_project_code`       | Writes or modifies code files in the project                                                    |
+| `code_project_run`        | Executes run commands, starts a local development server, or builds instructions                |
+| `code_project_deploy`     | Deploys the project as an accessible webpage, generating a shareable link                       |
+| `code_project_list_files` | Views the structure of all files in the project                                                 |
+| `code_project_read_file`  | Opens and reads the contents of a specified project file                                        |
+
+## 🛠️ Detailed Tool Functions
+
+### 1. `code_project_init` - Initialize Project
+
+Creates a standard **React project** structure, automatically adding essential directories, including:
+
+* `src/` Source code directory
+* `public/` Static resources directory
+* `package.json` Package management file
+* Tailwind CSS configuration
+* Default pages like `App.jsx`, `index.jsx`
+
+📌 *Currently only provides React templates; support for other frameworks is under development.*
+
+### 2. `code_project_code` - Write Code
+
+Add or modify any file in the project, suitable for:
+
+* Adding components or page files (e.g., `Home.jsx`, `Button.tsx`)
+* Editing existing file contents
+* Automatically saving to the project space, no manual upload management required
+
+> 📌 Can be combined with intelligent suggestions for writing React + Tailwind CSS page structures
+
+### 3. `code_project_run` - Run Commands
+
+Supports executing commands like `npm install`, `npm run dev`, `npm run build`, etc.:
+
+* Starts a local development server for debugging
+* Builds static resources for deployment
+* Outputs logs to help troubleshoot errors
+
+### 4. `code_project_deploy` - Deploy Project
+
+Deploys the current project to an online environment with one click, automatically generating a webpage URL for access and embedding:
+
+* Automatically builds and uploads artifacts to the platform’s hosting space
+* Directly accessible via the generated link
+* Ideal for quick showcases, prototype reviews, or embedded demos
+
+### 5. `code_project_list_files` - File List
+
+Lists all file structures in the current project, supporting nested directory expansion and file navigation.
+
+### 6. `code_project_read_file` - Read File Content
+
+Opens and views any project file, supporting code preview and content verification, commonly used for debugging or content reuse.
+
+***
+
+## 🔄 Recommended Workflow
+
+1. **Project Initialization**: Use `code_project_init` to create a React project
+2. **Write Pages and Components**: Add `.jsx`, `.css`, etc., files using `code_project_code`
+3. **Run and Debug**: Execute build or local debugging commands with `code_project_run`
+4. **Deploy and Publish**: Use `code_project_deploy` to obtain an accessible link
+5. **File Management**: Use `code_project_list_files` and `code_project_read_file` for assistance
+
+## 🚀 Example Use Cases
+
+* Building and launching frontend prototypes quickly
+* Converting AI-generated pages into accessible webpages
+* Embedding into other system modules as interactive components or visual outputs
+* Frontend teaching, component demos, or design reviews
+
+## 🎯 Core Advantages
+
+| Advantage                      | Description                                                                    |
+| ------------------------------ | ------------------------------------------------------------------------------ |
+| 🔄 Full Workflow Support       | Automates the entire process from initialization to development and deployment |
+| 📦 No Local Environment Needed | Fully online, no need to install Node.js or configure build environments       |
+| ⚡ Fast Publishing              | Second-level deployment, instantly generates accessible links                  |
+| 🔐 Secure Isolation            | Each project space is independent, ensuring user content security              |
+
+***
+
+## 🔮 Future Roadmap
+
+To support more development scenarios, the platform will soon support the following project types:
+
+* Vue / Nuxt
+* Next.js
+* Svelte / SvelteKit
+* Python
+* Node.js
+* Pure static HTML projects, etc.
+
+Stay tuned for updates and explore richer development template capabilities!
+
+***
+
+## 📘 Summary
+
+The **Code Project Toolset** provides a complete automated solution from “writing code” to “deploying webpages.” Whether you’re building components, quickly validating designs, or creating product prototypes, you can accomplish it all on this platform.
+
+Currently tailored for React projects, we will continue to expand support for more template types to meet the diverse needs of developers.
+
+For more complex intelligent development workflows, you can also integrate with other intelligent Agents and automation tool modules to build cross-task, cross-model intelligent collaborative workflows.

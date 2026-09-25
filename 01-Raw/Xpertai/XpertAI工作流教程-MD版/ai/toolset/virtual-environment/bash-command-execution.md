@@ -1,0 +1,146 @@
+---
+title: Bash command execution
+keywords:
+- XpertAI
+- AI-Agent
+- documentation
+state:
+  phase: raw
+  time_raw: '2026-05-08T00:00:00'
+  time_draft: '2026-09-23T00:53:35'
+  time_wiki: '2026-09-23T00:50:32'
+source_url: AI生成
+source_type: article
+source_platform: xpertai
+author: XpertAI
+fetch_date: '2026-05-08'
+priority: 3
+language: zh
+notes: XpertAI官方文档
+author_id: ''
+publish_date: ''
+---
+# Bash command execution
+
+> 此文档为原始素材，请勿直接修改。编译后的知识请移步 `02-Draft/` 目录。
+
+## 原文内容
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Bash command execution
+
+<Tip>
+  **PRO**
+
+  此功能在**专业版**中支持。
+</Tip>
+
+**Bash 命令执行工具**是一款用于**指令执行**的工具。它可以在一个受控、安全的环境中，帮助用户自动执行各种命令操作。
+
+## 核心功能
+
+* 1. 自动执行命令：用户只需输入一条命令，系统就能自动完成执行，无需手动操作终端界面。
+* 2. 流式返回结果：执行过程中的终端输出会实时返回，用户可以即时查看输出内容，便于快速验证命令效果。
+* 3. 安全环境运行：所有命令都在**独立沙箱环境**中执行，有效避免对真实系统环境造成风险，保障数据和操作安全。
+* 4. 与任务流程联动：此工具不仅能单独使用，还可接入到更大的任务流程中，与其他工具一起完成复杂操作。
+
+## 适用场景
+
+| 场景       | 应用示例                    |
+| -------- | ----------------------- |
+| 🧪 数据分析  | 自动生成分析数据所需的文件或日志        |
+| 📁 文件管理  | 快速列出、查找或处理文件目录          |
+| 📜 脚本执行  | 执行一段脚本任务并获取输出结果         |
+| 🤖 智能体任务 | 作为智能助理执行步骤中的一环，辅助完成特定任务 |
+
+## 使用方式
+
+使用者只需要提供一句命令，例如：
+
+* 查看文件列表
+* 查询当前系统时间
+* 下载一个特定文件
+* 解压一个压缩包
+
+系统会在后台执行该命令，并将结果反馈给你，无需任何额外操作。
+
+## 最佳实践
+
+提示词示例：
+
+````text theme={null}
+你拥有两类强大的工具：
+
+1. 一组可以编辑和创建文件的工具（用于生成 Python 脚本等文件）。
+2. 一组可以执行 Bash 命令的工具（用于执行命令行任务）。
+
+当用户提出任务涉及文档转换、内容生成、格式导出等自动化需求（例如：“将 Markdown 转为 PDF”、“生成 PPT 演示文稿”、“批量处理 Excel 数据”等），请遵循以下步骤：
+
+---
+
+**工作流程：**
+
+1. **理解任务需求，判断是否适合通过 Python 实现。**
+2. **使用“文件编辑工具”创建 Python 脚本，命名清晰（如 `generate_pdf.py`、`create_ppt.py` 等）。**
+3. **通过 Bash 工具执行以下命令来使用 [`uv`](https://github.com/astral-sh/uv) 创建虚拟环境并运行脚本：**
+
+>   ```bash
+>   [ -d .venv ] || uv venv .venv --python=python3.11 && source .venv/bin/activate && python -m ensurepip --upgrade && python -m pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple && python your_script.py
+>   ```
+
+4. **确保脚本中所需依赖已在 `requirements.txt` 中列出。**
+
+---
+
+**Python 脚本要求：**
+
+* 可独立运行，输入输出路径清晰可配置。
+* 优先使用常用库如：`python-pptx`、`reportlab`、`fpdf`、`pandas`、`matplotlib` 等。
+* 如果所需依赖未在系统中安装，应一并生成 `requirements.txt` 文件用于安装。
+
+---
+
+**目标：** 始终优先使用 Python + uv 环境完成任务，确保最终结果符合用户意图并具备可复用性。
+
+如果有生成文件请用 `list_files` 拉取文件列表找到该文件的 name 和 url，告诉用户可以下载该文件，下载格式为 `[name](url)`。
+````
+
+## 常见问题解答
+
+**Q1：是否可以执行任意命令？**
+A：工具支持常见的安全命令，危险命令（如删除重要文件）会被自动拦截或限制。
+
+**Q2：执行结果是否可靠？**
+A：工具会完整返回命令运行的输出内容，确保信息透明。
+
+**Q3：适合哪些人使用？**
+A：适用于希望提升操作效率的分析师、产品经理、运维人员等各类角色。
+
+
+## 核心摘录
+
+（在这里记录你阅读时的重点摘录）
+
+## 个人解读
+
+（在这里写下你的理解和思考）
+
+## 待验证点
+
+（记录文章中需要查证的信息）
+
+## 关联问题
+
+- 这个概念和其他知识有什么联系？
+- 这个观点和我的已有认知是否冲突？
+
+---
+
+## 抓取备注
+
+- 抓取时间：2026-05-08
+- 抓取工具：手动导入
+- 质量评分：

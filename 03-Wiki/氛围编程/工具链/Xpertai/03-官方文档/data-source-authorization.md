@@ -1,0 +1,104 @@
+---
+title: Document Source Authorization
+source: XpertAI 官方文档
+related: []
+keywords:
+- XpertAI
+state:
+  phase: wiki
+  time_raw: '2026-07-01T12:42:25'
+  time_draft: '2026-07-01T12:42:25'
+  time_wiki: '2026-07-01T12:42:25'
+sources:
+- Xpertai/XpertAI工作流教程-MD版/ai/knowledge-base/create-knowledge-base-via-pipeline/data-source-authorization.md
+---
+# Document Source Authorization
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Document Source Authorization
+
+XpertAI supports connecting to various external document sources. To ensure data security and access control, the system provides a flexible authorization mechanism, allowing knowledge pipelines to securely access and import data.
+In XpertAI, document source authorization can be achieved through **system integration** or **default environment variables**, supporting multiple authorization methods including **API Key** and **OAuth**.
+
+***
+
+## Overview of Document Source Authorization Mechanisms
+
+The XpertAI authorization system consists of two parts:
+
+1. **Default Environment Variable Authorization**\
+   During system deployment or in the workspace environment, various API Keys can be preset via environment variables. The knowledge pipeline will automatically use these credentials for authorization at runtime, without manual binding.
+
+2. **System Integration Authorization**\
+   XpertAI provides a unified system integration entry point where administrators or developers can configure API Key or OAuth (in development) authorization information for external services.\
+   System integration supports multiple authentication modes, including enterprise API Key, OAuth Client, and, in the future, service accounts and signed tokens.
+
+<img src="https://mintlify.s3.us-west-1.amazonaws.com/xpertai/public/en/img/ai/pipeline/pipeline-plugin-system-integration.png" alt="pipeline integrations" />
+
+***
+
+## Data Source Authorization Entry Points
+
+In XpertAI, you can configure data source authorization in the following two ways:
+
+### Method 1: Through the Knowledge Pipeline Orchestration Interface
+
+Enter the knowledge pipeline orchestration interface and add the required data source node.\
+Click **Bind** in the right panel, and the system will automatically detect whether the data source has valid authorization:
+
+* If system integration or environment variables are configured, it will connect automatically;
+* If no authorization information is found, you will be prompted to go to the system integration page for authorization.
+
+***
+
+### Method 2: Through the System Settings Interface
+
+Click the settings icon in the lower left corner and select **System Integration** to enter the system integration configuration page.\
+Select the system you want to authorize, click **Configure**, and you can add or update authorization credentials for that system.
+
+***
+
+## Supported Data Sources and Authorization Methods
+
+| Data Source | Default Env Variable | API Key | OAuth |
+| ----------- | -------------------- | ------- | ----- |
+| Firecrawl   | ✅                    | ✅       |       |
+| Lark Docs   | ✅                    | ✅       | ✅     |
+
+> More third-party data sources (such as OneDrive, Notion, Google Drive) will be supported in future versions.
+
+***
+
+## Authorization Methods Explained
+
+### 1. API Key Authorization
+
+API Key is the most common authorization method, suitable for integrated services that require direct calls to external APIs.\
+Users can generate API Keys on the corresponding service platform and configure them in two ways:
+
+* **Method A: Environment Variable Authorization**\
+  Write the API Key into the system environment variable (e.g., `LARK_APP_ID`, `LARK_APP_SECRET`). The pipeline will automatically detect and use it at runtime.
+
+* **Method B: System Integration Configuration**\
+  Go to **System Settings → System Integration**, select the corresponding system, and click **Add API Key**.\
+  Enter the key and click **Save**. The authorization information will be securely encrypted and stored, and the status will show as **Connected**.
+
+***
+
+### 2. OAuth Authorization (In Development)
+
+OAuth is a standardized authorization protocol suitable for scenarios where users need to access cloud documents or enterprise resources via login.\
+XpertAI supports two OAuth authorization modes:
+
+#### Mode A: Default Client (Built-in)
+
+For the SaaS version of XpertAI, some mainstream data sources (such as Lark Docs) have official built-in OAuth client configurations.\
+Users only need to click authorize and confirm the permission scope to complete authorization in one click.
+
+#### Mode B: Custom Client
+
+For self-hosted deployments or data sources without built-in configurations, you can register and obtain OAuth Client parameters (`Client ID` and `Client Secret`) on the third-party platform.\
+Then, fill in and save these on the **System Settings → System Integration → Add OAuth** page to complete authorization.

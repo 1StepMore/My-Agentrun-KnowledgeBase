@@ -1,0 +1,41 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.obsidian/
+*.swp
+*~
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Temporary files
+*.tmp
+*.log
+
+# KB 临时备份（改造期）
+_keywords.yaml.bak-*
+
+# 存档层：官方文档全量归档，可由源重建、体积大 → 不进 git
+**/参考存档/
+
+# 音频/视频原始素材：B站转写中间产物，体积巨大（2.7GB）且可从源重取 → 不进 git
+01-Raw/Bilibili/assets/audio/
+**/assets/audio/
+**/assets/video/
+
+# 其他大二进制（可由源重建）
+*.wav
+*.m4a
+*.mp4
+*.mov
+*.zip
+
+# 检索索引（派生文件，可重建）
+_index/
+
+# 私有区（不上公开仓）：敏感词表真实名单、内部过程产物（周报/审计/安全复盘）
+_private/

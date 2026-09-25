@@ -1,0 +1,174 @@
+---
+title: 'Project Team: Single Agent vs. Multi-Agent'
+source: XpertAI 官方文档
+related: []
+keywords:
+- XpertAI
+state:
+  phase: wiki
+  time_raw: '2026-07-01T12:42:25'
+  time_draft: '2026-07-01T12:42:25'
+  time_wiki: '2026-07-01T12:42:25'
+sources:
+- Xpertai/XpertAI工作流教程-MD版/ai/tutorial/project-group-single-vs-multi-agent.md
+---
+# Project Team: Single Agent vs. Multi-Agent
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Project Team: Single Agent vs. Multi-Agent
+
+> Enterprise-grade universal agent platform supporting hybrid task orchestration for single and multi-agent collaboration.
+
+## What is the XpertAI Project?
+
+[XpertAI Project](/docs/ai/chat/project/) is a customizable enterprise **universal agent project space**, orchestrating multiple capability units, including:
+
+* 📎 Attachments (data/file input)
+* 🛠 Custom tools (API, scripts, browser, etc.)
+* 📚 Knowledge base (structured/unstructured knowledge)
+* 👤 Digital expert agents (specialized skill-based agents)
+
+The universal agent behind the project has task decision-making capabilities (exploration or planning mode), dynamically invoking resources to complete tasks autonomously or collaboratively.
+
+## Insights from Debate
+
+### Background: Two Mainstream Views on Multi-Agent Systems
+
+Two recent articles highlight industry perspectives on multi-agent systems:
+
+* **Anthropic’s “[How we built our multi-agent research system](https://www.anthropic.com/engineering/built-multi-agent-research-system)”**: Emphasizes multi-agent systems for “low-dependency, parallelizable” tasks, showcasing efficiency in complex research tasks.
+* **Cognition (Devin AI’s parent company) “[Don’t Build Multi-Agents](https://cognition.ai/blog/dont-build-multi-agents)”**: Argues that in highly coupled, context-heavy scenarios (e.g., AI programming), multi-agents create collaboration and context management issues, advocating for single-agent context consistency.
+
+These seemingly opposing views reflect rational choices for different task contexts. Beyond single-task solutions, **agent reusability** is key for enterprise platforms. XpertAI supports both architectures, focusing on reusable “digital experts” as enterprise knowledge assets, configurable across projects and workflows.
+
+## Mode Analysis: Multi-Agent vs. Single-Agent
+
+### Mode 1: Multi-Agent Collaboration (Parallel Tasks)
+
+> Multiple specialized “digital expert agents” coordinated by a universal agent.
+
+**📌 Use Cases**:
+
+* Market research, competitor analysis, batch audits
+* Multi-document integration, large-scale knowledge retrieval
+* Low-dependency, concurrent subtasks
+
+**✅ Design Principles**:
+
+* Main agent (universal) decomposes tasks, coordinates workflows
+* Sub-agents execute specific subtasks with independent contexts
+* Structured output, main agent aggregates results
+
+**⚙️ Configuration**:
+
+* Set up multiple “digital expert” agents (e.g., web search, summarization, comparison experts)
+* Define clear goals and formats for subtasks to ensure stable outputs
+* Main agent uses control prompts for collaborative integration
+
+**⚠️ Risks**:
+
+* Sub-agents can’t share context, limiting applicability
+* Task dependencies require main agent to manage context
+
+**🔎 Example**:
+“Analyze strategic plans, revenue, and trends of 10 energy companies.”
+→ Main agent splits tasks → Sub-agents research each company → Main agent compiles structured report.
+
+> Collaboration among experts is coordinated by the universal agent without human intervention.
+
+**Reference Template**: [Deep Research Project (Multi-Agent)](https://app.xpertai.cn/explore?search=%E6%B7%B1%E5%BA%A6%E7%A0%94%E7%A9%B6%E9%A1%B9%E7%9B%AE%E7%BB%84%EF%BC%88%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%EF%BC%89)
+
+### Mode 2: Single-Agent Execution (Sequential Tasks)
+
+> Universal agent autonomously plans and executes tasks using all resources.
+
+**📌 Use Cases**:
+
+* AI programming, script generation, financial reporting
+* Contract drafting, legal reviews, process rule creation
+* Long task chains, high context coupling
+
+**✅ Design Principles**:
+
+* Maintain complete context to avoid fragmentation
+* Step-by-step task progression to manage token pressure
+* Use summarization to maintain information continuity
+
+**⚙️ Configuration**:
+
+* Single universal agent with tools (e.g., code executor, document analyzer)
+* Prompts control task steps (e.g., “Explain, then provide code”)
+* Intermediate interactions for error correction
+
+**⚠️ Risks**:
+
+* No concurrency, longer execution for long tasks
+* Token overflow risk, mitigated by summarization and step-wise strategies
+
+**🔎 Example**:
+“Generate a Python script for sales data analysis with a trend chart.”
+→ Agent explains logic → Writes code → User confirms → Generates script → Renders chart.
+
+> No need to orchestrate workflows or specify tools; the agent autonomously completes the process.
+
+**Reference Template**: [Deep Research Project (Single-Agent)](https://app.xpertai.cn/explore?search=%E6%B7%B1%E5%BA%A6%E7%A0%94%E7%A9%B6%E9%A1%B9%E7%9B%AE%E7%BB%84%EF%BC%88%E5%8D%95%E6%99%BA%E8%83%BD%E4%BD%93%EF%BC%89)
+
+## Choosing a Mode: Task Characteristics and Reusability
+
+| Feature           | Multi-Agent Mode                     | Single-Agent Mode            |
+| ----------------- | ------------------------------------ | ---------------------------- |
+| Parallelization   | Strong, suits task decomposition     | Weak, suits sequential tasks |
+| Context Sharing   | None, main agent coordinates         | Full context retention       |
+| Controllability   | Moderate, needs prompt design        | High, traceable flow         |
+| Suitable Tasks    | Multi-source integration, research   | Programming, writing, audits |
+| Agent Reusability | High, modular expert components      | Moderate, task-specific      |
+| Risk Control      | Context fragmentation, inconsistency | Token pressure, efficiency   |
+
+In XpertAI, both modes are flexibly selected via project creation. Multi-agent for information integration; single-agent for context-heavy tasks. Agents are configured as reusable “digital experts,” forming an enterprise “smart capability library.”
+
+## How to Configure a Project
+
+### Step 1: Create Project
+
+Click “New Project” on the “Conversation” homepage and name it.
+
+### Step 2: Add Resources
+
+In the “Tools” tab:
+
+* **✅ Tools** (e.g., bash, browser, custom APIs for system integration)
+* **✅ Attachments**: Upload spreadsheets, contracts, blueprints
+* **✅ Knowledge Base**: Add manuals, standards, past cases
+* **✅ Digital Experts**: Select or create experts via “Add Expert”
+
+### Step 3: Engage Project Team
+
+Switch to “Exploration Mode” to issue commands; the agent auto-calls resources. In “Planning Mode,” the agent outlines task steps before execution.
+
+## Case Studies
+
+| Scenario                | Mode         | Capabilities Involved                        |
+| ----------------------- | ------------ | -------------------------------------------- |
+| Monthly Sales Report    | Single-Agent | File tools, knowledge base, charting         |
+| Job Description Writing | Multi-Agent  | Job expert, language optimizer, norms        |
+| Budget Forecasting      | Single-Agent | Excel, budget rules, prediction tools        |
+| Competitor Analysis     | Multi-Agent  | Search, summarization, visualization experts |
+
+## Comparison with Other Products
+
+| Feature                          | XpertAI                | Coze Space | ManusAI  | SunaAI   |
+| -------------------------------- | ---------------------- | ---------- | -------- | -------- |
+| Multi-Agent Orchestration        | ✅ Expert collaboration | ❌          | Partial  | ❌        |
+| Custom Tool Integration          | ✅ Highly extensible    | ✅          | ❌        | ❌        |
+| Enterprise Knowledge Integration | ✅ Full support         | ✅          | ✅        | ❌        |
+| File Comprehension               | ✅ Strong               | Average    | Strong   | Moderate |
+| Ease of Use                      | Low barrier            | High       | Moderate | Moderate |
+
+## Summary
+
+Multi-agent isn’t a cure-all; single-agent isn’t outdated. Success lies in **choosing the right mode for the task and structuring the system effectively**. XpertAI supports both modes, enhancing enterprise-grade agent reusability. Understand their boundaries to build flexible, reliable, and scalable agent systems.
+
+👉 **Start your XpertAI project to empower your business!**

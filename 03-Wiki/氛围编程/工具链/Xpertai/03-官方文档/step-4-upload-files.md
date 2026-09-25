@@ -1,0 +1,72 @@
+---
+title: 'Step 4: Upload Files'
+source: XpertAI 官方文档
+related: []
+keywords:
+- XpertAI
+state:
+  phase: wiki
+  time_raw: '2026-07-01T12:42:25'
+  time_draft: '2026-07-01T12:42:25'
+  time_wiki: '2026-07-01T12:42:25'
+sources:
+- Xpertai/XpertAI工作流教程-MD版/ai/knowledge-base/create-knowledge-base-via-pipeline/step-4-upload-files.md
+---
+# Step 4: Upload Files
+
+> ## Documentation Index
+> Fetch the complete documentation index at: https://docs.xpertai.cn/llms.txt
+> Use this file to discover all available pages before exploring further.
+
+# Step 4: Upload Files
+
+After you have finished configuring, debugging, and successfully publishing your knowledge pipeline, you can upload files by navigating to the document list page:
+
+## Upload Process
+
+### 1. Select Data Source
+
+Choose an upload method from the data source types configured in the pipeline.
+Currently, XpertAI supports the following data sources:
+
+* **Local file upload** (pdf, docx, txt, markdown, etc.)
+* **Remote file systems** (such as S3, FTP, etc.)
+* **Online drives** (in development)
+* **Online documents** (such as Feishu Docs)
+* **Web crawling** (such as Firecrawl and other plugins)
+
+You can also find more data source support in the [XpertAI Plugin Marketplace](https://app.xpertai.cn/settings/plugins).
+
+<Tip>
+  **Tip**:
+
+  Even if you have configured a knowledge pipeline for your knowledge base, you can still use the **basic configuration mode** to upload files directly, without processing them through the pipeline.
+  This allows your knowledge base to support both automated processing and flexible manual additions or quick testing scenarios.
+</Tip>
+
+***
+
+### 2. Fill in File Processing Parameters and Input Variables
+
+If user input fields were defined during pipeline configuration, you will need to fill in the corresponding parameters and variables when uploading files.
+After completing the form, you can click **Preview Segmentation** to view how the document will be chunked.
+Once confirmed, click **Save and Process** to start creating and processing the knowledge base document.
+
+***
+
+### 3. Document Processing and Progress Tracking
+
+After the file upload is complete, the system will automatically start the document processing workflow.
+You can monitor the processing progress of each file in real time. Once embedding is complete, click **Go to Document** to enter the knowledge base page.
+
+***
+
+### 4. View File List
+
+After entering the knowledge base document interface, you can view:
+
+* The number of uploaded files
+* The processing status and progress of each file
+* Whether embedding is complete and the file is available
+
+On this page, you can also reprocess, delete, or append files to documents, making it easy to maintain the latest content in your knowledge base.

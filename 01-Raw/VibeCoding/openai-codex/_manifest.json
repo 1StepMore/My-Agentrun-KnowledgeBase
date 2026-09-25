@@ -1,0 +1,19 @@
+{
+ "pages": {
+  "https://github.com/openai/codex/blob/main/README.md": {
+   "url": "https://github.com/openai/codex/blob/main/README.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai-codex/openai-codex-readme.md"
+  },
+  "https://github.com/openai/codex/blob/main/docs/config.md": {
+   "url": "https://github.com/openai/codex/blob/main/docs/config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai-codex/openai-codex-config.md"
+  },
+  "https://github.com/openai/codex/blob/main/docs/install.md": {
+   "url": "https://github.com/openai/codex/blob/main/docs/install.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai-codex/openai-codex-install.md"
+  }
+ }
+}

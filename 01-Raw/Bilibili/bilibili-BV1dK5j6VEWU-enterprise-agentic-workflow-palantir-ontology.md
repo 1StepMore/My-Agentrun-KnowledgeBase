@@ -1,0 +1,121 @@
+---
+title: 10分钟企业Agentic Workflow落地：Palantir & Ontology
+keywords:
+- Palantir
+- semantic-layer
+- Agentic-Workflow
+- AIP
+- Foundry
+- OAG
+- digital-twin
+state:
+  phase: raw
+  time_raw: '2026-06-28T00:00:00'
+  time_draft: '2026-09-23T00:50:32'
+  time_wiki: '2026-09-23T00:50:32'
+source_url: https://www.bilibili.com/video/BV1dK5j6VEWU/
+source_type: video
+source_platform: bilibili
+author: 零点未来
+publish_date: '2026-06-28'
+fetch_date: '2026-06-28'
+priority: 4
+language: zh
+notes: Whisper small 转写 + DeepSeek V4 Flash (opencode CLI) 后处理。视频时长约10:38。Palantir Ontology 三部曲之一。
+duration_seconds: 638
+duration_formatted: '10:38'
+author_id: ''
+---
+# 10分钟企业Agentic Workflow落地：Palantir & Ontology
+
+## 视频信息
+
+| 字段 | 内容 |
+|------|------|
+| 标题 | 10分钟企业Agentic Workflow落地：Palantir & Ontology |
+| 作者 | 零点未来 |
+| 时长 | 10:38 |
+
+## 原文内容
+
+> DeepSeek V4 Flash 后处理，已修正专有名词和断句。
+
+Palantir 是谁？2003年，PayPal 的联合创始人 Peter Thiel 拉上了 Alex Karp 创建了 Palantir。名字来源于《指环王》里面的真知晶石，能够看透时空的魔法石。第一笔钱来源于美国中情局 CIA 旗下的风投。从反恐战争起家，逐渐发展到现在有三条产品线：
+
+- **Gotham**（2018）：美国情报界核心分析工具
+- **Foundry**（2016）：商业分析版本，服务空客、BP、NHS 等企业客户
+- **AIP**（2023）：AI 平台，把大模型带进企业
+
+2020 年上市，2024 年纳入标普 500，2025 年营收 40 亿美金。
+
+### Ontology 是什么
+
+**不是**数据仓库、BI 仪表盘、数据目录或语义层换名。Palantir 的官方定义：**组织的数字孪生**，位于数据层和模型之间的语义层。
+
+核心作用：把企业分散的数据、业务逻辑、操作能力编织成一张活的地图，人类和 AI 都能读懂。
+
+传统数据仓库有个 T-Order 表，500 万行。Ontology 会告诉你：客户第三方的订单包含了 5 个发动机叶片，目前在德国汉堡仓库等待质检，关联的物流订单是 DHL 的某个单号，预计下周二到上海。
+
+### 核心规则
+
+- **Dataset → Object Type**：不是 data table，而是 object。行是 object，列是 property（属性）
+- **Link**：不同 object type 之间的连接
+- **三层架构**：Data 层（数据源）→ Logic 层（Ontology 语义模型）→ Action 层（Workshop、AI Agent、自动化）
+
+### 三步骤搭建
+
+1. **定义名词**：把数据库翻译成业务对象。如供应商有 ID、名字、区域、交付周期、风险评分等属性
+2. **绑定逻辑**：教会系统判断。如库存还能撑几天、找谁补货，通过逻辑代码写给 AI
+3. **配置 Action**：谁做什么。每个 action 像一份合同——做什么、谁能做、什么条件下能做、做完了要记录什么
+
+### AIP（AI Platform）
+
+核心逻辑：LLM 仍然可以聊天写代码，但如果不懂你的业务，永远只是一个实习生。Ontology 给 AI 提供了一套完整的企业入职手册。
+
+关键概念：**OAG（Ontology-Augmented Generation）**，区别于 RAG（检索增强生成）。
+- RAG 检索文本段落，AI 猜测拼凑，可能幻觉
+- OAG 检索结构化业务对象和实体关系，精准匹配，自动走审批流程
+
+AIP 三步走：
+1. 接入 Ontology
+2. 安全护栏（权限控制）
+3. AI Agent 执行：根据自然语言指令，用 Ontology 寻找推理执行关系
+
+### 关键设计：Human-in-the-Loop
+
+Palantir 不卖自动驾驶，卖的是副驾驶（Assisting）。人类审核后执行。Ontology 把人类 review 的时间拉低到看结果点确认。
+
+### 真实场景：供应链中断应急
+
+1. IoT 传感实时监测库存，低于安全阈值触发异常
+2. AI 做影响分析：遍历关联订单、计算潜在损失、风险仿真
+3. AI 生成替代方案（优化算法模拟成本/交付时间）
+4. 决策层审核选择最优方案
+5. AI 执行：创建采购单、回写 ERP、通知客户、闭环反馈
+
+### 实施情况
+
+五个阶段：Discovery → Bootcamp（5天跑通一个用例）→ 试点 → 上线 → 规模化复制
+
+案例：Medicines 医药公司，2024年1月开始合作，不到6周上线一个工作流，后续新增用例只用90分钟。
+
+代价：NHS 四年约 4.2 亿美金。美国陆军 10 年 100 亿美金合同。一般大企业 3 年约 3 千万美金。
+
+### 优缺点
+
+优点：试点快（5-6天出结果）、能力強（一次性建模持续复用）、安全（全链路审计）
+
+缺点：贵（只适合超大型企业或政府）、技术锁定（迁移成本极高）、隐私伦理争议
+
+### 三件事记住
+
+1. **Palantir 的护城河不是 AI 模型，而是 Ontology**。模型通用，Ontology 专属。FDE（Forward Deployed Engineer）就是把 Ontology 建好的人
+2. **Ontology 相当于企业的操作系统**。让 AI Agent 与业务应用操作企业数据和流程，共享一套安全/权限/治理规则。建一次持续复用
+3. **语义先行，AI 才能跑起来**。太多企业急于上 AI 却跳过了最基础的一步：先搞清楚业务对象、关系、权限
+
+## 抓取备注
+
+- 零点未来 Palantir Ontology 三部曲之一
+- 侧重 Ontology 概念介绍 + AIP 架构 + 企业落地案例
+- FDE 角色的价值体现在深度行业理解的持续工程投入
+- OAG vs RAG 的对比是关键洞察

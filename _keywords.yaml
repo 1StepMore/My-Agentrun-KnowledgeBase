@@ -1,0 +1,1239 @@
+ADK:
+  aliases:
+  - ADK
+  category: tool
+  related:
+  - AI-Agent
+  - Skill-Design
+  status: verified
+AI-Agent:
+  aliases:
+  - AI-Agent
+  - AI Agent
+  - coding-agent
+  - 智能体
+  category: concept
+  status: verified
+AIP:
+  aliases:
+  - AIP
+  category: concept
+  status: verified
+AI工程:
+  aliases:
+  - AI工程
+  category: concept
+  status: verified
+AI平台:
+  aliases:
+  - AI平台
+  category: platform
+  status: verified
+AI编程:
+  aliases:
+  - AI编程
+  - AI coding
+  - AI 编程
+  category: concept
+  related:
+  - vibe-coding
+  - claude-code
+  status: verified
+API:
+  aliases:
+  - API
+  - API配置
+  category: concept
+  status: verified
+APS:
+  aliases:
+  - APS
+  - 高级计划与排程
+  - 高级排程
+  category: concept
+  related:
+  - 排产
+  - MES
+  - 制造业
+  status: auto_added
+Agentic-Workflow:
+  aliases:
+  - Agentic-Workflow
+  category: concept
+  status: verified
+Agent编排:
+  aliases:
+  - Agent编排
+  - 智能体编排
+  category: concept
+  related:
+  - AI-Agent
+  - Multi-Agent
+  status: auto_added
+Anthropic:
+  aliases:
+  - Anthropic
+  - Claude 官方
+  - anthropic
+  category: company
+  related:
+  - claude-code
+  - AI-Agent
+  status: verified
+BDD:
+  aliases:
+  - BDD
+  - Behavior Driven Development
+  category: methodology
+  status: auto_added
+BOM:
+  aliases:
+  - BOM
+  - 物料清单
+  category: concept
+  related:
+  - 工艺
+  - 制造业
+  status: auto_added
+Claude:
+  aliases:
+  - Claude
+  category: tool
+  related:
+  - AI-Agent
+  - ai-coding
+  status: verified
+Codex:
+  aliases:
+  - Codex
+  category: tool
+  related:
+  - AI-Agent
+  - ai-coding
+  status: verified
+ComfyUI:
+  aliases:
+  - ComfyUI
+  category: tool
+  status: auto_added
+Design-Patterns:
+  aliases:
+  - Design Patterns
+  category: methodology
+  status: verified
+ERP:
+  aliases:
+  - ERP
+  - 企业资源计划
+  category: concept
+  related:
+  - MES
+  - 制造业
+  status: auto_added
+Exa:
+  aliases:
+  - Exa
+  category: tool
+  related:
+  - WebSearch
+  status: verified
+FDE:
+  aliases:
+  - FDE
+  category: concept
+  status: verified
+Foundry:
+  aliases:
+  - Foundry
+  category: platform
+  related:
+  - Palantir
+  status: verified
+Harness:
+  aliases:
+  - Harness
+  category: tool
+  related:
+  - AI-Agent
+  - architecture
+  status: verified
+Hermes-Agent:
+  aliases:
+  - Hermes-Agent
+  - HermesAgent
+  - Hermes Agent
+  category: tool
+  related:
+  - AI-Agent
+  status: verified
+IM工具:
+  aliases:
+  - IM工具
+  category: tool
+  status: verified
+Jev:
+  aliases:
+  - Jev
+  - Jev模型
+  - Jev AI
+  - 杰文斯悖论
+  - Jevons
+  - Jevons Paradox
+  category: product
+  status: auto_added
+KPI:
+  aliases:
+  - KPI
+  category: concept
+  related:
+  - 量化基线
+  - 验收
+  status: auto_added
+Karpathy:
+  aliases:
+  - Karpathy
+  category: other
+  status: verified
+LLM:
+  aliases:
+  - LLM
+  category: concept
+  status: verified
+LLM-Wiki:
+  aliases:
+  - LLM-Wiki
+  category: tool
+  related:
+  - knowledge-base
+  status: verified
+LangChain:
+  aliases:
+  - LangChain
+  category: tool
+  related:
+  - AI-Agent
+  status: verified
+LangGraph:
+  aliases:
+  - LangGraph
+  category: tool
+  related:
+  - AI-Agent
+  status: verified
+MES:
+  aliases:
+  - MES
+  - 制造执行系统
+  category: concept
+  related:
+  - APS
+  - ERP
+  - 车间
+  status: auto_added
+MiniMax:
+  aliases:
+  - MiniMax
+  category: tool
+  related:
+  - API
+  - LLM
+  status: verified
+Multi-Agent:
+  aliases:
+  - Multi-Agent
+  - 多智能体
+  - 双Agent
+  category: concept
+  status: verified
+Nous-Research:
+  aliases:
+  - Nous-Research
+  category: other
+  status: verified
+OAG:
+  aliases:
+  - OAG
+  category: concept
+  status: auto_added
+Obsidian:
+  aliases:
+  - Obsidian
+  category: tool
+  related:
+  - knowledge-base
+  - LLM-Wiki
+  status: verified
+Oh-My-OpenCode:
+  aliases:
+  - Oh My OpenCode
+  - oh-my-opencode
+  category: tool
+  related:
+  - OpenCode
+  status: auto_added
+OpenClaw:
+  aliases:
+  - OpenClaw
+  category: tool
+  related:
+  - AI-Agent
+  - Hermes-Agent
+  status: verified
+OpenCode:
+  aliases:
+  - OpenCode
+  - opencode
+  category: tool
+  related:
+  - AI-Agent
+  status: auto_added
+Palantir:
+  aliases:
+  - Palantir
+  category: tool
+  related:
+  - semantic-layer
+  - ontology-construction
+  status: verified
+Perplexity:
+  aliases:
+  - Perplexity
+  category: tool
+  related:
+  - WebSearch
+  status: verified
+Qdrant:
+  aliases:
+  - Qdrant
+  category: tool
+  related:
+  - LLM
+  - knowledge-base
+  status: verified
+RAG:
+  aliases:
+  - RAG
+  category: concept
+  status: verified
+ReAct:
+  aliases:
+  - ReAct
+  - ReAct模式
+  - ReAct框架
+  category: methodology
+  note: 大小写敏感——不要与 React（JS 库，见 react 条目）混淆
+  status: verified
+Skill:
+  aliases:
+  - Skill
+  - skills
+  - ai-skill
+  category: concept
+  related:
+  - Hermes-Agent
+  - Skill-Design
+  status: verified
+Skill-Design:
+  aliases:
+  - Skill Design
+  category: concept
+  status: verified
+Tavily:
+  aliases:
+  - Tavily
+  category: tool
+  related:
+  - WebSearch
+  status: verified
+Telegram:
+  aliases:
+  - Telegram
+  category: platform
+  status: verified
+TypeSafe:
+  aliases:
+  - TypeSafe
+  - TypeSafe AI
+  - Type Safe
+  - TypeSafe公司
+  category: product
+  status: auto_added
+WebClipper:
+  aliases:
+  - WebClipper
+  category: tool
+  status: verified
+WebSearch:
+  aliases:
+  - WebSearch
+  category: tool
+  related:
+  - tool-review
+  status: verified
+XpertAI:
+  aliases:
+  - XpertAI
+  - Xpert AI
+  category: platform
+  related:
+  - Multi-Agent
+  - workflow
+  status: verified
+_AUTO_EXCLUDE:
+- bilibili
+- documentation
+- ppt-replacement
+advanced-techniques:
+  aliases:
+  - 进阶技巧
+  category: concept
+  status: verified
+agent-state:
+  aliases:
+  - agent-state
+  category: concept
+  status: verified
+agentic-loop:
+  aliases:
+  - Agentic Loops
+  - Agentic Loop
+  - Loops
+  - 循环工程
+  - Loop Engineering
+  - loop-engineering
+  - agent-loop
+  category: concept
+  related:
+  - AI-Agent
+  - methodology
+  status: verified
+ai-coding:
+  aliases:
+  - ai-coding
+  - AI Development
+  - AI-Development
+  category: methodology
+  status: verified
+ai-economics:
+  aliases:
+  - AI Economics
+  - AI经济学
+  - AI 经济学
+  category: concept
+  status: auto_added
+ai-programming:
+  aliases:
+  - ai-programming
+  - AI编程
+  category: concept
+  status: auto_added
+ai-service-monetization:
+  aliases:
+  - AI服务商业化
+  - AI 服务商业化
+  - AI monetization
+  - AI服务变现
+  category: concept
+  status: auto_added
+ai-video:
+  aliases:
+  - AI视频
+  - ai-video
+  category: concept
+  status: verified
+architecture:
+  aliases:
+  - 架构
+  - 架构设计
+  category: concept
+  status: verified
+automation:
+  aliases:
+  - 自动化
+  - automation
+  category: concept
+  status: verified
+autonomy:
+  aliases:
+  - autonomy
+  category: concept
+  status: verified
+beginner-tutorial:
+  aliases:
+  - 新手教程
+  category: concept
+  status: verified
+bilibili:
+  aliases:
+  - bilibili
+  - B站
+  category: platform
+  status: verified
+calibration:
+  aliases:
+  - calibration
+  - 校准
+  - Calibration
+  - 决策校准
+  - 置信度校准
+  category: concept
+  status: auto_added
+claude-code:
+  aliases:
+  - claude-code
+  - Claude Code
+  category: tool
+  status: auto_added
+cloud-code:
+  aliases:
+  - cloud-code
+  - Cloud Code
+  category: tool
+  status: verified
+codex:
+  aliases:
+  - Codex
+  - codex
+  category: tool
+  related:
+  - openai
+  - vibe-coding
+  status: verified
+context-engineering:
+  aliases:
+  - context-engineering
+  category: concept
+  status: verified
+contract-risk:
+  aliases:
+  - 合同风险
+  - 合同条款
+  - 责任限制
+  - 责任上限
+  - 责任限额
+  - 赔偿
+  - 担责
+  - 免责
+  - 违约
+  - liability
+  - indemnity
+  - indemnification
+  - limitation of liability
+  - contract
+  category: ai-service-monetization
+  related:
+  - service-offer
+  - ai-service-monetization
+  status: approved
+core-methodology:
+  aliases:
+  - 核心心法
+  category: concept
+  status: verified
+cursor:
+  aliases:
+  - cursor
+  category: tool
+  related:
+  - AI-Agent
+  - ai-coding
+  status: verified
+data-engineering:
+  aliases:
+  - data-engineering
+  category: concept
+  status: verified
+data-flywheel:
+  aliases:
+  - 数据飞轮
+  category: concept
+  status: verified
+data-integration:
+  aliases:
+  - data-integration
+  category: concept
+  status: verified
+data-modeling:
+  aliases:
+  - data-modeling
+  category: concept
+  status: verified
+data-pipeline:
+  aliases:
+  - data-pipeline
+  category: concept
+  related:
+  - etl
+  status: verified
+decision-model:
+  aliases:
+  - 决策模型
+  - 决策型AI
+  - Decision Model
+  - TypeSafe AI
+  - 决策型模型
+  category: concept
+  status: auto_added
+deployment:
+  aliases:
+  - 部署
+  - 上线部署
+  - 部署指南
+  - 安装教程
+  category: methodology
+  status: auto_added
+developer-experience:
+  aliases:
+  - developer-experience
+  category: concept
+  status: verified
+digital-twin:
+  aliases:
+  - 数字孪生
+  - Digital Twin
+  - digital twin
+  category: concept
+  related:
+  - semantic-layer
+  - ontology-construction
+  status: auto_added
+disk-persistence:
+  aliases:
+  - disk-persistence
+  category: concept
+  status: verified
+documentation:
+  aliases:
+  - 文档
+  - documentation
+  category: concept
+  status: verified
+efficiency:
+  aliases:
+  - 提效
+  category: concept
+  status: verified
+engineering:
+  aliases:
+  - 工程博客
+  - engineering blog
+  category: concept
+  related:
+  - Anthropic
+  status: auto_added
+enterprise-architecture:
+  aliases:
+  - enterprise-architecture
+  category: concept
+  status: verified
+etl:
+  aliases:
+  - etl
+  category: concept
+  status: verified
+feedback-loop:
+  aliases:
+  - 反馈循环
+  category: concept
+  status: verified
+garden-skills:
+  aliases:
+  - garden-skills
+  category: concept
+  status: verified
+generative-ai:
+  aliases:
+  - 生成式AI
+  category: concept
+  status: verified
+goal-programming:
+  aliases:
+  - goal-programming
+  category: methodology
+  related:
+  - ai-coding
+  - methodology
+  status: verified
+gsap:
+  aliases:
+  - GSAP
+  category: tool
+  related:
+  - hyperframes
+  - html-to-video
+  status: auto_added
+harness-engineering:
+  aliases:
+  - Harness Engineering
+  category: methodology
+  status: auto_added
+html-to-video:
+  aliases:
+  - html-to-video
+  - html-presentation
+  category: format
+  status: verified
+hyperframes:
+  aliases:
+  - hyperframes
+  category: tool
+  related:
+  - html-to-video
+  status: verified
+integration-tutorial:
+  aliases:
+  - 接入教程
+  category: concept
+  related:
+  - setup
+  status: verified
+knowledge-base:
+  aliases:
+  - 知识库
+  - AI知识库
+  - 知识管理
+  category: concept
+  status: verified
+knowledge-graph:
+  aliases:
+  - knowledge-graph
+  category: concept
+  status: verified
+long-running-agent:
+  aliases:
+  - ralph-loop
+  - ralph loop
+  category: concept
+  status: auto_added
+mcp:
+  aliases:
+  - mcp
+  category: tool
+  related:
+  - AI-Agent
+  - tool-calling
+  status: verified
+memory:
+  aliases:
+  - memory
+  category: concept
+  status: verified
+methodology:
+  aliases:
+  - methodology
+  category: methodology
+  status: verified
+multi-agent-system:
+  aliases:
+  - 多代理
+  - 多智能体系统
+  category: concept
+  status: auto_added
+multi-model-routing:
+  aliases:
+  - 多模型路由
+  category: concept
+  status: verified
+multi-platform:
+  aliases:
+  - multi-platform
+  category: concept
+  status: verified
+ontology-construction:
+  aliases:
+  - ontology-construction
+  category: methodology
+  related:
+  - semantic-layer
+  status: verified
+ontology-pipeline:
+  aliases:
+  - ontology-pipeline
+  category: concept
+  related:
+  - semantic-layer
+  status: verified
+open-source:
+  aliases:
+  - open-source
+  - 开源项目
+  category: concept
+  status: verified
+openai:
+  aliases:
+  - OpenAI
+  - openai
+  category: company
+  related:
+  - codex
+  - AI编程
+  status: verified
+opencode:
+  aliases:
+  - opencode
+  - OpenCode
+  category: tool
+  related:
+  - vibe-coding
+  - claude-code
+  status: verified
+outcome-based-pricing:
+  aliases:
+  - 按结果计费
+  - 结果计费
+  - outcome-based pricing
+  - 按效果付费
+  category: concept
+  status: auto_added
+plugin-recommendation:
+  aliases:
+  - 插件推荐
+  category: concept
+  related:
+  - Hermes-Agent
+  status: verified
+ppt-replacement:
+  aliases:
+  - ppt替代
+  category: concept
+  status: verified
+pricing-strategy:
+  aliases:
+  - 定价策略
+  - pricing strategy
+  - 定价方法
+  category: concept
+  status: auto_added
+product-verification:
+  aliases:
+  - product-verification
+  category: methodology
+  status: verified
+productivity-tools:
+  aliases:
+  - 效率工具
+  category: concept
+  related:
+  - workflow
+  status: verified
+professional-services:
+  aliases:
+  - 专业服务
+  - professional services
+  - PS
+  category: concept
+  status: auto_added
+progressive-disclosure:
+  aliases:
+  - 渐进式披露
+  category: methodology
+  status: verified
+prompt-engineering:
+  aliases:
+  - prompt-engineering
+  - PromptEngineering
+  - 提示词工程
+  category: methodology
+  related:
+  - AI-Agent
+  - ai-coding
+  status: verified
+react:
+  aliases:
+  - React.js
+  - React 组件
+  category: tool
+  related:
+  - remotion
+  - html-to-video
+  status: auto_added
+remotion:
+  aliases:
+  - Remotion
+  category: tool
+  status: verified
+research-method:
+  aliases:
+  - 调研
+  - 需求调研
+  - 需求调研方法
+  category: methodology
+  status: auto_added
+runbook:
+  aliases:
+  - runbook
+  category: concept
+  status: verified
+semantic-layer:
+  aliases:
+  - semantic-layer
+  - Ontology
+  - 语义层
+  category: concept
+  status: verified
+service-offer:
+  aliases:
+  - 服务报价
+  - 服务产品化
+  - service offer
+  - 服务包装
+  category: concept
+  status: auto_added
+setup:
+  aliases: []
+  category: concept
+  related:
+  - Hermes-Agent
+  - beginner-tutorial
+  status: verified
+six-primitives:
+  aliases:
+  - six-primitives
+  - 六大构件
+  category: concept
+  status: auto_added
+skill-design-patterns:
+  aliases:
+  - Skill设计模式
+  - Skill设计模式与Agent稳定输出
+  category: methodology
+  status: auto_added
+spec-coding:
+  aliases:
+  - spec-coding
+  - Spec Coding
+  - spec-driven-development
+  - Spec Driven Development
+  - SDD
+  - 规约驱动开发
+  - 规格驱动开发
+  - spec coding
+  category: methodology
+  status: auto_added
+svganimate:
+  aliases:
+  - svganimate
+  category: tool
+  related:
+  - html-to-video
+  status: verified
+systems-engineering:
+  aliases:
+  - 系统工程
+  category: concept
+  status: verified
+three.js:
+  aliases:
+  - Three.js
+  - three.js
+  category: tool
+  related:
+  - hyperframes
+  - html-to-video
+  status: auto_added
+tool-calling:
+  aliases:
+  - ToolCall
+  - tool-calling
+  category: concept
+  status: verified
+tool-review:
+  aliases:
+  - 工具横评
+  category: concept
+  status: verified
+unit-economics:
+  aliases:
+  - 单位经济
+  - 单位经济学
+  - unit economics
+  category: concept
+  status: auto_added
+usage-based-pricing:
+  aliases:
+  - 用量计费
+  - usage-based pricing
+  - 按用量付费
+  category: concept
+  status: auto_added
+usage-tips:
+  aliases:
+  - 使用技巧
+  category: concept
+  status: verified
+value-based-pricing:
+  aliases:
+  - 价值定价
+  - value-based pricing
+  - 基于价值的定价
+  category: concept
+  status: auto_added
+vector-database:
+  aliases:
+  - 向量数据库
+  - vector database
+  category: tool
+  status: auto_added
+vibe-coding:
+  aliases:
+  - vibe-coding
+  - Vibe Coding
+  - vibe coding
+  - 氛围编程
+  category: concept
+  status: auto_added
+video-generation:
+  aliases:
+  - video-generation
+  - 视频生成技术
+  category: concept
+  status: auto_added
+willingness-to-pay:
+  aliases:
+  - 支付意愿
+  - willingness to pay
+  - WTP
+  category: concept
+  status: auto_added
+workflow:
+  aliases:
+  - 工作流
+  - workflow
+  - ai-workflow
+  - AI工作流
+  - 自动化工作流
+  - 工作流自动化
+  - automation-workflow
+  category: concept
+  status: verified
+writing-principles:
+  aliases:
+  - 编写原则
+  - writing
+  - Gotchas
+  category: concept
+  status: verified
+交付:
+  aliases:
+  - 交付
+  - 项目交付
+  category: methodology
+  related:
+  - 验收
+  - 落地
+  status: auto_added
+产能:
+  aliases:
+  - 产能
+  - 有限产能
+  - 瓶颈
+  category: concept
+  related:
+  - 车间
+  - 排产
+  status: auto_added
+企业AI落地:
+  aliases:
+  - 企业AI落地
+  category: concept
+  related:
+  - 落地
+  - FDE
+  status: auto_added
+制造业:
+  aliases:
+  - 制造业
+  - 制造企业
+  - 制造
+  - 工业
+  category: concept
+  related:
+  - 车间
+  - APS
+  status: auto_added
+场景选择:
+  aliases:
+  - 场景选择
+  - 选场景
+  - 场景筛选
+  category: methodology
+  related:
+  - 落地
+  - 试点
+  status: auto_added
+多模态:
+  aliases:
+  - 多模态
+  category: concept
+  status: verified
+工艺:
+  aliases:
+  - 工艺
+  - 工艺路线
+  - 工序
+  - 工步
+  category: concept
+  related:
+  - BOM
+  - 制造业
+  status: auto_added
+微信:
+  aliases:
+  - 微信
+  category: platform
+  status: verified
+排产:
+  aliases:
+  - 排产
+  - 智能排产
+  - 生产排程
+  - 排程
+  category: concept
+  related:
+  - APS
+  - MES
+  - 制造业
+  status: auto_added
+本地LLM:
+  aliases:
+  - 本地LLM
+  category: concept
+  status: verified
+本地化:
+  aliases:
+  - 本地化
+  - localization
+  - l10n
+  category: concept
+  related:
+  - 短剧
+  status: auto_added
+权限控制:
+  aliases:
+  - 权限
+  - 权限控制
+  - 授权
+  category: concept
+  related:
+  - AI-Agent
+  - 交付
+  status: auto_added
+现场驻场:
+  aliases:
+  - 驻场
+  - 客户现场
+  category: methodology
+  related:
+  - 交付
+  - 需求调研
+  status: auto_added
+生图:
+  aliases:
+  - 生图
+  - 文生图
+  - 图像生成
+  category: concept
+  related:
+  - 多模态
+  status: auto_added
+短剧:
+  aliases:
+  - 短剧
+  - 微短剧
+  category: domain
+  related:
+  - 本地化
+  status: auto_added
+落地:
+  aliases:
+  - 落地
+  - 应用落地
+  category: concept
+  related:
+  - 交付
+  - 试点
+  status: auto_added
+视频生成:
+  aliases:
+  - 视频生成
+  category: concept
+  related:
+  - 多模态
+  - hyperframes
+  status: auto_added
+评测:
+  aliases:
+  - 评测
+  - evaluation
+  - eval
+  - benchmark
+  category: methodology
+  related:
+  - product-verification
+  - 验收
+  - 量化基线
+  status: verified
+试点:
+  aliases:
+  - 试点
+  - PoC
+  - 概念验证
+  - POC
+  category: methodology
+  related:
+  - 场景选择
+  - 交付
+  status: auto_added
+超级个体:
+  aliases:
+  - 超级个体
+  - 一人公司
+  category: concept
+  status: verified
+车间:
+  aliases:
+  - 车间
+  - 产线
+  - 生产线
+  category: concept
+  related:
+  - 制造业
+  - 产能
+  status: auto_added
+软件开发:
+  aliases:
+  - 软件开发
+  category: concept
+  status: verified
+量化基线:
+  aliases:
+  - 量化基线
+  - 基线
+  - 基线值
+  category: methodology
+  related:
+  - 验收
+  - KPI
+  status: auto_added
+需求调研:
+  aliases:
+  - 业务调研
+  category: methodology
+  related:
+  - 场景选择
+  - 交付
+  status: auto_added
+飞书:
+  aliases:
+  - 飞书
+  category: platform
+  status: verified
+验收:
+  aliases:
+  - 验收
+  - 验收标准
+  category: methodology
+  related:
+  - 交付
+  - 量化基线
+  status: auto_added

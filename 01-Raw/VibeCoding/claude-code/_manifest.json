@@ -1,0 +1,1880 @@
+{
+ "pages": {
+  "https://code.claude.com/docs/en/prompt-caching.md": {
+   "url": "https://code.claude.com/docs/en/prompt-caching.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-prompt-caching.md",
+   "title": "How Claude Code uses prompt caching",
+   "chars": 41311,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/features-overview.md": {
+   "url": "https://code.claude.com/docs/en/features-overview.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-features-overview.md",
+   "title": "Extend Claude Code",
+   "chars": 31686,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-directory.md": {
+   "url": "https://code.claude.com/docs/en/claude-directory.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-directory.md",
+   "title": "Explore the .claude directory",
+   "chars": 108007,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/how-claude-code-works.md": {
+   "url": "https://code.claude.com/docs/en/how-claude-code-works.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-how-claude-code-works.md",
+   "title": "How Claude Code works",
+   "chars": 19722,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/changelog.md": {
+   "url": "https://code.claude.com/docs/en/changelog.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-changelog.md",
+   "title": "Claude Code changelog",
+   "chars": 798468,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/quickstart.md": {
+   "url": "https://code.claude.com/docs/en/quickstart.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-quickstart.md",
+   "title": "Quickstart",
+   "chars": 13487,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/common-workflows.md": {
+   "url": "https://code.claude.com/docs/en/common-workflows.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-common-workflows.md",
+   "title": "Common workflows",
+   "chars": 16737,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/prompt-library.md": {
+   "url": "https://code.claude.com/docs/en/prompt-library.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-prompt-library.md",
+   "title": "Prompt library",
+   "chars": 56613,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/context-window.md": {
+   "url": "https://code.claude.com/docs/en/context-window.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-context-window.md",
+   "title": "Explore the context window",
+   "chars": 62479,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/memory.md": {
+   "url": "https://code.claude.com/docs/en/memory.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-memory.md",
+   "title": "How Claude remembers your project",
+   "chars": 52795,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/overview.md": {
+   "url": "https://code.claude.com/docs/en/overview.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-overview.md",
+   "title": "Overview",
+   "chars": 17507,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/sessions.md": {
+   "url": "https://code.claude.com/docs/en/sessions.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-sessions.md",
+   "title": "Manage sessions",
+   "chars": 38859,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-projects.md": {
+   "url": "https://code.claude.com/docs/en/claude-projects.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-projects.md",
+   "title": "Let Claude coordinate ongoing work with Projects",
+   "chars": 59460,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/chrome.md": {
+   "url": "https://code.claude.com/docs/en/chrome.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-chrome.md",
+   "title": "Use Claude Code with Chrome",
+   "chars": 19253,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/mobile.md": {
+   "url": "https://code.claude.com/docs/en/mobile.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-mobile.md",
+   "title": "Claude Code on mobile",
+   "chars": 9158,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/computer-use.md": {
+   "url": "https://code.claude.com/docs/en/computer-use.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-computer-use.md",
+   "title": "Let Claude use your computer from the CLI",
+   "chars": 12502,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/remote-control.md": {
+   "url": "https://code.claude.com/docs/en/remote-control.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-remote-control.md",
+   "title": "Continue local sessions from any device with Remote Control",
+   "chars": 62340,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/platforms.md": {
+   "url": "https://code.claude.com/docs/en/platforms.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-platforms.md",
+   "title": "Platforms and integrations",
+   "chars": 12653,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/jetbrains.md": {
+   "url": "https://code.claude.com/docs/en/jetbrains.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-jetbrains.md",
+   "title": "JetBrains IDEs",
+   "chars": 12473,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/vs-code.md": {
+   "url": "https://code.claude.com/docs/en/vs-code.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-vs-code.md",
+   "title": "Use Claude Code in VS Code",
+   "chars": 83080,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/web-quickstart.md": {
+   "url": "https://code.claude.com/docs/en/web-quickstart.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-web-quickstart.md",
+   "title": "Get started with Claude Code in the cloud",
+   "chars": 25491,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-code-on-the-web.md": {
+   "url": "https://code.claude.com/docs/en/claude-code-on-the-web.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-code-on-the-web.md",
+   "title": "Use Claude Code in the cloud",
+   "chars": 42034,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/slack.md": {
+   "url": "https://code.claude.com/docs/en/slack.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-slack.md",
+   "title": "Claude Code in Slack",
+   "chars": 14934,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/ultrareview.md": {
+   "url": "https://code.claude.com/docs/en/ultrareview.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-ultrareview.md",
+   "title": "Find bugs with ultrareview",
+   "chars": 20158,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/desktop-quickstart.md": {
+   "url": "https://code.claude.com/docs/en/desktop-quickstart.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-desktop-quickstart.md",
+   "title": "Get started with the desktop app",
+   "chars": 10432,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/desktop.md": {
+   "url": "https://code.claude.com/docs/en/desktop.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-desktop.md",
+   "title": "Desktop application",
+   "chars": 103142,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/desktop-linux.md": {
+   "url": "https://code.claude.com/docs/en/desktop-linux.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-desktop-linux.md",
+   "title": "Claude Desktop on Linux (beta)",
+   "chars": 11406,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/desktop-wsl.md": {
+   "url": "https://code.claude.com/docs/en/desktop-wsl.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-desktop-wsl.md",
+   "title": "Claude Code Desktop in WSL",
+   "chars": 2810,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/best-practices.md": {
+   "url": "https://code.claude.com/docs/en/best-practices.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-best-practices.md",
+   "title": "Best practices for Claude Code",
+   "chars": 39625,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/desktop-scheduled-tasks.md": {
+   "url": "https://code.claude.com/docs/en/desktop-scheduled-tasks.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-desktop-scheduled-tasks.md",
+   "title": "Schedule recurring tasks in Claude Code Desktop",
+   "chars": 12272,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/routines.md": {
+   "url": "https://code.claude.com/docs/en/routines.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-routines.md",
+   "title": "Automate work with routines",
+   "chars": 34314,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-security.md": {
+   "url": "https://code.claude.com/docs/en/claude-security.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-security.md",
+   "title": "Scan your codebase for vulnerabilities",
+   "chars": 13783,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-tag.md": {
+   "url": "https://code.claude.com/docs/en/claude-tag.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-tag.md",
+   "title": "Claude Tag",
+   "chars": 990,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/security-guidance.md": {
+   "url": "https://code.claude.com/docs/en/security-guidance.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-security-guidance.md",
+   "title": "Catch security issues as Claude writes code",
+   "chars": 20691,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/desktop-ios-simulator.md": {
+   "url": "https://code.claude.com/docs/en/desktop-ios-simulator.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-desktop-ios-simulator.md",
+   "title": "Test iOS apps in the simulator",
+   "chars": 12163,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/code-review.md": {
+   "url": "https://code.claude.com/docs/en/code-review.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-code-review.md",
+   "title": "Code Review",
+   "chars": 33622,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/github-actions.md": {
+   "url": "https://code.claude.com/docs/en/github-actions.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-github-actions.md",
+   "title": "Claude Code GitHub Actions",
+   "chars": 32827,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/github-actions-cloud-providers.md": {
+   "url": "https://code.claude.com/docs/en/github-actions-cloud-providers.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-github-actions-cloud-providers.md",
+   "title": "Use Claude Code GitHub Actions with cloud providers",
+   "chars": 18623,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/github-enterprise-server.md": {
+   "url": "https://code.claude.com/docs/en/github-enterprise-server.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-github-enterprise-server.md",
+   "title": "Claude Code with GitHub Enterprise Server",
+   "chars": 23209,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/gitlab-ci-cd.md": {
+   "url": "https://code.claude.com/docs/en/gitlab-ci-cd.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-gitlab-ci-cd.md",
+   "title": "Claude Code GitLab CI/CD",
+   "chars": 18809,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agents.md": {
+   "url": "https://code.claude.com/docs/en/agents.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agents.md",
+   "title": "Run agents in parallel",
+   "chars": 10032,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/workflows.md": {
+   "url": "https://code.claude.com/docs/en/workflows.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-workflows.md",
+   "title": "Orchestrate subagents at scale with dynamic workflows",
+   "chars": 43321,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/cross-session-messaging.md": {
+   "url": "https://code.claude.com/docs/en/cross-session-messaging.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-cross-session-messaging.md",
+   "title": "Message your other Claude Code sessions",
+   "chars": 41249,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/sub-agents.md": {
+   "url": "https://code.claude.com/docs/en/sub-agents.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-sub-agents.md",
+   "title": "Create custom subagents",
+   "chars": 117560,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/worktrees.md": {
+   "url": "https://code.claude.com/docs/en/worktrees.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-worktrees.md",
+   "title": "Run parallel sessions with worktrees",
+   "chars": 38833,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/mcp-quickstart.md": {
+   "url": "https://code.claude.com/docs/en/mcp-quickstart.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-mcp-quickstart.md",
+   "title": "Connect to MCP servers",
+   "chars": 25465,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-view.md": {
+   "url": "https://code.claude.com/docs/en/agent-view.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-view.md",
+   "title": "Manage multiple agents with agent view",
+   "chars": 256186,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/skills.md": {
+   "url": "https://code.claude.com/docs/en/skills.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-skills.md",
+   "title": "Extend Claude with skills",
+   "chars": 116403,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/discover-plugins.md": {
+   "url": "https://code.claude.com/docs/en/discover-plugins.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-discover-plugins.md",
+   "title": "Discover and install prebuilt plugins through marketplaces",
+   "chars": 38570,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/plugins.md": {
+   "url": "https://code.claude.com/docs/en/plugins.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-plugins.md",
+   "title": "Create plugins",
+   "chars": 30811,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/artifacts.md": {
+   "url": "https://code.claude.com/docs/en/artifacts.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-artifacts.md",
+   "title": "Share session output as artifacts",
+   "chars": 40595,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/scheduled-tasks.md": {
+   "url": "https://code.claude.com/docs/en/scheduled-tasks.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-scheduled-tasks.md",
+   "title": "Run prompts on a schedule",
+   "chars": 17960,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/mcp.md": {
+   "url": "https://code.claude.com/docs/en/mcp.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-mcp.md",
+   "title": "Connect Claude Code to tools via MCP",
+   "chars": 116197,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/plugin-evals.md": {
+   "url": "https://code.claude.com/docs/en/plugin-evals.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-plugin-evals.md",
+   "title": "Test plugins with evals",
+   "chars": 72877,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/hooks-guide.md": {
+   "url": "https://code.claude.com/docs/en/hooks-guide.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-hooks-guide.md",
+   "title": "Automate actions with hooks",
+   "chars": 82323,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-teams.md": {
+   "url": "https://code.claude.com/docs/en/agent-teams.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-teams.md",
+   "title": "Orchestrate teams of Claude Code sessions",
+   "chars": 41377,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/channels.md": {
+   "url": "https://code.claude.com/docs/en/channels.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-channels.md",
+   "title": "Push events into a running session with channels",
+   "chars": 22787,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/headless.md": {
+   "url": "https://code.claude.com/docs/en/headless.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-headless.md",
+   "title": "Run Claude Code programmatically",
+   "chars": 36873,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/deep-links.md": {
+   "url": "https://code.claude.com/docs/en/deep-links.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-deep-links.md",
+   "title": "Launch sessions from links",
+   "chars": 14609,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/goal.md": {
+   "url": "https://code.claude.com/docs/en/goal.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-goal.md",
+   "title": "Keep Claude working toward a goal",
+   "chars": 16654,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/troubleshooting.md": {
+   "url": "https://code.claude.com/docs/en/troubleshooting.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-troubleshooting.md",
+   "title": "Troubleshooting",
+   "chars": 15383,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/troubleshoot-install.md": {
+   "url": "https://code.claude.com/docs/en/troubleshoot-install.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-troubleshoot-install.md",
+   "title": "Troubleshoot installation and login",
+   "chars": 62017,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/large-codebases.md": {
+   "url": "https://code.claude.com/docs/en/large-codebases.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-large-codebases.md",
+   "title": "Set up Claude Code in a monorepo or large codebase",
+   "chars": 35822,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/errors.md": {
+   "url": "https://code.claude.com/docs/en/errors.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-errors.md",
+   "title": "Error reference",
+   "chars": 478042,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/admin-setup.md": {
+   "url": "https://code.claude.com/docs/en/admin-setup.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-admin-setup.md",
+   "title": "Set up Claude Code for your organization",
+   "chars": 41846,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/debug-your-config.md": {
+   "url": "https://code.claude.com/docs/en/debug-your-config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-debug-your-config.md",
+   "title": "Debug your configuration",
+   "chars": 24971,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/setup.md": {
+   "url": "https://code.claude.com/docs/en/setup.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-setup.md",
+   "title": "Advanced setup",
+   "chars": 30876,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/authentication.md": {
+   "url": "https://code.claude.com/docs/en/authentication.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-authentication.md",
+   "title": "Authentication",
+   "chars": 28857,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/managed-settings.md": {
+   "url": "https://code.claude.com/docs/en/managed-settings.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-managed-settings.md",
+   "title": "Deploy managed settings",
+   "chars": 69649,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/managed-mcp.md": {
+   "url": "https://code.claude.com/docs/en/managed-mcp.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-managed-mcp.md",
+   "title": "Control MCP server access for your organization",
+   "chars": 50433,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/server-managed-settings.md": {
+   "url": "https://code.claude.com/docs/en/server-managed-settings.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-server-managed-settings.md",
+   "title": "Configure server-managed settings",
+   "chars": 46986,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/amazon-bedrock.md": {
+   "url": "https://code.claude.com/docs/en/amazon-bedrock.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-amazon-bedrock.md",
+   "title": "Claude Code on Amazon Bedrock",
+   "chars": 42548,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/auto-mode-config.md": {
+   "url": "https://code.claude.com/docs/en/auto-mode-config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-auto-mode-config.md",
+   "title": "Configure auto mode",
+   "chars": 35766,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/third-party-integrations.md": {
+   "url": "https://code.claude.com/docs/en/third-party-integrations.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-third-party-integrations.md",
+   "title": "Enterprise deployment overview",
+   "chars": 13626,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-platform-on-aws.md": {
+   "url": "https://code.claude.com/docs/en/claude-platform-on-aws.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-platform-on-aws.md",
+   "title": "Claude Code on Claude Platform on AWS",
+   "chars": 18660,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/feature-availability.md": {
+   "url": "https://code.claude.com/docs/en/feature-availability.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-feature-availability.md",
+   "title": "Feature availability",
+   "chars": 23442,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/microsoft-foundry.md": {
+   "url": "https://code.claude.com/docs/en/microsoft-foundry.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-microsoft-foundry.md",
+   "title": "Claude Code on Microsoft Foundry",
+   "chars": 10566,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/network-config.md": {
+   "url": "https://code.claude.com/docs/en/network-config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-network-config.md",
+   "title": "Enterprise network configuration",
+   "chars": 40330,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/corporate-launcher.md": {
+   "url": "https://code.claude.com/docs/en/corporate-launcher.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-corporate-launcher.md",
+   "title": "Run Claude Code behind a corporate launcher",
+   "chars": 13131,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/devcontainer.md": {
+   "url": "https://code.claude.com/docs/en/devcontainer.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-devcontainer.md",
+   "title": "Development containers",
+   "chars": 18234,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/gateways.md": {
+   "url": "https://code.claude.com/docs/en/gateways.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-gateways.md",
+   "title": "Run Claude Code through a gateway",
+   "chars": 9285,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-apps-gateway.md": {
+   "url": "https://code.claude.com/docs/en/claude-apps-gateway.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-apps-gateway.md",
+   "title": "Claude apps gateway for Amazon Bedrock, Claude Platform on AWS, Google Cloud, and Microsoft Foundry",
+   "chars": 67263,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-apps-gateway-config.md": {
+   "url": "https://code.claude.com/docs/en/claude-apps-gateway-config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-apps-gateway-config.md",
+   "title": "Claude apps gateway configuration",
+   "chars": 139110,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-apps-gateway-on-gcp.md": {
+   "url": "https://code.claude.com/docs/en/claude-apps-gateway-on-gcp.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-apps-gateway-on-gcp.md",
+   "title": "Deploy Claude apps gateway on Google Cloud",
+   "chars": 24511,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-apps-gateway-deploy.md": {
+   "url": "https://code.claude.com/docs/en/claude-apps-gateway-deploy.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-apps-gateway-deploy.md",
+   "title": "Claude apps gateway deployment and operations",
+   "chars": 89439,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/llm-gateway.md": {
+   "url": "https://code.claude.com/docs/en/llm-gateway.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-llm-gateway.md",
+   "title": "Other LLM gateways",
+   "chars": 6329,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-apps-gateway-spend-limits.md": {
+   "url": "https://code.claude.com/docs/en/claude-apps-gateway-spend-limits.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-apps-gateway-spend-limits.md",
+   "title": "Claude apps gateway spend limits",
+   "chars": 18022,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/google-vertex-ai.md": {
+   "url": "https://code.claude.com/docs/en/google-vertex-ai.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-google-vertex-ai.md",
+   "title": "Claude Code on Google Cloud's Agent Platform",
+   "chars": 21395,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/llm-gateway-rollout.md": {
+   "url": "https://code.claude.com/docs/en/llm-gateway-rollout.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-llm-gateway-rollout.md",
+   "title": "Roll out an LLM gateway for your organization",
+   "chars": 38533,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/llm-gateway-protocol.md": {
+   "url": "https://code.claude.com/docs/en/llm-gateway-protocol.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-llm-gateway-protocol.md",
+   "title": "Claude Code gateway compatibility guide",
+   "chars": 52260,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/claude-apps-gateway-on-aws.md": {
+   "url": "https://code.claude.com/docs/en/claude-apps-gateway-on-aws.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-claude-apps-gateway-on-aws.md",
+   "title": "Deploy Claude apps gateway on AWS",
+   "chars": 50568,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/analytics.md": {
+   "url": "https://code.claude.com/docs/en/analytics.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-analytics.md",
+   "title": "Track team usage with analytics",
+   "chars": 12044,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/costs.md": {
+   "url": "https://code.claude.com/docs/en/costs.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-costs.md",
+   "title": "Manage costs effectively",
+   "chars": 42136,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/plugin-marketplaces.md": {
+   "url": "https://code.claude.com/docs/en/plugin-marketplaces.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-plugin-marketplaces.md",
+   "title": "Create and distribute a plugin marketplace",
+   "chars": 126949,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/llm-gateway-connect.md": {
+   "url": "https://code.claude.com/docs/en/llm-gateway-connect.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-llm-gateway-connect.md",
+   "title": "Connect Claude Code to an LLM gateway",
+   "chars": 60595,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/plugin-dependencies.md": {
+   "url": "https://code.claude.com/docs/en/plugin-dependencies.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-plugin-dependencies.md",
+   "title": "Constrain plugin dependency versions",
+   "chars": 24425,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/plugin-hints.md": {
+   "url": "https://code.claude.com/docs/en/plugin-hints.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-plugin-hints.md",
+   "title": "Recommend your plugin from your CLI",
+   "chars": 9675,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/security.md": {
+   "url": "https://code.claude.com/docs/en/security.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-security.md",
+   "title": "Security",
+   "chars": 12877,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/plugin-relevance.md": {
+   "url": "https://code.claude.com/docs/en/plugin-relevance.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-plugin-relevance.md",
+   "title": "Recommend plugins for your org",
+   "chars": 15808,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/zero-data-retention.md": {
+   "url": "https://code.claude.com/docs/en/zero-data-retention.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-zero-data-retention.md",
+   "title": "Zero data retention",
+   "chars": 9363,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/communications-kit.md": {
+   "url": "https://code.claude.com/docs/en/communications-kit.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-communications-kit.md",
+   "title": "Communications kit",
+   "chars": 25643,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/settings.md": {
+   "url": "https://code.claude.com/docs/en/settings.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-settings.md",
+   "title": "Settings files and precedence",
+   "chars": 59257,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/data-usage.md": {
+   "url": "https://code.claude.com/docs/en/data-usage.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-data-usage.md",
+   "title": "Data usage",
+   "chars": 22230,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/champion-kit.md": {
+   "url": "https://code.claude.com/docs/en/champion-kit.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-champion-kit.md",
+   "title": "Champion kit",
+   "chars": 21707,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/settings-example.md": {
+   "url": "https://code.claude.com/docs/en/settings-example.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-settings-example.md",
+   "title": "Example settings files",
+   "chars": 15676,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/monitoring-usage.md": {
+   "url": "https://code.claude.com/docs/en/monitoring-usage.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-monitoring-usage.md",
+   "title": "Monitoring",
+   "chars": 173552,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/settings-reference.md": {
+   "url": "https://code.claude.com/docs/en/settings-reference.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-settings-reference.md",
+   "title": "All settings",
+   "chars": 444787,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/permissions.md": {
+   "url": "https://code.claude.com/docs/en/permissions.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-permissions.md",
+   "title": "Configure permissions",
+   "chars": 83449,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/self-hosted-environments.md": {
+   "url": "https://code.claude.com/docs/en/self-hosted-environments.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-self-hosted-environments.md",
+   "title": "Self-hosted environments",
+   "chars": 20049,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/cloud-environments.md": {
+   "url": "https://code.claude.com/docs/en/cloud-environments.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-cloud-environments.md",
+   "title": "Configure cloud environments",
+   "chars": 66247,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/sandbox-environments.md": {
+   "url": "https://code.claude.com/docs/en/sandbox-environments.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-sandbox-environments.md",
+   "title": "Choose a sandbox environment",
+   "chars": 19942,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/sandboxing.md": {
+   "url": "https://code.claude.com/docs/en/sandboxing.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-sandboxing.md",
+   "title": "Configure the sandboxed Bash tool",
+   "chars": 78105,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/permission-modes.md": {
+   "url": "https://code.claude.com/docs/en/permission-modes.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-permission-modes.md",
+   "title": "Choose a permission mode",
+   "chars": 84354,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/self-hosted-environments-configuration.md": {
+   "url": "https://code.claude.com/docs/en/self-hosted-environments-configuration.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-self-hosted-environments-configuration.md",
+   "title": "Customize sessions in self-hosted environments",
+   "chars": 53084,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/self-hosted-environments-deploy.md": {
+   "url": "https://code.claude.com/docs/en/self-hosted-environments-deploy.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-self-hosted-environments-deploy.md",
+   "title": "Deploy self-hosted environments to production",
+   "chars": 65027,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/self-hosted-environments-quickstart.md": {
+   "url": "https://code.claude.com/docs/en/self-hosted-environments-quickstart.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-self-hosted-environments-quickstart.md",
+   "title": "Self-hosted environments quickstart",
+   "chars": 11467,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/self-hosted-environments-testing.md": {
+   "url": "https://code.claude.com/docs/en/self-hosted-environments-testing.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-self-hosted-environments-testing.md",
+   "title": "Test self-hosted environments end to end",
+   "chars": 15650,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/fast-mode.md": {
+   "url": "https://code.claude.com/docs/en/fast-mode.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-fast-mode.md",
+   "title": "Speed up responses with fast mode",
+   "chars": 20827,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/model-config.md": {
+   "url": "https://code.claude.com/docs/en/model-config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-model-config.md",
+   "title": "Model configuration",
+   "chars": 111859,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/self-hosted-environments-identity.md": {
+   "url": "https://code.claude.com/docs/en/self-hosted-environments-identity.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-self-hosted-environments-identity.md",
+   "title": "Verify session identity in self-hosted environments",
+   "chars": 24953,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/self-hosted-environments-reference.md": {
+   "url": "https://code.claude.com/docs/en/self-hosted-environments-reference.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-self-hosted-environments-reference.md",
+   "title": "Self-hosted environments reference",
+   "chars": 90545,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/output-styles.md": {
+   "url": "https://code.claude.com/docs/en/output-styles.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-output-styles.md",
+   "title": "Output styles",
+   "chars": 12416,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/fullscreen.md": {
+   "url": "https://code.claude.com/docs/en/fullscreen.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-fullscreen.md",
+   "title": "Fullscreen rendering",
+   "chars": 32856,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/terminal-config.md": {
+   "url": "https://code.claude.com/docs/en/terminal-config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-terminal-config.md",
+   "title": "Configure your terminal for Claude Code",
+   "chars": 27258,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/accessibility.md": {
+   "url": "https://code.claude.com/docs/en/accessibility.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-accessibility.md",
+   "title": "Use Claude Code with a screen reader",
+   "chars": 14438,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/statusline.md": {
+   "url": "https://code.claude.com/docs/en/statusline.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-statusline.md",
+   "title": "Customize your status line",
+   "chars": 78813,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/keybindings.md": {
+   "url": "https://code.claude.com/docs/en/keybindings.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-keybindings.md",
+   "title": "Customize keyboard shortcuts",
+   "chars": 49227,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/tools-reference.md": {
+   "url": "https://code.claude.com/docs/en/tools-reference.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-tools-reference.md",
+   "title": "Tools reference",
+   "chars": 109997,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/cli-reference.md": {
+   "url": "https://code.claude.com/docs/en/cli-reference.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-cli-reference.md",
+   "title": "CLI reference",
+   "chars": 126017,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/env-vars.md": {
+   "url": "https://code.claude.com/docs/en/env-vars.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-env-vars.md",
+   "title": "Environment variables",
+   "chars": 500388,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/checkpointing.md": {
+   "url": "https://code.claude.com/docs/en/checkpointing.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-checkpointing.md",
+   "title": "Checkpointing",
+   "chars": 8710,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/interactive-mode.md": {
+   "url": "https://code.claude.com/docs/en/interactive-mode.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-interactive-mode.md",
+   "title": "Interactive mode",
+   "chars": 93055,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/commands.md": {
+   "url": "https://code.claude.com/docs/en/commands.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-commands.md",
+   "title": "Commands",
+   "chars": 178046,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/voice-dictation.md": {
+   "url": "https://code.claude.com/docs/en/voice-dictation.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-voice-dictation.md",
+   "title": "Voice dictation",
+   "chars": 16687,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/hooks.md": {
+   "url": "https://code.claude.com/docs/en/hooks.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-hooks.md",
+   "title": "Hooks reference",
+   "chars": 330951,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/plugins-reference.md": {
+   "url": "https://code.claude.com/docs/en/plugins-reference.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-plugins-reference.md",
+   "title": "Plugins reference",
+   "chars": 144646,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/advisor.md": {
+   "url": "https://code.claude.com/docs/en/advisor.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-advisor.md",
+   "title": "Escalate hard decisions with the advisor tool",
+   "chars": 18763,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/overview.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/overview.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-overview.md",
+   "title": "Agent SDK overview",
+   "chars": 11056,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/glossary.md": {
+   "url": "https://code.claude.com/docs/en/glossary.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-glossary.md",
+   "title": "Glossary",
+   "chars": 26313,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/migration-guide.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/migration-guide.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-migration-guide.md",
+   "title": "Migrate to Claude Agent SDK",
+   "chars": 7134,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/channels-reference.md": {
+   "url": "https://code.claude.com/docs/en/channels-reference.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-channels-reference.md",
+   "title": "Channels reference",
+   "chars": 48904,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/quickstart.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/quickstart.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-quickstart.md",
+   "title": "Quickstart",
+   "chars": 15297,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/troubleshooting.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/troubleshooting.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-troubleshooting.md",
+   "title": "Troubleshoot the Agent SDK",
+   "chars": 11197,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/examples.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/examples.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-examples.md",
+   "title": "Examples",
+   "chars": 1959,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/configuration.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/configuration.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-configuration.md",
+   "title": "Configure your agent",
+   "chars": 21316,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/claude-code-features.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/claude-code-features.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-claude-code-features.md",
+   "title": "Use Claude Code features in the SDK",
+   "chars": 29168,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/sessions.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/sessions.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-sessions.md",
+   "title": "Work with sessions",
+   "chars": 23650,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/streaming-output.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/streaming-output.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-streaming-output.md",
+   "title": "Stream responses in real-time",
+   "chars": 14033,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/user-input.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/user-input.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-user-input.md",
+   "title": "Handle approvals and user input",
+   "chars": 38534,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/agent-loop.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/agent-loop.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-agent-loop.md",
+   "title": "How the agent loop works",
+   "chars": 49608,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/mcp.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/mcp.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-mcp.md",
+   "title": "Connect to external tools with MCP",
+   "chars": 37224,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/structured-outputs.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/structured-outputs.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-structured-outputs.md",
+   "title": "Get structured output from agents",
+   "chars": 20978,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/custom-tools.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/custom-tools.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-custom-tools.md",
+   "title": "Give Claude custom tools",
+   "chars": 40806,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/tool-search.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/tool-search.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-tool-search.md",
+   "title": "Scale to many tools with tool search",
+   "chars": 12729,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/subagents.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/subagents.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-subagents.md",
+   "title": "Subagents in the SDK",
+   "chars": 46833,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-streaming-vs-single-mode.md",
+   "title": "Streaming Input",
+   "chars": 9093,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-modifying-system-prompts.md",
+   "title": "Modifying system prompts",
+   "chars": 29050,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/session-storage.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/session-storage.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-session-storage.md",
+   "title": "Persist sessions to external storage",
+   "chars": 25355,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/plugins.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/plugins.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-plugins.md",
+   "title": "Plugins in the SDK",
+   "chars": 11599,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/skills.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/skills.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-skills.md",
+   "title": "Extend agents with skills",
+   "chars": 27144,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/hooks.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/hooks.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-hooks.md",
+   "title": "Intercept and control agent behavior with hooks",
+   "chars": 55317,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/file-checkpointing.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/file-checkpointing.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-file-checkpointing.md",
+   "title": "Rewind file changes with checkpointing",
+   "chars": 32728,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/observability.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/observability.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-observability.md",
+   "title": "Observability with OpenTelemetry",
+   "chars": 19923,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/todo-tracking.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/todo-tracking.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-todo-tracking.md",
+   "title": "Track todos",
+   "chars": 19204,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/hosting.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/hosting.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-hosting.md",
+   "title": "Hosting the Agent SDK",
+   "chars": 25291,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/secure-deployment.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/secure-deployment.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-secure-deployment.md",
+   "title": "Securely deploying AI agents",
+   "chars": 24208,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/permissions.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/permissions.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-permissions.md",
+   "title": "Configure permissions",
+   "chars": 26337,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/typescript-v2-preview.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/typescript-v2-preview.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-typescript-v2-preview.md",
+   "title": "TypeScript SDK V2 session API (removed)",
+   "chars": 11711,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/cost-tracking.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/cost-tracking.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-cost-tracking.md",
+   "title": "Track cost and usage",
+   "chars": 27315,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/typescript.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/typescript.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-typescript.md",
+   "title": "Agent SDK reference - TypeScript",
+   "chars": 378090,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w37.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w37.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w37.md",
+   "title": "Week 37 · September 7–11, 2026",
+   "chars": 6110,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w35.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w35.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w35.md",
+   "title": "Week 35 · August 24–28, 2026",
+   "chars": 8527,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/agent-sdk/python.md": {
+   "url": "https://code.claude.com/docs/en/agent-sdk/python.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-agent-sdk-python.md",
+   "title": "Agent SDK reference - Python",
+   "chars": 207907,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/index.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/index.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-index.md",
+   "title": "What's new",
+   "chars": 15925,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w33.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w33.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w33.md",
+   "title": "Week 33 · August 10–14, 2026",
+   "chars": 7541,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w34.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w34.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w34.md",
+   "title": "Week 34 · August 17–21, 2026",
+   "chars": 8419,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w32.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w32.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w32.md",
+   "title": "Week 32 · August 3–7, 2026",
+   "chars": 8724,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w30.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w30.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w30.md",
+   "title": "Week 30 · July 20–24, 2026",
+   "chars": 6989,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w29.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w29.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w29.md",
+   "title": "Week 29 · July 13–17, 2026",
+   "chars": 5436,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w28.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w28.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w28.md",
+   "title": "Week 28 · July 6–10, 2026",
+   "chars": 4296,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w27.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w27.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w27.md",
+   "title": "Week 27 · June 29 – July 3, 2026",
+   "chars": 6791,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w36.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w36.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w36.md",
+   "title": "Week 36 · August 31 – September 4, 2026",
+   "chars": 8962,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w26.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w26.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w26.md",
+   "title": "Week 26 · June 22–26, 2026",
+   "chars": 4443,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w24.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w24.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w24.md",
+   "title": "Week 24 · June 8–12, 2026",
+   "chars": 5341,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w25.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w25.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w25.md",
+   "title": "Week 25 · June 15–19, 2026",
+   "chars": 5352,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w21.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w21.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w21.md",
+   "title": "Week 21 · May 18–22, 2026",
+   "chars": 4320,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w23.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w23.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w23.md",
+   "title": "Week 23 · June 1–5, 2026",
+   "chars": 6573,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w20.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w20.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w20.md",
+   "title": "Week 20 · May 11–15, 2026",
+   "chars": 6843,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w19.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w19.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w19.md",
+   "title": "Week 19 · May 4–8, 2026",
+   "chars": 4596,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w18.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w18.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w18.md",
+   "title": "Week 18 · April 27 – May 1, 2026",
+   "chars": 6679,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w16.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w16.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w16.md",
+   "title": "Week 16 · April 13–17, 2026",
+   "chars": 8919,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w17.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w17.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w17.md",
+   "title": "Week 17 · April 20–24, 2026",
+   "chars": 7259,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w15.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w15.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w15.md",
+   "title": "Week 15 · April 6–10, 2026",
+   "chars": 7349,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/legal-and-compliance.md": {
+   "url": "https://code.claude.com/docs/en/legal-and-compliance.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-legal-and-compliance.md",
+   "title": "Legal and compliance",
+   "chars": 6141,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/fr.md": {
+   "url": "https://code.claude.com/docs/_llms/fr.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-fr.md",
+   "title": "Claude Code Docs: French",
+   "chars": 53468,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/de.md": {
+   "url": "https://code.claude.com/docs/_llms/de.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-de.md",
+   "title": "Claude Code Docs: German",
+   "chars": 52294,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/jp.md": {
+   "url": "https://code.claude.com/docs/_llms/jp.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-jp.md",
+   "title": "Claude Code Docs: Japanese",
+   "chars": 33666,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/it.md": {
+   "url": "https://code.claude.com/docs/_llms/it.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-it.md",
+   "title": "Claude Code Docs: Italian",
+   "chars": 51169,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/es.md": {
+   "url": "https://code.claude.com/docs/_llms/es.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-es.md",
+   "title": "Claude Code Docs: Spanish",
+   "chars": 51836,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w22.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w22.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w22.md",
+   "title": "Week 22 · May 25–29, 2026",
+   "chars": 7350,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/ko.md": {
+   "url": "https://code.claude.com/docs/_llms/ko.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-ko.md",
+   "title": "Claude Code Docs: Korean",
+   "chars": 32934,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w14.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w14.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w14.md",
+   "title": "Week 14 · March 30 – April 3, 2026",
+   "chars": 7866,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/zh-hant.md": {
+   "url": "https://code.claude.com/docs/_llms/zh-hant.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-zh-hant.md",
+   "title": "Claude Code Docs: Traditional Chinese",
+   "chars": 29428,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/cn.md": {
+   "url": "https://code.claude.com/docs/_llms/cn.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-cn.md",
+   "title": "Claude Code Docs: Chinese",
+   "chars": 28923,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/id.md": {
+   "url": "https://code.claude.com/docs/_llms/id.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-id.md",
+   "title": "Claude Code Docs: Indonesian",
+   "chars": 48015,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/pt-br.md": {
+   "url": "https://code.claude.com/docs/_llms/pt-br.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-pt-br.md",
+   "title": "Claude Code Docs: Brazilian Portuguese",
+   "chars": 50252,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/en/whats-new/2026-w13.md": {
+   "url": "https://code.claude.com/docs/en/whats-new/2026-w13.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-en-whats-new-2026-w13.md",
+   "title": "Week 13 · March 23–27, 2026",
+   "chars": 7979,
+   "lang": "en"
+  },
+  "https://code.claude.com/docs/_llms/ru.md": {
+   "url": "https://code.claude.com/docs/_llms/ru.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/claude-code/claude-code-_llms-ru.md",
+   "title": "Claude Code Docs: Russian",
+   "chars": 50615,
+   "lang": "en"
+  }
+ },
+ "urls": [
+  "https://code.claude.com/docs/en/overview.md",
+  "https://code.claude.com/docs/en/quickstart.md",
+  "https://code.claude.com/docs/en/changelog.md",
+  "https://code.claude.com/docs/en/how-claude-code-works.md",
+  "https://code.claude.com/docs/en/features-overview.md",
+  "https://code.claude.com/docs/en/claude-directory.md",
+  "https://code.claude.com/docs/en/context-window.md",
+  "https://code.claude.com/docs/en/prompt-caching.md",
+  "https://code.claude.com/docs/en/memory.md",
+  "https://code.claude.com/docs/en/sessions.md",
+  "https://code.claude.com/docs/en/common-workflows.md",
+  "https://code.claude.com/docs/en/prompt-library.md",
+  "https://code.claude.com/docs/en/best-practices.md",
+  "https://code.claude.com/docs/en/platforms.md",
+  "https://code.claude.com/docs/en/remote-control.md",
+  "https://code.claude.com/docs/en/claude-projects.md",
+  "https://code.claude.com/docs/en/mobile.md",
+  "https://code.claude.com/docs/en/chrome.md",
+  "https://code.claude.com/docs/en/computer-use.md",
+  "https://code.claude.com/docs/en/vs-code.md",
+  "https://code.claude.com/docs/en/jetbrains.md",
+  "https://code.claude.com/docs/en/slack.md",
+  "https://code.claude.com/docs/en/claude-tag.md",
+  "https://code.claude.com/docs/en/web-quickstart.md",
+  "https://code.claude.com/docs/en/claude-code-on-the-web.md",
+  "https://code.claude.com/docs/en/routines.md",
+  "https://code.claude.com/docs/en/ultrareview.md",
+  "https://code.claude.com/docs/en/desktop-quickstart.md",
+  "https://code.claude.com/docs/en/desktop.md",
+  "https://code.claude.com/docs/en/desktop-linux.md",
+  "https://code.claude.com/docs/en/desktop-wsl.md",
+  "https://code.claude.com/docs/en/desktop-scheduled-tasks.md",
+  "https://code.claude.com/docs/en/desktop-ios-simulator.md",
+  "https://code.claude.com/docs/en/security-guidance.md",
+  "https://code.claude.com/docs/en/claude-security.md",
+  "https://code.claude.com/docs/en/code-review.md",
+  "https://code.claude.com/docs/en/github-actions.md",
+  "https://code.claude.com/docs/en/github-actions-cloud-providers.md",
+  "https://code.claude.com/docs/en/github-enterprise-server.md",
+  "https://code.claude.com/docs/en/gitlab-ci-cd.md",
+  "https://code.claude.com/docs/en/agents.md",
+  "https://code.claude.com/docs/en/sub-agents.md",
+  "https://code.claude.com/docs/en/agent-view.md",
+  "https://code.claude.com/docs/en/agent-teams.md",
+  "https://code.claude.com/docs/en/cross-session-messaging.md",
+  "https://code.claude.com/docs/en/workflows.md",
+  "https://code.claude.com/docs/en/worktrees.md",
+  "https://code.claude.com/docs/en/mcp-quickstart.md",
+  "https://code.claude.com/docs/en/mcp.md",
+  "https://code.claude.com/docs/en/skills.md",
+  "https://code.claude.com/docs/en/discover-plugins.md",
+  "https://code.claude.com/docs/en/plugins.md",
+  "https://code.claude.com/docs/en/plugin-evals.md",
+  "https://code.claude.com/docs/en/artifacts.md",
+  "https://code.claude.com/docs/en/hooks-guide.md",
+  "https://code.claude.com/docs/en/channels.md",
+  "https://code.claude.com/docs/en/scheduled-tasks.md",
+  "https://code.claude.com/docs/en/goal.md",
+  "https://code.claude.com/docs/en/headless.md",
+  "https://code.claude.com/docs/en/deep-links.md",
+  "https://code.claude.com/docs/en/large-codebases.md",
+  "https://code.claude.com/docs/en/troubleshoot-install.md",
+  "https://code.claude.com/docs/en/troubleshooting.md",
+  "https://code.claude.com/docs/en/debug-your-config.md",
+  "https://code.claude.com/docs/en/errors.md",
+  "https://code.claude.com/docs/en/admin-setup.md",
+  "https://code.claude.com/docs/en/setup.md",
+  "https://code.claude.com/docs/en/authentication.md",
+  "https://code.claude.com/docs/en/managed-settings.md",
+  "https://code.claude.com/docs/en/server-managed-settings.md",
+  "https://code.claude.com/docs/en/managed-mcp.md",
+  "https://code.claude.com/docs/en/auto-mode-config.md",
+  "https://code.claude.com/docs/en/third-party-integrations.md",
+  "https://code.claude.com/docs/en/feature-availability.md",
+  "https://code.claude.com/docs/en/amazon-bedrock.md",
+  "https://code.claude.com/docs/en/claude-platform-on-aws.md",
+  "https://code.claude.com/docs/en/google-vertex-ai.md",
+  "https://code.claude.com/docs/en/microsoft-foundry.md",
+  "https://code.claude.com/docs/en/network-config.md",
+  "https://code.claude.com/docs/en/corporate-launcher.md",
+  "https://code.claude.com/docs/en/devcontainer.md",
+  "https://code.claude.com/docs/en/gateways.md",
+  "https://code.claude.com/docs/en/claude-apps-gateway.md",
+  "https://code.claude.com/docs/en/claude-apps-gateway-config.md",
+  "https://code.claude.com/docs/en/claude-apps-gateway-spend-limits.md",
+  "https://code.claude.com/docs/en/claude-apps-gateway-deploy.md",
+  "https://code.claude.com/docs/en/claude-apps-gateway-on-aws.md",
+  "https://code.claude.com/docs/en/claude-apps-gateway-on-gcp.md",
+  "https://code.claude.com/docs/en/llm-gateway.md",
+  "https://code.claude.com/docs/en/llm-gateway-connect.md",
+  "https://code.claude.com/docs/en/llm-gateway-rollout.md",
+  "https://code.claude.com/docs/en/llm-gateway-protocol.md",
+  "https://code.claude.com/docs/en/monitoring-usage.md",
+  "https://code.claude.com/docs/en/costs.md",
+  "https://code.claude.com/docs/en/analytics.md",
+  "https://code.claude.com/docs/en/plugin-marketplaces.md",
+  "https://code.claude.com/docs/en/plugin-dependencies.md",
+  "https://code.claude.com/docs/en/plugin-hints.md",
+  "https://code.claude.com/docs/en/plugin-relevance.md",
+  "https://code.claude.com/docs/en/security.md",
+  "https://code.claude.com/docs/en/data-usage.md",
+  "https://code.claude.com/docs/en/zero-data-retention.md",
+  "https://code.claude.com/docs/en/communications-kit.md",
+  "https://code.claude.com/docs/en/champion-kit.md",
+  "https://code.claude.com/docs/en/settings.md",
+  "https://code.claude.com/docs/en/settings-reference.md",
+  "https://code.claude.com/docs/en/settings-example.md",
+  "https://code.claude.com/docs/en/permissions.md",
+  "https://code.claude.com/docs/en/permission-modes.md",
+  "https://code.claude.com/docs/en/sandboxing.md",
+  "https://code.claude.com/docs/en/sandbox-environments.md",
+  "https://code.claude.com/docs/en/cloud-environments.md",
+  "https://code.claude.com/docs/en/self-hosted-environments.md",
+  "https://code.claude.com/docs/en/self-hosted-environments-quickstart.md",
+  "https://code.claude.com/docs/en/self-hosted-environments-deploy.md",
+  "https://code.claude.com/docs/en/self-hosted-environments-configuration.md",
+  "https://code.claude.com/docs/en/self-hosted-environments-testing.md",
+  "https://code.claude.com/docs/en/self-hosted-environments-reference.md",
+  "https://code.claude.com/docs/en/self-hosted-environments-identity.md",
+  "https://code.claude.com/docs/en/model-config.md",
+  "https://code.claude.com/docs/en/fast-mode.md",
+  "https://code.claude.com/docs/en/advisor.md",
+  "https://code.claude.com/docs/en/output-styles.md",
+  "https://code.claude.com/docs/en/terminal-config.md",
+  "https://code.claude.com/docs/en/fullscreen.md",
+  "https://code.claude.com/docs/en/accessibility.md",
+  "https://code.claude.com/docs/en/voice-dictation.md",
+  "https://code.claude.com/docs/en/statusline.md",
+  "https://code.claude.com/docs/en/keybindings.md",
+  "https://code.claude.com/docs/en/cli-reference.md",
+  "https://code.claude.com/docs/en/commands.md",
+  "https://code.claude.com/docs/en/env-vars.md",
+  "https://code.claude.com/docs/en/tools-reference.md",
+  "https://code.claude.com/docs/en/interactive-mode.md",
+  "https://code.claude.com/docs/en/checkpointing.md",
+  "https://code.claude.com/docs/en/hooks.md",
+  "https://code.claude.com/docs/en/plugins-reference.md",
+  "https://code.claude.com/docs/en/channels-reference.md",
+  "https://code.claude.com/docs/en/glossary.md",
+  "https://code.claude.com/docs/en/agent-sdk/overview.md",
+  "https://code.claude.com/docs/en/agent-sdk/quickstart.md",
+  "https://code.claude.com/docs/en/agent-sdk/migration-guide.md",
+  "https://code.claude.com/docs/en/agent-sdk/troubleshooting.md",
+  "https://code.claude.com/docs/en/agent-sdk/configuration.md",
+  "https://code.claude.com/docs/en/agent-sdk/examples.md",
+  "https://code.claude.com/docs/en/agent-sdk/agent-loop.md",
+  "https://code.claude.com/docs/en/agent-sdk/claude-code-features.md",
+  "https://code.claude.com/docs/en/agent-sdk/sessions.md",
+  "https://code.claude.com/docs/en/agent-sdk/session-storage.md",
+  "https://code.claude.com/docs/en/agent-sdk/streaming-vs-single-mode.md",
+  "https://code.claude.com/docs/en/agent-sdk/user-input.md",
+  "https://code.claude.com/docs/en/agent-sdk/streaming-output.md",
+  "https://code.claude.com/docs/en/agent-sdk/structured-outputs.md",
+  "https://code.claude.com/docs/en/agent-sdk/custom-tools.md",
+  "https://code.claude.com/docs/en/agent-sdk/mcp.md",
+  "https://code.claude.com/docs/en/agent-sdk/tool-search.md",
+  "https://code.claude.com/docs/en/agent-sdk/subagents.md",
+  "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts.md",
+  "https://code.claude.com/docs/en/agent-sdk/skills.md",
+  "https://code.claude.com/docs/en/agent-sdk/plugins.md",
+  "https://code.claude.com/docs/en/agent-sdk/permissions.md",
+  "https://code.claude.com/docs/en/agent-sdk/hooks.md",
+  "https://code.claude.com/docs/en/agent-sdk/file-checkpointing.md",
+  "https://code.claude.com/docs/en/agent-sdk/cost-tracking.md",
+  "https://code.claude.com/docs/en/agent-sdk/observability.md",
+  "https://code.claude.com/docs/en/agent-sdk/todo-tracking.md",
+  "https://code.claude.com/docs/en/agent-sdk/hosting.md",
+  "https://code.claude.com/docs/en/agent-sdk/secure-deployment.md",
+  "https://code.claude.com/docs/en/agent-sdk/typescript.md",
+  "https://code.claude.com/docs/en/agent-sdk/typescript-v2-preview.md",
+  "https://code.claude.com/docs/en/agent-sdk/python.md",
+  "https://code.claude.com/docs/en/whats-new/index.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w37.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w36.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w35.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w34.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w33.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w32.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w30.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w29.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w28.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w27.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w26.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w25.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w24.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w23.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w22.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w21.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w20.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w19.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w18.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w17.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w16.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w15.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w14.md",
+  "https://code.claude.com/docs/en/whats-new/2026-w13.md",
+  "https://code.claude.com/docs/en/legal-and-compliance.md",
+  "https://code.claude.com/docs/_llms/fr.md",
+  "https://code.claude.com/docs/_llms/de.md",
+  "https://code.claude.com/docs/_llms/it.md",
+  "https://code.claude.com/docs/_llms/jp.md",
+  "https://code.claude.com/docs/_llms/es.md",
+  "https://code.claude.com/docs/_llms/ko.md",
+  "https://code.claude.com/docs/_llms/cn.md",
+  "https://code.claude.com/docs/_llms/zh-hant.md",
+  "https://code.claude.com/docs/_llms/ru.md",
+  "https://code.claude.com/docs/_llms/id.md",
+  "https://code.claude.com/docs/_llms/pt-br.md"
+ ],
+ "discovered": 208,
+ "updated": "2026-09-23T02:42:51+08:00"
+}

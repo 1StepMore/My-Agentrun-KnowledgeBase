@@ -1,0 +1,104 @@
+{
+ "pages": {
+  "https://github.com/openai/openai-agents-python/blob/main/docs/index.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/index.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-index-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/quickstart.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/quickstart.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-quickstart-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/agents.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/agents.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-agents-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/running_agents.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/running_agents.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-running-agents-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/context.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/context.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-context-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/guardrails.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/guardrails.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-guardrails-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/handoffs.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/handoffs.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-handoffs-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/multi_agent.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/multi_agent.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-multi-agent-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/human_in_the_loop.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/human_in_the_loop.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-human-in-the-loop-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/mcp.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-mcp-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/results.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/results.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-results-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/config.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/config.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-config-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/sandbox_agents.md": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/sandbox_agents.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-sandbox-agents-md.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/llms.txt": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/llms.txt",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-llms-txt.md"
+  },
+  "https://github.com/openai/openai-agents-python/blob/main/docs/llms-full.txt": {
+   "url": "https://github.com/openai/openai-agents-python/blob/main/docs/llms-full.txt",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-agents-sdk-docs-llms-full-txt.md"
+  },
+  "https://github.com/openai/openai-cookbook/blob/main/articles/codex_exec_plans.md": {
+   "url": "https://github.com/openai/openai-cookbook/blob/main/articles/codex_exec_plans.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-cookbook-articles-codex-exec-plans-md.md"
+  },
+  "https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md": {
+   "url": "https://github.com/openai/openai-cookbook/blob/main/articles/techniques_to_improve_reliability.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-cookbook-articles-techniques-to-improve-reliability-md.md"
+  },
+  "https://github.com/openai/openai-cookbook/blob/main/articles/how_to_work_with_large_language_models.md": {
+   "url": "https://github.com/openai/openai-cookbook/blob/main/articles/how_to_work_with_large_language_models.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-cookbook-articles-how-to-work-with-large-language-models-md.md"
+  },
+  "https://github.com/openai/openai-cookbook/blob/main/articles/what_makes_documentation_good.md": {
+   "url": "https://github.com/openai/openai-cookbook/blob/main/articles/what_makes_documentation_good.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-cookbook-articles-what-makes-documentation-good-md.md"
+  },
+  "https://github.com/openai/openai-cookbook/blob/main/articles/chatgpt-agents-sales-meeting-prep.md": {
+   "url": "https://github.com/openai/openai-cookbook/blob/main/articles/chatgpt-agents-sales-meeting-prep.md",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/openai/openai-cookbook-articles-chatgpt-agents-sales-meeting-prep-md.md"
+  }
+ }
+}

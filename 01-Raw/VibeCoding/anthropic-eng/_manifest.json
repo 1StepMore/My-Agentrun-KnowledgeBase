@@ -1,0 +1,224 @@
+{
+ "pages": {
+  "https://www.anthropic.com/engineering/building-c-compiler": {
+   "url": "https://www.anthropic.com/engineering/building-c-compiler",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-building-c-compiler.md",
+   "title": "Building a C compiler with a team of parallel Claudes",
+   "chars": 15621,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/april-23-postmortem": {
+   "url": "https://www.anthropic.com/engineering/april-23-postmortem",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-april-23-postmortem.md",
+   "title": "An update on recent Claude Code quality reports",
+   "chars": 10700,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues": {
+   "url": "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-a-postmortem-of-three-recent-issues.md",
+   "title": "A postmortem of three recent issues",
+   "chars": 14193,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/claude-code-auto-mode": {
+   "url": "https://www.anthropic.com/engineering/claude-code-auto-mode",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-claude-code-auto-mode.md",
+   "title": "How we built Claude Code auto mode: a safer way to skip permissions",
+   "chars": 22999,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/advanced-tool-use": {
+   "url": "https://www.anthropic.com/engineering/advanced-tool-use",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-advanced-tool-use.md",
+   "title": "Introducing advanced tool use on the Claude Developer Platform",
+   "chars": 23602,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/building-effective-agents": {
+   "url": "https://www.anthropic.com/engineering/building-effective-agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-building-effective-agents.md",
+   "title": "Building effective agents",
+   "chars": 18788,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/code-execution-with-mcp": {
+   "url": "https://www.anthropic.com/engineering/code-execution-with-mcp",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-code-execution-with-mcp.md",
+   "title": "Code execution with MCP: Building more efficient agents",
+   "chars": 13858,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/claude-think-tool": {
+   "url": "https://www.anthropic.com/engineering/claude-think-tool",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-claude-think-tool.md",
+   "title": "The \"think\" tool: Enabling Claude to stop and think in complex tool use situations",
+   "chars": 15455,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/claude-code-sandboxing": {
+   "url": "https://www.anthropic.com/engineering/claude-code-sandboxing",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-claude-code-sandboxing.md",
+   "title": "Beyond permission prompts: making Claude Code more secure and autonomous",
+   "chars": 7830,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/contextual-retrieval": {
+   "url": "https://www.anthropic.com/engineering/contextual-retrieval",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-contextual-retrieval.md",
+   "title": "Introducing Contextual Retrieval",
+   "chars": 15606,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents": {
+   "url": "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-demystifying-evals-for-ai-agents.md",
+   "title": "Demystifying evals for AI agents",
+   "chars": 40284,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents": {
+   "url": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-effective-context-engineering-for-ai-agents.md",
+   "title": "Effective context engineering for AI agents",
+   "chars": 21430,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills": {
+   "url": "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-equipping-agents-for-the-real-world-with-agent-skills.md",
+   "title": "Equipping agents for the real world with Agent Skills",
+   "chars": 9734,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/desktop-extensions": {
+   "url": "https://www.anthropic.com/engineering/desktop-extensions",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-desktop-extensions.md",
+   "title": "Desktop Extensions: One-click MCP server installation for Claude Desktop",
+   "chars": 18078,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/eval-awareness-browsecomp": {
+   "url": "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-eval-awareness-browsecomp.md",
+   "title": "Eval awareness in Claude Opus 4.6’s BrowseComp performance",
+   "chars": 14217,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/claude-code-best-practices": {
+   "url": "https://www.anthropic.com/engineering/claude-code-best-practices",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-claude-code-best-practices.md",
+   "title": "Best practices for Claude Code",
+   "chars": 36633,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents": {
+   "url": "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-effective-harnesses-for-long-running-agents.md",
+   "title": "Effective harnesses for long-running agents",
+   "chars": 13526,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/how-we-contain-claude": {
+   "url": "https://www.anthropic.com/engineering/how-we-contain-claude",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-how-we-contain-claude.md",
+   "title": "How we contain Claude across products",
+   "chars": 28142,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/harness-design-long-running-apps": {
+   "url": "https://www.anthropic.com/engineering/harness-design-long-running-apps",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-harness-design-long-running-apps.md",
+   "title": "Harness design for long-running application development",
+   "chars": 33422,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/managed-agents": {
+   "url": "https://www.anthropic.com/engineering/managed-agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-managed-agents.md",
+   "title": "Scaling Managed Agents: Decoupling the brain from the hands",
+   "chars": 13197,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/multi-agent-research-system": {
+   "url": "https://www.anthropic.com/engineering/multi-agent-research-system",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-multi-agent-research-system.md",
+   "title": "How we built our multi-agent research system",
+   "chars": 26311,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/infrastructure-noise": {
+   "url": "https://www.anthropic.com/engineering/infrastructure-noise",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-infrastructure-noise.md",
+   "title": "Quantifying infrastructure noise in agentic coding evals",
+   "chars": 12513,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/swe-bench-sonnet": {
+   "url": "https://www.anthropic.com/engineering/swe-bench-sonnet",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-swe-bench-sonnet.md",
+   "title": "Raising the bar on SWE-bench Verified with Claude 3.5 Sonnet",
+   "chars": 19459,
+   "lang": "en"
+  },
+  "https://www.anthropic.com/engineering/writing-tools-for-agents": {
+   "url": "https://www.anthropic.com/engineering/writing-tools-for-agents",
+   "status": "ok",
+   "path": "/mnt/d/Hermes-KnowledgeBase/01-Raw/VibeCoding/anthropic-eng/anthropic-eng-engineering-writing-tools-for-agents.md",
+   "title": "Writing effective tools for agents — with agents",
+   "chars": 22162,
+   "lang": "en"
+  }
+ },
+ "urls": [
+  "https://www.anthropic.com/engineering/a-postmortem-of-three-recent-issues",
+  "https://www.anthropic.com/engineering/advanced-tool-use",
+  "https://www.anthropic.com/engineering/april-23-postmortem",
+  "https://www.anthropic.com/engineering/building-c-compiler",
+  "https://www.anthropic.com/engineering/building-effective-agents",
+  "https://www.anthropic.com/engineering/claude-code-auto-mode",
+  "https://www.anthropic.com/engineering/claude-code-best-practices",
+  "https://www.anthropic.com/engineering/claude-code-sandboxing",
+  "https://www.anthropic.com/engineering/claude-think-tool",
+  "https://www.anthropic.com/engineering/code-execution-with-mcp",
+  "https://www.anthropic.com/engineering/contextual-retrieval",
+  "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+  "https://www.anthropic.com/engineering/desktop-extensions",
+  "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+  "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents",
+  "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+  "https://www.anthropic.com/engineering/eval-awareness-browsecomp",
+  "https://www.anthropic.com/engineering/harness-design-long-running-apps",
+  "https://www.anthropic.com/engineering/how-we-contain-claude",
+  "https://www.anthropic.com/engineering/infrastructure-noise",
+  "https://www.anthropic.com/engineering/managed-agents",
+  "https://www.anthropic.com/engineering/multi-agent-research-system",
+  "https://www.anthropic.com/engineering/swe-bench-sonnet",
+  "https://www.anthropic.com/engineering/writing-tools-for-agents"
+ ],
+ "discovered": 24,
+ "updated": "2026-09-23T02:45:31+08:00"
+}

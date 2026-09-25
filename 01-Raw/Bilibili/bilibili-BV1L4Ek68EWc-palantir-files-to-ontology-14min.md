@@ -1,0 +1,140 @@
+---
+title: 14分钟揭秘Palantir一堆文件如何变成Ontology
+keywords:
+- Palantir
+- Foundry
+- semantic-layer
+- data-pipeline
+- etl
+- FDE
+- pipeline
+- data-integration
+state:
+  phase: raw
+  time_raw: '2026-06-28T00:00:00'
+  time_draft: '2026-09-23T00:50:32'
+  time_wiki: '2026-09-23T00:50:32'
+source_url: https://www.bilibili.com/video/BV1L4Ek68EWc/
+source_type: video
+source_platform: bilibili
+author: 零点未来
+publish_date: '2026-06-28'
+fetch_date: '2026-06-28'
+priority: 4
+language: zh
+notes: Whisper small 转写 + DeepSeek V4 Flash (opencode CLI) 后处理。视频时长约14:24。Palantir Ontology 三部曲之三。
+duration_seconds: 865
+duration_formatted: '14:24'
+author_id: ''
+---
+# 14分钟揭秘Palantir一堆文件如何变成Ontology
+
+## 视频信息
+
+| 字段 | 内容 |
+|------|------|
+| 标题 | 14分钟揭秘Palantir一堆文件如何变成Ontology |
+| 作者 | 零点未来 |
+| 时长 | 14:24 |
+
+## 原文内容
+
+> DeepSeek V4 Flash 后处理，已修正专有名词和断句。
+
+### 场景设定
+
+航空公司的三类数据：
+1. **航班运营数据**（结构化 CSV/DB）：出发时间、状态、飞机尾号
+2. **乘客预订数据**（嵌套 JSON）：乘客信息、多段行程
+3. **维修报告**（PDF 扫描件）：工程师手写记录，无数据结构
+
+### 五阶段 Pipeline
+
+#### 阶段 1：数据连接
+Palantir 要求数据从原系统拉进来时**不做任何预处理**，所有变换在 Foundry 内部完成。这样能从 Ontology 任意数据点追溯到最原始文件。
+
+Foundry 有 200 种连接器。拉取方式两种：
+- **Snapshot**：每次全量替换
+- **Append**：只追加新数据
+
+#### 阶段 2：存储
+- **Dataset**：通用存储容器，每次更新有版本记录（Git for Data）
+- **MediaSet**：专为图片/视频/音频/PDF 设计，可和 AI 提取工作流集成。关键设计：**Media Reference**——Dataset 的一列可以指向 MediaSet 里的文件，把结构化和非结构化数据关联起来
+
+#### 阶段 3：Pipeline Transforms（核心）
+
+三类数据走三条不同路径：
+
+**路径 A：结构化 CSV**
+- Apply Schema 按钮自动扫描样本推断类型（时间/数字/文字）
+- Pipeline Builder 拖拽做过滤、去重
+
+**路径 B：半结构化 JSON**
+- 核心操作 **Explode**：把嵌套数组炸开摊平成独立行
+- JSON→两张关联表（乘客表 + 预订表），用订单 ID 关联
+
+**路径 C：非结构化 PDF**
+通过 AIP Document Intelligence 五步：
+1. PDF→MediaSet
+2. OCR + 多模态视觉模型 → Markdown
+3. 从 Markdown 解析业务字段（尾号、维修日期、零件）
+4. **校验与复核**：格式检查 + 置信度过滤 + 人工抽样核查（最容易被跳过的关键步骤）
+5. 输出结构化 Clean Maintenance 表，每行保留指向原始 PDF 的列
+
+#### 阶段 4：Ontology Mapping
+
+| 数据概念 | Ontology 概念 |
+|---------|-------------|
+| 干净的表 | Object Type |
+| 每行数据 | Object（如航班 CA1234） |
+| 每列 | Property（属性） |
+| 表间关联 | Link Type |
+| 读写操作 | Action Type |
+
+**关键特性**：Action Type 让业务用户直接修改数据，改动写进独立的 WriteBack Dataset，不污染原始数据。
+
+#### 阶段 5：Logic + Action
+
+- **Logic**：自动推导新信息。如航班延误分钟数 = 实际起飞 - 计划出发
+- **Action**：四部分——参数输入 + 执行规则 + 前置条件 + 副作用。全程可追溯
+
+### 增量更新
+
+不每次全量重算，而是三层配合：
+1. 数据同步：只拉取新数据
+2. Pipeline：只处理新增行
+3. Ontology：只更新有变化的对象
+
+**两个踩坑点：**
+- 状态变更（准点→延误）用 append 同步会出现新旧版本共存 → Pipeline 里做去重只保留最新状态
+- Ontology 界面修改立即可见，Pipeline 批量更新定时跑，两个来源有时间差
+
+### 宽表处理
+
+企业 SAP 导出常是一张几百列大宽表。Palantir 硬性规则：**一个 Object Type 只能对应一张表**。宽表必须拆成多张聚焦小表（订单表、商品表、物流表），用 Link 连接。
+
+Pipeline Builder 有 AI 辅助写拆分代码，但**决定怎么拆、哪一列归哪个实体，需要人来判断**。这是 FDE 最贵的部分，也是 Palantir 的商业模式所在。
+
+### Ontology 与普通数据库 Schema 的真正差异
+
+1. **全链路可追溯**：任意字段值可追溯到原始文件的某一行
+2. **写回能力**：Action Type 修改写进 WriteBack Dataset，不污染原始数据
+3. **应用层直接消费**：不用写 API，AI 和应用直接操作 Ontology 对象
+
+三者合在一起使 Ontology 成为 **Agent 的操作层**，而不只是数据结构目录。
+
+### 作者的 OntoPlomb 项目
+
+正在开发 Pipeline 可视化功能：
+- 新建 Pipeline → 选择业务域 → 进入画布
+- 连接器（文件上传/MySQL）/ 存储器（自动检测 Dataset/MediaSet）/ 转换器（自动判断数据类型选择对应路径）
+- 创建本体时支持两种方式：简易 LLM Prompt 提取 / Pipeline Mapping
+
+## 抓取备注
+
+- 零点未来 Palantir Ontology 三部曲之三
+- 最实操的一篇：完整走通从原始文件到 Ontology 的 ETL 链路
+- 三类数据三种路径的设计是核心工程决策（结构化/半结构化/非结构化）
+- FDE 的存在价值：宽表拆分的业务判断是 Palantir 锁客的核心
+- 增量更新策略和两个踩坑点有实际工程参考价值
+- Ontology ≠ 数据库 Schema 的三点差异总结到位
