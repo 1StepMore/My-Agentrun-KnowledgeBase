@@ -16,7 +16,8 @@
 
 ```
 Hermes-KnowledgeBase/
-├── 00-Inbox/         # 盘点/审计报告（→ reports/）
+├── _private/         # 私有区（**gitignore，不上公开仓**）：内部过程产物 + 敏感词表真实名单
+│   └── 00-Inbox/     #   周报（self-packaging-reports/）· 审计/流转报告（reports/）· 安全复盘（security/）
 ├── 01-Raw/           # 原始素材（抓取内容，未经整理）
 │   ├── Bilibili/     # B站视频字幕 raw
 │   ├── Xpertai/      # XpertAI 官方文档树（GBK 旧目录名已废弃）
@@ -29,7 +30,8 @@ Hermes-KnowledgeBase/
 │   └── Bilibili/*.md        # 自建知识
 ├── _design/          # 设计文档（_kb-*.md）
 ├── _backup/          # 旧版本/备份（词表 .bak 等）
-└── README.md / _keywords.yaml / _pending_merges.yaml   # 根目录只留这三类
+├── _sensitive_terms.example.yaml  # 敏感词表**模板**（真实名单在 _private/，勿放仓内）
+└── README.md / _keywords.yaml / _pending_merges.yaml
 ```
 
 ## 机制：三层门禁（2026-09-23 立）
