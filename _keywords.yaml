@@ -697,6 +697,8 @@ knowledge-base:
 knowledge-graph:
   aliases:
   - knowledge-graph
+  - 知识图谱
+  - 知识图谱构建
   category: concept
   status: verified
 long-running-agent:
@@ -742,6 +744,11 @@ multi-platform:
 ontology-construction:
   aliases:
   - ontology-construction
+  - 本体建模
+  - 本体构建
+  - 本体模型
+  - 本体论
+  - 本体
   category: methodology
   related:
   - semantic-layer
@@ -1236,4 +1243,36 @@ writing-principles:
   related:
   - 交付
   - 量化基线
+  status: auto_added
+
+企业RSI:
+  aliases:
+  - 企业RSI
+  - 企业级RSI
+  - 商业强化学习
+  category: concept
+  status: auto_added
+垂直智能:
+  aliases:
+  - 垂直智能
+  - 垂直场域智能
+  category: concept
+  status: auto_added
+边缘解:
+  aliases:
+  - 边缘解
+  - 非共识
+  category: concept
+  status: auto_added
+数字员工:
+  aliases:
+  - 数字员工
+  - 数字劳动力
+  category: concept
+  status: auto_added
+合成数据:
+  aliases:
+  - 合成数据
+  - 数据合成
+  category: concept
   status: auto_added
