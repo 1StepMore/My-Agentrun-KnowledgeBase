@@ -701,6 +701,17 @@ knowledge-graph:
   - 知识图谱构建
   category: concept
   status: verified
+hindsight:
+  aliases:
+  - Hindsight
+  - hindsight
+  - 事后记忆
+  - hindsight-agent-memory
+  category: product
+  related:
+  - memory
+  - agent-state
+  status: auto_added
 long-running-agent:
   aliases:
   - ralph-loop
@@ -718,6 +729,11 @@ mcp:
 memory:
   aliases:
   - memory
+  - agent记忆
+  - 记忆系统
+  - 记忆框架
+  - agent-memory
+  - 长期记忆
   category: concept
   status: verified
 methodology:
