@@ -5,7 +5,7 @@ keywords:
 - ralph-technique
 - guide
 - claude-code
-- Codex
+- codex
 - goal-contract
 - maker-checker
 state:

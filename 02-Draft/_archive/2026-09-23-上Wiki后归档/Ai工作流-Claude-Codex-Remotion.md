@@ -3,7 +3,7 @@ title: 看完影视飓风，我也分享一下我的Ai工作流.......丨claude�
 keywords:
 - workflow
 - Claude
-- Codex
+- codex
 - remotion
 - ai-video
 - ai-coding

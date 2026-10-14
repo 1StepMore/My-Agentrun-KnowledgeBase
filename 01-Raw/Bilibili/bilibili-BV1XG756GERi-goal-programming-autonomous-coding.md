@@ -5,7 +5,7 @@ keywords:
 - target-programming
 - ai-coding
 - workflow
-- Codex
+- codex
 - ai-assisted-coding
 - target-oriented-development
 - OPP-OL-ORF

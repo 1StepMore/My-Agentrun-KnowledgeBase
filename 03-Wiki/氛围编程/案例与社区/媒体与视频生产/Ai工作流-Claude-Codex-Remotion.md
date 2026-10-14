@@ -5,7 +5,7 @@ related: []
 keywords:
 - workflow
 - Claude
-- Codex
+- codex
 - remotion
 - ai-video
 - ai-coding

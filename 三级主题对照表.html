@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc 3.11" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>三级主题对照表</title>
+  <style>
+
+html {
+color: #1a1a1a;
+background-color: #fdfdfd;
+}
+body {
+margin: 0 auto;
+max-width: 36em;
+padding-left: 50px;
+padding-right: 50px;
+padding-top: 50px;
+padding-bottom: 50px;
+hyphens: auto;
+overflow-wrap: break-word;
+text-rendering: optimizeLegibility;
+font-kerning: normal;
+}
+@media (max-width: 600px) {
+body {
+font-size: 0.9em;
+padding: 12px;
+}
+h1 {
+font-size: 1.8em;
+}
+}
+@media print {
+html {
+background-color: white;
+}
+body {
+background-color: transparent;
+color: black;
+}
+p, h2, h3 {
+orphans: 3;
+widows: 3;
+}
+h2, h3, h4 {
+page-break-after: avoid;
+}
+}
+p {
+margin: 1em 0;
+}
+a {
+color: #1a1a1a;
+}
+a:visited {
+color: #1a1a1a;
+}
+img {
+max-width: 100%;
+}
+svg {
+height: auto;
+max-width: 100%;
+}
+h1, h2, h3, h4, h5, h6 {
+margin-top: 1.4em;
+}
+h5, h6 {
+font-size: 1em;
+font-style: italic;
+}
+h6 {
+font-weight: normal;
+}
+ol, ul {
+padding-left: 1.7em;
+margin-top: 1em;
+}
+li > ol, li > ul {
+margin-top: 0;
+}
+blockquote {
+margin: 1em 0 1em 1.7em;
+padding-left: 1em;
+border-left: 2px solid #e6e6e6;
+color: #606060;
+}
+code {
+white-space: pre-wrap;
+font-family: Menlo, Monaco, Consolas, 'Lucida Console', monospace;
+font-size: 85%;
+margin: 0;
+hyphens: manual;
+}
+pre {
+margin: 1em 0;
+overflow: auto;
+}
+pre code {
+padding: 0;
+overflow: visible;
+overflow-wrap: normal;
+}
+.sourceCode {
+background-color: transparent;
+overflow: visible;
+}
+hr {
+border: none;
+border-top: 1px solid #1a1a1a;
+height: 1px;
+margin: 1em 0;
+}
+table {
+margin: 1em 0;
+border-collapse: collapse;
+width: 100%;
+overflow-x: auto;
+display: block;
+font-variant-numeric: lining-nums tabular-nums;
+}
+table caption {
+margin-bottom: 0.75em;
+}
+tbody {
+margin-top: 0.5em;
+border-top: 1px solid #1a1a1a;
+border-bottom: 1px solid #1a1a1a;
+}
+th {
+border-top: 1px solid #1a1a1a;
+padding: 0.25em 0.5em 0.25em 0.5em;
+}
+td {
+padding: 0.125em 0.5em 0.25em 0.5em;
+}
+header {
+margin-bottom: 4em;
+text-align: center;
+}
+#TOC li {
+list-style: none;
+}
+#TOC ul {
+padding-left: 1.3em;
+}
+#TOC > ul {
+padding-left: 0;
+}
+#TOC a:not(:hover) {
+text-decoration: none;
+}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+</style>
+  <style>
+body{font-family:'WenQuanYi Zen Hei','Microsoft YaHei',sans-serif;max-width:920px;margin:2em auto;padding:0 1.2em;line-height:1.8;color:#222}
+h1{border-bottom:3px solid #c0392b;padding-bottom:.3em}
+h2{border-bottom:1px solid #ddd;padding-bottom:.2em;margin-top:1.9em;color:#c0392b}
+h3{color:#333;margin-top:1.5em}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.94em}
+th,td{border:1px solid #ccc;padding:.45em .65em;text-align:left;vertical-align:top}
+th{background:#f6f6f6}
+tr:nth-child(even) td{background:#fafafa}
+code{background:#f4f4f4;padding:.1em .35em;border-radius:3px;font-size:.9em}
+pre{background:#f6f6f6;padding:.8em;border-radius:5px;overflow-x:auto}
+blockquote{border-left:4px solid #c0392b;background:#fdf6f6;margin:1em 0;padding:.6em 1em;color:#555}
+</style>
+</head>
+<body>
+<h1 id="三级主题对照表01-raw--02-draft--03-wiki">三级主题对照表（01-Raw
+↔︎ 02-Draft ↔︎ 03-Wiki）</h1>
+<blockquote>
+<p><strong>为什么有这张表</strong>（2026-10-08 架构体检，方案 B）：
+三状态（Raw 素材 → Draft 加工 → Wiki
+成品）这套设计<strong>唯一的意义就是能按主题追踪</strong>。
+但实测三级各用了<strong>不同的主题目录名</strong>，导致<strong>同一个东西从
+Raw 到 Wiki 追不起来</strong>。
+<strong>本次决定（用户拍板）：不统一目录</strong>（会牵动 4000+
+篇引用，收益与代价不成比例）， <strong>只做这张对照表</strong> ——
+让人和机器都能查&quot;这个主题在三级分别叫什么、在哪&quot;。 ⚠️
+新增素材时，<strong>优先沿用下表已有主题名</strong>，避免继续分叉。</p>
+</blockquote>
+<h2 id="一对照表实测2026-10-08">一、对照表（实测，2026-10-08）</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">主题（建议统一叫法）</th>
+<th style="text-align: left;"><code>01-Raw</code></th>
+<th style="text-align: left;"><code>02-Draft</code></th>
+<th style="text-align: left;"><code>03-Wiki</code></th>
+<th style="text-align: left;">备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>氛围编程 /
+VibeCoding</strong></td>
+<td style="text-align: left;"><code>VibeCoding/</code>（976）</td>
+<td style="text-align: left;"><code>VibeCoding/</code>（37）</td>
+<td style="text-align: left;"><strong><code>氛围编程/</code></strong>（196）</td>
+<td style="text-align: left;">🔴
+<strong>同一主题两个名</strong>（最该记住的一条）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AI 落地</strong></td>
+<td style="text-align: left;"><code>AI落地/</code>（2510）</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;"><code>AI落地/</code>（8）</td>
+<td style="text-align: left;">见 §五（<strong>不是缺环</strong>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AI 服务商业化</strong></td>
+<td style="text-align: left;"><code>AI服务商业化/</code>（26）</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;"><code>AI服务商业化/</code>（1）</td>
+<td style="text-align: left;">见 §五</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Bilibili</strong>（视频转录）</td>
+<td style="text-align: left;"><code>Bilibili/</code>（94）</td>
+<td style="text-align: left;"><code>Bilibili/</code>（25）</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;">见 §五</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Xpertai</strong></td>
+<td style="text-align: left;"><code>Xpertai/</code>（156）</td>
+<td style="text-align: left;"><code>Xpertai/</code>（<strong>空</strong>）</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;">见 §五</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>AI-coding</strong></td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;"><code>AI-coding/</code>（2）</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;">疑似应并入「氛围编程」</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Palantir</strong></td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;"><code>Palantir/</code>（3）</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;">疑似应并入「AI 落地」或「AI
+服务商业化」</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Loop-Engineering</strong></td>
+<td style="text-align: left;"><code>Loop-Engineering/</code>（10）</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;">⚪ 无</td>
+<td style="text-align: left;">Raw 独有</td>
+</tr>
+<tr>
+<td style="text-align: left;">—（治理）</td>
+<td style="text-align: left;"><code>_meta/</code>（2）</td>
+<td style="text-align: left;"><code>_archive/</code>（30）</td>
+<td style="text-align: left;">—</td>
+<td style="text-align: left;">内部目录，不算主题</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>括号内 = 该主题目录下的文件数（实测）。</p>
+</blockquote>
+<h2 id="二三级各自的根级散落warning-主要乱源">二、三级各自的&quot;根级散落&quot;（⚠️
+主要乱源）</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">层</th>
+<th style="text-align: left;">根级散落 <code>.md</code></th>
+<th style="text-align: left;">状态（2026-10-08）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><code>01-Raw</code></td>
+<td style="text-align: left;"><del>12</del> → <strong>0</strong>（仅余
+<code>.watch_log.md</code>，属运行日志）</td>
+<td style="text-align: left;">✅
+<strong>已归位</strong>：Short-Drama-*×3 → <code>ShortDrama/</code> ·
+hermes/opencode 教程 ×8 → <code>VibeCoding/</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>02-Draft</code></td>
+<td style="text-align: left;"><del>14</del> → <strong>0</strong></td>
+<td style="text-align: left;">✅
+<strong>已归位</strong>：「AI服务商业化」7 篇 →
+<code>AI服务商业化/</code>（<strong>新建</strong>）· Hermes/OpenCode
+教程 6 篇 → <code>VibeCoding/</code> · 短剧本地化 →
+<code>ShortDrama/</code>（<strong>新建</strong>）</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>03-Wiki</code></td>
+<td style="text-align: left;"><strong>0</strong> ✅</td>
+<td style="text-align: left;">本来就干净</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>归位后已 <code>kb_search.py --rebuild</code> 重建索引（<strong>1330
+条 · 0 错误</strong>），功能实测可查 ✅</p>
+</blockquote>
+<h2 id="三用法">三、用法</h2>
+<pre><code>① 要查某主题的素材 → 按上表定位三级的对应目录名（**别用直觉搜，名字不一样**）
+② 新增素材 → **先看本表有没有对应主题**；有就沿用，没有才新建（新建后在**本表登记**）
+③ 判断&quot;这条线走完三状态了吗&quot; → 看本表哪一级是 ⚪（缺环 = 还没走到那一步）
+④ 定期复核：`_tools/` 下的巡检可加一项&quot;本表与磁盘是否一致&quot;（暂未挂，见空白）</code></pre>
+<h2 id="四已知空白诚实清单">四、已知空白（诚实清单）</h2>
+<ul>
+<li><strong>本表是人工维护的</strong>，尚无自动核对（磁盘变了、本表不会自己更新）
+→ 若要治本：加一个脚本比对&quot;本表登记的主题&quot; vs
+&quot;磁盘实际目录&quot;，不一致就提醒</li>
+<li>⚠️ <strong>上表里&quot;⚪
+缺环&quot;的标注要按下面的收敛语义读，不要当成缺陷</strong>（2026-10-08
+主人纠正： 我原先提的&quot;只有进 Wiki 才需要 Draft&quot;是错的，已作废）</li>
+<li><strong>三级是否&quot;齐&quot;不是健康指标</strong>（见下）；本表的人工维护仍无自动核对</li>
+</ul>
+<h2 id="五star-收敛语义读本表的正确方式2026-10-08-主人纠正后定">五、⭐
+收敛语义（<strong>读本表的正确方式</strong>，2026-10-08
+主人纠正后定）</h2>
+<pre><code>**Raw → Draft → Wiki 是「多对一收敛」，不是「一对一管道」。**
+  · **多篇 Raw 可以合并成一篇 Draft**（把零散素材提炼成一份加工稿）
+  · **多篇 Draft 可以合并成一篇 Wiki**（把多份加工稿收敛成成品）
+
+⇒ 因此：
+  ① **某一级目录空 / 条目数对不上，本身不是缺环、不是错** ——
+     上游多、下游少是**收敛的必然结果**
+  ② **禁止**用&quot;三级必须都有对应条目&quot;判健康（会把&quot;尚未合并的素材&quot;误判成缺陷，
+     进而触发**错误的整理动作**）
+  ③ 判 KB 健康，看的是**位置对不对**（素材在 Raw / 加工稿在 Draft / 成品在 Wiki），
+     **不是**&quot;三级齐不齐&quot;
+  ④ 真正值得追的只有两种：**下游比上游多**、**同一条目在三级的引用链断了**
+⇒ 已落判据：`entities/me/库/判据/2026-10-08-KB三状态是多对一收敛不是一对一管道.md`</code></pre>
+<blockquote>
+<p>上表里的 <code>⚪ 无</code>
+<strong>一律按&quot;该主题在这一级还没有（或已合并到别处）&quot;读</strong>，不代表有问题。</p>
+</blockquote>
+</body>
+</html>

@@ -4,7 +4,7 @@ keywords:
 - agentic-loop
 - AI-Agent
 - 软件开发
-- Codex
+- codex
 - Claude
 - ai-coding
 - 自动化测试

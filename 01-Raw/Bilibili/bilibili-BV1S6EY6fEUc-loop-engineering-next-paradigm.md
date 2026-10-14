@@ -2,7 +2,7 @@
 title: Loop Engineering! AI 编程的下一个范式?
 keywords:
 - agentic-loop
-- ai-programming
+- AI编程
 - paradigm-shift
 - prompt-engineering
 - ai-coding

@@ -2,7 +2,7 @@
 title: Loop Engineering实操指南 | 90%工程师还在做AI时代的"人肉API"
 keywords:
 - agentic-loop
-- ai-programming
+- AI编程
 - prompt-engineering
 - engineering-paradigm
 - ai-coding

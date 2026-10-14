@@ -4,7 +4,7 @@ keywords:
 - agentic-loop
 - crash-course
 - 15-concepts
-- OpenCode
+- opencode
 - claude-code
 - heartbeat
 - cloud-routines

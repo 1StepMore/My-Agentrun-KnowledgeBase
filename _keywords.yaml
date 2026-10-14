@@ -10,6 +10,9 @@ AI-Agent:
   aliases:
   - AI-Agent
   - AI Agent
+  - AI agents
+  - agent
+  - agents
   - coding-agent
   - 智能体
   category: concept
@@ -31,6 +34,7 @@ AI平台:
   status: verified
 AI编程:
   aliases:
+  - ai-programming
   - AI编程
   - AI coding
   - AI 编程
@@ -104,13 +108,10 @@ Claude:
   - ai-coding
   status: verified
 Codex:
-  aliases:
-  - Codex
+  aliases: []
   category: tool
-  related:
-  - AI-Agent
-  - ai-coding
-  status: verified
+  status: merged
+  merged_into: codex
 ComfyUI:
   aliases:
   - ComfyUI
@@ -280,13 +281,10 @@ OpenClaw:
   - Hermes-Agent
   status: verified
 OpenCode:
-  aliases:
-  - OpenCode
-  - opencode
+  aliases: []
   category: tool
-  related:
-  - AI-Agent
-  status: auto_added
+  status: merged
+  merged_into: opencode
 Palantir:
   aliases:
   - Palantir
@@ -383,6 +381,12 @@ _AUTO_EXCLUDE:
 - bilibili
 - documentation
 - ppt-replacement
+- verification
+- 权限
+- 权限控制
+- workflow
+- architecture
+- automation
 advanced-techniques:
   aliases:
   - 进阶技巧
@@ -422,11 +426,10 @@ ai-economics:
   category: concept
   status: auto_added
 ai-programming:
-  aliases:
-  - ai-programming
-  - AI编程
+  aliases: []
   category: concept
-  status: auto_added
+  status: merged
+  merged_into: AI编程
 ai-service-monetization:
   aliases:
   - AI服务商业化
@@ -507,7 +510,6 @@ context-engineering:
 contract-risk:
   aliases:
   - 合同风险
-  - 合同条款
   - 责任限制
   - 责任上限
   - 责任限额
@@ -570,7 +572,6 @@ decision-model:
   - 决策模型
   - 决策型AI
   - Decision Model
-  - TypeSafe AI
   - 决策型模型
   category: concept
   status: auto_added
@@ -579,7 +580,6 @@ deployment:
   - 部署
   - 上线部署
   - 部署指南
-  - 安装教程
   category: methodology
   status: auto_added
 developer-experience:
@@ -615,7 +615,6 @@ efficiency:
   status: verified
 engineering:
   aliases:
-  - 工程博客
   - engineering blog
   category: concept
   related:
@@ -691,7 +690,6 @@ knowledge-base:
   aliases:
   - 知识库
   - AI知识库
-  - 知识管理
   category: concept
   status: verified
 knowledge-graph:
@@ -760,11 +758,8 @@ multi-platform:
 ontology-construction:
   aliases:
   - ontology-construction
-  - 本体建模
   - 本体构建
-  - 本体模型
-  - 本体论
-  - 本体
+  - 本体建模
   category: methodology
   related:
   - semantic-layer
@@ -779,7 +774,6 @@ ontology-pipeline:
 open-source:
   aliases:
   - open-source
-  - 开源项目
   category: concept
   status: verified
 openai:
@@ -877,8 +871,6 @@ remotion:
   status: verified
 research-method:
   aliases:
-  - 调研
-  - 需求调研
   - 需求调研方法
   category: methodology
   status: auto_added
@@ -897,7 +889,6 @@ semantic-layer:
 service-offer:
   aliases:
   - 服务报价
-  - 服务产品化
   - service offer
   - 服务包装
   category: concept
@@ -1067,8 +1058,6 @@ writing-principles:
   aliases:
   - 制造业
   - 制造企业
-  - 制造
-  - 工业
   category: concept
   related:
   - 车间
@@ -1133,12 +1122,10 @@ writing-principles:
   status: auto_added
 权限控制:
   aliases:
-  - 权限
   - 权限控制
-  - 授权
   category: concept
   related:
-  - AI-Agent
+  - 权限
   - 交付
   status: auto_added
 现场驻场:
@@ -1231,7 +1218,6 @@ writing-principles:
 量化基线:
   aliases:
   - 量化基线
-  - 基线
   - 基线值
   category: methodology
   related:
@@ -1292,3 +1278,113 @@ writing-principles:
   - 数据合成
   category: concept
   status: auto_added
+
+# ── 补词（2026-10-08，来源：B站 BV1ahhz6VEHh 入库时发现的词表缺口）───────
+# 用户拍板新增；status=auto_added（别名由助手起草，待 review 升 verified）
+pull-request:
+  aliases:
+    - pull request
+    - pull requests
+    - pull-request
+    - PR
+    - PRs
+    - 拉取请求
+    - 合并请求
+  category: concept
+  status: auto_added
+  note: "PR 为大写缩写，匹配须大小写敏感+词边界（防命中 pr 片段）。不等义于 评测/product-verification。"
+
+verification:
+  aliases:
+    - verification
+    - verify
+    - verified
+    - 验证
+    - 校验
+    - 质量验证
+    - agent 验证
+  category: concept
+  status: auto_added
+  note: "确认正确性，与 评测（evaluation/benchmark，打分比较）和 product-verification（产品验证方法论）均不等义。"
+
+trust:
+  aliases:
+    - trust
+    - trusted
+    - 信任
+    - 可信
+    - 信任度
+  category: concept
+  status: auto_added
+  note: "含「对 agent 的信任」这一用法（本词表补充来源）。与 security 不同：信任是预期管理，不是权限控制。"
+
+cloud-agent:
+  aliases:
+    - cloud agent
+    - cloud agents
+    - Cloud Agent
+    - Cloud Agents
+    - 云端 Agent
+    - 云端智能体
+  category: concept
+  status: auto_added
+  related:
+    - AI-Agent
+  note: "云端常驻的 agent 部署形态（如 Cursor Cloud Agents、Grok Bot），是 AI-Agent 的下位形态。"
+
+# ── 收窄拆分新建（2026-10-09，别名人工筛查 A 类：别名比原规范词更泛 ⇒ 摘出另建）──
+权限:
+  aliases:
+  - 权限
+  - permission
+  - permissions
+  - 访问权限
+  category: concept
+  related:
+  - 权限控制
+  status: auto_added
+  note: "从 权限控制 摘出：权限 ⊃ 权限控制。已入 _AUTO_EXCLUDE（命中 586 篇，泛词不打标）。"
+
+本体:
+  aliases:
+  - 本体
+  - 本体论
+  - 本体模型
+  category: concept
+  related:
+  - ontology-construction
+  - semantic-layer
+  status: auto_added
+  note: "从 ontology-construction 摘出：本体=概念/学科，本体构建=动作。"
+
+调研:
+  aliases:
+  - 调研
+  - 需求调研
+  - 用户调研
+  - 市场调研
+  category: methodology
+  related:
+  - research-method
+  status: auto_added
+  note: "从 research-method 摘出：调研 ⊃ 研究方法。"
+
+基线:
+  aliases:
+  - 基线
+  - baseline
+  category: concept
+  related:
+  - 量化基线
+  status: auto_added
+  note: "从 量化基线 摘出：基线 ⊃ 量化基线。"
+
+知识管理:
+  aliases:
+  - 知识管理
+  - knowledge management
+  category: concept
+  related:
+  - knowledge-base
+  status: auto_added
+  note: "从 knowledge-base 摘出：知识管理(学科/实践) ≠ 知识库(载体)。"

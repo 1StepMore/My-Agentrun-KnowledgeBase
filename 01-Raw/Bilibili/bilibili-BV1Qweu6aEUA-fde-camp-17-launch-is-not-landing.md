@@ -5,7 +5,7 @@ keywords:
 - FDE
 - 交付
 - 落地
-- Codex
+- codex
 - architecture
 - workflow
 - Skill

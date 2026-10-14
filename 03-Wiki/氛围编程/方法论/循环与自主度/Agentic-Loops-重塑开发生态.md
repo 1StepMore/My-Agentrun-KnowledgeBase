@@ -6,7 +6,7 @@ keywords:
 - agentic-loop
 - AI-Agent
 - 软件开发
-- Codex
+- codex
 - Claude
 state:
   phase: wiki

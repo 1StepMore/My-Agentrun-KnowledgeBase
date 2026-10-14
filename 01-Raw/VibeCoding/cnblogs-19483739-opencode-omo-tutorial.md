@@ -1,7 +1,7 @@
 ---
 title: OpenCode + Oh My OpenCode 高级使用教程：掌握 ulw、ralph-loop 与高效玩法
 keywords:
-- OpenCode
+- opencode
 - Oh-My-OpenCode
 - prompt-engineering
 - multi-agent-system

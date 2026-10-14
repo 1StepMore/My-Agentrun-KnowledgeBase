@@ -2,7 +2,7 @@
 title: OpenCode与Oh-My-OpenCode高级使用
 source: 其他（1 篇）；本页为我们的提炼
 keywords:
-- OpenCode
+- opencode
 - AI-Agent
 - architecture
 - Oh-My-OpenCode
