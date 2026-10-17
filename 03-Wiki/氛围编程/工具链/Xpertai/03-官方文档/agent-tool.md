@@ -12,6 +12,10 @@ state:
 sources:
 - Xpertai/XpertAI工作流教程-MD版/ai/workflow/agent-tool.md
 ---
+> ⚠️ **2026-10-17 核验（自动）：本条已过时，未自动覆盖正文** —— 官方页已改版：现标题为 **Agent Tool (Deprecated)**，功能由 **Agent Workflow** 承接（原快照 4707 字 → 官方现 650 字）。
+> 官方源：https://docs.xpertai.cn/en/ai/workflow/agent-tool.md
+> 下方正文为历史快照，引用前请以官方为准；原件留档 `_backup/refresh-20261017/03-Wiki/氛围编程/工具链/Xpertai/03-官方文档/agent-tool.md`。
+
 # Agent Tool
 
 > ## Documentation Index

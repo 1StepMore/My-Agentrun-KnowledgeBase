@@ -19,6 +19,10 @@ wiki_target: false
 wiki_note: 双语冗余：中文版已消化并入库
 ---
 
+> ⚠️ **2026-10-17 核验（自动）：本条已过时，未自动覆盖正文** —— 官方 README 已改版（版本/安装方式变化，体积 35910→9292 字）（原快照 35910 字 → 官方现 9292 字）。
+> 官方源：https://github.com/oh-my-opencode (README)
+> 下方正文为历史快照，引用前请以官方为准；原件留档 `_backup/refresh-20261017/02-Draft/VibeCoding/Oh-My-OpenAgent-OmO-官方文档汇编-11-English-README.md`。
+
 > **汇编性质**：OmO 官方仓库 code-yeongyu/oh-my-openagent 官方原文 1 页，按官方结构合并，逐节保留原始 URL。本汇编**不做改写**（一手来源改写会引入二手误差），可逐节回溯官方原文。
 > 证据等级：E2（官方一手）。汇编时间：2026-09-23T03:08:57+08:00
 

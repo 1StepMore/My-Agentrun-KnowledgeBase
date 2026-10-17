@@ -12,6 +12,10 @@ state:
 sources:
 - Xpertai/XpertAI工作流教程-MD版/ai/tutorial/wechat-work-integration.md
 ---
+> ⚠️ **2026-10-17 核验（自动）：本条已过时，未自动覆盖正文** —— 官方页已迁移：正文顶部写明 *"These integration docs have moved to the Plugin section"*，新版部署改用插件 `@xpert-ai/plugin-wecom` + **WeCom Trigger**（原快照 4776 字 → 官方现 484 字）。
+> 官方源：https://docs.xpertai.cn/en/ai/tutorial/wechat-work-integration.md
+> 下方正文为历史快照，引用前请以官方为准；原件留档 `_backup/refresh-20261017/03-Wiki/氛围编程/工具链/Xpertai/03-官方文档/wechat-work-integration.md`。
+
 # WeCom Integration
 
 > ## Documentation Index

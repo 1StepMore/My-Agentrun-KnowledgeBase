@@ -30,6 +30,11 @@ INDEX_DIR = os.path.join(KB, "_index")
 INDEX_PATH = os.path.join(INDEX_DIR, "kb_index.json")
 DIRTY = os.path.join(INDEX_DIR, ".dirty")
 MISS_LOG = os.path.join(INDEX_DIR, "miss_log.jsonl")
+# 2026-10-16 新增：**命中日志**（= 「谁在用 KB / 用了哪条」的调用地图数据源）
+#   位置与 miss_log 同级（_index/ 已 gitignore ⇒ 不进公开仓）；
+#   fail-open：写日志失败绝不影响检索；查询串经打码（真凭据不给落盘）。
+HIT_LOG = os.path.join(INDEX_DIR, "hit_log.jsonl")
+HIT_LOG_CAP = 5000
 KEYWORDS = os.path.join(KB, "_keywords.yaml")
 SYNONYMS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "synonyms.yaml")
 LAYERS = [("03-Wiki", "wiki"), ("02-Draft", "draft"), ("01-Raw", "raw")]
@@ -213,6 +218,57 @@ def log_miss(q, layers):
                 f.write(json.dumps(r, ensure_ascii=False) + "\n")
     except Exception:
         pass
+
+
+def _cur_profile() -> str:
+    """当前 profile。优先显式变量（HERMES_PROFILE），否则从 **Hermes 原生**的 HERMES_HOME 推
+    （多 profile 下 HERMES_HOME 形如 ~/.hermes/profiles/<名>）。不新造变量、不改原生行为。"""
+    p = os.environ.get("HERMES_PROFILE")
+    if p:
+        return p
+    m = re.search(r"/profiles/([^/]+)/?$", os.environ.get("HERMES_HOME", ""))
+    return m.group(1) if m else "default"
+
+
+def _mask_q(q: str) -> str:
+    """查询串打码（真凭据 → «REDACTED»）。规则单一真身 = ~/.hermes/scripts/secret_mask.py。
+    取不到规则时退化为原样（不阻断检索）。"""
+    try:
+        sp = os.path.expanduser("~/.hermes/scripts")
+        if sp not in sys.path:
+            sys.path.insert(0, sp)
+        import secret_mask
+        return secret_mask.mask_text(q)[0][:200]
+    except Exception:
+        return q[:200]
+
+
+def log_hit(q, layers, hits, limit_top=5):
+    """命中日志 —— 「谁在用 KB、命中哪几条」的**唯一数据源**（调用地图 → 更新优先级 → 维护归属）。
+    · 与 miss_log 同规格：落 `_index/`（gitignore，不进公开仓）、上限 HIT_LOG_CAP 条。
+    · **fail-open**：任何异常都只打一行 stderr，绝不影响检索本身。"""
+    try:
+        os.makedirs(INDEX_DIR, exist_ok=True)
+        rows = []
+        if os.path.exists(HIT_LOG):
+            for line in read_text(HIT_LOG).splitlines()[-HIT_LOG_CAP:]:
+                try:
+                    rows.append(json.loads(line))
+                except Exception:
+                    pass
+        rows.append({
+            "ts": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "q": _mask_q(q),
+            "layers": "/".join(layers),
+            "profile": _cur_profile(),
+            "n": len(hits),
+            "top": [{"l": it.get("layer"), "p": it.get("p")} for _, it, _ in hits[:limit_top]],
+        })
+        with io.open(HIT_LOG, "w", encoding="utf-8") as f:
+            for r in rows[-HIT_LOG_CAP:]:
+                f.write(json.dumps(r, ensure_ascii=False) + "\n")
+    except Exception as e:
+        print(f"⚠️ 命中日志写入失败（检索不受影响）：{e}", file=sys.stderr)
 
 
 def mark_dirty():
@@ -460,6 +516,35 @@ def route_hint(q):
     return ""
 
 
+FRESHNESS = os.path.join(INDEX_DIR, "freshness.json")
+
+
+def freshness_badge(rel_path, stale_days=90):
+    """命中条目的新鲜度徽标（2026-10-16 加 · 「使用即核」的触发点）。
+
+    数据源 = `_index/freshness.json` 账本（私有，由 ~/.hermes/scripts/kb_freshness.py 生成）。
+    · 易腐 + 从未核过/超期 ⇒ 显式提醒"用之前先核一次"（因为**用到的这一刻才会伤到你**）
+    · 常青 ⇒ 不打标（不制造噪音）；账本缺失/读失败 ⇒ 静默（fail-open）
+    """
+    try:
+        if not os.path.exists(FRESHNESS):
+            return ""
+        led = json.loads(read_text(FRESHNESS))
+        v = (led.get("items") or {}).get(rel_path)
+        if not v or v.get("freshness") == "常青":
+            return ""
+        if v.get("freshness") == "慢腐":
+            return " ｜ 🕐慢腐"
+        lv = v.get("last_verified")
+        if not lv:
+            return " ｜ ⚠️**易腐·从未核过**（用之前先核一次）"
+        import time as _t
+        age = int((_t.time() - _t.mktime(_t.strptime(lv[:10], "%Y-%m-%d"))) / 86400)
+        return f" ｜ ⚠️**易腐·上次核 {age} 天前**" if age > stale_days else f" ｜ 🕐易腐·{age} 天前核过"
+    except Exception:
+        return ""
+
+
 def render(q, hits, meta, as_json=False):
     if as_json:
         print(json.dumps({"query": q, "meta": meta,
@@ -490,7 +575,7 @@ def render(q, hits, meta, as_json=False):
             print(f"   🏷️  {' · '.join(it['kw'][:8])}")
         if it["ev"]:
             print(f"   🧾 证据：{it['ev']}")
-        print(f"   ✅ {why}")
+        print(f"   ✅ {why}{freshness_badge(it['p'])}")
         print(f"   📋 {it['snip'][:160]}…")
 
 # ---------- 自检 ----------
@@ -558,9 +643,12 @@ def main():
     items = load_index(a.all, no_check=a.no_check)
     a2c, rel = load_vocab()
     hits, meta = search(q, items, a2c, rel, limit=a.limit, layers=layers, raw_archive=(a.raw or a.all))
+    # 2026-10-16：命中即记（**所有分支之前**，保证 --brief/--json 也留痕）；fail-open
+    if hits:
+        log_hit(q, layers, hits)
     if a.brief:
         for i, (sc, it, why) in enumerate(hits, 1):
-            print(f"{i}. [{it['layer']}] {it['title']}  —  {it['p']}")
+            print(f"{i}. [{it['layer']}] {it['title']}  —  {it['p']}{freshness_badge(it['p'])}")
         if not hits:
             print(f"❌ 「{q}」无结果" + (f" ｜ 🧭 {route_hint(q)}" if route_hint(q) else ""))
         return 0
