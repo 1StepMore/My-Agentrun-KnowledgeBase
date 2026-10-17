@@ -22,7 +22,7 @@ state:
 related: null
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/cli/sessions-connect
 
 `ant beta:sessions connect` attaches your terminal to an existing Claude Managed Agents [session](https://platform.claude.com/docs/en/managed-agents/sessions). It loads the session's transcript and follows it live as the agent works. You can also step in: send a message, interrupt the agent, or allow or deny a tool call that is waiting for approval. With `--web`, it opens the session in the Claude Console's session viewer in your browser instead.
@@ -43,7 +43,7 @@ Press Ctrl+C to detach. The session keeps running, and connecting again loads it
 
 ## Follow and steer the session
 
-The terminal view shows the conversation live: messages and tool calls, with each call's duration and outcome. A status bar shows whether the session is running, idle, or waiting for your approval. In [multiagent](https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration) sessions, the view follows the session's primary thread, which includes the messages the coordinator exchanges with the agents it delegates to.
+The terminal view shows the conversation live: messages and tool calls, with each call's duration and outcome. A status bar shows whether the session is running, idle, or waiting for your approval. In [multiagent](https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration) sessions, the view follows the session's primary thread, which includes the messages exchanged between the agent that the session runs and the agents it delegates to.
 
 | Key                | Action                                                                                                                     |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------- |

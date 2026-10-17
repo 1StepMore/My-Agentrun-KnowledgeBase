@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:33+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/thinking-tool-workflows
 
 <Note>
@@ -28,7 +28,7 @@ This page walks through a complete two-turn tool-use round trip with thinking en
 
 Each link leads to the full statement on the Thinking page:
 
-* [Limit tool choice to `auto` or `none` in manual mode](https://platform.claude.com/docs/en/build-with-claude/thinking#thinking-with-tool-use): `tool_choice` options that force tool use return an error with manual extended thinking (`thinking: {type: "enabled"}`); adaptive thinking supports forced tool use.
+* [Limit tool choice to `auto` or `none` in manual mode](https://platform.claude.com/docs/en/build-with-claude/thinking#thinking-with-tool-use): `tool_choice` options that force tool use return an error with manual extended thinking (`thinking: {type: "enabled"}`). Adaptive thinking supports forced tool use, except on Claude Opus 5.5, Claude Sonnet 5.5, Claude Fable 5.1, and Claude Mythos 5.1, which return a 400 error. Where forced tool use is accepted, it skips thinking: the response starts with the tool call.
 * [Keep one thinking configuration per assistant turn](https://platform.claude.com/docs/en/build-with-claude/thinking#thinking-with-tool-use): a tool-use loop is one assistant turn, so change the configuration only between turns.
 * [Pass thinking blocks back complete and unmodified](https://platform.claude.com/docs/en/build-with-claude/thinking#preserving-thinking-blocks): when you return a tool result, the thinking blocks from the assistant message must come back with it.
 * [Echo the assistant message exactly as received](https://platform.claude.com/docs/en/build-with-claude/thinking#preserving-thinking-blocks): rebuilding the message or filtering out `redacted_thinking` blocks triggers a 400 error.
@@ -44,9 +44,33 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
     Send a request with adaptive thinking enabled and the tool defined. Apart from the `thinking` parameter, this is a standard [tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview) request:
 
     <CodeGroup>
+      ```bash cURL
+      curl https://api.anthropic.com/v1/messages \
+        -H "anthropic-version: 2023-06-01" \
+        -H "content-type: application/json" \
+        -H "x-api-key: $ANTHROPIC_API_KEY" \
+        -d '{
+          "model": "claude-opus-5-5",
+          "max_tokens": 16000,
+          "thinking": {"type": "adaptive"},
+          "tools": [{
+            "name": "get_weather",
+            "description": "Get current weather for a location",
+            "input_schema": {
+              "type": "object",
+              "properties": {
+                "location": {"type": "string", "description": "City name"}
+              },
+              "required": ["location"]
+            }
+          }],
+          "messages": [{"role": "user", "content": "What is the weather in Paris?"}]
+        }'
+      ```
+
       ```bash CLI
       ant messages create --transform content <<'YAML'
-      model: claude-opus-4-8
+      model: claude-opus-5-5
       max_tokens: 16000
       thinking:
         type: adaptive
@@ -83,7 +107,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
 
       # First request - Claude responds with thinking and tool request
       response = client.messages.create(
-          model="claude-opus-4-8",
+          model="claude-opus-5-5",
           max_tokens=16000,
           thinking={"type": "adaptive"},
           tools=[weather_tool],
@@ -109,7 +133,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
 
       // First request - Claude responds with thinking and tool request
       const response = await client.messages.create({
-        model: "claude-opus-4-8",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"
@@ -139,7 +163,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
 
       var parameters = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus4_8,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Thinking = new ThinkingConfigAdaptive(),
           Tools = [weatherTool],
@@ -170,7 +194,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       }
 
       response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus4_8,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 16000,
       	Thinking: anthropic.ThinkingConfigParamUnion{
       		OfAdaptive: &anthropic.ThinkingConfigAdaptiveParam{},
@@ -192,7 +216,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
           AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
           MessageCreateParams params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_4_8)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(16000L)
               .thinking(ThinkingConfigAdaptive.builder().build())
               .addTool(Tool.builder()
@@ -232,7 +256,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
           messages: [
               ['role' => 'user', 'content' => "What's the weather in Paris?"]
           ],
-          model: 'claude-opus-4-8',
+          model: 'claude-opus-5-5',
           thinking: ['type' => 'adaptive'],
           tools: [$weatherTool],
       );
@@ -255,7 +279,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       }
 
       message = client.messages.create(
-        model: "claude-opus-4-8",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"
@@ -271,10 +295,10 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
   </Step>
 
   <Step title="Capture the content array to echo back">
-    You should see `thinking`, `text`, and `tool_use` blocks in the response content on a run where Claude chose to think (on simpler requests, adaptive mode may skip the thinking block). Keep this content array intact: the next step sends it back verbatim.
+    You should see `thinking` and `tool_use` blocks in the response content on a run where Claude chose to think (on simpler requests, adaptive mode may skip the thinking block). A note Claude writes before the tool call comes back as a `text` block or, on models that write [progress updates](https://platform.claude.com/docs/en/build-with-claude/thinking#progress-updates), as another `thinking` block. Keep this content array intact: the next step sends it back verbatim.
 
     <Note>
-      To see thinking text like this output, add `display: "summarized"` to the request. On models where display defaults to omitted, including claude-opus-4-8, the `thinking` field otherwise comes back as an empty string with only the `signature` populated. Either way, echo the content array back unchanged; see [Controlling thinking display](https://platform.claude.com/docs/en/build-with-claude/thinking#controlling-thinking-display).
+      To see thinking text like this output, add `display: "summarized"` to the request. On models where display defaults to omitted, including Claude Opus 5.5, the `thinking` field otherwise comes back as an empty string with only the `signature` populated. Either way, echo the content array back unchanged; see [Controlling thinking display](https://platform.claude.com/docs/en/build-with-claude/thinking#controlling-thinking-display).
     </Note>
 
     ```json Output
@@ -284,10 +308,6 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
           "type": "thinking",
           "thinking": "The user wants to know the current weather in Paris. I have access to a function `get_weather`...",
           "signature": "BDaL4VrbR2Oj0hO4XpJxT28J5T...."
-        },
-        {
-          "type": "text",
-          "text": "I can help you get the current weather information for Paris. Let me check that for you"
         },
         {
           "type": "tool_use",
@@ -307,14 +327,18 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
 
     Each sample is a self-contained script: it repeats the first request, then immediately sends the follow-up using the response it just received.
 
-    <CodeGroup>
+    <CodeGroup exclude="shell:cURL">
+      <CodeGroupItem language="cURL">
+        This workflow needs more logic than a single shell command. Use the Claude SDK to run it.
+      </CodeGroupItem>
+
       ```bash CLI
       # First turn: write the assistant content array (thinking and tool_use
       # blocks, signatures intact) to a file. Routing model-generated text
       # through a file keeps it out of shell-expansion position later.
       ant messages create --transform content --format jsonl \
         > assistant_content.json <<'YAML'
-      model: claude-opus-4-8
+      model: claude-opus-5-5
       max_tokens: 16000
       thinking:
         type: adaptive
@@ -343,7 +367,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
           ($blocks[0][] | select(.type == "tool_use") | .id)
       ' <<'JSON' | ant messages create
       {
-        "model": "claude-opus-4-8",
+        "model": "claude-opus-5-5",
         "max_tokens": 16000,
         "thinking": {"type": "adaptive"},
         "tools": [{
@@ -383,7 +407,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
           },
       }
       response = client.messages.create(
-          model="claude-opus-4-8",
+          model="claude-opus-5-5",
           max_tokens=16000,
           thinking={"type": "adaptive"},
           tools=[weather_tool],
@@ -398,7 +422,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
 
       # Second request - Include the assistant turn and the tool result
       continuation = client.messages.create(
-          model="claude-opus-4-8",
+          model="claude-opus-5-5",
           max_tokens=16000,
           thinking={"type": "adaptive"},
           tools=[weather_tool],
@@ -438,7 +462,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       };
 
       const response = await client.messages.create({
-        model: "claude-opus-4-8",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"
@@ -459,7 +483,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       if (toolUseBlock) {
         // Second request - Include the assistant turn and the tool result
         const continuation = await client.messages.create({
-          model: "claude-opus-4-8",
+          model: "claude-opus-5-5",
           max_tokens: 16000,
           thinking: {
             type: "adaptive"
@@ -505,7 +529,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
 
       var parameters = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus4_8,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Thinking = new ThinkingConfigAdaptive(),
           Tools = [weatherTool],
@@ -532,7 +556,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       // Build continuation with tool result
       var continuationParams = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus4_8,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Thinking = new ThinkingConfigAdaptive(),
           Tools = [weatherTool],
@@ -575,7 +599,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       }
 
       response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus4_8,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 16000,
       	Thinking: anthropic.ThinkingConfigParamUnion{
       		OfAdaptive: &anthropic.ThinkingConfigAdaptiveParam{},
@@ -600,7 +624,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       weatherData := map[string]int{"temperature": 88}
 
       continuation, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus4_8,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 16000,
       	Thinking: anthropic.ThinkingConfigParamUnion{
       		OfAdaptive: &anthropic.ThinkingConfigAdaptiveParam{},
@@ -640,7 +664,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
               .build();
 
           MessageCreateParams initialParams = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_4_8)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(16000L)
               .thinking(ThinkingConfigAdaptive.builder().build())
               .addTool(weatherTool)
@@ -661,7 +685,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
 
           // Second request: echo the assistant turn as received, then the tool result
           MessageCreateParams continuationParams = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_4_8)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(16000L)
               .thinking(ThinkingConfigAdaptive.builder().build())
               .addTool(weatherTool)
@@ -705,7 +729,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
           messages: [
               ['role' => 'user', 'content' => "What's the weather in Paris?"]
           ],
-          model: 'claude-opus-4-8',
+          model: 'claude-opus-5-5',
           thinking: ['type' => 'adaptive'],
           tools: [$weatherTool],
       );
@@ -733,7 +757,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
                   ]
               ]]
           ],
-          model: 'claude-opus-4-8',
+          model: 'claude-opus-5-5',
           thinking: ['type' => 'adaptive'],
           tools: [$weatherTool],
       );
@@ -757,7 +781,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       }
 
       response = client.messages.create(
-        model: "claude-opus-4-8",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"
@@ -775,7 +799,7 @@ The example defines a `get_weather` tool, lets Claude think and request a tool c
       weather_data = { temperature: 88 }
 
       continuation = client.messages.create(
-        model: "claude-opus-4-8",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"

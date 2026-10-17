@@ -15,13 +15,15 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/middleware
 
-The Anthropic SDKs provide a middleware (or interceptor) hook that lets you run code before a request is sent and after the response is received. Use middleware for cross-cutting concerns such as logging, custom retries, request annotation, and refusal fallback handling.
+The Claude SDK provides a middleware (or interceptor) hook that lets you run code before a request is sent and after the response is received. Use middleware for cross-cutting concerns such as logging, custom retries, request annotation, and refusal fallback handling.
 
 ```mermaid
 sequenceDiagram
+    accTitle: How a request and its response pass through middleware
+    accDescr: Your code sends the request to Middleware A. Middleware A calls next(request) to pass it to Middleware B, and Middleware B calls next(request) to pass it to the SDK core. The SDK core sends the HTTP request to the Claude API and receives the HTTP response. The response returns through Middleware B, then Middleware A, to your code.
     autonumber
     participant App as Your code
     participant M1 as Middleware A
@@ -42,7 +44,7 @@ Each middleware can inspect or replace the request before calling `next()`, and 
 
 ## Registering middleware
 
-Each middleware is a function that receives the outgoing request and a `next` callable. Call `next` to forward the request to the rest of the chain (or directly to the SDK core if this is the last middleware), and return its response. Anything before the `next` call runs on the way out; anything after runs on the way back.
+Each middleware is a function that receives the outgoing request and the next handler. Call `call_next(request)` (typescript: `next(request)`; csharp: `next(request, cancellationToken)`; go: `next(req)`; java: `nextClient.execute(request, requestOptions)`; php: `$next($request)`; ruby: `call_next.call(request)`) to forward the request to the rest of the chain (or directly to the SDK core if this is the last middleware), and return its response. Anything before that call runs on the way out; anything after runs on the way back.
 
 <CodeGroup exclude="shell">
   ```python Python
@@ -185,8 +187,8 @@ In the Go SDK, repeated `option.WithMiddleware` calls concatenate (client first,
 
 ## Replacing the HTTP client
 
-Each SDK also accepts a custom HTTP client (for proxy configuration, custom TLS, or connection pooling). Only one HTTP client is used per SDK client; setting it replaces the default. The custom HTTP client receives requests after all middleware has run.
+The SDK also accepts a custom HTTP client (for proxy configuration, custom TLS, or connection pooling). Only one HTTP client is used per SDK client; setting it replaces the default. The custom HTTP client receives requests after all middleware has run.
 
 ## Built-in middleware
 
-The SDKs ship a refusal-fallback middleware that automatically retries requests Claude Fable 5 declines on a fallback model. See [Detect and retry on a fallback model](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#client-side-fallback) for setup and per-language examples.
+The SDK ships a refusal-fallback middleware that automatically retries a request Claude declines (`stop_reason: "refusal"`) on a fallback model. [Refusals and fallback](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback) lists the models whose safety classifiers can decline requests, and [Detect and retry on a fallback model](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#client-side-fallback) covers setup and per-language examples.

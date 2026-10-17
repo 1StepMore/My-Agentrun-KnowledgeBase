@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:33+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview
 
 ## Before prompt engineering
@@ -60,7 +60,7 @@ If you're an interactive learner, you can start with the interactive tutorials i
 
 <CardGroup cols={2}>
   <Card title="GitHub prompting tutorial" icon="link" href="https://github.com/anthropics/prompt-eng-interactive-tutorial">
-    An example-filled tutorial that covers the prompt engineering concepts found in the docs.
+    An example-filled tutorial on prompt engineering fundamentals. It was written for Claude 3 models, so follow Prompting best practices where the two differ.
   </Card>
 
   <Card title="Google Sheets prompting tutorial" icon="link" href="https://docs.google.com/spreadsheets/d/19jzLgRruG9kjUQNKtCg1ZjdD6l6weA6qRXG5zLIAhC8">

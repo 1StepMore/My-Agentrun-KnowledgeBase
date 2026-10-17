@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:35+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/managed-agents/files
 
 You can provide files to your agent by uploading them through the Files API and mounting them in the session's sandbox.
@@ -92,10 +92,10 @@ First, upload a file using the [Files API](https://platform.claude.com/docs/en/b
 
 ## Mounting files in a session
 
-Mount uploaded files into the sandbox by adding them to the `resources` array when creating a session:
+Mount uploaded files into the sandbox by adding them to the `resources` (csharp, go: `Resources`) array when creating a session:
 
 <Tip>
-  The `mount_path` is optional, but make sure the uploaded file has a descriptive name so the agent can identify it.
+  The `mount_path` (java, php: `mountPath`; csharp, go: `MountPath`) is optional, but make sure the uploaded file has a descriptive name so the agent can identify it.
 </Tip>
 
 <CodeGroup>
@@ -237,13 +237,13 @@ Mount uploaded files into the sandbox by adding them to the `resources` array wh
   ```
 </CodeGroup>
 
-With the preceding `mount_path`, the agent reads the file at `/mnt/session/uploads/data.csv` (see [File paths](https://platform.claude.com/docs/en/managed-agents/files#file-paths)).
+With the preceding `mount_path` (java, php: `mountPath`; csharp, go: `MountPath`), the agent reads the file at `/mnt/session/uploads/data.csv` (see [File paths](https://platform.claude.com/docs/en/managed-agents/files#file-paths)).
 
-A new `file_id` is created that references the instance of the file in the session. These copies do not count against your [storage limits](https://platform.claude.com/docs/en/build-with-claude/files).
+A new `file_id` (java: `fileId`; php: `fileID`; csharp, go: `FileID`) is created that references the instance of the file in the session. These copies do not count against your [storage limits](https://platform.claude.com/docs/en/build-with-claude/files).
 
 ## Multiple files
 
-Mount multiple files by adding entries to the `resources` array:
+Mount multiple files by adding entries to the `resources` (csharp, go: `Resources`) array:
 
 <CodeGroup>
   ```bash cURL
@@ -275,28 +275,22 @@ Mount multiple files by adding entries to the `resources` array:
     }'
   ```
 
-  <MultiFileExample language="cli" label="CLI">
-    ```bash CLI
-    ant beta:sessions create \
-      --agent agent_01J8XkN5uT3vHpLqRfWdY2 \
-      --environment-id env_01K2mPsT7hNwR4jXuLvCqD8 < session.yaml
-    ```
-
-    <File filename="session.yaml">
-      ```yaml
-      resources:
-        - type: file
-          file_id: file_011CNha8iCJcU1wXNR6q4V8w
-          mount_path: /data.csv
-        - type: file
-          file_id: file_011CPMxVD3fHLUhvTqtsQA5w
-          mount_path: /config.json
-        - type: file
-          file_id: file_011CRb3kQ7tWx9ZsLmDe2Vh4
-          mount_path: /src/main.py
-      ```
-    </File>
-  </MultiFileExample>
+  ```bash CLI
+  ant beta:sessions create \
+    --agent agent_01J8XkN5uT3vHpLqRfWdY2 \
+    --environment-id env_01K2mPsT7hNwR4jXuLvCqD8 <<YAML
+  resources:
+    - type: file
+      file_id: file_011CNha8iCJcU1wXNR6q4V8w
+      mount_path: /data.csv
+    - type: file
+      file_id: file_011CPMxVD3fHLUhvTqtsQA5w
+      mount_path: /config.json
+    - type: file
+      file_id: file_011CRb3kQ7tWx9ZsLmDe2Vh4
+      mount_path: /src/main.py
+  YAML
+  ```
 
   ```python Python
   resources = [
@@ -368,7 +362,7 @@ A maximum of 500 files is supported per session.
 
 ## Managing files on a running session
 
-You can add or remove files from a session after creation using the session resources API. Each resource has an `id` returned when it is added (or listed), which you use for deletes.
+You can add or remove files from a session after creation using the session resources API. Each resource has an `id` (csharp, go: `ID`) returned when it is added (or listed), which you use for deletes.
 
 <CodeGroup>
   ```bash cURL
@@ -460,7 +454,7 @@ You can add or remove files from a session after creation using the session reso
   ```
 </CodeGroup>
 
-List all resources on a session with `resources.list`. To remove a file, call `resources.delete` with the resource ID:
+List all resources on a session with `GET /v1/sessions/{session_id}/resources` (python, typescript, ruby: `client.beta.sessions.resources.list()`; go, csharp: `client.Beta.Sessions.Resources.List()`; java: `client.beta().sessions().resources().list()`; php: `$client->beta->sessions->resources->list()`; cli: `ant beta:sessions:resources list`). To remove a file, call `DELETE /v1/sessions/{session_id}/resources/{resource_id}` (python, typescript, ruby: `client.beta.sessions.resources.delete()`; go, csharp: `client.Beta.Sessions.Resources.Delete()`; java: `client.beta().sessions().resources().delete()`; php: `$client->beta->sessions->resources->delete()`; cli: `ant beta:sessions:resources delete`) with the resource ID:
 
 <CodeGroup>
   ```bash cURL
@@ -569,7 +563,7 @@ List all resources on a session with `resources.list`. To remove a file, call `r
 
 Use the [Files API](https://platform.claude.com/docs/en/build-with-claude/files) to list files scoped to a session and download them. Files the agent writes to `/mnt/session/outputs/` appear in the list shortly after the agent finishes writing them, sometimes a few seconds after the session goes idle. If an output file you expect is missing, list again after a short delay; once it appears in the list, its upload has finished.
 
-Filtering by `scope_id` requires the `managed-agents-2026-04-01` beta header, so the list examples use the `beta` files namespace and pass that header explicitly.
+Filtering by `scope_id` (java: `scopeId`; php: `scopeID`; csharp, go: `ScopeID`) requires the `managed-agents-2026-04-01` beta header, so the list examples call `GET /v1/files` (python, typescript, ruby: `client.beta.files.list()`; go, csharp: `client.Beta.Files.List()`; java: `client.beta().files().list()`; php: `$client->beta->files->list()`; cli: `ant beta:files list`) and pass that header explicitly.
 
 <CodeGroup>
   ```bash cURL
@@ -724,8 +718,8 @@ The agent can work with any file type, including:
   Files mounted in the sandbox are read-only copies. The agent can read them but cannot modify the original uploaded file. To work with modified versions, the agent writes to new paths within the sandbox.
 </Note>
 
-* The path you specify is rooted under the session's uploads directory: a `mount_path` of `/data.csv` places the file at `/mnt/session/uploads/data.csv` in the sandbox
-* If you omit `mount_path`, the file is placed at `/mnt/session/uploads/<file_id>`
+* The path you specify is rooted under the session's uploads directory: a `mount_path` (java, php: `mountPath`; csharp, go: `MountPath`) of `/data.csv` places the file at `/mnt/session/uploads/data.csv` in the sandbox
+* If you omit `mount_path` (java, php: `mountPath`; csharp, go: `MountPath`), the file is placed at `/mnt/session/uploads/<file_id>`
 * Parent directories are created automatically
 * Paths should be absolute (starting with `/`)
 * Files the agent writes to `/mnt/session/outputs/` become available through the Files API, scoped to the session; see [Listing and downloading session files](https://platform.claude.com/docs/en/managed-agents/files#listing-and-downloading-session-files)

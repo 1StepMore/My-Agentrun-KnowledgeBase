@@ -22,15 +22,15 @@ state:
 related: null
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:33+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-opus-4-8
 
-This guide covers the prompting patterns specific to Claude Opus 4.8. For the API changes involved in moving from Claude Opus 4.8 to the latest Opus model, see [Migrating to Claude Opus 5 from Claude Opus 4.8](https://platform.claude.com/docs/en/models/opus-5/migration-guide#migrating-from-claude-opus-4-8-to-claude-opus-5). For techniques that apply across all current Claude models, see [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
+This guide covers the prompting patterns specific to Claude Opus 4.8. For the API changes involved in moving from Claude Opus 4.8 to Claude Opus 5.5, see [Migrating to Claude Opus 5.5 from Claude Opus 4.8](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide#migrating-from-claude-opus-4-8). For techniques that apply across all current Claude models, see [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
 
 Claude Opus 4.8 has particular strengths in long-horizon agentic work, knowledge work, vision, and memory tasks. It performs well out of the box on existing Claude Opus 4.7 prompts. The following patterns cover the behaviors that most often require tuning.
 
 <Note>
-  For the API parameter changes since Claude Opus 4.7 (sampling parameters, effort default, 1M context window default, mid-conversation system messages, and refusal stop details), see [Migrating to Claude Opus 5 from Claude Opus 4.7](https://platform.claude.com/docs/en/models/opus-5/migration-guide#migrating-from-claude-opus-47), which covers the same changes on the way to the latest Opus model; Claude Opus 4.8 shares these behaviors.
+  For the API parameter changes since Claude Opus 4.7 (1M context window default and mid-conversation system messages), see [Migrating to Claude Opus 5.5 from Claude Opus 4.7](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide#migrating-from-claude-opus-47), which covers the same changes on the way to Claude Opus 5.5; Claude Opus 4.8 shares these behaviors.
 </Note>
 
 ## Response length and verbosity

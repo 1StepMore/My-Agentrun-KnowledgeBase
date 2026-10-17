@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:35+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/handle-streaming-refusals
 
 Starting with Claude 4 models, streaming responses from Claude's API return **`stop_reason`: `"refusal"`** when streaming classifiers intervene to handle potential policy violations. This safety feature helps maintain content compliance during real-time streaming.
@@ -59,9 +59,7 @@ In the event stream, `stop_details` arrives on the `message_delta` event alongsi
 When you receive **`stop_reason`: `refusal`**, you must reset the conversation context before continuing. You can remove or rephrase the turn that triggered the refusal, or clear the conversation history entirely. Attempting to continue without resetting will result in continued refusals.
 
 <Note>
-  Usage metrics are still provided in the response, even when the response is refused.
-
-  When a refusal arrives before Claude generates any output, you are not billed for the request on the Claude API, and the usage counts in that response are informational only. When Claude generates output before the refusal, you are billed for that request.
+  Usage metrics are still provided in the response, even when the response is refused. Whether a refused request is billed depends on when the refusal arrives and its category; see [How refusals are billed](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#how-refusals-are-billed).
 </Note>
 
 <Tip>
@@ -74,20 +72,32 @@ Here's how to detect and handle streaming refusals in your application:
 
 <CodeGroup>
   ```bash cURL
-  # Stream request and check for refusal
   response=$(curl -N https://api.anthropic.com/v1/messages \
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "messages": [{"role": "user", "content": "Hello"}],
       "max_tokens": 1024,
       "stream": true
     }')
 
-  # Check for refusal in the stream
-  if echo "$response" | grep -q '"stop_reason":"refusal"'; then
+  if echo "$response" | jq -R -e 'select(startswith("data: "))
+      | sub("^data: "; "") | fromjson
+      | select(.delta.stop_reason == "refusal")' >/dev/null; then
+    echo "Response refused - resetting conversation context"
+    # Reset your conversation state here
+  fi
+  ```
+
+  ```bash CLI
+  response=$(ant messages create --stream --format jsonl \
+    --model claude-opus-5-5 \
+    --max-tokens 1024 \
+    --message '{role: user, content: Hello}')
+
+  if echo "$response" | jq -e 'select(.delta.stop_reason == "refusal")' >/dev/null; then
     echo "Response refused - resetting conversation context"
     # Reset your conversation state here
   fi
@@ -109,7 +119,7 @@ Here's how to detect and handle streaming refusals in your application:
       with client.messages.stream(
           max_tokens=1024,
           messages=messages + [{"role": "user", "content": "Hello"}],
-          model="claude-opus-5",
+          model="claude-opus-5-5",
       ) as stream:
           for event in stream:
               # Check for refusal in message delta
@@ -134,7 +144,7 @@ Here's how to detect and handle streaming refusals in your application:
   try {
     const stream = await client.messages.stream({
       messages: [...messages, { role: "user", content: "Hello" }],
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024
     });
 
@@ -156,7 +166,7 @@ Here's how to detect and handle streaming refusals in your application:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [new() { Role = Role.User, Content = "Hello" }]
   };
@@ -198,7 +208,7 @@ Here's how to detect and handle streaming refusals in your application:
   	client := anthropic.NewClient()
 
   	stream := client.Messages.NewStreaming(context.TODO(), anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 1024,
   		Messages: []anthropic.MessageParam{
   			anthropic.NewUserMessage(anthropic.NewTextBlock("Hello")),
@@ -234,7 +244,7 @@ Here's how to detect and handle streaming refusals in your application:
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessage("Hello")
           .build();
@@ -275,7 +285,7 @@ Here's how to detect and handle streaming refusals in your application:
           messages: [
               ['role' => 'user', 'content' => 'Hello']
           ],
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
       );
 
       foreach ($stream as $event) {
@@ -284,7 +294,7 @@ Here's how to detect and handle streaming refusals in your application:
               break;
           }
       }
-  } catch (Exception $e) {
+  } catch (\Exception $e) {
       echo "Error: " . $e->getMessage() . "\n";
   }
   ```
@@ -300,7 +310,7 @@ Here's how to detect and handle streaming refusals in your application:
 
   begin
     stream = client.messages.stream(
-      model: :"claude-opus-5",
+      model: :"claude-opus-5-5",
       max_tokens: 1024,
       messages: [{ role: "user", content: "Hello" }]
     )
@@ -331,8 +341,8 @@ The API currently handles refusals in three different ways:
 
 * **Monitor for refusals:** Include **`stop_reason`: `refusal`** checks in your error handling
 * **Reset automatically:** Implement automatic context reset when refusals are detected
-* **Fall back to another model:** Configure [server-side fallback or the SDK middleware](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback) so refused requests are retried on another Claude model instead of surfacing a refusal to the user
-* **Redeem fallback credit on manual retries:** If you build the retry yourself, pass the refusal's [fallback credit](https://platform.claude.com/docs/en/build-with-claude/fallback-credit) token so the retry doesn't pay the prompt-cache cost twice
+* **Fall back to another model:** Configure [server-side fallback or the SDK middleware](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback) so refused requests are retried on another Claude model instead of surfacing a refusal to the user. Claude Haiku 5.5 has no server-side fallback, so set up its retry in your client
+* **Redeem fallback credit on manual retries:** If you build the retry yourself, pass the refusal's [fallback credit](https://platform.claude.com/docs/en/build-with-claude/fallback-credit) token so the retry doesn't pay the prompt-cache cost twice. Claude Haiku 5.5 refusals carry no fallback credit
 * **Provide custom messaging:** Create user-friendly messages for better UX when refusals occur
 * **Track refusal patterns:** Monitor refusal frequency to identify potential issues with your prompts
 
@@ -342,7 +352,7 @@ If you built refusal handling when this feature first shipped, or you're adding 
 
 * **Refusals are responses, not errors.** A refusal arrives as a successful HTTP 200 response with `stop_reason`: `"refusal"`, so monitoring built only on error rates won't surface it. Track refusals as their own signal.
 * **Refusals include structured detail.** On every model, a refusal also includes a `stop_details` object that identifies the policy category behind the decline. See [Refusals and fallback](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#refusal-response) for the full response shape.
-* **Retry on a different model.** Re-sending a refused request to the same model usually results in another refusal. Instead of only resetting context, retry on a fallback model with [server-side fallback, the SDK middleware, or a manual retry](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback), and redeem [fallback credit](https://platform.claude.com/docs/en/build-with-claude/fallback-credit) when you build the retry yourself.
+* **Retry on a different model.** Re-sending a refused request to the same model usually results in another refusal. Instead of only resetting context, retry on a fallback model with [server-side fallback, the SDK middleware, or a manual retry](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback), and redeem [fallback credit](https://platform.claude.com/docs/en/build-with-claude/fallback-credit) when you build the retry yourself. Claude Haiku 5.5 has no server-side fallback, and its refusals carry no fallback credit, so set up its retry in your client.
 * **Check batch results for refusals.** A refused request in a [Message Batch](https://platform.claude.com/docs/en/build-with-claude/batch-processing) is returned as a succeeded result with `stop_reason`: `"refusal"`, not as an errored result.
 * **Centralize handling on `stop_reason`.** The API continues to consolidate refusal handling around `stop_reason`: `"refusal"`, so branch on the stop reason rather than on model-specific behavior.
 

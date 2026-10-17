@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/php
 
 The Anthropic PHP library provides convenient access to the Claude API from any PHP 8.1.0+ application.
@@ -50,7 +50,7 @@ $client = new Client();
 $message = $client->messages->create(
   maxTokens: 1024,
   messages: [['role' => 'user', 'content' => 'Hello, Claude']],
-  model: 'claude-opus-5',
+  model: 'claude-opus-5-5',
 );
 
 $textBlock = array_find($message->content, static fn ($block): bool => $block->type === 'text');
@@ -75,7 +75,7 @@ $client = new Client();
 $stream = $client->messages->createStream(
   maxTokens: 1024,
   messages: [['role' => 'user', 'content' => 'Hello, Claude']],
-  model: 'claude-opus-5',
+  model: 'claude-opus-5-5',
 );
 
 foreach ($stream as $event) {
@@ -86,8 +86,8 @@ foreach ($stream as $event) {
 Streaming requires an HTTP client that returns the response body incrementally. When Guzzle is the discovered PSR-18 client, the SDK configures it for streaming automatically. With a buffering client, the `foreach` loop yields every event at once when the response completes instead of incrementally; if you observe that symptom, install Guzzle or supply a streaming-capable PSR-18 client through the `streamingTransporter` request option:
 
 ```php
-$client = new Anthropic\Client(
-  requestOptions: Anthropic\RequestOptions::with(streamingTransporter: $myStreamingClient),
+$client = new \Anthropic\Client(
+  requestOptions: \Anthropic\RequestOptions::with(streamingTransporter: $myStreamingClient),
 );
 ```
 
@@ -106,7 +106,7 @@ try {
   $message = $client->messages->create(
     maxTokens: 1024,
     messages: [['role' => 'user', 'content' => 'Hello, Claude']],
-    model: 'claude-opus-5',
+    model: 'claude-opus-5-5',
   );
 } catch (APIConnectionException $e) {
   echo "The server could not be reached", PHP_EOL;
@@ -153,7 +153,7 @@ $client = new Client(requestOptions: RequestOptions::with(maxRetries: 0));
 $result = $client->messages->create(
   maxTokens: 1024,
   messages: [['role' => 'user', 'content' => 'Hello, Claude']],
-  model: 'claude-opus-5',
+  model: 'claude-opus-5-5',
   requestOptions: RequestOptions::with(maxRetries: 5),
 );
 ```
@@ -174,8 +174,10 @@ foreach ($page->getItems() as $item) {
   echo $item->id, PHP_EOL;
 }
 // make additional network requests to fetch items from all pages, including and after the current page
+// ...
 foreach ($page->pagingEachItem() as $item) {
   echo $item->id, PHP_EOL;
+// ...
 }
 ```
 
@@ -197,7 +199,7 @@ use Anthropic\RequestOptions;
 $message = $client->messages->create(
   maxTokens: 1024,
   messages: [['role' => 'user', 'content' => 'Hello, Claude']],
-  model: 'claude-opus-5',
+  model: 'claude-opus-5-5',
   requestOptions: RequestOptions::with(
     extraQueryParams: ['my_query_parameter' => 'value'],
     extraBodyParams: ['my_body_parameter' => 'value'],

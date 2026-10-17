@@ -20,7 +20,7 @@ state:
 related: null
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:31+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose
 
 <Note>
@@ -37,7 +37,7 @@ You need:
 
 * **A way for the host to authenticate to the Tunnels API.**
 
-  * **Programmatic access (recommended).** Turn on **Set up programmatic access** when creating the tunnel (or create the federation rule directly under **Settings > Workload identity** if you're letting the setup component create the tunnel) so the setup component can authenticate through Workload Identity Federation. Record the federation rule ID (`fdrl_...`) and your organization ID.
+  * **Programmatic access (recommended).** Turn on **Set up programmatic access** when creating the tunnel so the setup component can authenticate through Workload Identity Federation. If you're letting the setup component create the tunnel, create the federation rule directly on the [Workload identity](https://platform.claude.com/settings/workload-identity-federation) page (`platform.claude.com/settings/workload-identity-federation`) in the Claude Console instead. Record the federation rule ID (`fdrl_...`) and your organization ID.
   * **Manual.** Skip programmatic access. You'll [get the tunnel token from the Console](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#get-the-connection-details), generate a CA and server certificate yourself, and [register the CA in the Console](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).
 
 * **A host with Docker and Docker Compose** installed. The manual flow also requires `openssl` (1.1.1 or later).
@@ -307,7 +307,7 @@ This guide provides one reference approach using Docker Compose. You are respons
         cat data/ca.crt
         ```
 
-        The tunnel's status flips to **Active** once a certificate is registered. See [Add a CA certificate](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).
+        The **Needs certificate** badge next to the tunnel's name goes away once a certificate is registered. See [Add a CA certificate](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).
       </Step>
 
       <Step title="Write the proxy config">

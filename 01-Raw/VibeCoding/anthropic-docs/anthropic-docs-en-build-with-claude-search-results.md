@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:33+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/search-results
 
 <Note>
@@ -87,20 +87,14 @@ Returning search results from your custom tools enables dynamic RAG applications
 
 ### Example: Knowledge base tool
 
-<CodeGroup>
-  ```bash cURL
-  # The tool-calling flow needs application-side search logic that doesn't
-  # translate to a one-off shell command. See the SDK tabs for the full flow.
-  # The raw shape of a tool conversation with search results is shown in the
-  # Combining both methods cURL tab; Method 2 shows the top-level shape.
-  ```
+<CodeGroup exclude="shell">
+  <CodeGroupItem language="cURL">
+    The tool-calling flow needs search logic in your application, which needs more than a single shell command. Use the Claude SDK for the full flow. For the raw request shape of a tool conversation with search results, see [Combining both methods](https://platform.claude.com/docs/en/build-with-claude/search-results#combining-both-methods). For search results as top-level content, see [Method 2](https://platform.claude.com/docs/en/build-with-claude/search-results#method-2-search-results-as-top-level-content).
+  </CodeGroupItem>
 
-  ```bash CLI
-  # The tool-calling flow needs application-side search logic that doesn't
-  # translate to a one-off shell command. See the SDK tabs for the full flow.
-  # The raw shape of a tool conversation with search results is shown in the
-  # Combining both methods cURL tab; Method 2 shows the top-level shape.
-  ```
+  <CodeGroupItem language="CLI">
+    The tool-calling flow needs search logic in your application, which needs more than a single shell command. Use the Claude SDK for the full flow. For the raw request shape of a tool conversation with search results, see [Combining both methods](https://platform.claude.com/docs/en/build-with-claude/search-results#combining-both-methods). For search results as top-level content, see [Method 2](https://platform.claude.com/docs/en/build-with-claude/search-results#method-2-search-results-as-top-level-content).
+  </CodeGroupItem>
 
   ```python Python
   from anthropic.types import (
@@ -811,7 +805,7 @@ You can also provide search results directly in user messages. This is useful fo
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "messages": [
         {
@@ -857,7 +851,7 @@ You can also provide search results directly in user messages. This is useful fo
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   messages:
     - role: user
@@ -898,7 +892,7 @@ You can also provide search results directly in user messages. This is useful fo
 
   # Provide search results directly in the user message
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[
           MessageParam(
@@ -945,7 +939,7 @@ You can also provide search results directly in user messages. This is useful fo
 
   // Provide search results directly in the user message
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -993,7 +987,7 @@ You can also provide search results directly in user messages. This is useful fo
   // Provide search results directly in the user message
   var response = await client.Messages.Create(new()
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages =
       [
@@ -1029,7 +1023,7 @@ You can also provide search results directly in user messages. This is useful fo
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(
@@ -1071,7 +1065,7 @@ You can also provide search results directly in user messages. This is useful fo
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessageOfBlockParams(List.of(
               ContentBlockParam.ofSearchResult(
@@ -1151,7 +1145,7 @@ You can also provide search results directly in user messages. This is useful fo
               ]
           ]
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
   );
 
   echo json_encode($message, JSON_PRETTY_PRINT);
@@ -1161,7 +1155,7 @@ You can also provide search results directly in user messages. This is useful fo
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -1324,7 +1318,7 @@ The following example replays a complete conversation. The first user message ca
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [
         {
@@ -1405,7 +1399,7 @@ The following example replays a complete conversation. The first user message ca
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - name: search_knowledge_base
@@ -1483,7 +1477,7 @@ The following example replays a complete conversation. The first user message ca
   # Replay a conversation that provides search results both ways: the first
   # user message carries a pre-fetched result, the tool result returns another
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[knowledge_base_tool],
       messages=[
@@ -1569,7 +1563,7 @@ The following example replays a complete conversation. The first user message ca
   // Replay a conversation that provides search results both ways: the first
   // user message carries a pre-fetched result, the tool result returns another
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [knowledgeBaseTool],
     messages: [
@@ -1642,7 +1636,7 @@ The following example replays a complete conversation. The first user message ca
   // user message carries a pre-fetched result, the tool result returns another
   var response = await client.Messages.Create(new()
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools =
       [
@@ -1740,7 +1734,7 @@ The following example replays a complete conversation. The first user message ca
   // Replay a conversation that provides search results both ways: the first
   // user message carries a pre-fetched result, the tool result returns another
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools:     []anthropic.ToolUnionParam{knowledgeBaseTool},
   	Messages: []anthropic.MessageParam{
@@ -1815,7 +1809,7 @@ The following example replays a complete conversation. The first user message ca
       // Replay a conversation that provides search results both ways: the first
       // user message carries a pre-fetched result, the tool result returns another
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(knowledgeBaseTool)
           .addUserMessageOfBlockParams(List.of(
@@ -1941,7 +1935,7 @@ The following example replays a complete conversation. The first user message ca
               ]
           ]
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
   );
 
   echo json_encode($response, JSON_PRETTY_PRINT);
@@ -1965,7 +1959,7 @@ The following example replays a complete conversation. The first user message ca
   # Replay a conversation that provides search results both ways: the first
   # user message carries a pre-fetched result, the tool result returns another
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [knowledge_base_tool],
     messages: [

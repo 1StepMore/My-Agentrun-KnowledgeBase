@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/java
 
 The Anthropic Java SDK provides convenient access to the Claude API from applications written in Java. It uses the builder pattern for creating requests and supports both synchronous and asynchronous operations.
@@ -29,7 +29,7 @@ The Anthropic Java SDK provides convenient access to the Claude API from applica
 <Tabs>
   <Tab title="Gradle">
     ```kotlin
-    implementation("com.anthropic:anthropic-java:2.63.0")
+    implementation("com.anthropic:anthropic-java:2.73.0")
     ```
   </Tab>
 
@@ -38,7 +38,7 @@ The Anthropic Java SDK provides convenient access to the Claude API from applica
     <dependency>
         <groupId>com.anthropic</groupId>
         <artifactId>anthropic-java</artifactId>
-        <version>2.63.0</version>
+        <version>2.73.0</version>
     </dependency>
     ```
   </Tab>
@@ -68,7 +68,7 @@ AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 MessageCreateParams params = MessageCreateParams.builder()
   .maxTokens(1024L)
   .addUserMessage("Hello, Claude")
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .build();
 
 Message message = client.messages().create(params);
@@ -160,7 +160,7 @@ AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 MessageCreateParams params = MessageCreateParams.builder()
   .maxTokens(1024L)
   .addUserMessage("Hello, Claude")
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .build();
 
 CompletableFuture<Message> message = client.async().messages().create(params);
@@ -180,7 +180,7 @@ AnthropicClientAsync client = AnthropicOkHttpClientAsync.fromEnv();
 MessageCreateParams params = MessageCreateParams.builder()
   .maxTokens(1024L)
   .addUserMessage("Hello, Claude")
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .build();
 
 CompletableFuture<Message> message = client.messages().create(params);
@@ -408,7 +408,7 @@ import com.anthropic.models.messages.Model;
 AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
 MessageCreateParams.Builder createParamsBuilder = MessageCreateParams.builder()
-        .model(Model.CLAUDE_OPUS_5)
+        .model(Model.CLAUDE_OPUS_5_5)
         .maxTokens(2048)
         .addTool(GetWeather.class)
         .addUserMessage("What's the temperature in New York?");
@@ -446,7 +446,7 @@ private static Object callTool(BetaToolUseBlock toolUseBlock) {
 
 ### Tool name conversion
 
-Tool names are derived from the camel case tool class names (for example, `GetWeather`) and converted to snake case (for example, `get_weather`). Word boundaries begin where the current character is not the first character, is upper-case, and either the preceding character is lower-case, or the following character is lower-case. For example, `MyJSONParser` becomes `my_json_parser` and `ParseJSON` becomes `parse_json`. This conversion can be overridden using the `@JsonTypeName` annotation.
+Tool names are derived from the camel case tool class names (for example, `GetWeather`) and converted to snake case (for example, `get_weather`). Word boundaries begin where the current character is not the first character, is uppercase, and either the preceding character is lowercase, or the following character is lowercase. For example, `MyJSONParser` becomes `my_json_parser` and `ParseJSON` becomes `parse_json`. This conversion can be overridden using the `@JsonTypeName` annotation.
 
 ### Local tool JSON schema validation
 
@@ -454,7 +454,7 @@ You can perform local validation to check that the JSON schema derived from your
 
 ```java
 MessageCreateParams.Builder createParamsBuilder = MessageCreateParams.builder()
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .maxTokens(2048)
   .addTool(GetWeather.class, JsonSchemaLocalValidation.NO)
   .addUserMessage("What's the temperature in New York?");
@@ -674,7 +674,7 @@ Duration.ofSeconds(
 
 This results in a timeout of up to 60 minutes, scaled by the `maxTokens` parameter, unless overridden.
 
-For non-streaming requests, the dynamic timeout scales from a 30 second minimum up to a 10 minute maximum based on `maxTokens`.
+For non-streaming requests, the dynamic timeout scales from a 30-second minimum up to a 10-minute maximum based on `maxTokens`.
 
 To set a custom timeout per-request:
 
@@ -704,7 +704,7 @@ AnthropicClient client = AnthropicOkHttpClient.builder()
   Consider using [streaming](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/java#streaming) for longer running requests.
 </Warning>
 
-Avoid setting a large `maxTokens` value without using streaming. Some networks may drop idle connections after a certain period of time, which can cause the request to fail or [timeout](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/java#timeouts) without receiving a response from Anthropic. The SDK periodically pings the API to keep the connection alive and reduce the impact of these networks.
+Avoid setting a large `maxTokens` value without using streaming. Some networks may drop idle connections after a certain period of time, which can cause the request to fail or [time out](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/java#timeouts) without receiving a response from Anthropic. The SDK periodically pings the API to keep the connection alive and reduce the impact of these networks.
 
 The SDK throws an error if a non-streaming request is expected to take longer than 10 minutes. Using a [streaming method](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/java#streaming) or [overriding the timeout](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/java#timeouts) at the client or request level disables the error.
 
@@ -813,7 +813,7 @@ Each class in the SDK has an associated builder for constructing it. Each class 
 MessageCreateParams params = MessageCreateParams.builder()
   .maxTokens(1024L)
   .addUserMessage("Hello, Claude")
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .build();
 
 // Create a modified copy using toBuilder()
@@ -875,7 +875,7 @@ import com.anthropic.models.messages.Model;
 MessageCreateParams params = MessageCreateParams.builder()
   .maxTokens(JsonValue.from(3.14))
   .addUserMessage("Hello, Claude")
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .build();
 ```
 
@@ -917,7 +917,7 @@ import com.anthropic.models.messages.Model;
 
 MessageCreateParams params = MessageCreateParams.builder()
   .addUserMessage("Hello, world")
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .maxTokens(JsonMissing.of())
   .build();
 ```
@@ -1091,7 +1091,7 @@ To use a completely custom HTTP client:
 
 The Java SDK supports the following platforms through separate dependencies that provide platform-specific `Backend` implementations:
 
-* **Agent Platform:** `com.anthropic:anthropic-java-vertex`: Use `VertexBackend.fromEnv()` or `VertexBackend.builder()`.
+* **Agent Platform:** `com.anthropic:anthropic-java-vertex`: Use `VertexBackend.builder()` or `VertexBackend.fromEnv()`. `fromEnv()` reads `CLOUD_ML_REGION` and `ANTHROPIC_VERTEX_PROJECT_ID` and uses Application Default Credentials.
 * **Bedrock:** `com.anthropic:anthropic-java-bedrock`: Use `BedrockMantleBackend.fromEnv()` or `BedrockMantleBackend.builder()` for the Messages-API Bedrock endpoint, or `BedrockBackend.fromEnv()` / `BedrockBackend.builder()` (`bedrock-runtime` path).
 * **Claude Platform on AWS:** `com.anthropic:anthropic-java-aws`: Use `AwsBackend.fromEnv()` (reads `ANTHROPIC_AWS_WORKSPACE_ID` and the AWS default region/credential chain) or `AwsBackend.builder()`. Available in beta.
 * **Foundry:** `com.anthropic:anthropic-java-foundry`: Use `FoundryBackend.fromEnv()` or `FoundryBackend.builder()`.
@@ -1116,7 +1116,7 @@ import com.anthropic.models.messages.Model;
 MessageCreateParams params = MessageCreateParams.builder()
   .maxTokens(1024L)
   .addUserMessage("Hello, Claude")
-  .model(Model.CLAUDE_OPUS_5)
+  .model(Model.CLAUDE_OPUS_5_5)
   .build();
 
 HttpResponseFor<Message> message = client.messages().withRawResponse().create(params);
@@ -1210,7 +1210,7 @@ Prefer the well-typed constants (for example, `Model.CLAUDE_OPUS_5`) so you get 
 
 ## Beta features
 
-Beta features are available before general release to get early feedback and test new functionality. You can check the availability of all of Claude's capabilities and tools in the [build with Claude overview](https://platform.claude.com/docs/en/build-with-claude/overview).
+Beta features are available before general release to get early feedback and test new functionality. You can check the availability of all of Claude's capabilities and tools in the [Features overview](https://platform.claude.com/docs/en/build-with-claude/overview).
 
 You can access most beta API features through the `beta()` method on the client. To enable a particular beta feature, add the appropriate [beta header](https://platform.claude.com/docs/en/api/beta-headers) with `.addBeta()` when building the message params.
 
@@ -1226,7 +1226,7 @@ void main() {
 
     BetaMessage message = client.beta().messages().create(
         MessageCreateParams.builder()
-            .model(Model.CLAUDE_OPUS_5)
+            .model(Model.CLAUDE_OPUS_5_5)
             .maxTokens(1024L)
             .addBeta(AnthropicBeta.CONTEXT_MANAGEMENT_2025_06_27)
             .addUserMessage("Hello, Claude")

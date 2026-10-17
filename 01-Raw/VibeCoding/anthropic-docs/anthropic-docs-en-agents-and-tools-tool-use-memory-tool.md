@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:31+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool
 
 The memory tool lets Claude store and retrieve information across conversations in a directory of memory files. Claude can create, read, update, and delete files that persist between sessions, building up knowledge over time without keeping everything in the context window.
@@ -132,7 +132,7 @@ Using the memory tool takes two steps:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 2048,
       "messages": [
         {
@@ -149,7 +149,7 @@ Using the memory tool takes two steps:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 2048
   tools:
     - type: memory_20250818
@@ -164,7 +164,7 @@ Using the memory tool takes two steps:
   client = anthropic.Anthropic()
 
   message = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=2048,
       messages=[
           {
@@ -182,7 +182,7 @@ Using the memory tool takes two steps:
   const anthropic = new Anthropic();
 
   const message = await anthropic.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 2048,
     messages: [
       {
@@ -202,7 +202,7 @@ Using the memory tool takes two steps:
   var message = await client.Messages.Create(
       new()
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 2048,
           Messages =
           [
@@ -223,7 +223,7 @@ Using the memory tool takes two steps:
   client := anthropic.NewClient()
 
   message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 2048,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Help me respond to this customer service ticket.")),
@@ -244,7 +244,7 @@ Using the memory tool takes two steps:
     AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
     MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(2048L)
       .addTool(MemoryTool20250818.builder().build())
       .addUserMessage("Help me respond to this customer service ticket.")
@@ -258,7 +258,7 @@ Using the memory tool takes two steps:
   $client = new Client();
 
   $message = $client->messages->create(
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       maxTokens: 2048,
       messages: [
           [
@@ -276,7 +276,7 @@ Using the memory tool takes two steps:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: Anthropic::Model::CLAUDE_OPUS_5,
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
     max_tokens: 2048,
     messages: [
       {
@@ -299,7 +299,7 @@ Using the memory tool takes two steps:
 
 Claude's reply to a request like the previous one ends with a `tool_use` block that requests a memory operation, such as `view /memories`. Your application executes the operation and returns the result in a `tool_result` block, then sends the conversation back so Claude can continue: the standard [tool-use loop](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls).
 
-Four SDKs provide memory tool helpers that handle the tool interface and the loop. Subclass `BetaAbstractMemoryTool` (Python and C#), use `betaMemoryTool` (TypeScript), or implement `BetaMemoryToolHandler` (Java) to back memory with your own storage, such as files on disk, a database, cloud storage, or encrypted files. Python and TypeScript also ship a ready-made local-filesystem implementation, `BetaLocalFilesystemMemoryTool`. The helper and tool-runner surfaces live in each SDK's beta namespace even though the memory tool itself doesn't require a beta header. The Go and Ruby SDKs have no memory helper, so those examples run the tool-use loop themselves, and PHP wraps your handler closure in its generic `BetaRunnableTool`. All three use an in-memory store that you replace with your own storage.
+Four SDKs provide memory tool helpers that handle the tool interface and the loop. Subclass `BetaAbstractMemoryTool` (Python and C#), use `betaMemoryTool` (TypeScript), or implement `BetaMemoryToolHandler` (Java) to back memory with your own storage, such as files on disk, a database, cloud storage, or encrypted files. Python and TypeScript also ship a ready-made local-filesystem implementation, `BetaLocalFilesystemMemoryTool`. The helper and tool-runner surfaces live in your SDK's beta namespace even though the memory tool itself doesn't require a beta header. The Go and Ruby SDKs have no memory helper, so those examples run the tool-use loop themselves, and PHP wraps your handler closure in its generic `BetaRunnableTool`. All three use an in-memory store that you replace with your own storage.
 
 <CodeGroup exclude="shell">
   ```python Python
@@ -310,7 +310,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   memory = BetaLocalFilesystemMemoryTool(base_path="./memory")
 
   runner = client.beta.messages.tool_runner(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[
           {
@@ -336,7 +336,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   const memory = betaMemoryTool(backend); // or pass your own handlers object
 
   const runner = client.beta.messages.toolRunner({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -365,7 +365,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   var runner = client.Beta.Messages.ToolRunner(
       new MessageCreateParams
       {
-          Model = Anthropic.Models.Messages.Model.ClaudeOpus5,
+          Model = Anthropic.Models.Messages.Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Messages =
           [
@@ -490,7 +490,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
 
   	for {
   		message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  			Model:     anthropic.ModelClaudeOpus5,
+  			Model:     anthropic.ModelClaudeOpus5_5,
   			MaxTokens: 1024,
   			Messages:  messages,
   			Tools:     tools,
@@ -536,7 +536,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
     BetaMemoryToolHandler handler = new FileSystemMemoryToolHandler(Path.of("memories"));
 
     MessageCreateParams createParams = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024L)
       .addTool(BetaMemoryTool20250818.builder().build())
       .addUserMessage("Remember that customer Acme Corp prefers email follow-ups.")
@@ -636,7 +636,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   $runner = $client->beta->messages->toolRunner(
       maxTokens: 1024,
       messages: [['role' => 'user', 'content' => 'Remember that customer Acme Corp prefers email follow-ups.']],
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       tools: [$memory],
       maxIterations: 10,
   );
@@ -706,7 +706,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   messages = [{role: "user", content: "Remember that customer Acme Corp prefers email follow-ups."}]
   loop do
     message = client.messages.create(
-      model: Anthropic::Model::CLAUDE_OPUS_5,
+      model: Anthropic::Model::CLAUDE_OPUS_5_5,
       max_tokens: 1024,
       messages: messages,
       tools: TOOLS
@@ -765,7 +765,7 @@ Here're the files and directories up to 2 levels deep in {path}, excluding hidde
 * Excludes hidden items (files starting with `.`) and `node_modules`
 * Uses a tab character between the size and the path
 
-The first `view` of `/memories` on an empty store is not an error. The SDKs' local-filesystem memory tools (`BetaLocalFilesystemMemoryTool`) create the memory root before Claude's first call and return the listing header followed by a single size-and-path line for the empty directory itself.
+The first `view` of `/memories` on an empty store is not an error. Where your SDK ships a local-filesystem memory tool, `BetaLocalFilesystemMemoryTool`, it creates the memory root before Claude's first call and returns the listing header followed by a single size-and-path line for the empty directory itself.
 
 **For files:** Return file contents with a header and line numbers:
 

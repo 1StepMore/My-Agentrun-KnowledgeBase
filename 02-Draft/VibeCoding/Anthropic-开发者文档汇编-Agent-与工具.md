@@ -58,12 +58,8 @@ state:
   time_wiki: '2026-09-23T10:40:21+08:00'
 wiki_ref: 03-Wiki/氛围编程/_MOC-氛围编程.md
 ---
-
-> ⚠️ **2026-10-17 核验（自动）：本条已过时，未自动覆盖正文** —— 未自动刷新：本条目是多页**汇编**（原文 121 万字符），官方现按单页拆分；且部分页面对我们的网络返回 "App unavailable in region" ⇒ 需人工/整篇重编译（原快照 1211868 字）。
-> 下方正文为历史快照，引用前请以官方为准；原件留档 `_backup/refresh-20261017/02-Draft/VibeCoding/Anthropic-开发者文档汇编-Agent-与工具.md`。
-
 > **汇编性质**：Anthropic 开发者文档 官方原文 42 页，按官方结构合并，逐节保留原始 URL。本汇编**不做改写**（一手来源改写会引入二手误差），可逐节回溯官方原文。
-> 证据等级：E1（官方一手）。汇编时间：2026-09-23T03:14:06+08:00
+> 证据等级：E1（官方一手）。重编译：2026-10-17T21:02:36+08:00（源=官方 llms-full.txt 全量包）
 
 ---
 
@@ -330,7 +326,15 @@ SKILL.md serves as an overview that points Claude to detailed materials as neede
 
 A basic Skill starts with just a SKILL.md file containing metadata and instructions:
 
+<Frame>
+  ![Simple SKILL.md file showing YAML frontmatter and markdown body](https://platform.claude.com/docs/images/agent-skills-simple-file.svg)
+</Frame>
+
 As your Skill grows, you can bundle additional content that Claude loads only when needed:
+
+<Frame>
+  ![Bundling additional reference files like reference.md and forms.md.](https://platform.claude.com/docs/images/agent-skills-bundling-content.svg)
+</Frame>
 
 The complete Skill directory structure might look like this:
 
@@ -1001,6 +1005,10 @@ Even if Claude could write a script, pre-made scripts offer advantages:
 * Save time (no code generation required)
 * Ensure consistency across uses
 
+<Frame>
+  ![Bundling executable scripts alongside instruction files](https://platform.claude.com/docs/images/agent-skills-executable-scripts.svg)
+</Frame>
+
 The preceding diagram shows how executable scripts work alongside instruction files. The instruction file (forms.md) references the script, and Claude can execute it without loading its contents into context.
 
 **Important distinction:** Make clear in your instructions whether Claude should:
@@ -1275,7 +1283,8 @@ When triggered, the skill equips Claude with:
 * **Streaming patterns:** Implementation details for building chat UIs and handling incremental display
 * **Batch processing:** Offline batch processing at 50% cost
 * **Prompt caching:** Prefix-stability design, breakpoint placement, and silent-invalidator audit
-* **Model migration:** Step-by-step guidance for migrating to newer Claude models (including the breaking changes and behavior shifts on [Claude Opus 5](https://platform.claude.com/docs/en/models/opus-5/migration-guide#migrating-from-claude-opus-4-8-to-claude-opus-5) and [Claude Fable 5.1](https://platform.claude.com/docs/en/models/fable-5-1/migration-guide))
+* **Model migration:** Step-by-step guidance for migrating to newer Claude models (including the breaking changes and behavior shifts on [Claude Opus 5.5](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide#migrating-from-claude-opus-5), [Claude Sonnet 5.5](https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide#migrating-from-claude-sonnet-5), [Claude Haiku 5.5](https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide), and [Claude Fable 5.1](https://platform.claude.com/docs/en/models/fable-5-1/migration-guide))
+* **Preserved thinking migration:** Finding, measuring, and fixing the history edits that invalidate `thinking` blocks, available through the `/claude-api preserved-thinking-migration` subcommand
 * **Current model information:** Model IDs, context window sizes, and pricing
 * **Common pitfalls:** Detailed guidance on avoiding frequent mistakes when integrating with the API
 
@@ -1325,7 +1334,9 @@ The skill ships with [Claude Code](https://code.claude.com/docs/en/overview) and
 
 You can also invoke it directly:
 
-```text wrap
+Use this skill in Claude Code
+
+```text
 /claude-api
 ```
 
@@ -1339,51 +1350,92 @@ The skill source is available in the [Anthropic skills repository](https://githu
 npx skills add https://github.com/anthropics/skills --skill claude-api
 ```
 
-Or install it as a [Claude Code plugin](https://code.claude.com/docs/en/plugins):
+Or ask Claude Code to install it as a [Claude Code plugin](https://code.claude.com/docs/en/plugins):
 
-```text wrap
-/plugin marketplace add anthropics/skills
-/plugin install claude-api@anthropic-agent-skills
+Let Claude Code install this for you
+
+```text
+Install the claude-api plugin from the anthropics/skills plugin marketplace
 ```
+
+<Accordion title="Manual install commands">
+  ```text wrap
+  /plugin marketplace add anthropics/skills
+  /plugin install claude-api@anthropic-agent-skills
+  ```
+</Accordion>
 
 ## Migrating to a newer Claude model
 
 The Claude API skill can perform Claude model migrations across a code base. Invoke it directly with `/claude-api migrate`:
 
-```text wrap
-/claude-api migrate this project to claude-opus-5
+Let Claude Code migrate your code for you
+
+```text
+/claude-api migrate this project to the latest Claude Opus model
 ```
 
 You can also pass a specific scope up front to skip the scope-confirmation question:
 
-```text wrap
-/claude-api migrate everything under src/ to claude-opus-5
-/claude-api migrate apps/api.py and apps/worker.py to claude-opus-5
+Let Claude Code migrate your code for you
+
+```text
+/claude-api migrate everything under src/ to the latest Claude Opus model
 ```
 
-When the scope is ambiguous (for example, a bare `/claude-api migrate to claude-opus-5`), the skill asks you to choose between the entire working directory, a specific subdirectory, or an explicit file list before editing any files. This applies to both Messages API and Managed Agents callers.
+Let Claude Code migrate your code for you
+
+```text
+/claude-api migrate apps/api.py and apps/worker.py to the latest Claude Opus model
+```
+
+When the scope is ambiguous (for example, a bare `/claude-api migrate to claude-opus-5-5`), the skill asks you to choose between the entire working directory, a specific subdirectory, or an explicit file list before editing any files. This applies to both Messages API and Managed Agents callers.
 
 The skill handles:
 
-* **Model ID swaps**, including typed SDK constants (`Model.CLAUDE_OPUS_4_8` → `Model.CLAUDE_OPUS_5`) across all supported languages, and classifies each file as a caller, a model definer, or an opaque string reference before editing
+* **Model ID swaps**, including typed SDK constants (`Model.CLAUDE_OPUS_4_8` → `Model.CLAUDE_OPUS_5_5`) across all supported languages, and classifies each file as a caller, a model definer, or an opaque string reference before editing
 * **Cloud platform detection**, preserving platform-specific model ID formats (for example, the `anthropic.` prefix on Amazon Bedrock) and skipping changes for features that are unavailable on partner-operated platforms
 * **Breaking parameter changes**, such as removing `temperature`, `top_p`, and `top_k` for Claude Opus 4.8 and Claude Opus 4.7, and converting `thinking: {type: "enabled", budget_tokens: N}` to `thinking: {type: "adaptive"}`
 * **Prefill replacement**, converting assistant-message prefill patterns to [structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) where applicable
-* **Beta header cleanup**, removing beta headers that the target model doesn't require (for example, `effort-2025-11-24`, `fine-grained-tool-streaming-2025-05-14`, `interleaved-thinking-2025-05-14`) and switching back from `client.beta.messages.create` to `client.messages.create`
+* **Beta header cleanup**, removing beta headers that the target model doesn't require (for example, `effort-2025-11-24`, `fine-grained-tool-streaming-2025-05-14`, `interleaved-thinking-2025-05-14`) and switching back from `client.beta.messages.create()` (go: `client.Beta.Messages.New()`; java: `client.beta().messages().create()`; csharp: `client.Beta.Messages.Create()`; php: `$client->beta->messages->create()`) to `client.messages.create()` (go: `client.Messages.New()`; java: `client.messages().create()`; csharp: `client.Messages.Create()`; php: `$client->messages->create()`)
 * **Effort calibration**, recommending an `output_config.effort` starting point for the target model (for example, the default `high` on Claude Opus 5, and `xhigh` for coding and agentic use cases on Claude Opus 4.8 and Claude Opus 4.7)
 * **Prompt-behavior tuning**, flagging length-control, tool-triggering, subagent, and instruction-following prompts that may behave differently on the target model
 * **Silent default handling**, opting back into thinking summarization (`thinking.display: "summarized"`) when reasoning is surfaced to users on Claude Opus 4.8 and Claude Opus 4.7
-* **Refusal fallback configuration**, adding `stop_reason: "refusal"` handling before reading response content and setting up a [fallback retry path](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback) when the target is Claude Fable 5.1, Claude Fable 5, or Claude Opus 5 (the server-side `fallbacks` parameter, typically in its `"default"` mode, the SDK refusal-fallback middleware, or a fallback-credit retry), and updating fallback code written against earlier preview shapes
+* **Refusal fallback configuration**, adding `stop_reason: "refusal"` handling before reading response content and setting up a [fallback retry path](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback) when the target is Claude Fable 5.1, Claude Fable 5, Claude Opus 5.5, Claude Opus 5, or Claude Sonnet 5.5 (the server-side `fallbacks` parameter, typically in its `"default"` mode, the SDK refusal-fallback middleware, or a fallback-credit retry), and updating fallback code written against earlier preview shapes
 
 As it edits, the skill explains each change and its motivation inline. On completion, it produces a checklist of items that require manual verification (typically integration tests, length-control prompt tuning, and cost/rate-limit re-baselining).
 
-For the full list of model-specific changes the skill applies, see [Migrating to Claude Opus 5 from Claude Opus 4.8](https://platform.claude.com/docs/en/models/opus-5/migration-guide#migrating-from-claude-opus-4-8-to-claude-opus-5) and [Migrating to Claude Fable 5.1](https://platform.claude.com/docs/en/models/fable-5-1/migration-guide).
+For the full list of model-specific changes the skill applies, see [Migrating to Claude Opus 5.5 from Claude Opus 5](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide#migrating-from-claude-opus-5), [Migrating to Claude Opus 5.5 from Claude Opus 4.8](https://platform.claude.com/docs/en/models/opus-5-5/migration-guide#migrating-from-claude-opus-4-8), [Migrating to Claude Sonnet 5.5 from Claude Sonnet 5](https://platform.claude.com/docs/en/models/sonnet-5-5/migration-guide#migrating-from-claude-sonnet-5), [Claude Haiku 5.5 migration guide](https://platform.claude.com/docs/en/models/haiku-5-5/migration-guide), and [Claude Fable 5.1 and Claude Mythos 5.1 migration guide](https://platform.claude.com/docs/en/models/fable-5-1/migration-guide).
+
+## Checking an integration for preserved thinking
+
+[Preserved thinking](https://platform.claude.com/docs/en/build-with-claude/preserved-thinking) keeps a `thinking` block valid only while the `system` prompt, `tools`, and messages before it stay unchanged. To find and fix the places where your code edits that history, open the repository that builds your requests and invoke the `preserved-thinking-migration` subcommand:
+
+Let Claude Code check your code for you
+
+```text
+/claude-api preserved-thinking-migration
+```
+
+The skill works through five steps:
+
+1. **Scope:** Checks whether your integration is affected, then sends three test requests to confirm that the API reports a deliberate edit.
+2. **Find:** Captures a few of your own multi-turn sessions, diffs consecutive requests, and lists each place your code edits the prefix.
+3. **Measure:** Replays the sessions with `"drop_block"` and reports which conversations lose `thinking` blocks, at which turn, and why.
+4. **Fix:** Replaces one edit at a time with the matching pattern in [Make changes without editing the prefix](https://platform.claude.com/docs/en/build-with-claude/preserved-thinking#replace-prefix-edits), and measures again after each change.
+5. **Report:** Summarizes each cause, the change made for it, and the counts before and after.
+
+If your project has an eval, the skill also compares scores and token usage with and without dropped `thinking` blocks.
+
+The test requests and replays are real Messages API requests, billed at the model's normal rates. Each replay requests only a few output tokens and sets `tool_choice` to `none`, so no tool runs. The skill states the cost and asks for your approval before it sends them.
 
 ## Setting up a Managed Agent
 
 To scaffold a new Managed Agent from scratch, invoke the `managed-agents-onboard` subcommand:
 
-```text wrap
+Let Claude Code set up your agent for you
+
+```text
 /claude-api managed-agents-onboard
 ```
 
@@ -1397,19 +1449,25 @@ Here are examples of tasks the skill helps Claude handle:
 
 **Building a chat application:**
 
-```text wrap
+Let Claude Code build this for you
+
+```text
 Build a streaming chat UI with the Claude API in TypeScript
 ```
 
 **Migrating an existing project:**
 
-```text wrap
-/claude-api migrate this codebase to claude-opus-5 and re-tune effort
+Let Claude Code migrate your code for you
+
+```text
+/claude-api migrate this code base to the latest Claude Opus model and re-tune effort
 ```
 
 **Onboarding a new Managed Agent:**
 
-```text wrap
+Let Claude Code set up your agent for you
+
+```text
 /claude-api managed-agents-onboard
 ```
 
@@ -1430,6 +1488,7 @@ In each case, the skill loads the relevant language-specific documentation and g
     Explore the public Anthropic skills repository on GitHub
   </Card>
 </CardGroup>
+
 
 ## Release notes
 
@@ -1745,6 +1804,10 @@ Progressive disclosure ensures only relevant content occupies the context window
 
 Skills run in a code execution environment where Claude has filesystem access, bash commands, and code execution capabilities. Skills exist as directories on a virtual machine, and Claude interacts with them using the same bash commands you'd use to navigate files on your computer.
 
+<Frame>
+  ![Agent Skills Architecture - showing how Skills integrate with the agent's configuration and virtual machine](https://platform.claude.com/docs/images/agent-skills-architecture.svg)
+</Frame>
+
 **How Claude accesses Skill content:**
 
 When a Skill is triggered, Claude uses bash to read SKILL.md from the filesystem, bringing its instructions into the context window. If those instructions reference other files (such as FORMS.md or a database schema), Claude reads those files too using additional bash commands. When instructions mention executable scripts, Claude runs them through bash and receives only the output (the script code itself never enters context).
@@ -1765,12 +1828,16 @@ Here's how Claude loads and uses the custom `pdf-processing` Skill from the earl
 4. **Claude determines:** Form filling is not needed, so FORMS.md is not read
 5. **Claude executes:** Uses instructions from SKILL.md to complete the task
 
+<Frame>
+  ![Skills loading into context window - showing the progressive loading of skill metadata and content](https://platform.claude.com/docs/images/agent-skills-context-window.svg)
+</Frame>
+
 ## Where Skills work
 
 Skills are available across Claude's agent products:
 
 <Note>
-  Claude Platform on AWS and Microsoft Foundry inherit the same Skills behavior as the Claude API in all following sections.
+  Claude Platform on AWS and Microsoft Foundry inherit the same Skills behavior as the Claude API in all following sections, except where [Limitations and constraints](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview#limitations-and-constraints) says otherwise.
 </Note>
 
 ### Claude API
@@ -1899,7 +1966,7 @@ For audit logging of Skills API operations, see [Audit logging](https://platform
 
 ## Limitations and constraints
 
-Claude Platform on AWS and Microsoft Foundry follow the same limitations as the Claude API in the following subsections.
+Claude Platform on AWS and Microsoft Foundry follow the same limitations as the Claude API in the following subsections. In addition, on Microsoft Foundry, the [Skill version download endpoint](https://platform.claude.com/docs/en/api/beta/skills/versions/download) (`GET /v1/skills/{skill_id}/versions/{version}/content`) is not supported.
 
 ### Cross-surface availability
 
@@ -2093,26 +2160,24 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
       -H "content-type: application/json" \
       -H "x-api-key: $ANTHROPIC_API_KEY" \
       -H "anthropic-version: 2023-06-01" \
-      -d @- <<'EOF'
-  {
-    "model": "claude-opus-5",
-    "max_tokens": 16000,
-    "container": {
-      "skills": [{"type": "anthropic", "skill_id": "pptx", "version": "latest"}]
-    },
-    "messages": [
-      {"role": "user", "content": "Create a presentation about renewable energy with 5 slides"}
-    ],
-    "tools": [{"type": "code_execution_20260521", "name": "code_execution"}]
-  }
-  EOF
+      -d '{
+        "model": "claude-opus-5-5",
+        "max_tokens": 16000,
+        "container": {
+          "skills": [{"type": "anthropic", "skill_id": "pptx", "version": "latest"}]
+        },
+        "messages": [
+          {"role": "user", "content": "Create a presentation about renewable energy with 5 slides"}
+        ],
+        "tools": [{"type": "code_execution_20260521", "name": "code_execution"}]
+      }'
   )
   ```
 
   ```bash CLI
   # Create a message with the PowerPoint Skill
   response=$(ant messages create --format json <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 16000
   container:
     skills:
@@ -2132,7 +2197,7 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
   ```python Python
   # Create a message with the PowerPoint Skill
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=16000,
       container={
           "skills": [{"type": "anthropic", "skill_id": "pptx", "version": "latest"}]
@@ -2152,7 +2217,7 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
   ```typescript TypeScript
   // Create a message with the PowerPoint Skill
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16000,
     container: {
       skills: [{ type: "anthropic", skill_id: "pptx", version: "latest" }],
@@ -2175,7 +2240,7 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
   // Create a message with the PowerPoint Skill
   var response = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 16000,
       Container = new ContainerParams
       {
@@ -2206,7 +2271,7 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
   ```go Go
   // Create a message with the PowerPoint Skill
   response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 16000,
   	Container: anthropic.MessageCreateParamsContainerUnion{
   		OfContainers: &anthropic.ContainerParams{
@@ -2239,7 +2304,7 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
   // Create a message with the PowerPoint Skill
   Message response = client.messages().create(
       MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(16000)
           .container(
               ContainerParams.builder()
@@ -2266,7 +2331,7 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
   ```php PHP
   // Create a message with the PowerPoint Skill
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 16000,
       container: [
           'skills' => [['type' => 'anthropic', 'skillID' => 'pptx', 'version' => 'latest']],
@@ -2286,7 +2351,7 @@ Use the PowerPoint Skill to create a presentation about renewable energy. Specif
   ```ruby Ruby
   # Create a message with the PowerPoint Skill
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16_000,
     container: {
       skills: [{type: "anthropic", skill_id: "pptx", version: "latest"}]
@@ -2573,7 +2638,7 @@ Try these variations:
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 16000,
       "container": {
         "skills": [{"type": "anthropic", "skill_id": "xlsx", "version": "latest"}]
@@ -2587,7 +2652,7 @@ Try these variations:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 16000
   container:
     skills:
@@ -2605,7 +2670,7 @@ Try these variations:
 
   ```python Python
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=16000,
       container={
           "skills": [{"type": "anthropic", "skill_id": "xlsx", "version": "latest"}]
@@ -2622,7 +2687,7 @@ Try these variations:
 
   ```typescript TypeScript
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16000,
     container: {
       skills: [{ type: "anthropic", skill_id: "xlsx", version: "latest" }]
@@ -2641,7 +2706,7 @@ Try these variations:
   var response = await client.Messages.Create(
       new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Container = new ContainerParams
           {
@@ -2670,7 +2735,7 @@ Try these variations:
 
   ```go Go
   response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 16000,
   	Container: anthropic.MessageCreateParamsContainerUnion{
   		OfContainers: &anthropic.ContainerParams{
@@ -2700,7 +2765,7 @@ Try these variations:
   ```java Java
   Message response = client.messages().create(
       MessageCreateParams.builder()
-          .model(CLAUDE_OPUS_5)
+          .model(CLAUDE_OPUS_5_5)
           .maxTokens(16000)
           .container(
               ContainerParams.builder()
@@ -2722,7 +2787,7 @@ Try these variations:
 
   ```php PHP
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 16000,
       container: [
           'skills' => [
@@ -2741,7 +2806,7 @@ Try these variations:
 
   ```ruby Ruby
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16_000,
     container: {
       skills: [{type: "anthropic", skill_id: "xlsx", version: "latest"}]
@@ -2766,7 +2831,7 @@ Try these variations:
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 16000,
       "container": {
         "skills": [{"type": "anthropic", "skill_id": "docx", "version": "latest"}]
@@ -2780,7 +2845,7 @@ Try these variations:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 16000
   container:
     skills:
@@ -2798,7 +2863,7 @@ Try these variations:
 
   ```python Python
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=16000,
       container={
           "skills": [{"type": "anthropic", "skill_id": "docx", "version": "latest"}]
@@ -2815,7 +2880,7 @@ Try these variations:
 
   ```typescript TypeScript
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16000,
     container: {
       skills: [{ type: "anthropic", skill_id: "docx", version: "latest" }]
@@ -2834,7 +2899,7 @@ Try these variations:
   var response = await client.Messages.Create(
       new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Container = new ContainerParams
           {
@@ -2863,7 +2928,7 @@ Try these variations:
 
   ```go Go
   response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 16000,
   	Container: anthropic.MessageCreateParamsContainerUnion{
   		OfContainers: &anthropic.ContainerParams{
@@ -2893,7 +2958,7 @@ Try these variations:
   ```java Java
   Message response = client.messages().create(
       MessageCreateParams.builder()
-          .model(CLAUDE_OPUS_5)
+          .model(CLAUDE_OPUS_5_5)
           .maxTokens(16000)
           .container(
               ContainerParams.builder()
@@ -2915,7 +2980,7 @@ Try these variations:
 
   ```php PHP
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 16000,
       container: [
           'skills' => [
@@ -2934,7 +2999,7 @@ Try these variations:
 
   ```ruby Ruby
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16_000,
     container: {
       skills: [{type: "anthropic", skill_id: "docx", version: "latest"}]
@@ -2959,7 +3024,7 @@ Try these variations:
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 16000,
       "container": {
         "skills": [{"type": "anthropic", "skill_id": "pdf", "version": "latest"}]
@@ -2973,7 +3038,7 @@ Try these variations:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 16000
   container:
     skills:
@@ -2991,7 +3056,7 @@ Try these variations:
 
   ```python Python
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=16000,
       container={
           "skills": [{"type": "anthropic", "skill_id": "pdf", "version": "latest"}]
@@ -3008,7 +3073,7 @@ Try these variations:
 
   ```typescript TypeScript
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16000,
     container: {
       skills: [{ type: "anthropic", skill_id: "pdf", version: "latest" }]
@@ -3027,7 +3092,7 @@ Try these variations:
   var response = await client.Messages.Create(
       new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Container = new ContainerParams
           {
@@ -3056,7 +3121,7 @@ Try these variations:
 
   ```go Go
   response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 16000,
   	Container: anthropic.MessageCreateParamsContainerUnion{
   		OfContainers: &anthropic.ContainerParams{
@@ -3086,7 +3151,7 @@ Try these variations:
   ```java Java
   Message response = client.messages().create(
       MessageCreateParams.builder()
-          .model(CLAUDE_OPUS_5)
+          .model(CLAUDE_OPUS_5_5)
           .maxTokens(16000)
           .container(
               ContainerParams.builder()
@@ -3108,7 +3173,7 @@ Try these variations:
 
   ```php PHP
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 16000,
       container: [
           'skills' => [
@@ -3127,7 +3192,7 @@ Try these variations:
 
   ```ruby Ruby
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 16_000,
     container: {
       skills: [{type: "anthropic", skill_id: "pdf", version: "latest"}]
@@ -3174,7 +3239,2065 @@ Try these variations:
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/mcp-connector
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-mcp-connector.md`
 
+Claude's Model Context Protocol (MCP) connector feature enables you to connect to remote MCP servers directly from the Messages API without a separate MCP client.
 
+<Note>
+  The previous version of this feature (`mcp-client-2025-04-04`) is deprecated. See [Deprecated version: mcp-client-2025-04-04](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector#deprecated-version-mcp-client-2025-04-04).
+</Note>
+
+## Key features
+
+* **Direct API integration:** Connect to MCP servers without implementing an MCP client
+* **Tool calling support:** Access MCP tools through the Messages API
+* **Flexible tool configuration:** Enable all tools, allowlist specific tools, or denylist unwanted tools
+* **Per-tool configuration:** Configure individual tools with custom settings
+* **OAuth authentication:** Support for OAuth Bearer tokens for authenticated servers
+* **Multiple servers:** Connect to multiple MCP servers in a single request
+
+## When Claude uses MCP tools
+
+Once an MCP server is connected, Claude calls its tools when the user's request maps to a tool's described capability, either explicitly ("search Jira for open bugs") or implicitly ("what's blocking the release?" with a Jira server attached).
+
+Claude does **not** call an MCP tool for general knowledge questions about a connected service. Asking "how do Notion databases work?" with a Notion server attached is answered directly; asking "what's in my Projects database?" triggers the tool.
+
+You can steer how readily Claude calls MCP tools through your system prompt. See [When Claude uses tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview#when-claude-uses-tools) for general guidance and example phrasings.
+
+## Limitations
+
+* Of the feature set of the [MCP specification](https://modelcontextprotocol.io/introduction#explore-mcp), only [tool calls](https://modelcontextprotocol.io/docs/concepts/tools) are currently supported.
+* The server must be publicly exposed through HTTP (supports both Streamable HTTP and SSE transports). Local STDIO servers cannot be connected directly.
+
+## Using the MCP connector in the Messages API
+
+The MCP connector uses two components:
+
+1. **MCP server definition** (`mcp_servers` array): Defines server connection details (URL, authentication)
+2. **MCP toolset** (`tools` array): Configures which tools to enable and how to configure them
+
+### Basic example
+
+This example enables all tools from an MCP server with default configuration:
+
+<CodeGroup>
+  ```bash cURL
+  curl https://api.anthropic.com/v1/messages \
+    -H "Content-Type: application/json" \
+    -H "X-API-Key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-beta: mcp-client-2025-11-20" \
+    -d '{
+      "model": "claude-opus-5-5",
+      "max_tokens": 1000,
+      "messages": [{"role": "user", "content": "What tools do you have available?"}],
+      "mcp_servers": [
+        {
+          "type": "url",
+          "url": "https://example-server.modelcontextprotocol.io/sse",
+          "name": "example-mcp",
+          "authorization_token": "YOUR_TOKEN"
+        }
+      ],
+      "tools": [
+        {
+          "type": "mcp_toolset",
+          "mcp_server_name": "example-mcp"
+        }
+      ]
+    }'
+  ```
+
+  ```bash CLI
+  ant beta:messages create --beta mcp-client-2025-11-20 <<'YAML'
+  model: claude-opus-5-5
+  max_tokens: 1000
+  messages:
+    - role: user
+      content: What tools do you have available?
+  mcp_servers:
+    - type: url
+      url: https://example-server.modelcontextprotocol.io/sse
+      name: example-mcp
+      authorization_token: YOUR_TOKEN
+  tools:
+    - type: mcp_toolset
+      mcp_server_name: example-mcp
+  YAML
+  ```
+
+  ```python Python
+  client = anthropic.Anthropic()
+
+  response = client.beta.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=1000,
+      messages=[{"role": "user", "content": "What tools do you have available?"}],
+      mcp_servers=[
+          {
+              "type": "url",
+              "url": "https://example-server.modelcontextprotocol.io/sse",
+              "name": "example-mcp",
+              "authorization_token": "YOUR_TOKEN",
+          }
+      ],
+      tools=[{"type": "mcp_toolset", "mcp_server_name": "example-mcp"}],
+      betas=["mcp-client-2025-11-20"],
+  )
+
+  print(response)
+  ```
+
+  ```typescript TypeScript
+  const anthropic = new Anthropic();
+
+  const response = await anthropic.beta.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 1000,
+    messages: [
+      {
+        role: "user",
+        content: "What tools do you have available?"
+      }
+    ],
+    mcp_servers: [
+      {
+        type: "url",
+        url: "https://example-server.modelcontextprotocol.io/sse",
+        name: "example-mcp",
+        authorization_token: "YOUR_TOKEN"
+      }
+    ],
+    tools: [
+      {
+        type: "mcp_toolset",
+        mcp_server_name: "example-mcp"
+      }
+    ],
+    betas: ["mcp-client-2025-11-20"]
+  });
+
+  console.log(response);
+  ```
+
+  ```csharp C#
+  AnthropicClient client = new();
+
+  var parameters = new MessageCreateParams
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 1000,
+      Messages = new List<BetaMessageParam>
+      {
+          new() { Role = Role.User, Content = "What tools do you have available?" }
+      },
+      McpServers = new List<BetaRequestMcpServerUrlDefinition>
+      {
+          new()
+          {
+              Url = "https://example-server.modelcontextprotocol.io/sse",
+              Name = "example-mcp",
+              AuthorizationToken = "YOUR_TOKEN"
+          }
+      },
+      Tools = new List<BetaToolUnion>
+      {
+          new BetaMcpToolset("example-mcp")
+      },
+      Betas = [AnthropicBeta.McpClient2025_11_20]
+  };
+
+  var message = await client.Beta.Messages.Create(parameters);
+  Console.WriteLine(message);
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+
+  response, err := client.Beta.Messages.New(context.TODO(), anthropic.BetaMessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 1000,
+  	Messages: []anthropic.BetaMessageParam{
+  		anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("What tools do you have available?")),
+  	},
+  	MCPServers: []anthropic.BetaRequestMCPServerURLDefinitionParam{
+  		{
+  			URL:                "https://example-server.modelcontextprotocol.io/sse",
+  			Name:               "example-mcp",
+  			AuthorizationToken: anthropic.String("YOUR_TOKEN"),
+  		},
+  	},
+  	Tools: []anthropic.BetaToolUnionParam{
+  		{OfMCPToolset: &anthropic.BetaMCPToolsetParam{
+  			MCPServerName: "example-mcp",
+  		}},
+  	},
+  	Betas: []anthropic.AnthropicBeta{
+  		anthropic.AnthropicBetaMCPClient2025_11_20,
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response)
+  ```
+
+  ```java Java
+  import com.anthropic.models.beta.messages.BetaMcpToolset;
+  // ...
+  import com.anthropic.models.beta.messages.BetaRequestMcpServerUrlDefinition;
+  // ...
+
+  void main() {
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      MessageCreateParams params = MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(1000L)
+          .addUserMessage("What tools do you have available?")
+          .addMcpServer(BetaRequestMcpServerUrlDefinition.builder()
+              .url("https://example-server.modelcontextprotocol.io/sse")
+              .name("example-mcp")
+              .authorizationToken("YOUR_TOKEN")
+              .build())
+          .addTool(BetaMcpToolset.builder()
+              .mcpServerName("example-mcp")
+              .build())
+          .addBeta(AnthropicBeta.MCP_CLIENT_2025_11_20)
+          .build();
+
+      BetaMessage response = client.beta().messages().create(params);
+      IO.println(response);
+  }
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  $message = $client->beta->messages->create(
+      maxTokens: 1000,
+      messages: [
+          ['role' => 'user', 'content' => 'What tools do you have available?']
+      ],
+      model: 'claude-opus-5-5',
+      mcpServers: [
+          [
+              'type' => 'url',
+              'url' => 'https://example-server.modelcontextprotocol.io/sse',
+              'name' => 'example-mcp',
+              'authorization_token' => 'YOUR_TOKEN',
+          ],
+      ],
+      tools: [
+          [
+              'type' => 'mcp_toolset',
+              'mcp_server_name' => 'example-mcp',
+          ],
+      ],
+      betas: ['mcp-client-2025-11-20'],
+  );
+
+  echo $message;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  response = client.beta.messages.create(
+    model: "claude-opus-5-5",
+    max_tokens: 1000,
+    messages: [
+      { role: "user", content: "What tools do you have available?" }
+    ],
+    mcp_servers: [
+      {
+        type: "url",
+        url: "https://example-server.modelcontextprotocol.io/sse",
+        name: "example-mcp",
+        authorization_token: "YOUR_TOKEN"
+      }
+    ],
+    tools: [
+      {
+        type: "mcp_toolset",
+        mcp_server_name: "example-mcp"
+      }
+    ],
+    betas: ["mcp-client-2025-11-20"]
+  )
+
+  puts response
+  ```
+</CodeGroup>
+
+## MCP server configuration
+
+Each MCP server in the `mcp_servers` array defines the connection details:
+
+```json
+{
+  "type": "url",
+  "url": "https://example-server.modelcontextprotocol.io/sse",
+  "name": "example-mcp",
+  "authorization_token": "YOUR_TOKEN"
+}
+```
+
+### Field descriptions
+
+| Property              | Type   | Required | Description                                                                                                                                                                                                                                                                                                            |
+| --------------------- | ------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`                | string | Yes      | Currently only "url" is supported.                                                                                                                                                                                                                                                                                     |
+| `url`                 | string | Yes      | The URL of the MCP server. Must start with https\://.                                                                                                                                                                                                                                                                  |
+| `name`                | string | Yes      | A unique identifier for this MCP server. Must be referenced by exactly one MCPToolset in the `tools` array.                                                                                                                                                                                                            |
+| `authorization_token` | string | No       | OAuth authorization token if required by the MCP server. See [Authentication](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector#authentication) for how to obtain one, or the [MCP specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization) for protocol details. |
+
+## MCP toolset configuration
+
+The MCPToolset lives in the `tools` array and configures which tools from the MCP server are enabled and how they should be configured.
+
+### Basic structure
+
+```json
+{
+  "type": "mcp_toolset",
+  "mcp_server_name": "example-mcp",
+  "default_config": {
+    "enabled": true,
+    "defer_loading": false
+  },
+  "configs": {
+    "specific_tool_name": {
+      "enabled": true,
+      "defer_loading": true
+    }
+  }
+}
+```
+
+### Field descriptions
+
+| Property          | Type   | Required | Description                                                                                                                             |
+| ----------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`            | string | Yes      | Must be "mcp\_toolset".                                                                                                                 |
+| `mcp_server_name` | string | Yes      | Must match a server name defined in the `mcp_servers` array.                                                                            |
+| `default_config`  | object | No       | Default configuration applied to all tools in this set. Individual tool configs in `configs` override these defaults.                   |
+| `configs`         | object | No       | Per-tool configuration overrides. Keys are tool names, values are configuration objects.                                                |
+| `cache_control`   | object | No       | [Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) cache breakpoint configuration for this toolset. |
+
+With the `mcp-client-2026-09-15` beta header, an MCPToolset also accepts `tools`, a pinned copy of the server's tool list. See [Pin an MCP server's tool list](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector#pin-mcp-tool-list).
+
+### Tool configuration options
+
+Each tool (whether configured in `default_config` or in `configs`) supports the following fields:
+
+| Property        | Type    | Default | Description                                                                                                                                                                 |
+| --------------- | ------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `enabled`       | boolean | `true`  | Whether this tool is enabled.                                                                                                                                               |
+| `defer_loading` | boolean | `false` | If true, tool description is not sent to the model initially. Used with [Tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool). |
+
+For the full directory of Anthropic-provided tools and optional properties such as `defer_loading`, see the [Tool reference](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference). To search across large tool sets, see [Tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool).
+
+### Configuration merging
+
+Configuration values merge with this precedence (highest to lowest):
+
+1. Tool-specific settings in `configs`
+2. Set-level `default_config`
+3. System defaults
+
+Example:
+
+```json
+{
+  "type": "mcp_toolset",
+  "mcp_server_name": "google-calendar-mcp",
+  "default_config": {
+    "defer_loading": true
+  },
+  "configs": {
+    "search_events": {
+      "enabled": false
+    }
+  }
+}
+```
+
+Results in:
+
+* `search_events`: `enabled: false` (from configs), `defer_loading: true` (from default\_config)
+* All other tools: `enabled: true` (system default), `defer_loading: true` (from default\_config)
+
+## Common configuration patterns
+
+### Enable all tools with default configuration
+
+The simplest pattern: enable all tools from a server:
+
+```json
+{
+  "type": "mcp_toolset",
+  "mcp_server_name": "google-calendar-mcp"
+}
+```
+
+### Allowlist: enable only specific tools
+
+Set `enabled: false` as the default, then explicitly enable specific tools:
+
+```json
+{
+  "type": "mcp_toolset",
+  "mcp_server_name": "google-calendar-mcp",
+  "default_config": {
+    "enabled": false
+  },
+  "configs": {
+    "search_events": {
+      "enabled": true
+    },
+    "create_event": {
+      "enabled": true
+    }
+  }
+}
+```
+
+### Denylist: disable specific tools
+
+Enable all tools by default, then explicitly disable unwanted tools. Denylisting write or destructive tools is recommended when building read-only assistants, or when you want a human confirmation step before state changes:
+
+```json
+{
+  "type": "mcp_toolset",
+  "mcp_server_name": "google-calendar-mcp",
+  "configs": {
+    "delete_all_events": {
+      "enabled": false
+    },
+    "share_calendar_publicly": {
+      "enabled": false
+    }
+  }
+}
+```
+
+### Mixed: allowlist with per-tool configuration
+
+Combine allowlisting with custom configuration for each tool:
+
+```json
+{
+  "type": "mcp_toolset",
+  "mcp_server_name": "google-calendar-mcp",
+  "default_config": {
+    "enabled": false,
+    "defer_loading": true
+  },
+  "configs": {
+    "search_events": {
+      "enabled": true,
+      "defer_loading": false
+    },
+    "list_events": {
+      "enabled": true
+    }
+  }
+}
+```
+
+In this example:
+
+* `search_events` is enabled with `defer_loading: false`
+* `list_events` is enabled with `defer_loading: true` (inherited from default\_config)
+* All other tools are disabled
+
+## Validation rules
+
+The API enforces these validation rules:
+
+* **Server must exist:** The `mcp_server_name` in an MCPToolset must match a server defined in the `mcp_servers` array
+* **Server must be used:** Every MCP server defined in `mcp_servers` must be referenced by exactly one MCPToolset
+* **Unique toolset per server:** Each MCP server can only be referenced by one MCPToolset
+* **Unknown tool names:** If a tool name in `configs` doesn't exist on the MCP server, a backend warning is logged but no error is returned (MCP servers may have dynamic tool availability)
+
+## Response content types
+
+When Claude uses MCP tools, the response includes two new content block types:
+
+### MCP tool use block
+
+```json
+{
+  "type": "mcp_tool_use",
+  "id": "mcptoolu_014Q35RayjACSWkSj4X2yov1",
+  "name": "echo",
+  "server_name": "example-mcp",
+  "input": { "param1": "value1", "param2": "value2" }
+}
+```
+
+### MCP tool result block
+
+```json
+{
+  "type": "mcp_tool_result",
+  "tool_use_id": "mcptoolu_014Q35RayjACSWkSj4X2yov1",
+  "is_error": false,
+  "content": [
+    {
+      "type": "text",
+      "text": "Hello"
+    }
+  ]
+}
+```
+
+## Pin an MCP server's tool list (beta)
+
+An MCP server can change its tools at any time. The `mcp-client-2026-09-15` beta header records the tool list each server returns and lets you pin it, so a server that changes its tools doesn't change what Claude sees partway through a conversation. It includes everything `mcp-client-2025-11-20` does, so send it in place of that header. It's available on the Claude API.
+
+When the API asks an MCP server for its tools while producing a response, the response starts with an `mcp_tool_listing` block for that server, one block for each server it asked:
+
+```json
+{
+  "type": "mcp_tool_listing",
+  "mcp_server_name": "example-mcp",
+  "tools": [
+    {
+      "name": "echo",
+      "description": "Returns the text it receives.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "text": { "type": "string" } },
+        "required": ["text"]
+      }
+    }
+  ]
+}
+```
+
+If your code reads `content[0]`, skip these blocks. Send the assistant message back unchanged, `mcp_tool_listing` blocks included, and keep sending `mcp-client-2026-09-15` on every request that carries one. Later requests then use the recorded list for that server instead of asking it again.
+
+To pin a list yourself, copy a block's `tools` into the `tools` field of that server's MCPToolset. The API then doesn't ask the server for its tools, and the toolset's tools are exactly those entries, with `default_config` and `configs` applied:
+
+```json
+{
+  "type": "mcp_toolset",
+  "mcp_server_name": "example-mcp",
+  "tools": [
+    {
+      "name": "echo",
+      "description": "Returns the text it receives.",
+      "input_schema": {
+        "type": "object",
+        "properties": { "text": { "type": "string" } },
+        "required": ["text"]
+      }
+    }
+  ]
+}
+```
+
+Each entry in `tools` holds the tool's `name` as the server lists it (without the server name), its `description`, and its `input_schema`.
+
+The following example sends one request with an unpinned toolset, copies the returned list into the toolset's `tools` field, and sends the request again. The second response has no `mcp_tool_listing` block, because the API doesn't ask the server:
+
+<CodeGroup>
+  ```bash cURL
+  BODY='{
+    "model": "claude-opus-5-5",
+    "max_tokens": 1024,
+    "mcp_servers": [
+      {
+        "type": "url",
+        "url": "https://example-server.modelcontextprotocol.io/sse",
+        "name": "example-mcp",
+        "authorization_token": "YOUR_TOKEN"
+      }
+    ],
+    "tools": [
+      {
+        "type": "mcp_toolset",
+        "mcp_server_name": "example-mcp"
+      }
+    ],
+    "messages": [
+      {
+        "role": "user",
+        "content": "What tools do you have available?"
+      }
+    ]
+  }'
+
+  # First request: the toolset isn't pinned, so the API asks the server for
+  # its tools and the response starts with an mcp_tool_listing block.
+  # tee shows the response on stderr while the variable captures it.
+  FIRST=$(curl -sS https://api.anthropic.com/v1/messages \
+    -H "content-type: application/json" \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-beta: mcp-client-2026-09-15" \
+    -d "$BODY" | tee /dev/stderr)
+
+  # Pin the list: copy the block's tools into the toolset. The API uses
+  # exactly these entries and doesn't ask the server again.
+  TOOLS=$(jq '.content[] | select(.type == "mcp_tool_listing") | .tools' \
+    <<<"$FIRST")
+  PINNED=$(jq --argjson tools "$TOOLS" '.tools[0].tools = $tools' <<<"$BODY")
+
+  # With a pinned toolset, the response has no mcp_tool_listing block.
+  curl https://api.anthropic.com/v1/messages \
+    -H "content-type: application/json" \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-beta: mcp-client-2026-09-15" \
+    -d "$PINNED"
+  ```
+
+  ```bash CLI
+  request=$(cat <<'YAML'
+  model: claude-opus-5-5
+  max_tokens: 1024
+  mcp_servers:
+    - type: url
+      url: https://example-server.modelcontextprotocol.io/sse
+      name: example-mcp
+      authorization_token: YOUR_TOKEN
+  tools:
+    - type: mcp_toolset
+      mcp_server_name: example-mcp
+  messages:
+    - role: user
+      content: What tools do you have available?
+  YAML
+  )
+
+  # First request: the toolset isn't pinned, so the API asks the server for
+  # its tools and the response starts with an mcp_tool_listing block.
+  # tee shows the response on stderr while the variable captures it.
+  first=$(ant beta:messages create --beta mcp-client-2026-09-15 --format json \
+    <<<"$request" | tee /dev/stderr)
+  tools=$(jq -c '.content[] | select(.type == "mcp_tool_listing") | .tools' \
+    <<<"$first")
+
+  # Pin the list: copy the block's tools into the toolset. The --tool flag
+  # replaces the body's tools array. The API uses exactly these entries and
+  # doesn't ask the server again, so the response has no mcp_tool_listing block.
+  ant beta:messages create --beta mcp-client-2026-09-15 \
+    --tool "{type: mcp_toolset, mcp_server_name: example-mcp, tools: $tools}" \
+    <<<"$request"
+  ```
+
+  ```python Python
+  from anthropic.types.beta import (
+      BetaMessageParam,
+      BetaRequestMCPServerURLDefinitionParam,
+  )
+
+  client = anthropic.Anthropic()
+
+  mcp_servers: list[BetaRequestMCPServerURLDefinitionParam] = [
+      {
+          "type": "url",
+          "url": "https://example-server.modelcontextprotocol.io/sse",
+          "name": "example-mcp",
+          "authorization_token": "YOUR_TOKEN",
+      },
+  ]
+  messages: list[BetaMessageParam] = [
+      {"role": "user", "content": "What tools do you have available?"},
+  ]
+
+  # First request: the toolset isn't pinned, so the API asks the server for
+  # its tools and the response starts with an mcp_tool_listing block.
+  first = client.beta.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=1024,
+      betas=["mcp-client-2026-09-15"],
+      mcp_servers=mcp_servers,
+      tools=[{"type": "mcp_toolset", "mcp_server_name": "example-mcp"}],
+      messages=messages,
+  )
+
+  listing = next(block for block in first.content if block.type == "mcp_tool_listing")
+  print([tool.name for tool in listing.tools])
+
+  # Pin the list: copy the block's tools into the toolset. The API uses
+  # exactly these entries and doesn't ask the server again.
+  second = client.beta.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=1024,
+      betas=["mcp-client-2026-09-15"],
+      mcp_servers=mcp_servers,
+      tools=[
+          {
+              "type": "mcp_toolset",
+              "mcp_server_name": "example-mcp",
+              "tools": [
+                  {
+                      "name": tool.name,
+                      "description": tool.description,
+                      "input_schema": tool.input_schema,
+                  }
+                  for tool in listing.tools
+              ],
+          },
+      ],
+      messages=messages,
+  )
+
+  # With a pinned toolset, the response has no mcp_tool_listing block.
+  print([block.type for block in second.content])
+  ```
+
+  ```typescript TypeScript
+  const client = new Anthropic();
+
+  const mcpServers: Anthropic.Beta.BetaRequestMCPServerURLDefinition[] = [
+    {
+      type: "url",
+      url: "https://example-server.modelcontextprotocol.io/sse",
+      name: "example-mcp",
+      authorization_token: "YOUR_TOKEN"
+    }
+  ];
+  const messages: Anthropic.Beta.BetaMessageParam[] = [
+    { role: "user", content: "What tools do you have available?" }
+  ];
+
+  // First request: the toolset isn't pinned, so the API asks the server for
+  // its tools and the response starts with an mcp_tool_listing block.
+  const first = await client.beta.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    betas: ["mcp-client-2026-09-15"],
+    mcp_servers: mcpServers,
+    tools: [{ type: "mcp_toolset", mcp_server_name: "example-mcp" }],
+    messages
+  });
+
+  const listing = first.content.find((block) => block.type === "mcp_tool_listing");
+  if (!listing) {
+    throw new Error("The response has no mcp_tool_listing block.");
+  }
+  console.log(listing.tools.map((tool) => tool.name));
+
+  // Pin the list: copy the block's tools into the toolset. The API uses
+  // exactly these entries and doesn't ask the server again.
+  const second = await client.beta.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    betas: ["mcp-client-2026-09-15"],
+    mcp_servers: mcpServers,
+    tools: [
+      {
+        type: "mcp_toolset",
+        mcp_server_name: "example-mcp",
+        tools: listing.tools
+      }
+    ],
+    messages
+  });
+
+  // With a pinned toolset, the response has no mcp_tool_listing block.
+  console.log(second.content.map((block) => block.type));
+  ```
+
+  ```csharp C#
+  using Anthropic.Models.Beta;
+  using Anthropic.Models.Beta.Messages;
+  using Messages = Anthropic.Models.Messages;
+
+  AnthropicClient client = new();
+
+  List<BetaRequestMcpServerUrlDefinition> mcpServers =
+  [
+      new()
+      {
+          Url = "https://example-server.modelcontextprotocol.io/sse",
+          Name = "example-mcp",
+          AuthorizationToken = "YOUR_TOKEN",
+      },
+  ];
+  List<BetaMessageParam> messages =
+  [
+      new() { Role = Role.User, Content = "What tools do you have available?" },
+  ];
+
+  // First request: the toolset isn't pinned, so the API asks the server for
+  // its tools and the response starts with an mcp_tool_listing block.
+  var first = await client.Beta.Messages.Create(new MessageCreateParams
+  {
+      Model = Messages::Model.ClaudeOpus5_5,
+      MaxTokens = 1024,
+      Betas = [AnthropicBeta.McpClient2026_09_15],
+      McpServers = mcpServers,
+      Tools = [new BetaMcpToolset("example-mcp")],
+      Messages = messages,
+  });
+
+  var listing = first.Content
+      .Select(block => block.Value)
+      .OfType<BetaMcpToolListingBlock>()
+      .First();
+  Console.WriteLine(string.Join(", ", listing.Tools.Select(tool => tool.Name)));
+
+  // Pin the list: copy the block's tools into the toolset. The API uses
+  // exactly these entries and doesn't ask the server again.
+  var second = await client.Beta.Messages.Create(new MessageCreateParams
+  {
+      Model = Messages::Model.ClaudeOpus5_5,
+      MaxTokens = 1024,
+      Betas = [AnthropicBeta.McpClient2026_09_15],
+      McpServers = mcpServers,
+      Tools =
+      [
+          new BetaMcpToolset("example-mcp")
+          {
+              Tools =
+              [
+                  .. listing.Tools.Select(tool => new BetaMcpToolParam
+                  {
+                      Name = tool.Name,
+                      Description = tool.Description,
+                      InputSchema = tool.InputSchema,
+                  }),
+              ],
+          },
+      ],
+      Messages = messages,
+  });
+
+  // With a pinned toolset, the response has no mcp_tool_listing block.
+  Console.WriteLine(string.Join(", ", second.Content.Select(block => block.Type)));
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+
+  mcpServers := []anthropic.BetaRequestMCPServerURLDefinitionParam{
+  	{
+  		URL:                "https://example-server.modelcontextprotocol.io/sse",
+  		Name:               "example-mcp",
+  		AuthorizationToken: anthropic.String("YOUR_TOKEN"),
+  	},
+  }
+  messages := []anthropic.BetaMessageParam{
+  	anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("What tools do you have available?")),
+  }
+
+  // First request: the toolset isn't pinned, so the API asks the server for
+  // its tools and the response starts with an mcp_tool_listing block.
+  first, err := client.Beta.Messages.New(context.TODO(), anthropic.BetaMessageNewParams{
+  	Model:      anthropic.ModelClaudeOpus5_5,
+  	MaxTokens:  1024,
+  	Betas:      []anthropic.AnthropicBeta{anthropic.AnthropicBetaMCPClient2026_09_15},
+  	MCPServers: mcpServers,
+  	Tools: []anthropic.BetaToolUnionParam{
+  		{OfMCPToolset: &anthropic.BetaMCPToolsetParam{MCPServerName: "example-mcp"}},
+  	},
+  	Messages: messages,
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  var listing anthropic.BetaMCPToolListingBlock
+  for _, block := range first.Content {
+  	if listingBlock, ok := block.AsAny().(anthropic.BetaMCPToolListingBlock); ok {
+  		listing = listingBlock
+  		break
+  	}
+  }
+
+  // Pin the list: copy the block's tools into the toolset. The API uses
+  // exactly these entries and doesn't ask the server again.
+  var toolNames []string
+  var pinnedTools []anthropic.BetaMCPToolParam
+  for _, tool := range listing.Tools {
+  	toolNames = append(toolNames, tool.Name)
+  	pinnedTools = append(pinnedTools, anthropic.BetaMCPToolParam{
+  		Name:        tool.Name,
+  		Description: anthropic.String(tool.Description),
+  		InputSchema: tool.InputSchema,
+  	})
+  }
+  fmt.Println(toolNames)
+
+  second, err := client.Beta.Messages.New(context.TODO(), anthropic.BetaMessageNewParams{
+  	Model:      anthropic.ModelClaudeOpus5_5,
+  	MaxTokens:  1024,
+  	Betas:      []anthropic.AnthropicBeta{anthropic.AnthropicBetaMCPClient2026_09_15},
+  	MCPServers: mcpServers,
+  	Tools: []anthropic.BetaToolUnionParam{
+  		{OfMCPToolset: &anthropic.BetaMCPToolsetParam{
+  			MCPServerName: "example-mcp",
+  			Tools:         pinnedTools,
+  		}},
+  	},
+  	Messages: messages,
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  // With a pinned toolset, the response has no mcp_tool_listing block.
+  var blockTypes []string
+  for _, block := range second.Content {
+  	blockTypes = append(blockTypes, block.Type)
+  }
+  fmt.Println(blockTypes)
+  ```
+
+  ```java Java
+  import com.anthropic.models.beta.AnthropicBeta;
+  import com.anthropic.models.beta.messages.BetaMcpTool;
+  import com.anthropic.models.beta.messages.BetaMcpToolListingBlock;
+  import com.anthropic.models.beta.messages.BetaMcpToolset;
+  import com.anthropic.models.beta.messages.BetaMessage;
+  import com.anthropic.models.beta.messages.BetaRequestMcpServerUrlDefinition;
+  import com.anthropic.models.beta.messages.MessageCreateParams;
+  // ...
+
+  void main() {
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      BetaRequestMcpServerUrlDefinition mcpServer = BetaRequestMcpServerUrlDefinition.builder()
+          .url("https://example-server.modelcontextprotocol.io/sse")
+          .name("example-mcp")
+          .authorizationToken("YOUR_TOKEN")
+          .build();
+
+      // First request: the toolset isn't pinned, so the API asks the server for
+      // its tools and the response starts with an mcp_tool_listing block.
+      BetaMessage first = client.beta().messages().create(MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(1024)
+          .addBeta(AnthropicBeta.MCP_CLIENT_2026_09_15)
+          .addMcpServer(mcpServer)
+          .addTool(BetaMcpToolset.builder()
+              .mcpServerName("example-mcp")
+              .build())
+          .addUserMessage("What tools do you have available?")
+          .build());
+
+      BetaMcpToolListingBlock listing = first.content().stream()
+          .flatMap(block -> block.mcpToolListing().stream())
+          .findFirst()
+          .orElseThrow();
+      IO.println(listing.tools().stream().map(BetaMcpTool::name).toList());
+
+      // Pin the list: copy the block's tools into the toolset. The API uses
+      // exactly these entries and doesn't ask the server again.
+      BetaMessage second = client.beta().messages().create(MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(1024)
+          .addBeta(AnthropicBeta.MCP_CLIENT_2026_09_15)
+          .addMcpServer(mcpServer)
+          .addTool(BetaMcpToolset.builder()
+              .mcpServerName("example-mcp")
+              .tools(listing.tools().stream().map(BetaMcpTool::toParam).toList())
+              .build())
+          .addUserMessage("What tools do you have available?")
+          .build());
+
+      // With a pinned toolset, the response has no mcp_tool_listing block.
+      IO.println(second.content().stream()
+          .map(block -> block.type().asString())
+          .toList());
+  }
+  ```
+
+  ```php PHP
+  use Anthropic\Beta\AnthropicBeta;
+  use Anthropic\Beta\Messages\BetaMCPTool;
+  use Anthropic\Beta\Messages\BetaMCPToolListingBlock;
+  // ...
+
+  $client = new Client();
+
+  $mcpServers = [
+      [
+          'type' => 'url',
+          'url' => 'https://example-server.modelcontextprotocol.io/sse',
+          'name' => 'example-mcp',
+          'authorization_token' => 'YOUR_TOKEN',
+      ],
+  ];
+  $messages = [['role' => 'user', 'content' => 'What tools do you have available?']];
+
+  // First request: the toolset isn't pinned, so the API asks the server for
+  // its tools and the response starts with an mcp_tool_listing block.
+  $first = $client->beta->messages->create(
+      model: Model::CLAUDE_OPUS_5_5,
+      maxTokens: 1024,
+      betas: [AnthropicBeta::MCP_CLIENT_2026_09_15],
+      mcpServers: $mcpServers,
+      tools: [['type' => 'mcp_toolset', 'mcp_server_name' => 'example-mcp']],
+      messages: $messages,
+  );
+
+  $listing = array_find($first->content, fn ($block) => $block instanceof BetaMCPToolListingBlock);
+  echo json_encode(array_map(fn (BetaMCPTool $tool) => $tool->name, $listing->tools)), PHP_EOL;
+
+  // Pin the list: copy the block's tools into the toolset. The API uses
+  // exactly these entries and doesn't ask the server again.
+  $second = $client->beta->messages->create(
+      model: Model::CLAUDE_OPUS_5_5,
+      maxTokens: 1024,
+      betas: [AnthropicBeta::MCP_CLIENT_2026_09_15],
+      mcpServers: $mcpServers,
+      tools: [
+          [
+              'type' => 'mcp_toolset',
+              'mcp_server_name' => 'example-mcp',
+              'tools' => array_map(
+                  fn (BetaMCPTool $tool) => [
+                      'name' => $tool->name,
+                      'description' => $tool->description,
+                      'input_schema' => $tool->inputSchema,
+                  ],
+                  $listing->tools,
+              ),
+          ],
+      ],
+      messages: $messages,
+  );
+
+  // With a pinned toolset, the response has no mcp_tool_listing block.
+  echo json_encode(array_map(fn ($block) => $block->type, $second->content)), PHP_EOL;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  mcp_servers = [
+    {
+      type: "url",
+      url: "https://example-server.modelcontextprotocol.io/sse",
+      name: "example-mcp",
+      authorization_token: "YOUR_TOKEN"
+    }
+  ]
+  messages = [{ role: "user", content: "What tools do you have available?" }]
+
+  # First request: the toolset isn't pinned, so the API asks the server for
+  # its tools and the response starts with an mcp_tool_listing block.
+  first = client.beta.messages.create(
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
+    max_tokens: 1024,
+    betas: [Anthropic::AnthropicBeta::MCP_CLIENT_2026_09_15],
+    mcp_servers:,
+    tools: [{ type: "mcp_toolset", mcp_server_name: "example-mcp" }],
+    messages:
+  )
+
+  listing = first.content.find { it.is_a?(Anthropic::Beta::BetaMCPToolListingBlock) }
+  puts listing.tools.map(&:name).inspect
+
+  # Pin the list: copy the block's tools into the toolset. The API uses
+  # exactly these entries and doesn't ask the server again.
+  second = client.beta.messages.create(
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
+    max_tokens: 1024,
+    betas: [Anthropic::AnthropicBeta::MCP_CLIENT_2026_09_15],
+    mcp_servers:,
+    tools: [
+      {
+        type: "mcp_toolset",
+        mcp_server_name: "example-mcp",
+        tools: listing.tools.map(&:to_h)
+      }
+    ],
+    messages:
+  )
+
+  # With a pinned toolset, the response has no mcp_tool_listing block.
+  puts second.content.map(&:type).inspect
+  ```
+</CodeGroup>
+
+With the `inline-tools-2026-09-15` beta header as well, you can add an MCP server partway through a conversation. See [Add an MCP server mid-conversation](https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages#add-an-mcp-server-mid-conversation-beta).
+
+## Multiple MCP servers
+
+You can connect to multiple MCP servers by including multiple server definitions in `mcp_servers` and a corresponding MCPToolset for each in the `tools` array:
+
+```json
+{
+  "model": "claude-opus-5-5",
+  "max_tokens": 1000,
+  "messages": [
+    {
+      "role": "user",
+      "content": "Use tools from both mcp-server-1 and mcp-server-2 to complete this task"
+    }
+  ],
+  "mcp_servers": [
+    {
+      "type": "url",
+      "url": "https://mcp.example1.com/sse",
+      "name": "mcp-server-1",
+      "authorization_token": "TOKEN1"
+    },
+    {
+      "type": "url",
+      "url": "https://mcp.example2.com/sse",
+      "name": "mcp-server-2",
+      "authorization_token": "TOKEN2"
+    }
+  ],
+  "tools": [
+    {
+      "type": "mcp_toolset",
+      "mcp_server_name": "mcp-server-1"
+    },
+    {
+      "type": "mcp_toolset",
+      "mcp_server_name": "mcp-server-2",
+      "default_config": {
+        "defer_loading": true
+      }
+    }
+  ]
+}
+```
+
+With many tools available, Claude selects based on tool names and descriptions. Clear, specific tool descriptions improve selection accuracy. For large tool sets (dozens of tools across several servers), consider enabling [`defer_loading`](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector#tool-configuration-options) with the [Tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool) so only relevant tools are surfaced per query.
+
+## Authentication
+
+For MCP servers that require OAuth authentication, you'll need to obtain an access token. The MCP connector beta supports passing an `authorization_token` parameter in the MCP server definition. API consumers are expected to handle the OAuth flow and obtain the access token prior to making the API call, and to refresh the token as needed.
+
+### Obtaining an access token for testing
+
+The MCP inspector can guide you through the process of obtaining an access token for testing purposes.
+
+1. Run the inspector with the following command. You need Node.js installed on your machine.
+
+   ```bash
+   npx @modelcontextprotocol/inspector
+   ```
+
+2. In the sidebar on the left, for **Transport type**, select either **SSE** or **Streamable HTTP**.
+
+3. Enter the URL of the MCP server.
+
+4. In the right area, click **Open Auth Settings** after **Need to configure authentication?**.
+
+5. Click **Quick OAuth Flow** and authorize on the OAuth screen.
+
+6. Follow the steps in the **OAuth Flow Progress** section of the inspector and click **Continue** until you reach **Authentication complete**.
+
+7. Copy the `access_token` value.
+
+8. Paste it into the `authorization_token` field in your MCP server configuration.
+
+### Using the access token
+
+Once you've obtained an access token using either of the preceding OAuth flows, you can use it in your MCP server configuration:
+
+```json
+{
+  "mcp_servers": [
+    {
+      "type": "url",
+      "url": "https://example-server.modelcontextprotocol.io/sse",
+      "name": "authenticated-server",
+      "authorization_token": "YOUR_ACCESS_TOKEN_HERE"
+    }
+  ]
+}
+```
+
+For detailed explanations of the OAuth flow, refer to the [Authorization section](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization) in the MCP specification.
+
+## Client-side MCP helpers
+
+If you manage your own MCP client connection (for example, with local stdio servers, MCP prompts, or MCP resources), the SDK provides helper functions that convert between MCP types and Claude API types. This eliminates manual conversion code when using an MCP SDK for your language (for example, the [TypeScript MCP SDK](https://github.com/modelcontextprotocol/typescript-sdk)) alongside the Anthropic SDK.
+
+<Note>
+  Use the [`mcp_servers` API parameter](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector#using-the-mcp-connector-in-the-messages-api) when you have remote servers accessible by URL and only need tool support. Use the client-side helpers when you need local servers, prompts, resources, or more control over the connection with the base SDK.
+</Note>
+
+### Installation
+
+Install both the Anthropic SDK and the MCP SDK:
+
+<Tabs>
+  <Tab title="Python">
+    The MCP helpers are included in the `mcp` extra, which requires Python 3.10 or later:
+
+    ```bash
+    pip install "anthropic[mcp]"
+    ```
+  </Tab>
+
+  <Tab title="TypeScript">
+    ```bash
+    npm install @anthropic-ai/sdk @modelcontextprotocol/sdk
+    ```
+  </Tab>
+
+  <Tab title="C#">
+    The helpers live in the separate `Anthropic.Mcp` package; the MCP client itself comes from the official [ModelContextProtocol package](https://www.nuget.org/packages/ModelContextProtocol):
+
+    ```bash
+    dotnet add package Anthropic.Mcp
+    dotnet add package ModelContextProtocol
+    ```
+  </Tab>
+
+  <Tab title="Go">
+    The helpers live in the `mcp` subpackage of the Go SDK, which builds on the [MCP Go SDK](https://github.com/modelcontextprotocol/go-sdk):
+
+    ```bash
+    go get github.com/anthropics/anthropic-sdk-go/mcp
+    ```
+  </Tab>
+
+  <Tab title="Java">
+    The helpers live in the separate `anthropic-java-mcp` artifact, which requires Java 17 or later (the base SDK supports Java 8). Add it alongside the base `anthropic-java` dependency:
+
+    <Tabs>
+      <Tab title="Gradle">
+        ```kotlin
+        implementation("com.anthropic:anthropic-java:2.73.0")
+        implementation("com.anthropic:anthropic-java-mcp:2.73.0")
+        ```
+      </Tab>
+
+      <Tab title="Maven">
+        ```xml
+        <dependency>
+            <groupId>com.anthropic</groupId>
+            <artifactId>anthropic-java</artifactId>
+            <version>2.73.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.anthropic</groupId>
+            <artifactId>anthropic-java-mcp</artifactId>
+            <version>2.73.0</version>
+        </dependency>
+        ```
+      </Tab>
+    </Tabs>
+  </Tab>
+
+  <Tab title="PHP">
+    The helpers use the official [MCP PHP SDK](https://packagist.org/packages/mcp/sdk):
+
+    ```bash
+    composer require "anthropic-ai/sdk" "guzzlehttp/guzzle:^7" "mcp/sdk"
+    ```
+  </Tab>
+
+  <Tab title="Ruby">
+    The helpers use the official [`mcp` gem](https://rubygems.org/gems/mcp):
+
+    ```bash
+    bundle add anthropic mcp
+    ```
+  </Tab>
+</Tabs>
+
+### Available helpers
+
+Import the helpers for your language:
+
+<CodeGroup exclude="shell">
+  ```python Python
+  from anthropic.lib.tools.mcp import (
+      async_mcp_tool,
+      mcp_message,
+      mcp_resource_to_content,
+      mcp_resource_to_file,
+  )
+  ```
+
+  ```typescript TypeScript
+  import {
+    mcpTools,
+    mcpMessages,
+    mcpResourceToContent,
+    mcpResourceToFile
+  } from "@anthropic-ai/sdk/helpers/beta/mcp";
+  ```
+
+  ```csharp C#
+  using Anthropic.Helpers.Beta;
+  using Anthropic.Helpers.Beta.Mcp;
+  ```
+
+  ```go Go
+  import (
+  	"github.com/anthropics/anthropic-sdk-go/mcp"
+  )
+
+  ```
+
+  ```java Java
+  import com.anthropic.helpers.McpBetaTool;
+  import com.anthropic.mcp.BetaMcp;
+  ```
+
+  ```php PHP
+  use Anthropic\Lib\Tools\BetaMcp;
+  ```
+
+  ```ruby Ruby
+  require "anthropic"
+
+  # The helpers are exposed on the Anthropic::Mcp module
+  ```
+</CodeGroup>
+
+| Helper                                                                                                                                                                                                                                                                                                                     | Description                                                                                                                                                                                                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `async_mcp_tool(tool, mcp_client)` (typescript: `mcpTools(tools, mcpClient)`; csharp: `BetaMcp.ListToolsAsync(mcpClient)`; go: `mcp.NewBetaTools(tools, session)`; java: `BetaMcp.mcpTools(tools, mcpClient)`; php: `BetaMcp::tools($tools, $mcp)`; ruby: `Anthropic::Mcp.tools(tools, mcp_client)`)                       | Converts MCP tools to Claude API tools for use with `client.beta.messages.tool_runner()` (typescript: `client.beta.messages.toolRunner()`; java: `client.beta().messages().toolRunner()`; php: `$client->beta->messages->toolRunner()`; csharp: `client.Beta.Messages.ToolRunner()`; go: `client.Beta.Messages.NewToolRunner()`) |
+| `mcp_message(message)` (typescript: `mcpMessages(messages)`; csharp: `BetaMcp.Messages(messages)`; go: `mcp.ToMessage(message)`; java: `BetaMcp.mcpMessages(messages)`; php: `BetaMcp::message($message)`; ruby: `Anthropic::Mcp.message(message)`)                                                                        | Converts MCP prompt messages to Claude API message format                                                                                                                                                                                                                                                                        |
+| `mcp_resource_to_content(resource)` (typescript: `mcpResourceToContent(resource)`; csharp: `BetaMcp.ResourceToContent(resource)`; go: `mcp.ResourceToBlock(resource)`; java: `BetaMcp.mcpResourceContents(resource)`; php: `BetaMcp::resourceToContent($resource)`; ruby: `Anthropic::Mcp.resource_to_contents(resource)`) | Converts an MCP resource to a Claude API content block                                                                                                                                                                                                                                                                           |
+| `mcp_resource_to_file(resource)` (typescript: `mcpResourceToFile(resource)`; csharp: `BetaMcp.ResourceToFile(resource)`; go: `mcp.ResourceToFile(resource)`; java: `BetaMcp.mcpResourceFiles(resource)`; php: `BetaMcp::resourceToFile($resource)`; ruby: `Anthropic::Mcp.resource_to_files(resource)`)                    | Converts an MCP resource to a file object for upload                                                                                                                                                                                                                                                                             |
+
+### Use MCP tools
+
+Convert MCP tools for use with the SDK's [tool runner](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner), which handles tool execution automatically:
+
+<CodeGroup exclude="shell">
+  ```python Python
+  from anthropic.lib.tools.mcp import async_mcp_tool
+  from mcp import ClientSession
+  from mcp.client.stdio import StdioServerParameters, stdio_client
+
+  client = AsyncAnthropic()
+
+
+  async def main() -> None:
+      # Connect to an MCP server
+      server_params = StdioServerParameters(command="mcp-server")
+      async with stdio_client(server_params) as (read, write):
+          async with ClientSession(read, write) as mcp_client:
+              await mcp_client.initialize()
+
+              # List tools and convert them for the Claude API
+              tools_result = await mcp_client.list_tools()
+              runner = client.beta.messages.tool_runner(
+                  model="claude-opus-5-5",
+                  max_tokens=1024,
+                  messages=[
+                      {"role": "user", "content": "What tools do you have available?"},
+                  ],
+                  tools=[async_mcp_tool(tool, mcp_client) for tool in tools_result.tools],
+              )
+
+              final_message = await runner.until_done()
+              print(final_message)
+
+
+  asyncio.run(main())
+  ```
+
+  ```typescript TypeScript
+  import {
+    mcpTools,
+    type MCPCallToolResultLike,
+    type MCPClientLike
+  } from "@anthropic-ai/sdk/helpers/beta/mcp";
+  import { Client } from "@modelcontextprotocol/sdk/client/index.js";
+  import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
+
+  const anthropic = new Anthropic();
+
+  // Connect to an MCP server
+  const transport = new StdioClientTransport({ command: "mcp-server", args: [] });
+  const mcpClient = new Client({ name: "my-client", version: "1.0.0" });
+  await mcpClient.connect(transport);
+
+  // List tools and convert them for the Claude API
+  const { tools } = await mcpClient.listTools();
+
+  // The MCP SDK's callTool return type still includes a legacy result shape that
+  // mcpTools does not accept; narrow it. Drop this once MCPClientLike widens.
+  const mcpClientForTools: MCPClientLike = {
+    callTool: (params) => mcpClient.callTool(params) as Promise<MCPCallToolResultLike>
+  };
+
+  const finalMessage = await anthropic.beta.messages.toolRunner({
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    messages: [{ role: "user", content: "What tools do you have available?" }],
+    tools: mcpTools(tools, mcpClientForTools)
+  });
+
+  console.log(finalMessage);
+  ```
+
+  ```csharp C#
+  using Anthropic.Helpers.Beta;
+  using Anthropic.Helpers.Beta.Mcp;
+  using Anthropic.Models.Beta.Messages;
+  using ModelContextProtocol.Client;
+  using Messages = Anthropic.Models.Messages;
+
+  var anthropic = new AnthropicClient();
+
+  // Connect to an MCP server
+  await using var mcpClient = await McpClient.CreateAsync(
+      new StdioClientTransport(new StdioClientTransportOptions { Command = "mcp-server" })
+  );
+
+  // List tools and convert them for the Claude API
+  var tools = await BetaMcp.ListToolsAsync(mcpClient);
+  var runner = anthropic.Beta.Messages.ToolRunner(
+      new MessageCreateParams
+      {
+          Model = Messages::Model.ClaudeOpus5_5,
+          MaxTokens = 1024,
+          Messages =
+          [
+              new BetaMessageParam
+              {
+                  Role = Role.User,
+                  Content = "What tools do you have available?",
+              },
+          ],
+      },
+      tools
+  );
+
+  var finalMessage = await runner.RunUntilDoneAsync();
+  Console.WriteLine(finalMessage);
+  ```
+
+  ```go Go
+  import (
+  // ...
+
+  // ...
+  	"github.com/anthropics/anthropic-sdk-go/mcp"
+  	mcpsdk "github.com/modelcontextprotocol/go-sdk/mcp"
+  )
+
+  func main() {
+  	client := anthropic.NewClient()
+  	ctx := context.Background()
+
+  	// Connect to an MCP server
+  	mcpClient := mcpsdk.NewClient(&mcpsdk.Implementation{Name: "my-client", Version: "1.0.0"}, nil)
+  	session, err := mcpClient.Connect(ctx, &mcpsdk.CommandTransport{Command: exec.Command("mcp-server")}, nil)
+  	if err != nil {
+  		log.Fatal(err)
+  	}
+  	defer session.Close()
+
+  	// List tools and convert them for the Claude API
+  	toolsResult, err := session.ListTools(ctx, nil)
+  	if err != nil {
+  		log.Fatal(err)
+  	}
+  	betaTools, err := mcp.NewBetaTools(toolsResult.Tools, session)
+  	if err != nil {
+  		log.Fatal(err)
+  	}
+
+  	runner := client.Beta.Messages.NewToolRunner(betaTools, anthropic.BetaToolRunnerParams{
+  		BetaMessageNewParams: anthropic.BetaMessageNewParams{
+  			Model:     anthropic.ModelClaudeOpus5_5,
+  			MaxTokens: 1024,
+  			Messages: []anthropic.BetaMessageParam{
+  				anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("What tools do you have available?")),
+  			},
+  		},
+  	})
+
+  	finalMessage, err := runner.RunToCompletion(ctx)
+  	if err != nil {
+  		log.Fatal(err)
+  	}
+  	fmt.Println(finalMessage.RawJSON())
+  }
+
+  ```
+
+  ```java Java
+  import com.anthropic.helpers.BetaToolRunner;
+  import com.anthropic.helpers.McpBetaTool;
+  import com.anthropic.mcp.BetaMcp;
+  import com.anthropic.models.beta.messages.BetaMessage;
+  import com.anthropic.models.beta.messages.MessageCreateParams;
+  import com.anthropic.models.messages.Model;
+  import io.modelcontextprotocol.client.McpClient;
+  import io.modelcontextprotocol.client.McpSyncClient;
+  import io.modelcontextprotocol.client.transport.ServerParameters;
+  import io.modelcontextprotocol.client.transport.StdioClientTransport;
+  import io.modelcontextprotocol.json.McpJsonDefaults;
+  import io.modelcontextprotocol.spec.McpSchema;
+  // ...
+
+  void main() throws Exception {
+      AnthropicClient anthropic = AnthropicOkHttpClient.fromEnv();
+
+      // Connect to an MCP server
+      StdioClientTransport transport = new StdioClientTransport(
+              ServerParameters.builder("mcp-server").build(), McpJsonDefaults.getMapper());
+
+      try (McpSyncClient mcpClient = McpClient.sync(transport)
+              .clientInfo(new McpSchema.Implementation("my-client", "1.0.0"))
+              .build()) {
+
+          mcpClient.initialize();
+
+          // List tools and convert them for the Claude API
+          List<McpBetaTool> betaTools = BetaMcp.mcpTools(mcpClient.listTools().tools(), mcpClient);
+
+          MessageCreateParams params = MessageCreateParams.builder()
+                  .model(Model.CLAUDE_OPUS_5_5)
+                  .maxTokens(1024L)
+                  .addUserMessage("What tools do you have available?")
+                  .addTools(betaTools)
+                  .build();
+
+          // The runner yields one message per assistant turn; the last is the final response
+          BetaToolRunner runner = anthropic.beta().messages().toolRunner(params);
+          BetaMessage finalMessage = null;
+          for (BetaMessage message : runner) {
+              finalMessage = message;
+          }
+          IO.println(finalMessage);
+      }
+  }
+  ```
+
+  ```php PHP
+  use Anthropic\Lib\Tools\BetaMcp;
+  use Mcp\Client;
+  use Mcp\Client\Transport\HttpTransport;
+
+  $anthropic = new Anthropic();
+
+  // Connect to an MCP server. The PHP MCP client connects over HTTP; point this
+  // at your server's endpoint.
+  $mcp = Client::builder()->build();
+  $mcp->connect(new HttpTransport('http://localhost:8000/mcp'));
+
+  // List tools and convert them for the Claude API
+  $runner = $anthropic->beta->messages->toolRunner(
+      maxTokens: 1024,
+      messages: [['role' => 'user', 'content' => 'What tools do you have available?']],
+      model: 'claude-opus-5-5',
+      tools: BetaMcp::tools($mcp->listTools()->tools, $mcp),
+  );
+
+  echo $runner->runUntilDone(), "\n";
+  ```
+
+  ```ruby Ruby
+  require "mcp"
+
+  anthropic = Anthropic::Client.new
+
+  # Connect to an MCP server
+  transport = MCP::Client::Stdio.new(command: "mcp-server")
+  mcp_client = MCP::Client.new(transport: transport)
+  mcp_client.connect
+
+  # List tools and convert them for the Claude API
+  runner = anthropic.beta.messages.tool_runner(
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    messages: [{ role: "user", content: "What tools do you have available?" }],
+    tools: Anthropic::Mcp.tools(mcp_client.tools, mcp_client)
+  )
+
+  final_message = runner.run_until_finished.last
+  puts final_message
+  ```
+</CodeGroup>
+
+### Use MCP prompts
+
+Convert MCP prompt messages into Claude API message format:
+
+<CodeGroup exclude="shell">
+  ```python Python
+  from anthropic.lib.tools.mcp import mcp_message
+
+  prompt = await mcp_client.get_prompt(name="my-prompt")
+  response = await client.beta.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=1024,
+      messages=[mcp_message(message) for message in prompt.messages],
+  )
+
+  print(response)
+  ```
+
+  ```typescript TypeScript
+  import { mcpMessages } from "@anthropic-ai/sdk/helpers/beta/mcp";
+
+  const { messages } = await mcpClient.getPrompt({ name: "my-prompt" });
+  const response = await anthropic.beta.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    messages: mcpMessages(messages)
+  });
+
+  console.log(response);
+  ```
+
+  ```csharp C#
+  var prompt = await mcpClient.GetPromptAsync("my-prompt");
+  var response = await anthropic.Beta.Messages.Create(
+      new MessageCreateParams
+      {
+          Model = Messages::Model.ClaudeOpus5_5,
+          MaxTokens = 1024,
+          Messages = BetaMcp.Messages(prompt.Messages),
+      }
+  );
+
+  Console.WriteLine(response);
+  ```
+
+  ```go Go
+  prompt, err := session.GetPrompt(ctx, &mcpsdk.GetPromptParams{Name: "my-prompt"})
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  messages := make([]anthropic.BetaMessageParam, 0, len(prompt.Messages))
+  for _, promptMessage := range prompt.Messages {
+  	message, err := mcp.ToMessage(promptMessage)
+  	if err != nil {
+  		log.Fatal(err)
+  	}
+  	messages = append(messages, message)
+  }
+
+  response, err := client.Beta.Messages.New(ctx, anthropic.BetaMessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 1024,
+  	Messages:  messages,
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response.RawJSON())
+  ```
+
+  ```java Java
+  McpSchema.GetPromptResult prompt = mcpClient.getPrompt(
+          new McpSchema.GetPromptRequest("my-prompt", Map.of()));
+
+  BetaMessage response = anthropic.beta().messages().create(MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(1024L)
+          .messages(BetaMcp.mcpMessages(prompt.messages()))
+          .build());
+
+  IO.println(response);
+  ```
+
+  ```php PHP
+  $prompt = $mcp->getPrompt('my-prompt');
+
+  $response = $anthropic->beta->messages->create(
+      maxTokens: 1024,
+      messages: array_map(BetaMcp::message(...), $prompt->messages),
+      model: 'claude-opus-5-5',
+  );
+
+  echo $response, "\n";
+  ```
+
+  ```ruby Ruby
+  prompt = mcp_client.get_prompt(name: "my-prompt")
+
+  response = anthropic.beta.messages.create(
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    messages: prompt["messages"].map { |message| Anthropic::Mcp.message(message) }
+  )
+
+  puts response
+  ```
+</CodeGroup>
+
+### Use MCP resources
+
+Convert MCP resources into content blocks to include in messages, or into file objects for upload:
+
+<CodeGroup exclude="shell">
+  ```python Python
+  from anthropic.lib.tools.mcp import (
+      mcp_resource_to_content,
+      mcp_resource_to_file,
+  )
+
+  # As a content block in a message
+  resource = await mcp_client.read_resource(uri="file:///path/to/doc.txt")
+  response = await client.beta.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=1024,
+      messages=[
+          {
+              "role": "user",
+              "content": [
+                  mcp_resource_to_content(resource),
+                  {"type": "text", "text": "Summarize this document"},
+              ],
+          }
+      ],
+  )
+  print(response)
+
+  # As a file upload
+  file_resource = await mcp_client.read_resource(
+      uri="file:///path/to/data.json",
+  )
+  uploaded = await client.files.upload(
+      file=mcp_resource_to_file(file_resource),
+  )
+  print(uploaded.id)
+  ```
+
+  ```typescript TypeScript
+  import { mcpResourceToContent, mcpResourceToFile } from "@anthropic-ai/sdk/helpers/beta/mcp";
+
+  // As a content block in a message
+  const resource = await mcpClient.readResource({ uri: "file:///path/to/doc.txt" });
+  const response = await anthropic.beta.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    messages: [
+      {
+        role: "user",
+        content: [
+          mcpResourceToContent(resource),
+          { type: "text", text: "Summarize this document" }
+        ]
+      }
+    ]
+  });
+  console.log(response);
+
+  // As a file upload
+  const fileResource = await mcpClient.readResource({ uri: "file:///path/to/data.json" });
+  const uploaded = await anthropic.files.upload({ file: mcpResourceToFile(fileResource) });
+  console.log(uploaded.id);
+  ```
+
+  ```csharp C#
+  // As a content block in a message
+  var resource = await mcpClient.ReadResourceAsync("file:///path/to/doc.txt");
+  var response = await anthropic.Beta.Messages.Create(
+      new MessageCreateParams
+      {
+          Model = Messages::Model.ClaudeOpus5_5,
+          MaxTokens = 1024,
+          Messages =
+          [
+              new BetaMessageParam
+              {
+                  Role = Role.User,
+                  Content = new BetaMessageParamContent(
+                      [
+                          BetaMcp.ResourceToContent(resource),
+                          new BetaTextBlockParam { Text = "Summarize this document" },
+                      ]
+                  ),
+              },
+          ],
+      }
+  );
+
+  Console.WriteLine(response);
+
+  // As a file upload
+  var fileResource = await mcpClient.ReadResourceAsync("file:///path/to/data.json");
+  var (filename, data, mediaType) = BetaMcp.ResourceToFile(fileResource);
+
+  // Build the file part explicitly so the resource's filename and MIME type
+  // carry through to the upload.
+  var file = new BinaryContent { Stream = new MemoryStream(data), FileName = filename };
+  if (mediaType is not null)
+  {
+      file.ContentType = new(mediaType);
+  }
+
+  var uploaded = await anthropic.Files.Upload(new FileUploadParams { File = file });
+  Console.WriteLine(uploaded.ID);
+  ```
+
+  ```go Go
+  // As a content block in a message
+  resource, err := session.ReadResource(ctx, &mcpsdk.ReadResourceParams{URI: "file:///path/to/doc.txt"})
+  if err != nil {
+  	log.Fatal(err)
+  }
+  block, err := mcp.ResourceToBlock(resource)
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  response, err := client.Beta.Messages.New(ctx, anthropic.BetaMessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 1024,
+  	Messages: []anthropic.BetaMessageParam{
+  		anthropic.NewBetaUserMessage(
+  			// ResourceToBlock returns the tool-result content union; message
+  			// content is a separate union type, so re-wrap the shared variants
+  			// (mcp.ToMessage does the same internally).
+  			anthropic.BetaContentBlockParamUnion{
+  				OfText:     block.OfText,
+  				OfImage:    block.OfImage,
+  				OfDocument: block.OfDocument,
+  			},
+  			anthropic.NewBetaTextBlock("Summarize this document"),
+  		),
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response.RawJSON())
+
+  // As a file upload
+  fileResult, err := session.ReadResource(ctx, &mcpsdk.ReadResourceParams{URI: "file:///path/to/data.json"})
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fileReader, err := mcp.ResourceToFile(fileResult)
+  if err != nil {
+  	log.Fatal(err)
+  }
+  uploaded, err := client.Files.Upload(ctx, anthropic.FileUploadParams{File: fileReader})
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(uploaded.ID)
+  ```
+
+  ```java Java
+  // As a content block in a message
+  McpSchema.ReadResourceResult resource = mcpClient.readResource(
+          new McpSchema.ReadResourceRequest("file:///path/to/doc.txt"));
+
+  List<BetaContentBlockParam> content =
+          new ArrayList<>(BetaMcp.mcpResourceContents(resource));
+  content.add(BetaContentBlockParam.ofText(
+          BetaTextBlockParam.builder().text("Summarize this document").build()));
+
+  BetaMessage response = anthropic.beta().messages().create(MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(1024L)
+          .addUserMessageOfBetaContentBlockParams(content)
+          .build());
+
+  IO.println(response);
+
+  // As a file upload
+  McpSchema.ReadResourceResult fileResource = mcpClient.readResource(
+          new McpSchema.ReadResourceRequest("file:///path/to/data.json"));
+
+  McpResourceFile resourceFile = BetaMcp.mcpResourceFiles(fileResource).getFirst();
+
+  // Build the file part explicitly so the resource's filename and MIME type
+  // carry through to the upload.
+  MultipartField.Builder<InputStream> fileField = MultipartField.<InputStream>builder()
+          .value(new ByteArrayInputStream(resourceFile.content()))
+          .filename(resourceFile.filename());
+  if (resourceFile.mimeType() != null) {
+      fileField.contentType(resourceFile.mimeType());
+  }
+
+  var uploaded = anthropic.files().upload(FileUploadParams.builder()
+          .file(fileField.build())
+          .build());
+
+  IO.println(uploaded.id());
+  ```
+
+  ```php PHP
+  // As a content block in a message
+  $resource = $mcp->readResource('file:///path/to/doc.txt');
+
+  $response = $anthropic->beta->messages->create(
+      maxTokens: 1024,
+      messages: [
+          [
+              'role' => 'user',
+              'content' => [
+                  BetaMcp::resourceToContent($resource),
+                  ['type' => 'text', 'text' => 'Summarize this document'],
+              ],
+          ],
+      ],
+      model: 'claude-opus-5-5',
+  );
+
+  echo $response, "\n";
+
+  // As a file upload
+  $fileResource = $mcp->readResource('file:///path/to/data.json');
+  $file = $anthropic->files->upload(file: BetaMcp::resourceToFile($fileResource));
+  echo $file->id, "\n";
+  ```
+
+  ```ruby Ruby
+  # As a content block in a message
+  resource = mcp_client.read_resource(uri: "file:///path/to/doc.txt")
+
+  response = anthropic.beta.messages.create(
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    messages: [
+      {
+        role: "user",
+        content: [
+          *Anthropic::Mcp.resource_to_contents(resource),
+          { type: "text", text: "Summarize this document" }
+        ]
+      }
+    ]
+  )
+
+  puts response
+
+  # As a file upload
+  file_resource = mcp_client.read_resource(uri: "file:///path/to/data.json")
+  file = Anthropic::Mcp.resource_to_files(file_resource).first
+  uploaded_file = anthropic.files.upload(file: file)
+  puts uploaded_file.id
+  ```
+</CodeGroup>
+
+### Error handling
+
+The conversion functions fail with `UnsupportedMCPValueError` (go: `UnsupportedValueError`; java, csharp: `AnthropicInvalidDataException`) if an MCP value isn't supported by the Claude API (thrown, or in Go returned as an error). This can happen with unsupported content types, MIME types, or resource links (resolve resource links with your MCP client before converting).
+
+## Batch requests
+
+You can include `mcp_servers` in [Message Batches API](https://platform.claude.com/docs/en/build-with-claude/batch-processing) requests. MCP tool calls through the Batches API are priced the same as those in regular Messages API requests.
+
+## Data retention
+
+The MCP connector is not covered by ZDR arrangements. Data exchanged with MCP servers, including tool definitions and execution results, is retained according to Anthropic's standard data retention policy.
+
+For ZDR eligibility across all features, see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
+
+## Migration guide
+
+If you're using the deprecated `mcp-client-2025-04-04` beta header, follow this guide to migrate to the new version.
+
+### Key changes
+
+1. **New beta header:** Change from `mcp-client-2025-04-04` to `mcp-client-2025-11-20`
+2. **Tool configuration moved:** Tool configuration now lives in the `tools` array as MCPToolset objects, not in the MCP server definition
+3. **More flexible configuration:** New pattern supports allowlisting, denylisting, and per-tool configuration
+
+### Migration steps
+
+**Before (deprecated):**
+
+```json
+{
+  "model": "claude-opus-5-5",
+  "max_tokens": 1000,
+  "messages": [
+    // ...
+  ],
+  "mcp_servers": [
+    {
+      "type": "url",
+      "url": "https://mcp.example.com/sse",
+      "name": "example-mcp",
+      "authorization_token": "YOUR_TOKEN",
+      "tool_configuration": {
+        "enabled": true,
+        "allowed_tools": ["tool1", "tool2"]
+      }
+    }
+  ]
+}
+```
+
+**After (current):**
+
+```json
+{
+  "model": "claude-opus-5-5",
+  "max_tokens": 1000,
+  "messages": [
+    // ...
+  ],
+  "mcp_servers": [
+    {
+      "type": "url",
+      "url": "https://mcp.example.com/sse",
+      "name": "example-mcp",
+      "authorization_token": "YOUR_TOKEN"
+    }
+  ],
+  "tools": [
+    {
+      "type": "mcp_toolset",
+      "mcp_server_name": "example-mcp",
+      "default_config": {
+        "enabled": false
+      },
+      "configs": {
+        "tool1": {
+          "enabled": true
+        },
+        "tool2": {
+          "enabled": true
+        }
+      }
+    }
+  ]
+}
+```
+
+### Common migration patterns
+
+| Old pattern                                 | New pattern                                                                             |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| No `tool_configuration` (all tools enabled) | MCPToolset with no `default_config` or `configs`                                        |
+| `tool_configuration.enabled: false`         | MCPToolset with `default_config.enabled: false`                                         |
+| `tool_configuration.allowed_tools: [...]`   | MCPToolset with `default_config.enabled: false` and specific tools enabled in `configs` |
+
+## Deprecated version: mcp-client-2025-04-04
+
+<Warning>
+  This version is deprecated. Migrate to `mcp-client-2025-11-20` using the preceding [migration guide](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector#migration-guide).
+</Warning>
+
+The previous version of the MCP connector included tool configuration directly in the MCP server definition:
+
+```json
+{
+  "mcp_servers": [
+    {
+      "type": "url",
+      "url": "https://example-server.modelcontextprotocol.io/sse",
+      "name": "example-mcp",
+      "authorization_token": "YOUR_TOKEN",
+      "tool_configuration": {
+        "enabled": true,
+        "allowed_tools": ["example_tool_1", "example_tool_2"]
+      }
+    }
+  ]
+}
+```
+
+### Deprecated field descriptions
+
+| Property                           | Type    | Description                                                        |
+| ---------------------------------- | ------- | ------------------------------------------------------------------ |
+| `tool_configuration`               | object  | **Deprecated:** Use MCPToolset in the `tools` array instead        |
+| `tool_configuration.enabled`       | boolean | **Deprecated:** Use `default_config.enabled` in MCPToolset         |
+| `tool_configuration.allowed_tools` | array   | **Deprecated:** Use allowlist pattern with `configs` in MCPToolset |
 
 ---
 
@@ -3225,6 +5348,8 @@ Inner TLS spans Anthropic's backend and your proxy. cloudflared and the tunnel e
 
 ```mermaid
 sequenceDiagram
+  accTitle: How a request reaches an MCP server through a tunnel
+  accDescr: cloudflared, the proxy, and the upstream MCP server run inside your network. cloudflared opens an outbound connection on port 7844 to the tunnel edge on the Cloudflare network. The connection stays open, and no inbound port is opened. The Anthropic backend sends an MCP request to the tunnel edge over outer mTLS. The edge carries it over the open connection to cloudflared, which passes it to the proxy on localhost:8080. Inner TLS spans the Anthropic backend to the proxy and terminates at the proxy. The proxy routes the request by hostname to the upstream MCP server. The response returns along the same path, reversed.
   participant A as Anthropic<br/>backend
   participant E as Tunnel edge<br/>(Cloudflare network)
   participant C as cloudflared
@@ -3278,7 +5403,7 @@ This page covers the Console side of an MCP tunnels deployment: creating a tunne
 
 <Steps>
   <Step title="Open the MCP tunnels page">
-    In the Console sidebar, go to **Manage > MCP tunnels**. Tunnels are workspace-scoped; the new tunnel belongs to the workspace currently selected in the Console, so switch workspaces first if you want it elsewhere.
+    In the Claude Console, go to the [MCP tunnels](https://platform.claude.com/settings/workspaces/default/mcp-tunnels) page (`platform.claude.com/settings/workspaces/default/mcp-tunnels`). Tunnels are workspace-scoped; the new tunnel belongs to the workspace currently selected in the Console. Select the workspace you want in the workspace picker in the sidebar.
   </Step>
 
   <Step title="Name the tunnel">
@@ -3290,9 +5415,9 @@ This page covers the Console side of an MCP tunnels deployment: creating a tunne
 
     Programmatic access relies on [Workload Identity Federation](https://platform.claude.com/docs/en/manage-claude/workload-identity-federation); read that page first if federation issuers, rules, and service accounts are unfamiliar. To turn the toggle on you need:
 
-    1. **A registered OIDC issuer** for the identity provider your stack presents tokens from (such as a Kubernetes cluster, AWS IAM, Google Cloud, or GitHub Actions). Register one under **Settings > Workload identity > Issuers** if your organization doesn't have one.
+    1. **A registered OIDC issuer** for the identity provider your stack presents tokens from (such as a Kubernetes cluster, AWS IAM, Google Cloud, or GitHub Actions). Register one on the **Issuers** tab of the [Workload identity](https://platform.claude.com/settings/workload-identity-federation) page (`platform.claude.com/settings/workload-identity-federation`) in the Claude Console if your organization doesn't have one.
     2. **A federation rule with the `workspace:manage_tunnels` scope.** Turning on the toggle reveals a **Federation rule** picker. Choose an existing rule with that scope, or click **Create federation rule** to create one inline.
-    3. **The rule's service account added to this workspace.** The Tunnels API authorizes against the service account's workspace memberships. If you're creating the tunnel in a workspace other than the organization's default, add the service account under **Settings > Workspaces** and pass the workspace ID at deploy time (`api.wif.workspaceId` for Helm, `ANTHROPIC_WORKSPACE_ID` for Compose).
+    3. **The rule's service account added to this workspace.** The Tunnels API authorizes against the service account's workspace memberships. If you're creating the tunnel in a workspace other than the organization's default, [add the service account to that workspace](https://platform.claude.com/docs/en/manage-claude/workspaces#role-inheritance) and pass the workspace ID at deploy time (`api.wif.workspaceId` for Helm, `ANTHROPIC_WORKSPACE_ID` for Compose).
 
     Skipping this step is fully supported; both deploy guides have a **Without programmatic access** tab.
   </Step>
@@ -3309,10 +5434,10 @@ This page covers the Console side of an MCP tunnels deployment: creating a tunne
 
     What else you need depends on the [credential-provisioning mode](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/concepts#credential-provisioning):
 
-    | With programmatic access                                                                                                                                                   | Without programmatic access                                                                                                                                                                                                                         |
-    | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | The **federation rule ID** (`fdrl_...`) of the rule you selected. The rule is org-level, not stored on the tunnel; find it under **Settings > Workload identity > Rules**. | The **tunnel token**, revealed with the eye icon next to **Token** on the detail page. Treat it as a secret. See [Get the connection details](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#get-the-connection-details). |
-    | The **organization ID** (a UUID), shown under **Settings > Organization**.                                                                                                 | A **CA certificate** that you generate and [register on the tunnel](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).                                                                                 |
+    | With programmatic access                                                                                                                                                                                                                                                                                                                                    | Without programmatic access                                                                                                                                                                                                                         |
+    | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+    | The **federation rule ID** (`fdrl_...`) of the rule you selected. The rule is org-level, not stored on the tunnel; find it on the **Rules** tab of the [Workload identity](https://platform.claude.com/settings/workload-identity-federation?tab=rules) page (`platform.claude.com/settings/workload-identity-federation?tab=rules`) in the Claude Console. | The **tunnel token**, revealed with the eye icon next to **Token** on the detail page. Treat it as a secret. See [Get the connection details](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#get-the-connection-details). |
+    | The **organization ID** (a UUID), shown on the [Organization](https://platform.claude.com/settings/organization) page (`platform.claude.com/settings/organization`) in the Claude Console.                                                                                                                                                                  | A **CA certificate** that you generate and [register on the tunnel](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).                                                                                 |
 
     With programmatic access, your stack fetches the tunnel token through the Tunnels API, generates the CA and server certificate locally (the private key never leaves your environment), and registers only the CA's public certificate with Anthropic. You're still responsible for securing the private keys and renewing the server certificate before it expires.
   </Step>
@@ -3376,8 +5501,8 @@ Once your stack is running and has one or more MCP servers configured, attach an
 </Note>
 
 <Steps>
-  <Step title="Open the New session modal">
-    Go to **Managed Agents > Sessions** and click **New session**.
+  <Step title="Open the Create session dialog">
+    In the Claude Console, go to the [Sessions](https://platform.claude.com/sessions) page (`platform.claude.com/sessions`) and click **Create session**.
   </Step>
 
   <Step title="Define an inline agent">
@@ -3401,7 +5526,7 @@ Once your stack is running and has one or more MCP servers configured, attach an
 
 Archiving immediately stops the tunnel from accepting connections and is permanent.
 
-In the **MCP tunnels** list, open the row menu for the tunnel and choose **Archive**. Archived tunnels remain visible when you filter the list by **Archived** or **All**.
+In the Claude Console, go to the [MCP tunnels](https://platform.claude.com/settings/workspaces/default/mcp-tunnels) page (`platform.claude.com/settings/workspaces/default/mcp-tunnels`). In the workspace picker in the sidebar, select the workspace that holds the tunnel. Open the row menu for the tunnel and choose **Archive**. Archived tunnels remain visible when you filter the list by **Archived** or **All**.
 
 ## Next steps
 
@@ -3417,7 +5542,7 @@ In the **MCP tunnels** list, open the row menu for the tunnel and choose **Archi
 
 ---
 
-## * [MCP tunnels reference](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/reference) for proxy configuration fields, certificate requirements, and the setup compone
+## * [MCP tunnels reference](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/reference)
 
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-compose
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-mcp-tunnels-deploy-compose.md`
@@ -3436,7 +5561,7 @@ You need:
 
 * **A way for the host to authenticate to the Tunnels API.**
 
-  * **Programmatic access (recommended).** Turn on **Set up programmatic access** when creating the tunnel (or create the federation rule directly under **Settings > Workload identity** if you're letting the setup component create the tunnel) so the setup component can authenticate through Workload Identity Federation. Record the federation rule ID (`fdrl_...`) and your organization ID.
+  * **Programmatic access (recommended).** Turn on **Set up programmatic access** when creating the tunnel so the setup component can authenticate through Workload Identity Federation. If you're letting the setup component create the tunnel, create the federation rule directly on the [Workload identity](https://platform.claude.com/settings/workload-identity-federation) page (`platform.claude.com/settings/workload-identity-federation`) in the Claude Console instead. Record the federation rule ID (`fdrl_...`) and your organization ID.
   * **Manual.** Skip programmatic access. You'll [get the tunnel token from the Console](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#get-the-connection-details), generate a CA and server certificate yourself, and [register the CA in the Console](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).
 
 * **A host with Docker and Docker Compose** installed. The manual flow also requires `openssl` (1.1.1 or later).
@@ -3456,10 +5581,12 @@ from mcp.server.fastmcp import FastMCP
 
 mcp = FastMCP("hello-server", host="0.0.0.0", port=9000)
 
+
 @mcp.tool()
 def hello(name: str = "world") -> str:
     """Say hello to someone."""
     return f"Hello, {name}!"
+
 
 if __name__ == "__main__":
     mcp.run(transport="streamable-http")
@@ -3704,7 +5831,7 @@ This guide provides one reference approach using Docker Compose. You are respons
         cat data/ca.crt
         ```
 
-        The tunnel's status flips to **Active** once a certificate is registered. See [Add a CA certificate](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).
+        The **Needs certificate** badge next to the tunnel's name goes away once a certificate is registered. See [Add a CA certificate](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/console#add-a-ca-certificate).
       </Step>
 
       <Step title="Write the proxy config">
@@ -3936,10 +6063,12 @@ data:
 
     mcp = FastMCP("hello-server", host="0.0.0.0", port=9000)
 
+
     @mcp.tool()
     def hello(name: str = "world") -> str:
         """Say hello to someone."""
         return f"Hello, {name}!"
+
 
     if __name__ == "__main__":
         mcp.run(transport="streamable-http")
@@ -4001,7 +6130,7 @@ The Install steps that follow note where to add the corresponding route.
           The chart's default audience is `api.anthropic.com` with no scheme, but the Console's federation-rule form suggests `https://api.anthropic.com`. The two must match byte-for-byte or authentication fails. Either set the rule's audience to `api.anthropic.com`, or set `api.wif.audience` in `values.yaml` to `https://api.anthropic.com`.
         </Note>
 
-        If the tunnel is in a workspace other than the organization's default, also add the rule's service account as a member of that workspace under **Settings > Workspaces** (the Tunnels API authorizes against the service account's workspace memberships).
+        If the tunnel is in a workspace other than the organization's default, also [add the rule's service account to that workspace](https://platform.claude.com/docs/en/manage-claude/workspaces#role-inheritance) (the Tunnels API authorizes against the service account's workspace memberships).
 
         Note the rule's ID (`fdrl_...`); you'll set it as `api.wif.federationRuleId`.
 
@@ -4075,7 +6204,7 @@ The Install steps that follow note where to add the corresponding route.
 
         The setup component runs as a Helm pre-install hook Job, so `helm install` blocks until it completes. On success Helm deletes the Job automatically. If `helm install` fails with a hook error, see [Setup component authentication failures](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/troubleshooting#setup-component-authentication-failures).
 
-        When `tunnel.id` is empty, the setup component creates the tunnel in the workspace your federation rule targets (the organization's default workspace unless you set `api.wif.workspaceId`) and stores its ID and domain in the `mcp-tunnel` Secret. Find the domain you'll need for [verification](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm#verify-the-deployment) on the tunnel's detail page in the Console under **Manage > MCP tunnels**, or read it from the Secret:
+        When `tunnel.id` is empty, the setup component creates the tunnel in the workspace your federation rule targets (the organization's default workspace unless you set `api.wif.workspaceId`) and stores its ID and domain in the `mcp-tunnel` Secret. Find the domain you'll need for [verification](https://platform.claude.com/docs/en/agents-and-tools/mcp-tunnels/deploy-helm#verify-the-deployment) on the tunnel's detail page, which you open from the [MCP tunnels](https://platform.claude.com/settings/workspaces/default/mcp-tunnels) page (`platform.claude.com/settings/workspaces/default/mcp-tunnels`) in the Console. In the workspace picker in the sidebar, select the workspace that holds the tunnel. You can also read the domain from the Secret:
 
         ```bash
         kubectl -n mcp-tunnel get secret mcp-tunnel \
@@ -4458,7 +6587,7 @@ In both cases, the tunnel carries encrypted traffic to your MCP server but does 
 
 ### Managed Agents (Console)
 
-1. In **Managed Agents > Sessions**, create a session and choose **Create new agent** so you can edit the MCP server list.
+1. On the [Sessions](https://platform.claude.com/sessions) page (`platform.claude.com/sessions`) in the Claude Console, create a session and choose **Create new agent** so you can edit the MCP server list.
 2. Click **+ MCP Server** and open the dropdown. Tunnels in the session's workspace that have at least one active certificate appear at the top of the list, above the public connector catalog.
 3. Select the tunnel and supply the **Subdomain** that your proxy routes to a specific MCP server, and the **Path** the upstream MCP server expects. The **Resolves to** line shows the exact URL.
 
@@ -4476,7 +6605,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: mcp-client-2025-11-20" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1000,
       "messages": [{"role": "user", "content": "Use the hello tool to greet tunnel."}],
       "mcp_servers": [
@@ -4492,7 +6621,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
 
   ```bash CLI
   ant beta:messages create --beta mcp-client-2025-11-20 <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1000
   messages:
     - role: user
@@ -4511,7 +6640,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
   client = anthropic.Anthropic()
 
   response = client.beta.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1000,
       messages=[{"role": "user", "content": "Use the hello tool to greet tunnel."}],
       mcp_servers=[
@@ -4532,7 +6661,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
   const anthropic = new Anthropic();
 
   const response = await anthropic.beta.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1000,
     messages: [
       {
@@ -4564,7 +6693,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
 
   var parameters = new MessageCreateParams
   {
-      Model = Messages::Model.ClaudeOpus5,
+      Model = Messages::Model.ClaudeOpus5_5,
       MaxTokens = 1000,
       Messages = new List<BetaMessageParam>
       {
@@ -4593,7 +6722,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
   client := anthropic.NewClient()
 
   response, err := client.Beta.Messages.New(context.TODO(), anthropic.BetaMessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1000,
   	Messages: []anthropic.BetaMessageParam{
   		anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("Use the hello tool to greet tunnel.")),
@@ -4629,7 +6758,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1000L)
           .addUserMessage("Use the hello tool to greet tunnel.")
           .addMcpServer(BetaRequestMcpServerUrlDefinition.builder()
@@ -4655,7 +6784,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
       messages: [
           ['role' => 'user', 'content' => 'Use the hello tool to greet tunnel.']
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       mcpServers: [
           [
               'type' => 'url',
@@ -4679,7 +6808,7 @@ The URL's host is `<subdomain>.<your-tunnel-domain>`. The path depends on your u
   client = Anthropic::Client.new
 
   response = client.beta.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1000,
     messages: [
       { role: "user", content: "Use the hello tool to greet tunnel." }
@@ -4751,7 +6880,7 @@ A two-container [tunnel stack](https://platform.claude.com/docs/en/agents-and-to
 
 <Steps>
   <Step title="Create a tunnel">
-    In the Claude Console sidebar, go to **Manage > MCP tunnels** and click **New tunnel**. Give it a name. Leave **Set up programmatic access** off; this quickstart uses manual credential provisioning.
+    In the Claude Console, go to the [MCP tunnels](https://platform.claude.com/settings/workspaces/default/mcp-tunnels) page (`platform.claude.com/settings/workspaces/default/mcp-tunnels`). Each tunnel belongs to one workspace. Select the workspace you want in the workspace picker in the sidebar. Click **New tunnel** and give it a name. Leave **Set up programmatic access** off; this quickstart uses manual credential provisioning.
 
     After it's created, open the tunnel. Copy two values from the **Connection** section:
 
@@ -4836,7 +6965,7 @@ A two-container [tunnel stack](https://platform.claude.com/docs/en/agents-and-to
       </Tab>
     </Tabs>
 
-    Back in the Console, on the tunnel detail page, click **Add certificate** and upload `data/ca.crt` (or paste its contents). The tunnel status flips to **Active**.
+    Back in the Console, on the tunnel detail page, click **Add certificate** and upload `data/ca.crt` (or paste its contents). The **Needs certificate** badge next to the tunnel's name goes away.
   </Step>
 
   <Step title="Write the sample MCP server">
@@ -4848,10 +6977,12 @@ A two-container [tunnel stack](https://platform.claude.com/docs/en/agents-and-to
 
         mcp = FastMCP("hello-server", host="0.0.0.0", port=9000)
 
+
         @mcp.tool()
         def hello(name: str = "world") -> str:
             """Say hello to someone."""
             return f"Hello, {name}!"
+
 
         if __name__ == "__main__":
             mcp.run(transport="streamable-http")
@@ -4866,10 +6997,12 @@ A two-container [tunnel stack](https://platform.claude.com/docs/en/agents-and-to
 
         mcp = FastMCP("hello-server", host="0.0.0.0", port=9000)
 
+
         @mcp.tool()
         def hello(name: str = "world") -> str:
             """Say hello to someone."""
             return f"Hello, {name}!"
+
 
         if __name__ == "__main__":
             mcp.run(transport="streamable-http")
@@ -4986,7 +7119,7 @@ A two-container [tunnel stack](https://platform.claude.com/docs/en/agents-and-to
   </Step>
 
   <Step title="Call it from Claude">
-    In the Console, go to **Managed Agents > Sessions** and create a session. In the agent picker choose **Create new agent**, give the agent a name, and keep the pre-filled model. Click **+ MCP Server**, select your tunnel, set **Subdomain** to `echo` and **Path** to `mcp`. Then ask:
+    In the Console, go to the [Sessions](https://platform.claude.com/sessions) page (`platform.claude.com/sessions`) and create a session. In the agent picker choose **Create new agent**, give the agent a name, and keep the pre-filled model. Click **+ MCP Server**, select your tunnel, set **Subdomain** to `echo` and **Path** to `mcp`. Then ask:
 
     > Use the hello tool to greet tunnel.
 
@@ -5052,7 +7185,7 @@ Each upstream value must be exactly `scheme://host:port`. The port is mandatory.
 The Tunnels REST API lives at `/v1/tunnels` and supports creating, listing, and archiving tunnels, registering CA certificates, and revealing or rotating the tunnel token. See the [Tunnels API reference](https://platform.claude.com/docs/en/api/beta/tunnels/list) for all endpoints, request and response schemas, and examples.
 
 <Note>
-  The previous Admin API surface at `/v1/organizations/tunnels` (beta header `mcp-tunnels-2026-05-19`, scope `org:manage_tunnels`) continues to work during a migration window and remains documented in the [Admin API reference](https://platform.claude.com/docs/en/api/admin/mcp_tunnels) with a deprecation notice. To migrate, update the path to `/v1/tunnels`, the beta header to `mcp-tunnels-2026-06-22`, and your WIF token scope to `workspace:manage_tunnels`.
+  The previous Admin API surface at `/v1/organizations/tunnels` (beta header `mcp-tunnels-2026-05-19`, scope `org:manage_tunnels`) continues to work during a migration window and remains documented in the [Admin API reference](https://platform.claude.com/docs/en/api/beta/organization/mcp_tunnels) with a deprecation notice. To migrate, update the path to `/v1/tunnels`, the beta header to `mcp-tunnels-2026-06-22`, and your WIF token scope to `workspace:manage_tunnels`.
 </Note>
 
 <Warning>
@@ -5366,6 +7499,7 @@ upstream:
   Avoid `0.0.0.0/0` outside of local testing; it disables SSRF protection entirely.
 </Warning>
 
+
 ### Claude on cloud platforms
 
 ---
@@ -5403,6 +7537,7 @@ For more information about using remote MCP servers with the Claude API, see [MC
   **Looking for more?** [Find hundreds more MCP servers on GitHub](https://github.com/modelcontextprotocol/servers).
 </Note>
 
+
 ### MCP > MCP tunnels
 
 ---
@@ -5418,6 +7553,8 @@ This pattern fits long-horizon agentic workloads (coding agents, computer use, m
 
 ```mermaid
 sequenceDiagram
+  accTitle: How the executor model consults the advisor model
+  accDescr: Your application sends a request with the advisor tool to the executor model, which begins the task. The executor emits a server_tool_use block, and Anthropic runs the advisor model server-side. The advisor reads the full transcript and returns strategic guidance in an advisor_tool_result. The executor continues, informed by the advice, and returns the response to your application.
   participant U as Your application
   participant E as Executor model
   participant A as Advisor model
@@ -5466,7 +7603,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
         {
           "type": "advisor_20260301",
           "name": "advisor",
-          "model": "claude-opus-5"
+          "model": "claude-opus-5-5"
         }
       ],
       "messages": [{
@@ -5483,7 +7620,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
   tools:
     - type: advisor_20260301
       name: advisor
-      model: claude-opus-5
+      model: claude-opus-5-5
   messages:
     - role: user
       content: Build a concurrent worker pool in Go with graceful shutdown.
@@ -5501,7 +7638,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
           {
               "type": "advisor_20260301",
               "name": "advisor",
-              "model": "claude-opus-5",
+              "model": "claude-opus-5-5",
           }
       ],
       messages=[
@@ -5526,7 +7663,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
       {
         type: "advisor_20260301",
         name: "advisor",
-        model: "claude-opus-5"
+        model: "claude-opus-5-5"
       }
     ],
     messages: [
@@ -5554,7 +7691,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
       {
           new BetaAdvisorTool20260301
           {
-              Model = Messages::Model.ClaudeOpus5
+              Model = Messages::Model.ClaudeOpus5_5
           }
       },
       Messages =
@@ -5580,7 +7717,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
   	MaxTokens: 4096,
   	Tools: []anthropic.BetaToolUnionParam{
   		{OfAdvisorTool20260301: &anthropic.BetaAdvisorTool20260301Param{
-  			Model: anthropic.ModelClaudeOpus5,
+  			Model: anthropic.ModelClaudeOpus5_5,
   		}},
   	},
   	Messages: []anthropic.BetaMessageParam{
@@ -5609,7 +7746,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
           .model(Model.CLAUDE_SONNET_5)
           .maxTokens(4096L)
           .addTool(BetaAdvisorTool20260301.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .build())
           .addUserMessage("Build a concurrent worker pool in Go with graceful shutdown.")
           .addBeta("advisor-tool-2026-03-01")
@@ -5636,7 +7773,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
           [
               'type' => 'advisor_20260301',
               'name' => 'advisor',
-              'model' => 'claude-opus-5',
+              'model' => 'claude-opus-5-5',
           ],
       ],
       betas: ['advisor-tool-2026-03-01'],
@@ -5655,7 +7792,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
       {
         type: "advisor_20260301",
         name: "advisor",
-        model: "claude-opus-5"
+        model: "claude-opus-5-5"
       }
     ],
     messages: [
@@ -5671,7 +7808,7 @@ The advisor is a weaker fit for single-turn Q\&A (nothing to plan), pure pass-th
   ```
 </CodeGroup>
 
-The response `content` includes an `advisor_tool_result` block carrying the advisor's guidance. With `claude-opus-5` as the advisor, as in this quick start, the block's `content` field is an `advisor_redacted_result` variant (encrypted; the executor reads it server-side, but your client does not). To see the advice text directly in your response, use `claude-opus-4-8` as the advisor model instead, which returns the plaintext `advisor_result` variant. See [Result variants](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#result-variants) for both shapes side by side and which advisor models return which, and [Model compatibility](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#model-compatibility) for the full list of valid pairs.
+The response `content` includes an `advisor_tool_result` block carrying the advisor's guidance. With `claude-opus-5-5` as the advisor, as in this quick start, the block's `content` field is an `advisor_redacted_result` variant (encrypted; the executor reads it server-side, but your client does not). To see the advice text directly in your response, use `claude-opus-4-8` as the advisor model instead, which returns the plaintext `advisor_result` variant. See [Result variants](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#result-variants) for both shapes side by side and which advisor models return which, and [Model compatibility](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#model-compatibility) for the full list of valid pairs.
 
 ## How it works
 
@@ -5692,7 +7829,7 @@ The advisor itself runs without tools and without context management. Its thinki
 | ------------ | -------------- | -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `type`       | string         | *required*                 | Must be `"advisor_20260301"`.                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | `name`       | string         | *required*                 | Must be `"advisor"`.                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `model`      | string         | *required*                 | The advisor model ID, such as claude-opus-5. Billed at this model's rates for the sub-inference.                                                                                                                                                                                                                                                                                                                                                         |
+| `model`      | string         | *required*                 | The advisor model ID, such as claude-opus-5-5. Billed at this model's rates for the sub-inference.                                                                                                                                                                                                                                                                                                                                                       |
 | `max_uses`   | integer        | unlimited                  | Maximum number of advisor calls allowed in a single request. Once the executor reaches this cap, further advisor calls return an `advisor_tool_result_error` with `error_code: "max_uses_exceeded"` and the executor continues without further advice. This is a per-request cap, not a per-conversation cap. See [Cost control](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#cost-control) for conversation-level limits. |
 | `max_tokens` | integer        | advisor model's output cap | Caps the advisor's total output (thinking plus text) per call. Minimum 1024. See [Capping advisor output](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#capping-advisor-output).                                                                                                                                                                                                                                            |
 | `caching`    | object \| null | `null` (off)               | Enables [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) for the advisor's own transcript across calls within a conversation. See [Advisor prompt caching](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#advisor-prompt-caching).                                                                                                                                                     |
@@ -5705,7 +7842,7 @@ The advisor tool also accepts the generic properties available on any tool defin
 
 ### Successful advisor call
 
-When the advisor is called, a `server_tool_use` block is followed by an `advisor_tool_result` block in the assistant's content. The following example shows the plaintext `advisor_result` variant returned by a Claude Opus 4.8 advisor. The [Quick start](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#quick-start) uses Claude Opus 5, which returns the encrypted `advisor_redacted_result` variant instead; see [Result variants](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#result-variants) for both shapes side by side.
+When the advisor is called, a `server_tool_use` block is followed by an `advisor_tool_result` block in the assistant's content. The following example shows the plaintext `advisor_result` variant returned by a Claude Opus 4.8 advisor. The [Quick start](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#quick-start) uses Claude Opus 5.5, which returns the encrypted `advisor_redacted_result` variant instead; see [Result variants](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#result-variants) for both shapes side by side.
 
 ```json
 {
@@ -5749,7 +7886,7 @@ The `advisor_tool_result.content` field is a discriminated union. For successful
 | `advisor_redacted_result` | `encrypted_content`, `stop_reason` | The advisor model returns encrypted output.                         |
 
 <Note>
-  Claude Fable 5.1, Claude Mythos 5.1, Claude Opus 5, Claude Fable 5, and Claude Mythos 5 advisors return the encrypted `advisor_redacted_result`. Every other advisor model in the [compatibility table](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#model-compatibility) returns the plaintext `advisor_result`. To read the advice text in your own responses, use an advisor that returns plaintext, such as `claude-opus-4-8`, where your executor's row in the [compatibility table](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#model-compatibility) lists one. Claude Fable 5.1, Claude Mythos 5.1, Claude Opus 5, Claude Fable 5, and Claude Mythos 5 executors pair only with advisors that return the encrypted form, so on those executors the advice text isn't readable in the response.
+  Claude Sonnet 5.5, Claude Fable 5.1, Claude Mythos 5.1, Claude Opus 5.5, Claude Opus 5, Claude Fable 5, Claude Mythos 5, and Claude Haiku 5.5 advisors return the encrypted `advisor_redacted_result`. Every other advisor model in the [compatibility table](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#model-compatibility) returns the plaintext `advisor_result`. To read the advice text in your own responses, use an advisor that returns plaintext, such as `claude-opus-4-8`, where your executor's row in the [compatibility table](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#model-compatibility) lists one. Claude Sonnet 5.5, Claude Fable 5.1, Claude Mythos 5.1, Claude Opus 5.5, Claude Opus 5, Claude Fable 5, and Claude Mythos 5 executors pair only with advisors that return the encrypted form, so on those executors the advice text isn't readable in the response.
 </Note>
 
 Here is the same request sent twice, identical except for the advisor `model` in the tool definition, showing both variants.
@@ -5767,7 +7904,7 @@ With `"model": "claude-opus-4-8"`, the advice is plaintext:
 }
 ```
 
-With `"model": "claude-opus-5"`, the advice is encrypted:
+With `"model": "claude-opus-5-5"`, the advice is encrypted:
 
 ```json
 {
@@ -5817,7 +7954,7 @@ Advisor rate limits draw from the same per-model bucket as direct calls to the a
 
 ## Multi-turn conversations
 
-Pass the full assistant content, including `advisor_tool_result` blocks, back to the API on subsequent turns. Round-trip the result blocks verbatim: with a Claude Opus 5 advisor the result block's `content` is the encrypted `advisor_redacted_result` variant, and the server decrypts it and renders the advice into the executor's prompt on the next turn (see [Result variants](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#result-variants)). The mechanics are identical for any advisor model.
+Pass the full assistant content, including `advisor_tool_result` blocks, back to the API on subsequent turns. Round-trip the result blocks verbatim: with a Claude Opus 5.5 advisor the result block's `content` is the encrypted `advisor_redacted_result` variant, and the server decrypts it and renders the advice into the executor's prompt on the next turn (see [Result variants](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#result-variants)). The mechanics are identical for any advisor model.
 
 <CodeGroup exclude="shell">
   ```python Python
@@ -5827,7 +7964,7 @@ Pass the full assistant content, including `advisor_tool_result` blocks, back to
       {
           "type": "advisor_20260301",
           "name": "advisor",
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
       }
   ]
 
@@ -5868,7 +8005,7 @@ Pass the full assistant content, including `advisor_tool_result` blocks, back to
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5"
+      model: "claude-opus-5-5"
     }
   ];
 
@@ -5906,11 +8043,13 @@ Pass the full assistant content, including `advisor_tool_result` blocks, back to
   using Anthropic.Models.Beta.Messages;
   using Messages = Anthropic.Models.Messages;
 
-  var client = new AnthropicClient();
+  // Advisor calls run a second model inside the request, so allow more than the
+  // C# SDK's default non-streaming timeout, which it sizes from max_tokens.
+  var client = new AnthropicClient { Timeout = TimeSpan.FromMinutes(5) };
 
   var tools = new BetaToolUnion[]
   {
-      new BetaAdvisorTool20260301 { Model = Messages::Model.ClaudeOpus5 }
+      new BetaAdvisorTool20260301 { Model = Messages::Model.ClaudeOpus5_5 }
   };
 
   var messages = new List<BetaMessageParam>
@@ -5952,7 +8091,7 @@ Pass the full assistant content, including `advisor_tool_result` blocks, back to
 
   tools := []anthropic.BetaToolUnionParam{
   	{OfAdvisorTool20260301: &anthropic.BetaAdvisorTool20260301Param{
-  		Model: anthropic.ModelClaudeOpus5,
+  		Model: anthropic.ModelClaudeOpus5_5,
   	}},
   }
 
@@ -6007,7 +8146,7 @@ Pass the full assistant content, including `advisor_tool_result` blocks, back to
 
       List<BetaToolUnion> tools = List.of(
           BetaToolUnion.ofAdvisorTool20260301(
-              BetaAdvisorTool20260301.builder().model(Model.CLAUDE_OPUS_5).build()));
+              BetaAdvisorTool20260301.builder().model(Model.CLAUDE_OPUS_5_5).build()));
 
       List<BetaMessageParam> messages = new ArrayList<>();
       messages.add(BetaMessageParam.builder()
@@ -6053,7 +8192,7 @@ Pass the full assistant content, including `advisor_tool_result` blocks, back to
       [
           'type' => 'advisor_20260301',
           'name' => 'advisor',
-          'model' => 'claude-opus-5',
+          'model' => 'claude-opus-5-5',
       ],
   ];
 
@@ -6094,7 +8233,7 @@ Pass the full assistant content, including `advisor_tool_result` blocks, back to
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5"
+      model: "claude-opus-5-5"
     }
   ]
 
@@ -6141,7 +8280,7 @@ A response can end with `stop_reason: "pause_turn"` while an advisor call is sti
 
 ### Mid-conversation nudge for under-calling executors
 
-If a Haiku executor has not called the advisor in its first assistant turn, append a short reminder as an additional user message before the second assistant turn. In Anthropic's internal behavioral evaluation this raised task pass rates by roughly 7 percentage points on Haiku executors. On Sonnet executors, the plain-text nudge had no measurable effect in Anthropic's testing. The call-timing considerations that follow are especially relevant for Sonnet. Do not apply the nudge to Opus executors: On Opus it slightly lowered pass rates.
+If a Haiku executor has not called the advisor in its first assistant turn, append a short reminder as an additional user message before the second assistant turn. In Anthropic's internal behavioral evaluation on Claude Haiku 4.5 executors, this raised task pass rates by roughly 7 percentage points. On Sonnet executors, the plain-text nudge had no measurable effect in Anthropic's testing. The call-timing considerations that follow are especially relevant for Sonnet. Do not apply the nudge to Opus executors: On Opus it slightly lowered pass rates.
 
 With the default `NUDGE_TURN` of 2, the reminder typically arrives after the model has oriented on the task but before it has committed to an approach.
 
@@ -6157,6 +8296,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
   )
   MAX_TURNS = 10  # agent loop cap
 
+
   def run_your_tools(content):
       # Replace with your tool dispatch. Returns one tool_result block per tool_use block.
       return [
@@ -6169,8 +8309,13 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
           if block.type == "tool_use"
       ]
 
+
   tools = [
-      {"type": "advisor_20260301", "name": "advisor", "model": "claude-opus-5"},
+      {
+          "type": "advisor_20260301",
+          "name": "advisor",
+          "model": "claude-opus-5-5",
+      },
       # ... your other tools
   ]
   task = "Build a concurrent worker pool in Go with graceful shutdown."
@@ -6179,7 +8324,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
   for turn in range(1, MAX_TURNS + 1):
       response = client.beta.messages.create(
-          model="claude-haiku-4-5",
+          model="claude-haiku-5-5",
           max_tokens=4096,
           betas=["advisor-tool-2026-03-01"],
           tools=tools,
@@ -6190,10 +8335,10 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
           block.type == "server_tool_use" and block.name == "advisor"
           for block in response.content
       )
-      if response.stop_reason == "end_turn":
-          break
       if response.stop_reason == "pause_turn":
           continue  # server tool pending; re-send to let the API complete it
+      if response.stop_reason != "tool_use":
+          break  # end_turn, or a stop such as max_tokens that needs handling (see below)
 
       results = run_your_tools(response.content)  # list of tool_result blocks
       if results:
@@ -6227,7 +8372,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
   }
 
   const tools: Anthropic.Beta.Messages.BetaToolUnion[] = [
-    { type: "advisor_20260301", name: "advisor", model: "claude-opus-5" }
+    { type: "advisor_20260301", name: "advisor", model: "claude-opus-5-5" }
     // ... your other tools
   ];
   const task = "Build a concurrent worker pool in Go with graceful shutdown.";
@@ -6236,7 +8381,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
   for (let turn = 1; turn <= MAX_TURNS; turn++) {
     const response = await client.beta.messages.create({
-      model: "claude-haiku-4-5",
+      model: "claude-haiku-5-5",
       max_tokens: 4096,
       betas: ["advisor-tool-2026-03-01"],
       tools,
@@ -6248,11 +8393,11 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
       response.content.some(
         (block) => block.type === "server_tool_use" && block.name === "advisor"
       );
-    if (response.stop_reason === "end_turn") {
-      break;
-    }
     if (response.stop_reason === "pause_turn") {
       continue; // server tool pending; re-send to let the API complete it
+    }
+    if (response.stop_reason !== "tool_use") {
+      break; // end_turn, or a stop such as max_tokens that needs handling (see below)
     }
 
     const results = runYourTools(response.content); // list of tool_result blocks
@@ -6299,7 +8444,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
   var tools = new BetaToolUnion[]
   {
-      new BetaAdvisorTool20260301 { Model = Messages::Model.ClaudeOpus5 }
+      new BetaAdvisorTool20260301 { Model = Messages::Model.ClaudeOpus5_5 }
       // ... your other tools
   };
   var task = "Build a concurrent worker pool in Go with graceful shutdown.";
@@ -6310,7 +8455,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
   {
       var response = await client.Beta.Messages.Create(new MessageCreateParams
       {
-          Model = Messages::Model.ClaudeHaiku4_5,
+          Model = Messages::Model.ClaudeHaiku5_5,
           MaxTokens = 4096,
           Tools = tools,
           Messages = messages,
@@ -6327,13 +8472,13 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
               block.TryPickServerToolUse(out var serverToolUse)
               && serverToolUse.Name.Value() == Name.Advisor
           );
-      if (response.StopReason == BetaStopReason.EndTurn)
-      {
-          break;
-      }
       if (response.StopReason == BetaStopReason.PauseTurn)
       {
           continue; // server tool pending; re-send to let the API complete it
+      }
+      if (response.StopReason != BetaStopReason.ToolUse)
+      {
+          break; // end_turn, or a stop such as max_tokens that needs handling (see below)
       }
 
       var results = RunYourTools(response.Content); // list of tool_result blocks
@@ -6374,7 +8519,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
   	tools := []anthropic.BetaToolUnionParam{
   		{OfAdvisorTool20260301: &anthropic.BetaAdvisorTool20260301Param{
-  			Model: anthropic.ModelClaudeOpus5,
+  			Model: anthropic.ModelClaudeOpus5_5,
   		}},
   		// ... your other tools
   	}
@@ -6386,7 +8531,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
   	for turn := 1; turn <= maxTurns; turn++ {
   		response, err := client.Beta.Messages.New(context.TODO(), anthropic.BetaMessageNewParams{
-  			Model:     anthropic.ModelClaudeHaiku4_5,
+  			Model:     anthropic.ModelClaudeHaiku5_5,
   			MaxTokens: 4096,
   			Tools:     tools,
   			Messages:  messages,
@@ -6405,11 +8550,11 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
   				advisorCalled = true
   			}
   		}
-  		if response.StopReason == anthropic.BetaStopReasonEndTurn {
-  			break
-  		}
   		if response.StopReason == anthropic.BetaStopReasonPauseTurn {
   			continue // server tool pending; re-send to let the API complete it
+  		}
+  		if response.StopReason != anthropic.BetaStopReasonToolUse {
+  			break // end_turn, or a stop such as max_tokens that needs handling (see below)
   		}
 
   		results := runYourTools(response.Content) // list of tool_result blocks
@@ -6467,7 +8612,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
       List<BetaToolUnion> tools = List.of(
           BetaToolUnion.ofAdvisorTool20260301(
-              BetaAdvisorTool20260301.builder().model(Model.CLAUDE_OPUS_5).build())
+              BetaAdvisorTool20260301.builder().model(Model.CLAUDE_OPUS_5_5).build())
           // ... your other tools
       );
       String task = "Build a concurrent worker pool in Go with graceful shutdown.";
@@ -6480,7 +8625,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
       for (int turn = 1; turn <= MAX_TURNS; turn++) {
           BetaMessage response = client.beta().messages().create(MessageCreateParams.builder()
-              .model(Model.CLAUDE_HAIKU_4_5)
+              .model(Model.CLAUDE_HAIKU_5_5)
               .maxTokens(4096L)
               .tools(tools)
               .messages(messages)
@@ -6496,11 +8641,11 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
                   block.isServerToolUse()
                       && block.asServerToolUse().name().equals(BetaServerToolUseBlock.Name.ADVISOR));
           BetaStopReason stopReason = response.stopReason().orElse(null);
-          if (BetaStopReason.END_TURN.equals(stopReason)) {
-              break;
-          }
           if (BetaStopReason.PAUSE_TURN.equals(stopReason)) {
               continue; // server tool pending; re-send to let the API complete it
+          }
+          if (!BetaStopReason.TOOL_USE.equals(stopReason)) {
+              break; // end_turn, or a stop such as max_tokens that needs handling (see below)
           }
 
           List<BetaContentBlockParam> results = runYourTools(response.content()); // list of tool_result blocks
@@ -6547,7 +8692,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
   }
 
   $tools = [
-      ['type' => 'advisor_20260301', 'name' => 'advisor', 'model' => 'claude-opus-5'],
+      ['type' => 'advisor_20260301', 'name' => 'advisor', 'model' => 'claude-opus-5-5'],
       // ... your other tools
   ];
   $task = 'Build a concurrent worker pool in Go with graceful shutdown.';
@@ -6558,7 +8703,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
       $response = $client->beta->messages->create(
           maxTokens: 4096,
           messages: $messages,
-          model: 'claude-haiku-4-5',
+          model: 'claude-haiku-5-5',
           tools: $tools,
           betas: ['advisor-tool-2026-03-01'],
       );
@@ -6568,11 +8713,11 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
               $advisorCalled = true;
           }
       }
-      if ($response->stopReason === 'end_turn') {
-          break;
-      }
       if ($response->stopReason === 'pause_turn') {
           continue; // server tool pending; re-send to let the API complete it
+      }
+      if ($response->stopReason !== 'tool_use') {
+          break; // end_turn, or a stop such as max_tokens that needs handling (see below)
       }
 
       $results = runYourTools($response->content); // list of tool_result blocks
@@ -6605,7 +8750,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
   end
 
   tools = [
-    { type: "advisor_20260301", name: "advisor", model: "claude-opus-5" }
+    { type: "advisor_20260301", name: "advisor", model: "claude-opus-5-5" }
     # ... your other tools
   ]
   task = "Build a concurrent worker pool in Go with graceful shutdown."
@@ -6614,7 +8759,7 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
 
   (1..MAX_TURNS).each do |turn|
     response = client.beta.messages.create(
-      model: "claude-haiku-4-5",
+      model: "claude-haiku-5-5",
       max_tokens: 4096,
       tools: tools,
       messages: messages,
@@ -6624,8 +8769,8 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
     advisor_called ||= response.content.any? do |block|
       block.type == :server_tool_use && block.name == :advisor
     end
-    break if response.stop_reason == :end_turn
     next if response.stop_reason == :pause_turn # server tool pending; re-send to let the API complete it
+    break unless response.stop_reason == :tool_use # end_turn, or a stop such as max_tokens that needs handling (see below)
 
     results = run_your_tools(response.content) # list of tool_result blocks
     messages << { role: "user", content: results } unless results.empty?
@@ -6635,13 +8780,15 @@ With the default `NUDGE_TURN` of 2, the reminder typically arrives after the mod
   ```
 </CodeGroup>
 
-Append the nudge as its own user message after the tool results rather than as a sibling block in the same message. Consecutive user messages are valid. In Anthropic's testing on Haiku and Sonnet executors they behaved equivalently to a sibling block. The separate-message shape also keeps the reminder clearly distinct from tool output.
+The loop ends on any stop reason other than `tool_use` or `pause_turn`. If `max_tokens` cuts a response off, drop the truncated assistant turn from `messages` and [retry with a higher `max_tokens`](https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons#max-tokens). When that turn contains no `tool_use` block, you can instead keep it and [continue the response](https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons#ensuring-complete-responses) with a new user message. Re-sending the truncated assistant turn as the last message is a [prefill](https://platform.claude.com/docs/en/api/errors#prefill-not-supported), which Claude 4.6 and later models reject.
+
+Append the nudge as its own user message after the tool results rather than as a sibling block in the same message. Consecutive user messages are valid. In Anthropic's testing on Claude Haiku 4.5 and Sonnet executors they behaved equivalently to a sibling block. The separate-message shape also keeps the reminder clearly distinct from tool output.
 
 **Trade-offs:** The nudge raises the call rate, which can push trivially simple tasks into an unnecessary consult. If your workload mixes simple and complex tasks, consider raising `NUDGE_TURN` to 3 so two-turn tasks complete before the nudge fires, or gate the nudge on a task-complexity signal you already compute. If your system prompt already contains restraint language ("reserve the advisor for genuine uncertainty"), skip the nudge entirely, because the two instructions conflict.
 
-The plain-text nudge is highly salient on Haiku and Sonnet executors: 74 percent (Sonnet) to 98 percent (Haiku) of nudged attempts in Anthropic's testing called the advisor immediately at turn 2. If that lands before your executor has read the problem or gathered context, the resulting advisor call is low-context and can displace a better-timed later call. Measure your executor's baseline first-call turn before adding the nudge. If the executor already calls the advisor reliably and its first call typically lands at turn N, set `NUDGE_TURN` greater than N. In Anthropic's testing, a turn-2 nudge on workloads where the baseline first call was turn 7 or later correlated with a 3 to 4 percentage-point task-performance drop. On a browse workload where the baseline call rate was 86 percent, the same nudge raised engagement with no task-performance cost.
+The plain-text nudge is highly salient on Claude Haiku 4.5 and Sonnet executors: 74 percent (Sonnet) to 98 percent (Claude Haiku 4.5) of nudged attempts in Anthropic's testing called the advisor immediately at turn 2. If that lands before your executor has read the problem or gathered context, the resulting advisor call is low-context and can displace a better-timed later call. Measure your executor's baseline first-call turn before adding the nudge. If the executor already calls the advisor reliably and its first call typically lands at turn N, set `NUDGE_TURN` greater than N. In Anthropic's testing, a turn-2 nudge on workloads where the baseline first call was turn 7 or later correlated with a 3 to 4 percentage-point task-performance drop. On a browse workload where the baseline call rate was 86 percent, the same nudge raised engagement with no task-performance cost.
 
-To force a consult on a specific request instead of nudging, set `tool_choice` to `{"type": "tool", "name": "advisor"}`, subject to the constraints in [Forcing tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools#forcing-tool-use). Forcing tool use cannot be combined with manual extended thinking (`thinking: {type: "enabled"}`): the API returns a `400 invalid_request_error` if you enable both. Adaptive thinking supports forced tool use. Claude Fable 5.1 and Claude Mythos 5.1 executors reject `tool_choice` types `tool` and `any`, so use the prompt nudge on those models instead.
+To force a consult on a specific request instead of nudging, set `tool_choice` to `{"type": "tool", "name": "advisor"}`, subject to the constraints in [Forcing tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools#forcing-tool-use). Forcing tool use cannot be combined with manual extended thinking (`thinking: {type: "enabled"}`): the API returns a `400 invalid_request_error` if you enable both. Adaptive thinking supports forced tool use. Claude Opus 5.5, Claude Sonnet 5.5, Claude Fable 5.1, and Claude Mythos 5.1 executors reject `tool_choice` types `tool` and `any`, so use the prompt nudge on those models instead.
 
 ## Streaming
 
@@ -6674,7 +8821,7 @@ Advisor calls run as a separate sub-inference billed at the advisor model's rate
       },
       {
         "type": "advisor_message",
-        "model": "claude-opus-5",
+        "model": "claude-opus-5-5",
         "input_tokens": 823,
         "cache_read_input_tokens": 0,
         "cache_creation_input_tokens": 0,
@@ -6720,7 +8867,7 @@ Set `caching` on the tool definition to enable prompt caching for the advisor's 
       {
           "type": "advisor_20260301",
           "name": "advisor",
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
           "caching": {"type": "ephemeral", "ttl": "5m"},
       }
   ]
@@ -6731,7 +8878,7 @@ Set `caching` on the tool definition to enable prompt caching for the advisor's 
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       caching: { type: "ephemeral", ttl: "5m" }
     }
   ];
@@ -6745,7 +8892,7 @@ Set `caching` on the tool definition to enable prompt caching for the advisor's 
   {
       new BetaAdvisorTool20260301
       {
-          Model = Messages::Model.ClaudeOpus5,
+          Model = Messages::Model.ClaudeOpus5_5,
           Caching = new BetaCacheControlEphemeral { Ttl = Ttl.Ttl5m }
       }
   };
@@ -6754,7 +8901,7 @@ Set `caching` on the tool definition to enable prompt caching for the advisor's 
   ```go Go
   tools := []anthropic.BetaToolUnionParam{
   	{OfAdvisorTool20260301: &anthropic.BetaAdvisorTool20260301Param{
-  		Model:   anthropic.ModelClaudeOpus5,
+  		Model:   anthropic.ModelClaudeOpus5_5,
   		Caching: anthropic.BetaCacheControlEphemeralParam{TTL: anthropic.BetaCacheControlEphemeralTTLTTL5m},
   	}},
   }
@@ -6768,7 +8915,7 @@ Set `caching` on the tool definition to enable prompt caching for the advisor's 
 
   List<BetaToolUnion> tools = List.of(
       BetaToolUnion.ofAdvisorTool20260301(BetaAdvisorTool20260301.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .caching(BetaCacheControlEphemeral.builder()
               .ttl(BetaCacheControlEphemeral.Ttl.TTL_5M)
               .build())
@@ -6780,7 +8927,7 @@ Set `caching` on the tool definition to enable prompt caching for the advisor's 
       [
           'type' => 'advisor_20260301',
           'name' => 'advisor',
-          'model' => 'claude-opus-5',
+          'model' => 'claude-opus-5-5',
           'caching' => ['type' => 'ephemeral', 'ttl' => '5m'],
       ],
   ];
@@ -6791,7 +8938,7 @@ Set `caching` on the tool definition to enable prompt caching for the advisor's 
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       caching: { type: "ephemeral", ttl: "5m" }
     }
   ]
@@ -6805,7 +8952,7 @@ The advisor's prompt on the Nth call is the (N-1)th call's prompt with one more 
 **Keep it consistent:** Set `caching` once and leave it for the whole conversation. Toggling it off and on mid-conversation causes cache misses.
 
 <Warning>
-  [`clear_thinking`](https://platform.claude.com/docs/en/build-with-claude/context-editing) with a `keep` value other than `"all"` shifts the advisor's quoted transcript each turn, causing advisor-side cache misses. This is a cost degradation only. Advice quality is unaffected. When extended thinking is enabled without explicit `clear_thinking` configuration, the API defaults to `keep: {type: "thinking_turns", value: 1}`, which triggers this behavior (the default on earlier Opus/Sonnet models and all Haiku models, whereas on Opus 4.5+ and Sonnet 4.6+ the default is to keep all turns). Set `keep: "all"` to preserve advisor cache stability.
+  [`clear_thinking`](https://platform.claude.com/docs/en/build-with-claude/context-editing) with a `keep` value other than `"all"` shifts the advisor's quoted transcript each turn, causing advisor-side cache misses. This is a cost degradation only. Advice quality is unaffected. When thinking is on without explicit `clear_thinking` configuration, the API defaults to `keep: {type: "thinking_turns", value: 1}`, which triggers this behavior (the default on earlier Opus and Sonnet models and on Haiku models through Claude Haiku 4.5; on Claude Opus 4.5 and later Opus models, Claude Sonnet 4.6 and later Sonnet models, and Claude Haiku 5.5, the default is to keep all turns). Set `keep: "all"` to preserve advisor cache stability.
 </Warning>
 
 ## Combining with other tools
@@ -6823,7 +8970,7 @@ The advisor tool composes with other server-side and client-side tools. Add them
       {
           "type": "advisor_20260301",
           "name": "advisor",
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
       },
       {
           "name": "run_bash",
@@ -6846,7 +8993,7 @@ The advisor tool composes with other server-side and client-side tools. Add them
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5"
+      model: "claude-opus-5-5"
     },
     {
       name: "run_bash",
@@ -6867,7 +9014,7 @@ The advisor tool composes with other server-side and client-side tools. Add them
   var tools = new BetaToolUnion[]
   {
       new BetaWebSearchTool20250305 { MaxUses = 5 },
-      new BetaAdvisorTool20260301 { Model = Messages::Model.ClaudeOpus5 },
+      new BetaAdvisorTool20260301 { Model = Messages::Model.ClaudeOpus5_5 },
       new BetaTool
       {
           Name = "run_bash",
@@ -6889,7 +9036,7 @@ The advisor tool composes with other server-side and client-side tools. Add them
   		MaxUses: anthropic.Int(5),
   	}},
   	{OfAdvisorTool20260301: &anthropic.BetaAdvisorTool20260301Param{
-  		Model: anthropic.ModelClaudeOpus5,
+  		Model: anthropic.ModelClaudeOpus5_5,
   	}},
   	{OfTool: &anthropic.BetaToolParam{
   		Name:        "run_bash",
@@ -6916,7 +9063,7 @@ The advisor tool composes with other server-side and client-side tools. Add them
           .maxUses(5L)
           .build()),
       BetaToolUnion.ofAdvisorTool20260301(BetaAdvisorTool20260301.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .build()),
       BetaToolUnion.ofBetaTool(BetaTool.builder()
           .name("run_bash")
@@ -6938,7 +9085,7 @@ The advisor tool composes with other server-side and client-side tools. Add them
       [
           'type' => 'advisor_20260301',
           'name' => 'advisor',
-          'model' => 'claude-opus-5',
+          'model' => 'claude-opus-5-5',
       ],
       [
           'name' => 'run_bash',
@@ -6961,7 +9108,7 @@ The advisor tool composes with other server-side and client-side tools. Add them
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5"
+      model: "claude-opus-5-5"
     },
     {
       name: "run_bash",
@@ -6980,7 +9127,7 @@ The executor can search the web, call the advisor, and use your custom tools in 
 | Feature                                                                                    | Interaction                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [Batch processing](https://platform.claude.com/docs/en/build-with-claude/batch-processing) | Supported. `usage.iterations` is reported per item.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| [Token counting](https://platform.claude.com/docs/en/build-with-claude/token-counting)     | Returns the executor's first-iteration input tokens only. For a rough advisor estimate, call `count_tokens` with `model` set to the advisor model and the same messages.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| [Token counting](https://platform.claude.com/docs/en/build-with-claude/token-counting)     | Returns the executor's first-iteration input tokens only. For a rough advisor estimate, call `client.beta.messages.count_tokens()` (typescript: `client.beta.messages.countTokens()`; go, csharp: `client.Beta.Messages.CountTokens()`; java: `client.beta().messages().countTokens()`; php: `$client->beta->messages->countTokens()`; cli: `ant beta:messages count-tokens`; curl: `POST /v1/messages/count_tokens`) with `model` set to the advisor model and the same messages.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | [Context editing](https://platform.claude.com/docs/en/build-with-claude/context-editing)   | `clear_tool_uses` is not fully compatible with advisor tool blocks. With `clear_thinking`, see the earlier caching warning.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
 | `pause_turn`                                                                               | A dangling advisor call ends the response with `stop_reason: "pause_turn"` and a `server_tool_use` block with no result when no client `tool_use` block is awaiting your result in the same turn. The advisor runs on resumption. If the executor also called one of your tools in that turn, the response ends with `stop_reason: "tool_use"` instead, and the pending advisor call runs at the start of your next request, after you send the `tool_result` blocks. See [Resuming a paused turn](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool#resuming-a-paused-turn), [Mixing server tools and client tools in one turn](https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools#mixing-server-tools-and-client-tools-in-one-turn), and [Server tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools#the-server-side-loop-and-pause-turn). |
 
@@ -7093,7 +9240,7 @@ Set `max_tokens` on the tool definition to cap the advisor's total output (think
       {
           "type": "advisor_20260301",
           "name": "advisor",
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
           "max_tokens": 2048,
       }
   ]
@@ -7104,7 +9251,7 @@ Set `max_tokens` on the tool definition to cap the advisor's total output (think
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 2048
     }
   ];
@@ -7118,7 +9265,7 @@ Set `max_tokens` on the tool definition to cap the advisor's total output (think
   {
       new BetaAdvisorTool20260301
       {
-          Model = Messages::Model.ClaudeOpus5,
+          Model = Messages::Model.ClaudeOpus5_5,
           MaxTokens = 2048
       }
   };
@@ -7127,7 +9274,7 @@ Set `max_tokens` on the tool definition to cap the advisor's total output (think
   ```go Go
   tools := []anthropic.BetaToolUnionParam{
   	{OfAdvisorTool20260301: &anthropic.BetaAdvisorTool20260301Param{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: anthropic.Int(2048),
   	}},
   }
@@ -7140,7 +9287,7 @@ Set `max_tokens` on the tool definition to cap the advisor's total output (think
 
   List<BetaToolUnion> tools = List.of(
       BetaToolUnion.ofAdvisorTool20260301(BetaAdvisorTool20260301.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(2048L)
           .build()));
   ```
@@ -7150,7 +9297,7 @@ Set `max_tokens` on the tool definition to cap the advisor's total output (think
       [
           'type' => 'advisor_20260301',
           'name' => 'advisor',
-          'model' => 'claude-opus-5',
+          'model' => 'claude-opus-5-5',
           'max_tokens' => 2048,
       ],
   ];
@@ -7161,7 +9308,7 @@ Set `max_tokens` on the tool definition to cap the advisor's total output (think
     {
       type: "advisor_20260301",
       name: "advisor",
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 2048
     }
   ]
@@ -7213,19 +9360,22 @@ For coding tasks, pairing a Sonnet executor at medium [effort](https://platform.
 
 The executor model (the top-level `model` field) and the advisor model (the `model` field inside the tool definition) must form a valid pair. The advisor must be Claude Sonnet 4.6 or a more capable model, and it must be at least as capable as the executor. Models of equal capability (for example, Claude Opus 4.7 and Claude Opus 4.8) can advise each other.
 
-| Executor models                       | Advisor models                                                                                                                                                                                                                                                                                                                                          |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Haiku 4.5 (claude-haiku-4-5)   | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5) Claude Opus 4.8 (claude-opus-4-8) Claude Opus 4.7 (claude-opus-4-7) Claude Opus 4.6 (claude-opus-4-6) Claude Sonnet 5 (claude-sonnet-5) Claude Sonnet 4.6 (claude-sonnet-4-6) |
-| Claude Sonnet 4.6 (claude-sonnet-4-6) | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5) Claude Opus 4.8 (claude-opus-4-8) Claude Opus 4.7 (claude-opus-4-7) Claude Opus 4.6 (claude-opus-4-6) Claude Sonnet 5 (claude-sonnet-5) Claude Sonnet 4.6 (claude-sonnet-4-6) |
-| Claude Sonnet 5 (claude-sonnet-5)     | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5) Claude Opus 4.8 (claude-opus-4-8) Claude Opus 4.7 (claude-opus-4-7) Claude Sonnet 5 (claude-sonnet-5)                                                                         |
-| Claude Opus 4.6 (claude-opus-4-6)     | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5) Claude Opus 4.8 (claude-opus-4-8) Claude Opus 4.7 (claude-opus-4-7) Claude Opus 4.6 (claude-opus-4-6) Claude Sonnet 5 (claude-sonnet-5)                                       |
-| Claude Opus 4.7 (claude-opus-4-7)     | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5) Claude Opus 4.8 (claude-opus-4-8) Claude Opus 4.7 (claude-opus-4-7)                                                                                                           |
-| Claude Opus 4.8 (claude-opus-4-8)     | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5) Claude Opus 4.8 (claude-opus-4-8) Claude Opus 4.7 (claude-opus-4-7)                                                                                                           |
-| Claude Opus 5 (claude-opus-5)         | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5)                                                                                                                                                                               |
-| Claude Fable 5 (claude-fable-5)       | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5)                                                                                                                                                                               |
-| Claude Mythos 5 (claude-mythos-5)     | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1) Claude Mythos 5 (claude-mythos-5) Claude Fable 5 (claude-fable-5) Claude Opus 5 (claude-opus-5)                                                                                                                                                                               |
-| Claude Fable 5.1 (claude-fable-5-1)   | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1)                                                                                                                                                                                                                                                                               |
-| Claude Mythos 5.1 (claude-mythos-5-1) | Claude Mythos 5.1 (claude-mythos-5-1) Claude Fable 5.1 (claude-fable-5-1)                                                                                                                                                                                                                                                                               |
+| Executor models                       | Advisor models                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Haiku 4.5 (claude-haiku-4-5)   | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Opus 4.8 (claude-opus-4-8)<br />Claude Opus 4.7 (claude-opus-4-7)<br />Claude Opus 4.6 (claude-opus-4-6)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)<br />Claude Sonnet 5 (claude-sonnet-5)<br />Claude Sonnet 4.6 (claude-sonnet-4-6)<br />Claude Haiku 5.5 (claude-haiku-5-5) |
+| Claude Haiku 5.5 (claude-haiku-5-5)   | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Opus 4.8 (claude-opus-4-8)<br />Claude Opus 4.7 (claude-opus-4-7)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)<br />Claude Sonnet 5 (claude-sonnet-5)<br />Claude Haiku 5.5 (claude-haiku-5-5)                                                                                   |
+| Claude Sonnet 4.6 (claude-sonnet-4-6) | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Opus 4.8 (claude-opus-4-8)<br />Claude Opus 4.7 (claude-opus-4-7)<br />Claude Opus 4.6 (claude-opus-4-6)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)<br />Claude Sonnet 5 (claude-sonnet-5)<br />Claude Sonnet 4.6 (claude-sonnet-4-6)<br />Claude Haiku 5.5 (claude-haiku-5-5) |
+| Claude Sonnet 5 (claude-sonnet-5)     | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Opus 4.8 (claude-opus-4-8)<br />Claude Opus 4.7 (claude-opus-4-7)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)<br />Claude Sonnet 5 (claude-sonnet-5)<br />Claude Haiku 5.5 (claude-haiku-5-5)                                                                                   |
+| Claude Sonnet 5.5 (claude-sonnet-5-5) | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)                                                                                                                                                                                                                                                 |
+| Claude Opus 4.6 (claude-opus-4-6)     | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Opus 4.8 (claude-opus-4-8)<br />Claude Opus 4.7 (claude-opus-4-7)<br />Claude Opus 4.6 (claude-opus-4-6)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)<br />Claude Sonnet 5 (claude-sonnet-5)<br />Claude Haiku 5.5 (claude-haiku-5-5)                                            |
+| Claude Opus 4.7 (claude-opus-4-7)     | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Opus 4.8 (claude-opus-4-8)<br />Claude Opus 4.7 (claude-opus-4-7)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)                                                                                                                                                                   |
+| Claude Opus 4.8 (claude-opus-4-8)     | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)<br />Claude Opus 4.8 (claude-opus-4-8)<br />Claude Opus 4.7 (claude-opus-4-7)<br />Claude Sonnet 5.5 (claude-sonnet-5-5)                                                                                                                                                                   |
+| Claude Opus 5 (claude-opus-5)         | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)                                                                                                                                                                                                                                                                                            |
+| Claude Opus 5.5 (claude-opus-5-5)     | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)                                                                                                                                                                                                                                                                                            |
+| Claude Fable 5 (claude-fable-5)       | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)                                                                                                                                                                                                                                                                                            |
+| Claude Mythos 5 (claude-mythos-5)     | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)<br />Claude Mythos 5 (claude-mythos-5)<br />Claude Fable 5 (claude-fable-5)<br />Claude Opus 5.5 (claude-opus-5-5)<br />Claude Opus 5 (claude-opus-5)                                                                                                                                                                                                                                                                                            |
+| Claude Fable 5.1 (claude-fable-5-1)   | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| Claude Mythos 5.1 (claude-mythos-5-1) | Claude Mythos 5.1 (claude-mythos-5-1)<br />Claude Fable 5.1 (claude-fable-5-1)                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 
 If you request an invalid pair, the API returns a `400 invalid_request_error` naming the unsupported combination.
 
@@ -7235,7 +9385,7 @@ The advisor tool is available in beta on the Claude API and on [Claude Platform 
 
 ## Advisor on Claude Managed Agents
 
-[Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) sessions support an advisor as well, configured as part of the agent rather than as a tool definition: add a `{"type": "advisor", "model": ...}` entry to the agent's multiagent roster, and the session's primary thread can consult that model mid-turn. The roster entry takes no `max_uses`, `max_tokens`, or `caching` options, and advice is delivered as thread events on the session's event stream rather than as `advisor_tool_result` blocks in the response. See [Give the session an advisor](https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration#give-the-session-an-advisor).
+[Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) sessions support an advisor as well, configured as part of the agent rather than as a tool definition: set `"advisor": {"type": "enabled", "model": ...}` in the agent's `multiagent` block, and the session's primary thread can consult that model mid-turn. The setting takes no `max_uses`, `max_tokens`, or `caching` options, and advice is delivered as thread events on the session's event stream rather than as `advisor_tool_result` blocks in the response. See [Give the session an advisor](https://platform.claude.com/docs/en/managed-agents/multiagent-orchestration#give-the-session-an-advisor).
 
 ## Next steps
 
@@ -7290,7 +9440,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [
         {
@@ -7309,7 +9459,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
 
   ```bash CLI
   ant messages create \
-    --model claude-opus-5 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --tool '{type: bash_20250124, name: bash}' \
     --message '{role: user, content: List all Python files in the current directory.}'
@@ -7319,7 +9469,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[{"type": "bash_20250124", "name": "bash"}],
       messages=[
@@ -7334,7 +9484,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [{ type: "bash_20250124", name: "bash" }],
     messages: [
@@ -7354,7 +9504,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
   var response = await client.Messages.Create(
       new()
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = [new ToolBash20250124()],
           Messages =
@@ -7375,7 +9525,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfBashTool20250124: &anthropic.ToolBash20250124Param{}},
@@ -7398,7 +9548,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
 
       Message response = client.messages().create(
           MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024)
               .addTool(ToolBash20250124.builder().build())
               .addUserMessage("List all Python files in the current directory.")
@@ -7415,7 +9565,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
   $client = new Client();
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: [new ToolBash20250124()],
       messages: [
@@ -7430,7 +9580,7 @@ The current version of the tool is `bash_20250124`. For model support, beta head
   client = Anthropic::Client.new
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [{type: "bash_20250124", name: "bash"}],
     messages: [
@@ -7447,7 +9597,7 @@ Claude responds with `stop_reason: "tool_use"` and a `tool_use` block that conta
 ```json Output
 {
   "id": "msg_01XAbCDeFgHiJkLmNoPQrStU",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "stop_reason": "tool_use",
   "role": "assistant",
   "content": [
@@ -7517,7 +9667,7 @@ To handle `restart: true`, kill the shell process, start a new one, and return a
 
 `bash_20250124` is the current version of the tool, and it requires no beta header. Every model from Claude Sonnet 3.7 ([retired](https://platform.claude.com/docs/en/about-claude/model-deprecations)) onward accepts it, including all current Claude models.
 
-The original `bash_20241022` version works only with the October 2024 Claude Sonnet 3.5 model ([retired](https://platform.claude.com/docs/en/about-claude/model-deprecations)). Requests that use it need the `anthropic-beta: computer-use-2024-10-22` header, and the SDKs expose it only in their beta namespaces. New integrations should use `bash_20250124`.
+The original `bash_20241022` version works only with the October 2024 Claude Sonnet 3.5 model ([retired](https://platform.claude.com/docs/en/about-claude/model-deprecations)). Requests that use it need the `anthropic-beta: computer-use-2024-10-22` header, and the SDK exposes it only in its beta namespace. New integrations should use `bash_20250124`.
 
 ## Example: Multistep automation
 
@@ -7554,6 +9704,7 @@ Claude determines which command to run. Your application owns everything else: t
       import subprocess
       import uuid
 
+
       class BashSession:
           """A bash process that stays alive between commands so state persists."""
 
@@ -7584,6 +9735,7 @@ Claude determines which command to run. Your application owns everything else: t
               self.process.kill()
               self.process.wait()
               self.__init__()
+
 
       bash_session = BashSession()
       print(bash_session.execute_command("cd /tmp && pwd"))
@@ -8099,7 +10251,7 @@ Claude determines which command to run. Your application owns everything else: t
         -H "x-api-key: $ANTHROPIC_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -d '{
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
           "max_tokens": 1024,
           "tools": [
             {
@@ -8141,7 +10293,7 @@ Claude determines which command to run. Your application owns everything else: t
 
       ```bash CLI
       ant messages create <<'YAML'
-      model: claude-opus-5
+      model: claude-opus-5-5
       max_tokens: 1024
       tools:
         - type: bash_20250124
@@ -8170,7 +10322,7 @@ Claude determines which command to run. Your application owns everything else: t
       client = anthropic.Anthropic()
 
       response = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=1024,
           tools=[{"type": "bash_20250124", "name": "bash"}],
           messages=[
@@ -8206,7 +10358,7 @@ Claude determines which command to run. Your application owns everything else: t
       const client = new Anthropic();
 
       const response = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         tools: [{ type: "bash_20250124", name: "bash" }],
         messages: [
@@ -8247,7 +10399,7 @@ Claude determines which command to run. Your application owns everything else: t
       var response = await client.Messages.Create(
           new()
           {
-              Model = Model.ClaudeOpus5,
+              Model = Model.ClaudeOpus5_5,
               MaxTokens = 1024,
               Tools = [new ToolBash20250124()],
               Messages =
@@ -8296,7 +10448,7 @@ Claude determines which command to run. Your application owns everything else: t
       client := anthropic.NewClient()
 
       response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus5,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 1024,
       	Tools: []anthropic.ToolUnionParam{
       		{OfBashTool20250124: &anthropic.ToolBash20250124Param{}},
@@ -8337,7 +10489,7 @@ Claude determines which command to run. Your application owns everything else: t
           AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
           MessageCreateParams params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024)
               .addTool(ToolBash20250124.builder().build())
               .addUserMessage("List all Python files in the current directory.")
@@ -8379,7 +10531,7 @@ Claude determines which command to run. Your application owns everything else: t
       $client = new Client();
 
       $response = $client->messages->create(
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           maxTokens: 1024,
           tools: [new ToolBash20250124()],
           messages: [
@@ -8415,7 +10567,7 @@ Claude determines which command to run. Your application owns everything else: t
       client = Anthropic::Client.new
 
       response = client.messages.create(
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         tools: [{type: "bash_20250124", name: "bash"}],
         messages: [
@@ -8460,6 +10612,7 @@ Claude determines which command to run. Your application owns everything else: t
 
       ALLOWED_COMMANDS = {"ls", "cat", "echo", "pwd", "grep", "find", "wc", "head", "tail"}
       SHELL_OPERATORS = {"&&", "||", "|", ";", "&", ">", "<", ">>"}
+
 
       def validate_command(command):
           # Allow only commands from an explicit allowlist
@@ -8769,6 +10922,7 @@ When a command fails or the session breaks, tell Claude what happened. Return th
       import os
       import signal
 
+
       def execute_with_timeout(session, command, timeout=30):
           """Run a command in the session, replacing the session if the command hangs."""
           with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
@@ -9077,6 +11231,7 @@ When a command fails or the session breaks, tell Claude what happened. Return th
 
       logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
+
       def execute_and_log(session, command):
           """Run a command in the session and keep an audit record of it."""
           logging.info("command=%r", command)
@@ -9175,10 +11330,10 @@ Beyond isolation, add these controls:
 
 The bash tool definition adds the following input tokens to your request. This is in addition to the per-model [tool use system prompt](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview#pricing) that applies whenever any tool is present.
 
-| Model                                               | Additional input tokens |
-| --------------------------------------------------- | ----------------------- |
-| Claude Opus 5, Claude Opus 4.8, and Claude Opus 4.7 | 325 tokens              |
-| Claude Opus 4.6, Claude Sonnet 4.6, and earlier     | 244 tokens              |
+| Model                                                 | Additional input tokens |
+| ----------------------------------------------------- | ----------------------- |
+| Claude 4.7 and later models and Claude Mythos Preview | 325 tokens              |
+| Claude 4.6 and earlier models                         | 244 tokens              |
 
 Additional tokens are consumed by:
 
@@ -9245,11 +11400,1588 @@ The bash tool pairs well with the [Text editor tool](https://platform.claude.com
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-tool-use-browser-use-tool.md`
 
+<Note>
+  **Start with the SDK toolsets:** The Python and TypeScript SDKs have a browser toolset class, in beta. Start from [a partner's integration](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk#partner-integrations), or see [Browser and computer use with the SDK toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk). Use this page as the tool reference, or when you handle the tool calls yourself.
+</Note>
 
+The browser use tool lets Claude navigate, read, and interact with webpages in a browser that your application runs. Claude works with the page both through its structure (the accessibility tree, elements, forms, and tabs) and through screenshots and viewport coordinates.
+
+The tool is an Anthropic-defined [client toolset](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets): one `browser_toolset_20260801` entry in `tools` gives Claude 27 member tools by default, such as `navigate`, `read_page`, `left_click`, and `screenshot`, plus four more when you [enable them](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#enable-optional-member-tools). Your application runs every call against its own browser automation; nothing runs on Anthropic's side. The tool isn't currently available in [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/tools).
+
+Choose browser use when the task stays inside webpages and means acting on them, or when pages build their content with JavaScript. When a task needs a whole desktop, use the [computer use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool), which works through screenshots and coordinates alone. For reading pages you can point Claude to, or finding sources on the web, the [web fetch tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool) and [web search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool) are lighter. They're [server tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools) that the API runs for you, with no browser to operate.
+
+With browser use, Claude reads and acts on live webpages, so everything a page supplies is untrusted input and the actions Claude takes can have real effects. See [Security considerations](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#security-considerations) before you deploy.
+
+## Quick start
+
+The browser use tool is available on the Claude API and [Google Cloud](https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai): add one entry of type `browser_toolset_20260801`, with no `name`, to the `tools` array of a [Messages API](https://platform.claude.com/docs/en/api/messages/create) request.
+
+<CodeGroup>
+  ```bash cURL
+  curl https://api.anthropic.com/v1/messages \
+    -H "content-type: application/json" \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -d '{
+      "model": "claude-opus-5-5",
+      "max_tokens": 2048,
+      "tools": [
+        {
+          "type": "browser_toolset_20260801"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Open example.com/docs and tell me how to get started."
+        }
+      ]
+    }'
+  ```
+
+  ```bash CLI
+  ant messages create <<'YAML'
+  model: claude-opus-5-5
+  max_tokens: 2048
+  tools:
+    - type: browser_toolset_20260801
+  messages:
+    - role: user
+      content: Open example.com/docs and tell me how to get started.
+  YAML
+  ```
+
+  ```python Python
+  client = anthropic.Anthropic()
+
+  response = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=2048,
+      tools=[{"type": "browser_toolset_20260801"}],
+      messages=[
+          {
+              "role": "user",
+              "content": "Open example.com/docs and tell me how to get started.",
+          }
+      ],
+  )
+  print(response)
+  ```
+
+  ```typescript TypeScript
+  const client = new Anthropic();
+
+  const response = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 2048,
+    tools: [{ type: "browser_toolset_20260801" }],
+    messages: [
+      {
+        role: "user",
+        content: "Open example.com/docs and tell me how to get started."
+      }
+    ]
+  });
+
+  console.log(response);
+  ```
+
+  ```csharp C#
+  var client = new AnthropicClient();
+
+  var parameters = new MessageCreateParams
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 2048,
+      Tools = [new BrowserToolset20260801()],
+      Messages =
+      [
+          new MessageParam
+          {
+              Role = Role.User,
+              Content = "Open example.com/docs and tell me how to get started.",
+          },
+      ],
+  };
+
+  var response = await client.Messages.Create(parameters);
+  Console.WriteLine(response);
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+
+  response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 2048,
+  	Tools: []anthropic.ToolUnionParam{
+  		{OfBrowserToolset20260801: &anthropic.BrowserToolset20260801Param{}},
+  	},
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(anthropic.NewTextBlock("Open example.com/docs and tell me how to get started.")),
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response.RawJSON())
+  ```
+
+  ```java Java
+  import com.anthropic.models.messages.BrowserToolset20260801;
+  // ...
+
+  void main() {
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      MessageCreateParams params = MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(2048L)
+          .addTool(BrowserToolset20260801.builder().build())
+          .addUserMessage("Open example.com/docs and tell me how to get started.")
+          .build();
+
+      Message response = client.messages().create(params);
+      IO.println(response);
+  }
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  $response = $client->messages->create(
+      maxTokens: 2048,
+      messages: [
+          ['role' => 'user', 'content' => 'Open example.com/docs and tell me how to get started.'],
+      ],
+      model: 'claude-opus-5-5',
+      tools: [
+          ['type' => 'browser_toolset_20260801'],
+      ],
+  );
+
+  echo $response;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  response = client.messages.create(
+    model: "claude-opus-5-5",
+    max_tokens: 2048,
+    tools: [
+      { type: "browser_toolset_20260801" }
+    ],
+    messages: [
+      {
+        role: "user",
+        content: "Open example.com/docs and tell me how to get started."
+      }
+    ]
+  )
+
+  puts response
+  ```
+</CodeGroup>
+
+Claude's first response ends with `stop_reason: "tool_use"` and carries one or more member `tool_use` blocks, each naming a member tool in `name` and carrying `"toolset_name": "browser"`:
+
+```json Output
+{
+  "id": "msg_01HCDu4XSTLzTAcodEQ58vDo",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-opus-5-5",
+  "content": [
+    {
+      "type": "text",
+      "text": "I'll open the documentation and read the page to find the getting-started instructions."
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01NRLabsLyVHZPKxbKvkfSMn",
+      "name": "navigate",
+      "toolset_name": "browser",
+      "input": { "url": "https://example.com/docs" }
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01UvHU5cDyTZ2vXKf5wCkPqR",
+      "name": "read_page",
+      "toolset_name": "browser",
+      "input": { "filter": "interactive" }
+    }
+  ],
+  "stop_reason": "tool_use",
+  "stop_sequence": null
+}
+```
+
+Your executor (the part of your application that drives the browser and produces tool results) runs `navigate`, then `read_page`. Your application returns one `tool_result` per block in its next request, echoing `toolset_name` on each. The `navigate` result reports the tab it loaded in a `browser_state` block; the `read_page` result is text in which every element carries a reference:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01NRLabsLyVHZPKxbKvkfSMn",
+      "toolset_name": "browser",
+      "content": [
+        { "type": "text", "text": "Navigated to https://example.com/docs" },
+        {
+          "type": "browser_state",
+          "tabs": [
+            {
+              "tab_id": "tab-1",
+              "title": "Documentation",
+              "url": "https://example.com/docs",
+              "active": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01UvHU5cDyTZ2vXKf5wCkPqR",
+      "toolset_name": "browser",
+      "content": [
+        {
+          "type": "text",
+          "text": "link \"Documentation\" [ref_1]\nlink \"Getting started\" [ref_2]\ntextbox \"Search docs\" [ref_3]\nbutton \"Search\" [ref_4]\nlink \"Pricing\" [ref_5]"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Claude now holds references it can act on, so its next turn can click `ref_2` to open the getting-started page, with no need to locate the link in a screenshot first.
+
+## How browser use works
+
+Browser use runs as an agent loop in your application: Claude returns member tool calls, your executor runs them against the browser, and you return the results until Claude answers in text.
+
+<Steps>
+  <Step title="Provide Claude with the browser use tool and a user prompt">
+    * Add the `browser_toolset_20260801` entry, and optionally other tools, to your API request.
+    * Include a user prompt that calls for working with webpages, for example, "Open example.com/docs and tell me how to get started."
+  </Step>
+
+  <Step title="Claude responds with member tool calls">
+    * Claude returns one or more `tool_use` blocks in a single assistant turn; several in one turn form a batch action, for example, `left_click`, then `type`, then `key`.
+    * Each block's `name` is the member name, each carries `"toolset_name": "browser"`, and `input` holds only that member's parameters, with no `action` field. The response's `stop_reason` is `tool_use`.
+  </Step>
+
+  <Step title="Run the calls in order and return results">
+    * Iterate every `tool_use` block in `response.content` (don't assume there's exactly one) and run them sequentially, in the order they appear, because later calls usually depend on earlier ones.
+    * Return one `tool_result` per block in a new `user` message, matched by `tool_use_id`, and echo `"toolset_name": "browser"` on each. Every call must be answered or the next request is rejected.
+    * If a call fails, return `is_error: true` with a text description for that block, then apply the halt rule in [Batch actions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#batch-actions) to every later block in the turn.
+  </Step>
+
+  <Step title="Claude continues until the task is complete">
+    * Claude reads the results (page text, accessibility trees, screenshots, tab state) and, if it needs more, returns further member calls, which takes you back to step 3.
+    * Otherwise, it returns a text response to the user.
+  </Step>
+</Steps>
+
+Here's a skeleton of that loop's tool-call step in two parts. First, stub member handlers stand in for your browser automation. Five members (`navigate`, `read_page`, `left_click`, `type`, and `screenshot`) return the text, or for `screenshot` the image block, that becomes the result content, and the dispatcher raises an error for any member it doesn't implement.
+
+<CodeGroup exclude="shell">
+  ```python Python
+  # Placeholder image data; a real executor captures the viewport and returns the PNG bytes
+  PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+
+
+  def navigate(url):
+      return f"navigated to {url}"
+
+
+  def read_page():
+      return 'link "Docs" [ref_1]\nbutton "Search" [ref_2]'
+
+
+  def click(target):
+      # A target is an element reference from read_page or find, or a viewport coordinate
+      if target["type"] == "ref":
+          return f"clicked {target['ref']}"
+      return f"clicked at ({target['x']}, {target['y']})"
+
+
+  def type_text(text):
+      return f"typed: {text}"
+
+
+  def capture_screenshot() -> list[ImageBlockParam]:
+      # screenshot answers with an image block rather than text: return the result content list
+      return [
+          {
+              "type": "image",
+              "source": {"type": "base64", "media_type": "image/png", "data": PLACEHOLDER_PNG},
+          }
+      ]
+
+
+  def handle_browser_action(name, tool_input):
+      if name == "navigate":
+          return navigate(tool_input["url"])
+      elif name == "read_page":
+          return read_page()
+      elif name == "left_click":
+          return click(tool_input["target"])
+      elif name == "type":
+          return type_text(tool_input["text"])
+      elif name == "screenshot":
+          return capture_screenshot()
+      # Handle other actions as needed
+      raise ValueError(f"Unknown or unimplemented member: {name}")
+  ```
+
+  ```typescript TypeScript
+  // Placeholder image data; a real executor captures the viewport as PNG bytes
+  const PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
+  function navigate(url: string): string {
+    return `navigated to ${url}`;
+  }
+
+  function readPage(): string {
+    return 'link "Docs" [ref_1]\nbutton "Search" [ref_2]';
+  }
+
+  function clickElement(ref: string): string {
+    return `clicked ${ref}`;
+  }
+
+  function clickAt(x: number, y: number): string {
+    return `clicked at (${x}, ${y})`;
+  }
+
+  function typeText(text: string): string {
+    return `typed: ${text}`;
+  }
+
+  function captureScreenshot(): Anthropic.ImageBlockParam[] {
+    // screenshot answers with an image block rather than text
+    return [
+      {
+        type: "image",
+        source: {
+          type: "base64",
+          media_type: "image/png",
+          data: PLACEHOLDER_PNG,
+        },
+      },
+    ];
+  }
+
+  function handleBrowserAction(
+    action: string,
+    input: unknown,
+  ): string | Anthropic.ImageBlockParam[] {
+    const params: object =
+      typeof input === "object" && input !== null ? input : {};
+    if (action === "navigate" && "url" in params) {
+      return navigate(String(params.url));
+    } else if (action === "read_page") {
+      return readPage();
+    } else if (action === "left_click" && "target" in params) {
+      // target is an element reference from read_page or a viewport coordinate
+      const target: object =
+        typeof params.target === "object" && params.target !== null
+          ? params.target
+          : {};
+      if ("type" in target && target.type === "ref" && "ref" in target) {
+        return clickElement(String(target.ref));
+      } else if ("x" in target && "y" in target) {
+        return clickAt(Number(target.x), Number(target.y));
+      }
+    } else if (action === "type" && "text" in params) {
+      return typeText(String(params.text));
+    } else if (action === "screenshot") {
+      return captureScreenshot();
+    }
+    // Handle other actions as needed
+    throw new Error(`Unknown or unimplemented member: ${action}`);
+  }
+  ```
+
+  ```csharp C#
+  // Placeholder image data; a real executor captures the viewport and returns the PNG bytes
+  const string PlaceholderPng = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
+  string Navigate(string url) => $"navigated to {url}";
+
+  string ReadPage() =>
+      """
+      link "Docs" [ref_1]
+      button "Search" [ref_2]
+      """;
+
+  string ClickRef(string elementRef) => $"clicked {elementRef}";
+
+  string ClickAt(int x, int y) => $"clicked at ({x}, {y})";
+
+  // target is {"type": "ref", "ref": "ref_1"} or {"type": "coordinate", "x": 640, "y": 380}
+  string Click(JsonElement target) =>
+      target.GetProperty("type").GetString() == "ref"
+          ? ClickRef(target.GetProperty("ref").GetString()!)
+          : ClickAt(target.GetProperty("x").GetInt32(), target.GetProperty("y").GetInt32());
+
+  string TypeText(string text) => $"typed: {text}";
+
+  // screenshot answers with an image block rather than text: return the result content list
+  List<Block> CaptureScreenshot() =>
+      [
+          new ImageBlockParam(
+              new Base64ImageSource { Data = PlaceholderPng, MediaType = MediaType.ImagePng }
+          ),
+      ];
+
+  ToolResultBlockParamContent HandleBrowserAction(
+      string action,
+      IReadOnlyDictionary<string, JsonElement> input
+  ) =>
+      action switch
+      {
+          "navigate" => Navigate(input["url"].GetString()!),
+          "read_page" => ReadPage(),
+          "left_click" => Click(input["target"]),
+          "type" => TypeText(input["text"].GetString()!),
+          "screenshot" => CaptureScreenshot(),
+          // Handle other actions as needed
+          _ => throw new NotSupportedException($"Unknown or unimplemented member: {action}"),
+      };
+  ```
+
+  ```go Go
+  // placeholderPNG stands in for a real capture: an executor returns the
+  // viewport as base64-encoded PNG data.
+  const placeholderPNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+
+  // textContent wraps text as tool_result content.
+  func textContent(text string) []anthropic.ToolResultBlockParamContentUnion {
+  	return []anthropic.ToolResultBlockParamContentUnion{
+  		{OfText: &anthropic.TextBlockParam{Text: text}},
+  	}
+  }
+
+  func navigate(url string) string {
+  	return fmt.Sprintf("navigated to %s", url)
+  }
+
+  func readPage() string {
+  	return "link \"Docs\" [ref_1]\nbutton \"Search\" [ref_2]"
+  }
+
+  func clickRef(ref string) string {
+  	return fmt.Sprintf("clicked %s", ref)
+  }
+
+  func clickAt(x, y int) string {
+  	return fmt.Sprintf("clicked at (%d, %d)", x, y)
+  }
+
+  func typeText(text string) string {
+  	return fmt.Sprintf("typed: %s", text)
+  }
+
+  // captureScreenshot returns an image block rather than text.
+  func captureScreenshot() []anthropic.ToolResultBlockParamContentUnion {
+  	return []anthropic.ToolResultBlockParamContentUnion{{
+  		OfImage: &anthropic.ImageBlockParam{
+  			Source: anthropic.ImageBlockParamSourceUnion{
+  				OfBase64: &anthropic.Base64ImageSourceParam{
+  					MediaType: anthropic.Base64ImageSourceMediaTypeImagePNG,
+  					Data:      placeholderPNG,
+  				},
+  			},
+  		},
+  	}}
+  }
+
+  func handleBrowserAction(action string, params map[string]any) ([]anthropic.ToolResultBlockParamContentUnion, error) {
+  	switch action {
+  	case "navigate":
+  		if url, ok := params["url"].(string); ok {
+  			return textContent(navigate(url)), nil
+  		}
+  	case "read_page":
+  		return textContent(readPage()), nil
+  	case "left_click":
+  		// target is either an element reference from read_page or a viewport coordinate
+  		target, _ := params["target"].(map[string]any)
+  		if ref, ok := target["ref"].(string); ok && target["type"] == "ref" {
+  			return textContent(clickRef(ref)), nil
+  		}
+  		x, xok := target["x"].(float64)
+  		y, yok := target["y"].(float64)
+  		if xok && yok {
+  			return textContent(clickAt(int(x), int(y))), nil
+  		}
+  	case "type":
+  		if text, ok := params["text"].(string); ok {
+  			return textContent(typeText(text)), nil
+  		}
+  	case "screenshot":
+  		return captureScreenshot(), nil
+  	// Handle other actions as needed
+  	default:
+  		return nil, fmt.Errorf("unknown or unimplemented member: %s", action)
+  	}
+  	// Reached when a member's input is missing a field or a field has the wrong type
+  	return nil, fmt.Errorf("invalid input for %s", action)
+  }
+
+  ```
+
+  ```java Java
+  /** Placeholder pixels; a real executor captures the viewport and base64-encodes the PNG. */
+  static final String PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
+  ToolResultBlockParam.Content captureScreenshot() {
+      ImageBlockParam image = ImageBlockParam.builder()
+              .source(Base64ImageSource.builder()
+                      .mediaType(Base64ImageSource.MediaType.IMAGE_PNG)
+                      .data(PLACEHOLDER_PNG)
+                      .build())
+              .build();
+      return ToolResultBlockParam.Content.ofBlocks(
+              List.of(ToolResultBlockParam.Content.Block.ofImage(image)));
+  }
+
+  String navigate(String url) {
+      return "navigated to " + url;
+  }
+
+  String readPage() {
+      return """
+              link "Docs" [ref_1]
+              button "Search" [ref_2]""";
+  }
+
+  String clickRef(String ref) {
+      return "clicked " + ref;
+  }
+
+  String clickAt(long x, long y) {
+      return "clicked at (" + x + ", " + y + ")";
+  }
+
+  String typeText(String text) {
+      return "typed: " + text;
+  }
+
+  /** Runs one browser toolset member; {@code action} is the tool_use block's name. */
+  ToolResultBlockParam.Content handleBrowserAction(String action, Map<String, JsonValue> input) {
+      if (action.equals("screenshot")) {
+          return captureScreenshot(); // the one member here that answers with an image block
+      }
+      String output = switch (action) {
+          case "navigate" -> navigate(input.get("url").asStringOrThrow());
+          case "read_page" -> readPage();
+          case "left_click" -> {
+              // target is {"type": "ref", "ref": "ref_1"} or {"type": "coordinate", "x": 640, "y": 380}
+              Map<String, JsonValue> target =
+                      (Map<String, JsonValue>) input.get("target").asObject().get();
+              if (target.get("type").asStringOrThrow().equals("ref")) {
+                  yield clickRef(target.get("ref").asStringOrThrow());
+              }
+              long x = ((Number) target.get("x").asNumber().get()).longValue();
+              long y = ((Number) target.get("y").asNumber().get()).longValue();
+              yield clickAt(x, y);
+          }
+          case "type" -> typeText(input.get("text").asStringOrThrow());
+          // Handle other actions as needed
+          default -> throw new UnsupportedOperationException("Unknown or unimplemented member: " + action);
+      };
+      return ToolResultBlockParam.Content.ofString(output);
+  }
+  ```
+
+  ```php PHP
+  // Stand-in for real PNG bytes; a real executor captures the viewport
+  const PLACEHOLDER_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+
+  function navigateTo(string $url): string
+  {
+      return "navigated to {$url}";
+  }
+
+  function readPage(): string
+  {
+      return <<<'TEXT'
+          link "Docs" [ref_1]
+          button "Search" [ref_2]
+          TEXT;
+  }
+
+  function clickTarget(array $target): string
+  {
+      // A target is an element reference from read_page or find, or a viewport pixel coordinate
+      if ($target['type'] === 'ref') {
+          return "clicked {$target['ref']}";
+      }
+
+      return "clicked at ({$target['x']}, {$target['y']})";
+  }
+
+  function typeText(string $text): string
+  {
+      return "typed: {$text}";
+  }
+
+  function captureScreenshot(): array
+  {
+      // screenshot answers with an image block rather than text, so return the result content list
+      $image = [
+          'type' => 'image',
+          'source' => ['type' => 'base64', 'media_type' => 'image/png', 'data' => PLACEHOLDER_PNG],
+      ];
+
+      return [$image];
+  }
+
+  function handleBrowserAction(string $name, array $input): string|array
+  {
+      return match ($name) {
+          'navigate' => navigateTo($input['url']),
+          'read_page' => readPage(),
+          'left_click' => clickTarget($input['target']),
+          'type' => typeText($input['text']),
+          'screenshot' => captureScreenshot(),
+          // Handle other actions as needed
+          default => throw new \RuntimeException("Unknown or unimplemented member: {$name}"),
+      };
+  }
+  ```
+
+  ```ruby Ruby
+  # Stand-in image data; a real executor captures the viewport as a PNG.
+  PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+
+  def navigate(url)
+    "navigated to #{url}"
+  end
+
+  def read_page
+    <<~TREE
+      link "Docs" [ref_1]
+      button "Search" [ref_2]
+    TREE
+  end
+
+  def click(target)
+    return "clicked #{target[:ref]}" if target[:type] == "ref"
+
+    "clicked at (#{target[:x]}, #{target[:y]})"
+  end
+
+  def type_text(text)
+    "typed: #{text}"
+  end
+
+  def capture_screenshot
+    [
+      {
+        type: "image",
+        source: { type: "base64", media_type: "image/png", data: PLACEHOLDER_PNG }
+      }
+    ]
+  end
+
+  def handle_browser_action(name, input)
+    case name
+    when "navigate"
+      navigate(input[:url])
+    when "read_page"
+      read_page
+    when "left_click"
+      # target is an element reference (from read_page or find) or a coordinate
+      click(input[:target])
+    when "type"
+      type_text(input[:text])
+    when "screenshot"
+      capture_screenshot
+    # Handle other actions as needed
+    else
+      raise ArgumentError, "Unknown or unimplemented member: #{name}"
+    end
+  end
+  ```
+</CodeGroup>
+
+The second part runs a batch in order, dispatches each block to those handlers, echoes `toolset_name` on every result, and applies the halt rule from [Batch actions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#batch-actions), turning a handler error into an error result. The sampling loop that calls it is the one shown in [Understand the agent loop](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#understanding-the-agentic-loop), with the browser toolset in `tools`.
+
+<CodeGroup exclude="shell">
+  ```python Python
+  NOT_EXECUTED = "Not executed: an earlier action in this turn failed."
+
+
+  def process_tool_calls(response: Message) -> list[ToolResultBlockParam]:
+      """
+      Run the browser actions in Claude's response in order and answer each
+      one. After the first failure the rest are skipped, because Claude planned
+      them assuming the earlier actions succeeded.
+      """
+      tool_results: list[ToolResultBlockParam] = []
+      failed = False
+      for block in response.content:
+          # Only the browser toolset is declared; route other tools here if you add them
+          if block.type != "tool_use" or block.toolset_name != "browser":
+              continue
+          result: ToolResultBlockParam = {
+              "type": "tool_result",
+              "tool_use_id": block.id,
+              "toolset_name": "browser",
+          }
+          if failed:
+              result["content"] = NOT_EXECUTED
+              result["is_error"] = True
+          else:
+              try:
+                  # A string or a list of content blocks; a real executor also adds a
+                  # browser_state block to navigation and tab-management results
+                  result["content"] = handle_browser_action(block.name, block.input)
+              except Exception as err:
+                  result["content"] = f"Error: {err}"
+                  result["is_error"] = True
+                  failed = True
+          tool_results.append(result)
+      return tool_results
+  ```
+
+  ```typescript TypeScript
+  const HALT_TEXT = "Not executed: an earlier action in this turn failed.";
+
+  function browserResult(
+    toolUseId: string,
+    content: string | Anthropic.ImageBlockParam[],
+    isError?: boolean,
+  ): Anthropic.ToolResultBlockParam {
+    return {
+      type: "tool_result",
+      tool_use_id: toolUseId,
+      toolset_name: "browser",
+      content,
+      is_error: isError,
+    };
+  }
+
+  function processToolCalls(
+    response: Anthropic.Message,
+  ): Anthropic.ToolResultBlockParam[] {
+    const toolResults: Anthropic.ToolResultBlockParam[] = [];
+    let failed = false;
+    for (const block of response.content) {
+      if (block.type !== "tool_use") {
+        continue;
+      }
+      if (block.toolset_name !== "browser") {
+        // This example declares only the browser toolset; route other tools
+        // here if you add them.
+        continue;
+      }
+      if (failed) {
+        // A batch stops at its first failure; answer later actions unexecuted
+        toolResults.push(browserResult(block.id, HALT_TEXT, true));
+        continue;
+      }
+      try {
+        // A string or an image block list; a real executor also adds a
+        // browser_state block to navigation and tab-management results
+        const result = handleBrowserAction(block.name, block.input);
+        toolResults.push(browserResult(block.id, result));
+      } catch (error) {
+        failed = true;
+        const message = error instanceof Error ? error.message : String(error);
+        toolResults.push(browserResult(block.id, `Error: ${message}`, true));
+      }
+    }
+    return toolResults;
+  }
+  ```
+
+  ```csharp C#
+  const string HaltText = "Not executed: an earlier action in this turn failed.";
+
+  List<ContentBlockParam> ProcessToolCalls(Message response)
+  {
+      List<ContentBlockParam> toolResults = [];
+      var failed = false;
+      foreach (var block in response.Content)
+      {
+          if (!block.TryPickToolUse(out var toolUse))
+          {
+              continue;
+          }
+
+          if (toolUse.ToolsetName != "browser")
+          {
+              // This example declares only the browser toolset; route other tools
+              // here if you add them.
+              continue;
+          }
+
+          if (failed)
+          {
+              // A batch stops at its first failure; answer later actions without running them
+              toolResults.Add(
+                  new ToolResultBlockParam(toolUse.ID)
+                  {
+                      Content = HaltText,
+                      IsError = true,
+                      ToolsetName = "browser",
+                  }
+              );
+              continue;
+          }
+
+          try
+          {
+              // A string or a list of content blocks; a real executor also adds a
+              // browser_state block to navigation and tab-management results
+              var result = HandleBrowserAction(toolUse.Name, toolUse.Input);
+              toolResults.Add(
+                  new ToolResultBlockParam(toolUse.ID) { Content = result, ToolsetName = "browser" }
+              );
+          }
+          catch (Exception e)
+          {
+              failed = true;
+              toolResults.Add(
+                  new ToolResultBlockParam(toolUse.ID)
+                  {
+                      Content = $"Error: {e.Message}",
+                      IsError = true,
+                      ToolsetName = "browser",
+                  }
+              );
+          }
+      }
+      return toolResults;
+  }
+  ```
+
+  ```go Go
+  const notExecuted = "Not executed: an earlier action in this turn failed."
+
+  // browserToolResult builds the result for one browser action. Unlike an
+  // ordinary tool result, it must echo the toolset name. A real executor also
+  // adds a browser_state block to navigation and tab-management results.
+  func browserToolResult(toolUseID string, content []anthropic.ToolResultBlockParamContentUnion, isError bool) anthropic.ContentBlockParamUnion {
+  	result := anthropic.ToolResultBlockParam{
+  		ToolUseID:   toolUseID,
+  		ToolsetName: anthropic.String("browser"),
+  		Content:     content,
+  	}
+  	if isError {
+  		result.IsError = anthropic.Bool(true)
+  	}
+  	return anthropic.ContentBlockParamUnion{OfToolResult: &result}
+  }
+
+  // processToolCalls runs the browser actions in Claude's response in order and
+  // builds one tool_result per tool_use block. After the first failure it skips
+  // the rest: Claude planned them assuming the earlier actions succeeded.
+  func processToolCalls(response *anthropic.Message) []anthropic.ContentBlockParamUnion {
+  	var toolResults []anthropic.ContentBlockParamUnion
+  	failed := false
+  	for _, block := range response.Content {
+  		switch variant := block.AsAny().(type) {
+  		case anthropic.ToolUseBlock:
+  			// This example declares only the browser toolset; route other tools here if you add them.
+  			if variant.ToolsetName != "browser" {
+  				continue
+  			}
+  			if failed {
+  				toolResults = append(toolResults, browserToolResult(variant.ID, textContent(notExecuted), true))
+  				continue
+  			}
+  			var input map[string]any
+  			var content []anthropic.ToolResultBlockParamContentUnion
+  			err := json.Unmarshal(variant.Input, &input)
+  			if err == nil {
+  				content, err = handleBrowserAction(variant.Name, input)
+  			}
+  			if err != nil {
+  				failed = true
+  				content = textContent("Error: " + err.Error())
+  			}
+  			toolResults = append(toolResults, browserToolResult(variant.ID, content, err != nil))
+  		}
+  	}
+  	return toolResults
+  }
+
+  ```
+
+  ```java Java
+  /** The exact text the toolset contract prescribes for member calls skipped after a failure. */
+  static final String HALT_TEXT = "Not executed: an earlier action in this turn failed.";
+
+  /** Every result answering a browser toolset member echoes toolset_name. */
+  ToolResultBlockParam.Builder browserResult(ToolUseBlock toolUse) {
+      return ToolResultBlockParam.builder()
+              .toolUseId(toolUse.id())
+              .toolsetName("browser");
+  }
+
+  /**
+   * Run the browser actions in Claude's response in order and build one
+   * tool_result per tool_use block. After the first failure, skip the rest:
+   * Claude planned them assuming the earlier actions succeeded.
+   */
+  List<ContentBlockParam> processToolCalls(Message response) {
+      List<ContentBlockParam> toolResults = new ArrayList<>();
+      boolean failed = false;
+      for (ContentBlock block : response.content()) {
+          // This example declares only the browser toolset; route other tools here if you add them.
+          if (!block.isToolUse() || !block.asToolUse().toolsetName().equals(Optional.of("browser"))) {
+              continue;
+          }
+          ToolUseBlock toolUse = block.asToolUse();
+          ToolResultBlockParam result;
+          if (failed) {
+              result = browserResult(toolUse).content(HALT_TEXT).isError(true).build();
+          } else {
+              try {
+                  Map<String, JsonValue> input =
+                          (Map<String, JsonValue>) toolUse._input().asObject().get();
+                  ToolResultBlockParam.Content output = handleBrowserAction(toolUse.name(), input);
+                  // A real executor also adds a browser_state block to navigation and
+                  // tab-management results; see "Track tabs with browser_state" on this page.
+                  result = browserResult(toolUse).content(output).build();
+              } catch (RuntimeException e) {
+                  failed = true;
+                  result = browserResult(toolUse).content("Error: " + e.getMessage()).isError(true).build();
+              }
+          }
+          toolResults.add(ContentBlockParam.ofToolResult(result));
+      }
+      return toolResults;
+  }
+  ```
+
+  ```php PHP
+  const HALT_TEXT = 'Not executed: an earlier action in this turn failed.';
+
+  function processToolCalls(Message $response): array
+  {
+      $toolResults = [];
+      $failed = false;
+      foreach ($response->content as $block) {
+          // This example declares only the browser toolset; route other tools here if you add them.
+          if (!($block instanceof \Anthropic\Messages\ToolUseBlock) || $block->toolsetName !== 'browser') {
+              continue;
+          }
+          $result = ['type' => 'tool_result', 'tool_use_id' => $block->id, 'toolset_name' => 'browser'];
+          if ($failed) {
+              // A batch stops at its first failure; the remaining actions are answered without running
+              $toolResults[] = [...$result, 'content' => HALT_TEXT, 'is_error' => true];
+              continue;
+          }
+          try {
+              // A real executor also returns a browser_state block on navigation and tab-management results
+              $toolResults[] = [...$result, 'content' => handleBrowserAction($block->name, $block->input)];
+          } catch (\Throwable $e) {
+              $failed = true;
+              $toolResults[] = [...$result, 'content' => 'Error: ' . $e->getMessage(), 'is_error' => true];
+          }
+      }
+
+      return $toolResults;
+  }
+  ```
+
+  ```ruby Ruby
+  NOT_EXECUTED = "Not executed: an earlier action in this turn failed."
+
+  # Run the browser actions in Claude's response in order and build one
+  # tool_result per tool_use block. After the first failure, skip the rest:
+  # Claude planned them assuming the earlier actions succeeded.
+  def process_tool_calls(response)
+    tool_results = []
+    failed = false
+    response.content.each do |block|
+      # This example declares only the browser toolset; route other tools here
+      # if you add them.
+      next unless block.type == :tool_use && block.toolset_name == "browser"
+
+      result = { type: "tool_result", tool_use_id: block.id, toolset_name: "browser" }
+      if failed
+        result.update(content: NOT_EXECUTED, is_error: true)
+      else
+        begin
+          # A String, or content blocks for a screenshot. A real executor also adds
+          # a browser_state block to navigation and tab-management results.
+          result[:content] = handle_browser_action(block.name, block.input)
+        rescue => e
+          result.update(content: "Error: #{e.message}", is_error: true)
+          failed = true
+        end
+      end
+      tool_results << result
+    end
+    tool_results
+  end
+  ```
+</CodeGroup>
+
+Dispatch each block on the pair (`toolset_name`, `name`) rather than on `name` alone, because a custom tool in the same request may share a member's name; [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets) describes the parts of this contract both toolsets share. If Claude names a member your executor doesn't implement, or one you disabled, answer that block with an [error result](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#return-errors-from-your-executor) rather than dropping it.
+
+When you stream the response, each member's `input` arrives as one complete `input_json_delta` rather than as fragments, so wait for the turn to finish before running the batch.
+
+### Batch actions
+
+A turn with several member calls is a batch action: run the calls in the order they appear, stop at the first failure, and answer every later call with `is_error: true` and the exact text `Not executed: an earlier action in this turn failed.` A batch uses the same response shape as [parallel tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use); the difference is that you run the blocks in order rather than concurrently. Here Claude clicks the search box it found earlier, types a query, and presses Enter in one turn:
+
+```json
+{
+  "role": "assistant",
+  "content": [
+    {
+      "type": "tool_use",
+      "id": "toolu_01D7FLrfh4GYq7yT1ULFeyMV",
+      "name": "left_click",
+      "toolset_name": "browser",
+      "input": { "target": { "type": "ref", "ref": "ref_3" } }
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01Ez4kLb1nQ2vXo8sJ9pWm3c",
+      "name": "type",
+      "toolset_name": "browser",
+      "input": { "text": "install" }
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01FkP8rTz6uYh2mNq4LsXw7v",
+      "name": "key",
+      "toolset_name": "browser",
+      "input": { "text": "Enter" }
+    }
+  ]
+}
+```
+
+Your application returns three `tool_result` blocks in one `user` message, each carrying `toolset_name` and a short text acknowledgment such as `Clicked element ref_3.` Pressing Enter loads a results page, so the `key` result also carries a `browser_state` block with the tab's updated URL ([Tab context on other results](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#tab-context-on-other-results)). If the click had failed instead, its result would carry your error text and the other two results would carry the halt text, as shown under [Return errors from your executor](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#return-errors-from-your-executor).
+
+You don't need to return a screenshot after every call. Claude typically ends a batch with an observation call (`screenshot`, `read_page`, or `get_page_text`), and your application can also attach its own observation, such as a fresh screenshot or accessibility tree, as an extra content block on the last result in the batch to save a round trip. Because a tab-management result must be exactly one `browser_state` block, attach it to the last result that isn't a tab-management call.
+
+If your executor can run only one call per round trip, set `disable_parallel_tool_use` to `true` in `tool_choice` and Claude returns at most one member call per turn, at the cost of more round trips ([Disable parallel tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use#disable-parallel-tool-use)). The rest of the contract under [Batch actions for the computer use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions) carries over, including one `tool_result` for every `tool_use` in the next `user` message, except for two things: the halt text and what a successful result's `content` holds. Result content follows [Member tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#member-tools) on this page instead: a `new_tab`, `switch_tab`, `close_tab`, or `list_tabs` result is exactly one `browser_state` block with no text or image ([Tab management results](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#tab-management-results)), and any other member's result may add a `browser_state` block to its text or image ([Tab context on other results](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#tab-context-on-other-results)). Where cache breakpoints inside a batch take effect is described in the `cache_control` row of the computer use tool's [Tool parameters](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#tool-parameters).
+
+### Targets and coordinates
+
+Member tools that act on a location take a `target` object, which is either a viewport-pixel coordinate or a reference to an element that `read_page` or `find` returned. The [Member tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#member-tools) tables write `Target` for a parameter that accepts either shape.
+
+| Shape              | `target.type`  | Fields                                         | Accepted by                                                                                                                                                                               |
+| ------------------ | -------------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CoordinateTarget` | `"coordinate"` | `x`, `y` (integers, viewport pixels)           | `left_click`, `right_click`, `middle_click`, `double_click`, `triple_click`, `hover`, `left_click_drag` (`from` and `target`), `left_mouse_down`, `left_mouse_up`, `mouse_move`, `scroll` |
+| `RefTarget`        | `"ref"`        | `ref` (an element reference such as `"ref_2"`) | `left_click`, `right_click`, `middle_click`, `double_click`, `triple_click`, `hover`, `scroll_to`, `form_input`, `file_upload`                                                            |
+
+**Coordinates are viewport pixels**, the pixel space of a full-viewport `screenshot` with the origin at the top left of the rendered page; there's no surrounding desktop or window frame. The toolset declares no display dimensions and Claude infers the viewport size from the screenshots you return, so keep them one consistent size. A `zoom` doesn't change the frame, so its `region` and any coordinates Claude emits after seeing the zoomed image are still full-viewport pixels.
+
+**Screenshots must fit the image limits.** The API doesn't downscale toolset images: a screenshot or zoom image over your model's [image size limits](https://platform.claude.com/docs/en/build-with-claude/vision#evaluate-image-size), or over the stricter per-image limit that applies once a request holds [more than 20 images](https://platform.claude.com/docs/en/build-with-claude/vision#request-limits), is rejected. Resize before returning, and scale Claude's coordinates back up by the inverse of your factor before dispatching them ([Size screenshots to fit image limits](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#handle-coordinate-scaling-for-higher-resolutions)).
+
+**Element references come from `read_page` and `find`.** Each element in their output carries a tag such as `[ref_2]`, as in the Quick start result:
+
+```text wrap
+link "Documentation" [ref_1]
+link "Getting started" [ref_2]
+textbox "Search docs" [ref_3]
+button "Search" [ref_4]
+link "Pricing" [ref_5]
+```
+
+Claude passes a reference back as a `{"type": "ref", "ref": "ref_2"}` target on a later click, `hover`, `scroll_to`, `form_input`, or `file_upload` call, or as the `ref` parameter on `read_page` to read a subtree. Your executor assigns the references, keeps the mapping from each one to the underlying node (an accessibility-node ID, a stored selector, or equivalent), and acts on that node when a reference comes back.
+
+References are scoped to the tab that produced them and stay valid until that tab navigates or its DOM changes materially. The API can't detect a stale or unknown reference, so when Claude passes a reference your executor no longer recognizes, return an error result such as `Error: ref_3 is stale or not found on the current page. Re-read the page to get fresh references.` Claude then reads the page again. Don't renumber references you've already handed out for a tab until it navigates, because that silently invalidates references Claude still holds.
+
+Claude uses both targeting styles and switches between them based on what the page exposes; your prompt and what your executor returns steer the choice:
+
+* **Prefer references where the page has a usable accessibility tree.** A reference survives layout shifts and reflows that make pixel coordinates fragile, and lets Claude act on controls that are hard to hit with a pointer.
+* **Fall back to coordinates for content the tree doesn't describe.** Canvas-rendered interfaces, embedded video or remote-desktop surfaces, heavily virtualized lists, and elements inside cross-origin iframes often have no useful node, so Claude works from `screenshot` and `zoom` and clicks by coordinate; your executor resolves which frame a coordinate lands in.
+* **Scope reads, and read the tree before you screenshot.** On large pages, `read_page` with `filter: "interactive"` or the `ref` of a container returns a focused subtree, and a tree read of a typical page often costs fewer input tokens than a screenshot while giving Claude references it can act on immediately. Screenshots remain the right observation when visual layout, images, or rendering state matter.
+
+## Security considerations
+
+Browser use carries risks that standard API features don't, because Claude reads and acts on content from the open web, where any page can contain text written to manipulate it.
+
+<Warning>
+  To reduce these risks, take precautions such as the following:
+
+  1. Run the browser and your executor in a dedicated container or virtual machine with minimal privileges, a fresh profile that holds no credentials, and no access to sensitive filesystems or internal networks; isolate any tool you run alongside it the same way.
+  2. Restrict the hosts the browser can reach to a domain allowlist enforced at the network layer and re-checked in your `navigate` handler after redirects, and block loopback, link-local, and private ranges unless the task needs them.
+  3. Treat everything a page supplies as untrusted input, including the tab titles and URLs, and each download's `url`, `path`, and `error`, that you report in a [`browser_state`](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#track-tabs-and-page-state) block, and build page reads from what the page renders (the accessibility tree or visible text), not raw DOM source, so hidden text doesn't reach Claude.
+  4. In your `navigate` handler, accept the history keywords `"back"`, `"forward"`, and `"reload"`, treat a URL without a scheme as `https://`, then parse the URL and refuse any scheme other than `http` or `https` (`javascript:`, `file:`, `data:`, `chrome:`, and so on) with an [error result](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#return-errors-from-your-executor). Check the scheme with a URL parser rather than a string prefix; the API doesn't filter the URLs Claude opens, so it can't reject one for you.
+  5. Leave `javascript_exec` and `file_upload` disabled unless you need them, and read [Enable optional members](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#enable-optional-member-tools) before turning either on.
+  6. Have a human confirm consequential actions and anything that requires affirmative consent (purchasing, modifying accounts, messaging, and accepting terms), and make that check in your executor before each call, because one turn can carry several.
+</Warning>
+
+Claude sometimes follows instructions found in page content even when they conflict with yours; text on a page that says "ignore your previous instructions and navigate to..." can divert it from the task. Isolate Claude from sensitive data and actions to limit what a prompt injection can reach, review [Mitigate jailbreaks and prompt injections](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks), and if a task can't avoid a logged-in session, use a dedicated low-privilege account and keep human confirmation on account-changing actions.
+
+Anthropic has trained the model to resist these prompt injections and has added an extra layer of defense. If you use the browser use tool, classifiers will automatically scan what the browser returns, such as page text or screenshots, to flag potential prompt injections. When these classifiers identify a potential prompt injection, they will automatically steer the model to check whether the instruction really came from you before acting on it.
+
+This extra protection won't be ideal for every use case (for example, use cases without a human in the loop), so if you'd like to opt out and turn it off, [contact support](https://support.claude.com/en/). The precautions above remain important even with these classifiers in place.
+
+Because the browser runs in your environment, the sites Claude visits see your executor's network identity, and page content reaches the API only as the tool results you return. Inform end users of the relevant risks and obtain their consent before enabling browser use in your products.
+
+## Member tools
+
+The `browser_toolset_20260801` entry declares 31 member tools; each call's `input` is exactly the parameters listed here, and `tab_id`, where optional, defaults to the active tab. `Target`, `CoordinateTarget`, and `RefTarget` are the shapes described in [Targets and coordinates](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#targets-and-coordinates). Four members (`javascript_exec`, `file_upload`, `read_console`, and `read_network`) are disabled by default and appear only when you [enable them](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#enable-optional-member-tools). The input bounds and output conventions noted in each member's row are stated to Claude, not enforced by the API, so validate inputs (including coordinates against your viewport) and apply the conventions in your executor.
+
+Only `screenshot` and `zoom` require an [`image` block](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls#handling-results-from-client-tools) in their result, and the four tab-management members (`new_tab`, `list_tabs`, `switch_tab`, and `close_tab`) return exactly one `browser_state` block (see [Tab management results](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#tab-management-results)). Every other member returns a `text` block: either a short acknowledgment such as `Clicked element ref_2.` or the member's output. Any result other than a tab-management result may also carry an `image` block, typically a screenshot taken after the action, so Claude sees the outcome without a separate `screenshot` call; [Batch actions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#batch-actions) shows where to attach one in a batch. A member `tool_result` may contain only `text`, `image`, and `browser_state` content blocks.
+
+### Navigation and capture
+
+| Member       | Input               | Description                                                                                                                                                                                                                                                                                     |
+| ------------ | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigate`   | `url`, `tab_id?`    | Load an `http` or `https` URL, or move through history with `"back"`, `"forward"`, or `"reload"`. Treat a URL without a scheme as `https://` and refuse any other scheme with an error result. Return a short acknowledgment, plus a `browser_state` block when the tab's URL or title changed. |
+| `screenshot` | `tab_id?`           | Capture the viewport and return an `image` block.                                                                                                                                                                                                                                               |
+| `zoom`       | `region`, `tab_id?` | Return a cropped, upscaled `image` of `region`, given as `[x0, y0, x1, y1]` in viewport pixels, for closer inspection of small text or controls.                                                                                                                                                |
+
+### Pointer
+
+| Member            | Input                                                                       | Description                                                                                                                                                    |
+| ----------------- | --------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `left_click`      | `target: Target`, `modifiers?`, `tab_id?`                                   | Left-click a coordinate or a referenced element. `modifiers` is a chord held during the click, for example, `"shift"` or `"ctrl+shift"`.                       |
+| `right_click`     | `target: Target`, `modifiers?`, `tab_id?`                                   | Right-click a coordinate or element.                                                                                                                           |
+| `middle_click`    | `target: Target`, `modifiers?`, `tab_id?`                                   | Middle-click a coordinate or element.                                                                                                                          |
+| `double_click`    | `target: Target`, `modifiers?`, `tab_id?`                                   | Double left-click a coordinate or element.                                                                                                                     |
+| `triple_click`    | `target: Target`, `modifiers?`, `tab_id?`                                   | Triple left-click a coordinate or element, which typically selects a line or paragraph.                                                                        |
+| `hover`           | `target: Target`, `tab_id?`                                                 | Move the pointer over a coordinate or element without clicking.                                                                                                |
+| `left_click_drag` | `from: CoordinateTarget`, `target: CoordinateTarget`, `tab_id?`             | Press at `from`, drag to `target`, and release.                                                                                                                |
+| `left_mouse_down` | `target: CoordinateTarget`, `tab_id?`                                       | Press and hold the left button at a coordinate; pair with `left_mouse_up` for a custom drag.                                                                   |
+| `left_mouse_up`   | `target: CoordinateTarget`, `tab_id?`                                       | Release the left button at a coordinate.                                                                                                                       |
+| `mouse_move`      | `target: CoordinateTarget`, `tab_id?`                                       | Move the pointer to a coordinate.                                                                                                                              |
+| `scroll`          | `target: CoordinateTarget`, `scroll_direction`, `scroll_amount?`, `tab_id?` | Scroll at a viewport position. `scroll_direction` is `"up"`, `"down"`, `"left"`, or `"right"`; `scroll_amount` is in scroll-wheel notches, 1 to 10, default 3. |
+| `scroll_to`       | `target: RefTarget`, `tab_id?`                                              | Scroll a referenced element into view.                                                                                                                         |
+
+### Keyboard and timing
+
+| Member     | Input                         | Description                                                                                                                                                                               |
+| ---------- | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `type`     | `text`, `tab_id?`             | Type a literal string at the current focus.                                                                                                                                               |
+| `key`      | `text`, `repeat?`, `tab_id?`  | Press a key or chord. `text` is a single key (`"Enter"`), a chord joined with `+` (`"ctrl+a"`), or a space-separated sequence (`"Backspace Backspace"`); `repeat` is 1 to 100, default 1. |
+| `hold_key` | `text`, `duration`, `tab_id?` | Hold a key or chord for `duration` seconds, 0 to 30.                                                                                                                                      |
+| `wait`     | `duration`, `tab_id?`         | Pause for `duration` seconds, 0 to 30.                                                                                                                                                    |
+
+### Page reading
+
+| Member          | Input                                  | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| --------------- | -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `read_page`     | `filter?`, `depth?`, `ref?`, `tab_id?` | Return the page's accessibility tree as text with each element tagged with a reference such as `[ref_2]`. With `filter` omitted, return every visible element; with `"interactive"`, only visible interactive elements; with `"all"`, also elements outside the viewport. `depth` caps the tree depth (minimum 1, default 15) and `ref` scopes the read to that element's subtree. Cap the output at 50,000 characters and say so in the text; Claude then narrows with a smaller `depth` or a `ref`. |
+| `find`          | `query`, `tab_id?`                     | Search for elements matching a natural-language description such as `"search field"` or `"add to cart button"`, and return up to 20 matches in the same tagged format as `read_page`.                                                                                                                                                                                                                                                                                                                 |
+| `get_page_text` | `tab_id?`                              | Return the page's visible text as plain text, prioritizing the main article content; suited to articles, documentation, and other text-heavy pages.                                                                                                                                                                                                                                                                                                                                                   |
+
+### Forms and files
+
+| Member                              | Input                                                     | Description                                                                                                                                                                                                                                                                      |
+| ----------------------------------- | --------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `form_input`                        | `target: RefTarget`, `value`, `tab_id?`                   | Set a form element's value directly. `value` is a `string`, `number`, or `boolean`; use a `boolean` for checkboxes and an option's value or visible text for selects.                                                                                                            |
+| `file_upload` (disabled by default) | `target: RefTarget`, `paths?`, `document_ids?`, `tab_id?` | Set the files on a file-input element from `paths` on the executor's filesystem, `document_ids` your application has staged, or both; at least one is required. See [Upload files](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#upload-files). |
+
+### Diagnostics and scripting
+
+| Member                                  | Input             | Description                                                                                                                                                                                                                                                                      |
+| --------------------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `read_console` (disabled by default)    | `tab_id?`         | Return the tab's console entries (log, warning, and error lines) accumulated since the last read, one line per entry. See [Read console and network activity](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#read-console-and-network-activity). |
+| `read_network` (disabled by default)    | `tab_id?`         | Return the tab's network requests (method, URL, status, MIME type, timing) since the last read, one line per entry.                                                                                                                                                              |
+| `javascript_exec` (disabled by default) | `text`, `tab_id?` | Run `text` as JavaScript in the page context and return the value of the last expression as text. See [Enable optional members](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#enable-optional-member-tools).                                    |
+
+### Tab management
+
+| Member       | Input               | Description                            |
+| ------------ | ------------------- | -------------------------------------- |
+| `new_tab`    | (none)              | Open a tab and make it the active tab. |
+| `list_tabs`  | (none)              | Report the tab inventory.              |
+| `switch_tab` | `tab_id` (required) | Make `tab_id` the active tab.          |
+| `close_tab`  | `tab_id` (required) | Close `tab_id`.                        |
+
+On success, each of these returns exactly one `browser_state` block and no text or image; see [Tab management results](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#tab-management-results).
+
+## Configure the toolset
+
+Besides `type`, the toolset entry accepts `configs`, `cache_control`, and `allowed_callers`; the rules these fields share with the computer use toolset are listed under [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets), and this section covers the browser-specific defaults. `configs` is an object keyed by member name, and each member's value accepts two fields:
+
+| Field           | Default                                                                                                                                                             | Meaning                                                                                                                                                                                                                                                                                                                                          |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `enabled`       | `true`, except `false` for the four [optional members](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#enable-optional-member-tools) | Whether the member is offered to Claude.                                                                                                                                                                                                                                                                                                         |
+| `defer_loading` | `false`                                                                                                                                                             | Whether the toolset's definition is deferred for tool search. Must resolve to the same value on every enabled member. With the four optional members left disabled, deferring the toolset means setting it on the other 27; see [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets). |
+
+### Enable or disable member tools
+
+List only the members you want to change in `configs`; every member you omit keeps its default. For example, an executor that implements console reads but not low-level pointer or key-hold control turns `read_console` on and withholds three members:
+
+```json
+{
+  "type": "browser_toolset_20260801",
+  "configs": {
+    "read_console": { "enabled": true },
+    "left_mouse_down": { "enabled": false },
+    "left_mouse_up": { "enabled": false },
+    "hold_key": { "enabled": false }
+  }
+}
+```
+
+A disabled member disappears from the definition Claude sees; that doesn't guarantee Claude never names it, so your executor still answers such a call with an [error result](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#return-errors-from-your-executor).
+
+### Combine with other tools
+
+Declare the browser use tool alongside your own tools and other Anthropic-provided tools in the same `tools` array. A custom tool may share a member's name (your own `navigate`, for example), because `toolset_name` distinguishes Claude's calls, but no other entry may be named `browser`, and a request may contain only one browser toolset entry.
+
+You can also declare it alongside the [computer use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool), either the toolset or an earlier computer use tool version. The two work independently, each in its own coordinate frame (viewport pixels here, desktop screenshot pixels there), and Claude's calls to members that share a name, such as `screenshot` or `key`, are told apart by `toolset_name`.
+
+## Enable optional members
+
+Four member tools are disabled by default: `javascript_exec` and `file_upload` because they widen what a manipulated page could make Claude do, and `read_console` and `read_network` because not every browser automation stack can supply those logs and they widen what page-controlled content reaches Claude. Enable each one with `configs` (for example, `"configs": {"file_upload": {"enabled": true}}`) only when your executor implements it and the task needs it.
+
+### Upload files
+
+`file_upload` sets the files on an `<input type="file">` element directly, which is more reliable than driving a native file chooser. Its `target` is a reference only, because the call needs the element's identity, and it takes `paths`, `document_ids`, or both:
+
+* `paths` are file paths on the executor's filesystem, for deployments where the executor can read your application's files directly (the same condition under which you populate a download's `path`).
+* `document_ids` are identifiers for files your application has staged for the browser, for deployments where it can't. Your application defines what the identifiers mean; scope their resolution the way you scope `paths`, to files staged for this task.
+
+```json
+{
+  "type": "tool_use",
+  "id": "toolu_01N7gVzFEfZjLjgsYwnrPgrF",
+  "name": "file_upload",
+  "toolset_name": "browser",
+  "input": {
+    "target": { "type": "ref", "ref": "ref_12" },
+    "paths": ["/home/user/uploads/summary.pdf"],
+    "tab_id": "tab-2"
+  }
+}
+```
+
+Claude writes these paths while it's reading untrusted pages, so an unrestricted implementation would let a malicious page direct the upload of any file the executor can read to a site the page controls. Enable the member only when your executor resolves each path (following symlinks and `..` segments) and accepts nothing outside a dedicated, allowlisted upload directory that holds only files meant for the task. Don't reuse the browser's download directory for this; if you do, every file a page causes the browser to download becomes uploadable.
+
+### Run JavaScript in the page
+
+`javascript_exec` runs the expression Claude writes in the page's context and returns the value of the last expression as text; Claude writes an expression, not a `return` statement. The code runs with the page's full privileges, including its cookies, storage, and same-origin requests. Enable the member only in sessions that hold no credentials, keep the domain allowlist from [Security considerations](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#security-considerations) in force, treat the returned value as untrusted input, and log the code Claude emits.
+
+### Read console and network activity
+
+`read_console` returns the tab's console entries and `read_network` returns its network requests, each as text with one line per entry accumulated since the previous read of that tab. A console line carries a log, warning, or error entry; a network line carries the method, URL, status, MIME type, and timing. Entries exist only from the moment your browser automation attached to the tab, so an empty result doesn't mean a tab that was already open had no traffic.
+
+These members let Claude diagnose a misbehaving page (a failed request behind a spinner, a script error behind a dead button) without repeated screenshots. Console and network entries are page-controlled and often contain secrets such as tokens in request URLs, so redact credential-like values you don't want in Claude's context and truncate very long entries before returning them.
+
+## Track tabs with `browser_state`
+
+Claude addresses tabs by `tab_id`, your application is the source of truth for which tabs exist, and you report that state in a `browser_state` content block that Claude never sees directly: the API renders the text Claude reads from it.
+
+```json
+{
+  "type": "browser_state",
+  "tabs": [
+    {
+      "tab_id": "tab-1",
+      "title": "Documentation",
+      "url": "https://example.com/docs",
+      "active": true
+    },
+    { "tab_id": "tab-2", "title": "Pricing", "url": "https://example.com/pricing" }
+  ]
+}
+```
+
+* `tabs` is the full inventory of open tabs after the call, not a delta. It may be empty; whenever it isn't, exactly one entry carries `"active": true`.
+* `state_changes` (not shown here) reports side effects of the call: a `tab_opened` entry for each tab the call opened that's still open when it finishes, whose `tab_id` must also appear in `tabs`, and [download events](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#report-downloads). Omit the field when there's nothing to report; an empty array is rejected.
+* Send the block only on results that answer a browser member call, at most once per `tool_result`, and never on a result with `is_error: true`. You express "no tab state to report" by omitting the block.
+* The API renders `tabs`, and any download entries in `state_changes`, into text for Claude. The next two sections and [Report downloads](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#report-downloads) show that text.
+
+**You assign `tab_id` values.** Any stable string works, such as your automation library's page identifier or your own counter, as long as you don't reuse a `tab_id` while a tab with that identifier is still listed as open in an earlier result. The API enforces these limits on the block:
+
+* Each `tab_id`, `title`, and `url` may be at most 4,096 characters, `tab_id` must be non-empty, and none may contain control characters (including newlines) or Unicode line or paragraph separators.
+* A block may list at most 100 tabs and 200 state changes.
+* The same limits apply to the `tab_id` Claude passes to `switch_tab` and `close_tab`, because the API renders it into the result text, so answer a call whose `tab_id` violates them with an error result instead of a `browser_state` block.
+
+<Warning>
+  Tab titles and URLs come from the page and render into text Claude reads, so they're a prompt-injection surface. The API renders tab URLs verbatim, so sanitize page-supplied URLs before populating `tabs`. It escapes double quotes and backslashes in titles when it renders them, so don't pre-escape titles (a pre-escaped title reaches Claude double-escaped); truncating or dropping suspicious titles is still worthwhile. A download entry's `url`, `path`, and `error` also render into text Claude reads, so treat them as untrusted too; the API quotes and escapes them as it does titles. The length and character limits the API enforces are a floor, not a defense.
+</Warning>
+
+### Tab management results
+
+For `new_tab`, `switch_tab`, `close_tab`, and `list_tabs`, a successful result's `content` is exactly one `browser_state` block with no text or image, and the API writes the text Claude sees. A `new_tab` result's block must also carry exactly one `tab_opened` state change whose `tab_id` matches the entry marked `active: true`.
+
+| Member       | Text Claude sees                                                                                                            |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `switch_tab` | `Switched to tab {tab_id}`, taken from the call's `input.tab_id`                                                            |
+| `close_tab`  | `Closed tab {tab_id}`, taken from the call's `input.tab_id`                                                                 |
+| `new_tab`    | `Created new tab with tab_id: {tab_id}, URL: {url}. It is now the current tab.`, taken from the entry marked `active: true` |
+| `list_tabs`  | `Available tabs:` followed by one line per tab, or `No tabs available` when `tabs` is empty                                 |
+
+A `list_tabs` result whose block lists two tabs with the first one active renders as follows, with each line indented two spaces and `(current)` appended to the active tab only:
+
+```text wrap
+Available tabs:
+  • tab_id tab-1: "Documentation" (https://example.com/docs) (current)
+  • tab_id tab-2: "Pricing" (https://example.com/pricing)
+```
+
+An error result for one of these members is the reverse: ordinary error text in `content`, `is_error: true`, and no `browser_state` block.
+
+For example, when Claude calls `new_tab` (its `input` is empty), your executor opens the tab, makes it active, and returns the inventory with one `tab_opened` entry:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01WvHSbQVV9j5nWGvTmk4vNL",
+      "toolset_name": "browser",
+      "content": [
+        {
+          "type": "browser_state",
+          "tabs": [
+            { "tab_id": "tab-1", "title": "Documentation", "url": "https://example.com/docs" },
+            { "tab_id": "tab-2", "title": "Pricing", "url": "https://example.com/pricing" },
+            { "tab_id": "tab-3", "title": "", "url": "about:blank", "active": true }
+          ],
+          "state_changes": [{ "type": "tab_opened", "tab_id": "tab-3" }]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Claude sees `Created new tab with tab_id: tab-3, URL: about:blank. It is now the current tab.` Report the URL the tab was opened at, as here, not one it later redirects to; later results report the tab's then-current URL.
+
+### Tab context on other results
+
+On every other member the block is optional: send it when the set of open tabs, the active tab, or a tab's title or URL changed, or when there are `state_changes` to report, and always include the full `tabs` inventory. When a result carries both text and a `browser_state` block, the API appends a `Tab Context` footer to that result's text, separated from your text by a blank line, so Claude receives the new state without a separate `list_tabs` call:
+
+```text wrap
+Tab Context:
+- Executed on tab_id: tab-1
+- Available tabs:
+  • tab_id tab-1: "Documentation" (https://example.com/docs)
+  • tab_id tab-2: "Pricing" (https://example.com/pricing)
+```
+
+`Executed on` names the tab the call ran on, which is its `tab_id` input when present and otherwise the active tab, and the footer's tab lines carry no `(current)` marker. Don't append this text yourself; send the structured block and let the API render it. The footer is deduplicated, so identical tab state isn't rendered again on later results and populating the block liberally costs nothing.
+
+Three cases render no footer even when the block is present:
+
+* Any `zoom` result.
+* A result with no `text` block (an image-only `screenshot` result, for example). Nothing is rendered or remembered for that result; the tab context appears on the next result that carries both text and a `browser_state` block, so include a short text block alongside the image when you want Claude to see a tab change on that same result. The exception is a result whose block reports a [download event](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#report-downloads). The API adds the download lines as a text block, and the footer follows them as it would on any result with text.
+* A result whose `tabs` list is empty on a call that carried no `tab_id`, because there's no tab to name.
+
+For example, when Claude clicked the "Pricing" link (`ref_5`) earlier in this session, the page opened it in a new tab Claude didn't ask for, and without a report Claude would have to call `list_tabs` to discover it. Return the click's acknowledgment plus a block whose `state_changes` names the opened tab, marking whichever tab your executor left active:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01EgTXj1FjE2FCTt2zNFWLao",
+      "toolset_name": "browser",
+      "content": [
+        { "type": "text", "text": "Clicked element ref_5." },
+        {
+          "type": "browser_state",
+          "tabs": [
+            {
+              "tab_id": "tab-1",
+              "title": "Documentation",
+              "url": "https://example.com/docs",
+              "active": true
+            },
+            { "tab_id": "tab-2", "title": "Pricing", "url": "https://example.com/pricing" }
+          ],
+          "state_changes": [{ "type": "tab_opened", "tab_id": "tab-2" }]
+        }
+      ]
+    }
+  ]
+}
+```
+
+Claude sees `Clicked element ref_5.` followed by the Tab Context footer shown earlier. A tab opened during a call that failed gets no `tab_opened` entry, because error results carry no `browser_state`; it appears in the `tabs` inventory of the next successful result instead. In a batch, attach the block to the result of the call during which the change happened, and give every successful tab-management result its own block even when an earlier result in the same turn reported the same state.
+
+### Report downloads
+
+When a click or navigation starts a file download, report it in `state_changes` on the result of the call during which it happened, correlated across results by a `download_id` you assign. Downloads run asynchronously and can span several results, so there are three event types:
+
+| `type`               | Fields                                       | When to send                                                                                                                                                                                                                                                                                                                                            |
+| -------------------- | -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `download_started`   | `download_id`, `url`                         | On the result of the call during which the download began. `url` is the final URL the file is served from, after redirects.                                                                                                                                                                                                                             |
+| `download_completed` | `download_id`, `url`, `path?`, `size_bytes?` | On the result of whichever later call is running when the download finishes. Include `path` only when another tool in the same environment (for example, the [bash tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool) or `file_upload`) can read the file there; otherwise `download_id` is the download's only identifier. |
+| `download_failed`    | `download_id`, `url`, `error?`               | When the download fails or is canceled, with the reason in `error` if the browser provides one.                                                                                                                                                                                                                                                         |
+
+The API renders each entry as one line of text for Claude, in the order the entries appear. It adds the lines after the result's text, separated by a blank line, and before any Tab Context footer. Every kind of member result carries the lines, including `zoom` and tab-management results. A result with no `text` block gets them as a text block of its own. Each line gives the `download_id` and `url`, plus `path` and `size_bytes` (for `download_completed`) or `error` (for `download_failed`) when you send them. You don't need to describe the download in your own text. The API wraps `url`, `path`, and `error` in double quotes and escapes double quotes and backslashes inside them, so don't pre-escape these values.
+
+For example, a click on "Download price list (CSV)" (`ref_8`) in the Pricing tab starts a download, so the click's result carries a `download_started` entry with `download_id` `"dl-1"` and the file's URL. The download finishes while a later `screenshot` call is running, so that result's `content` holds the image, a text block such as `Screenshot captured.`, and this `browser_state` block reporting the completion under the same `download_id`:
+
+```json
+{
+  "type": "browser_state",
+  "tabs": [
+    { "tab_id": "tab-1", "title": "Documentation", "url": "https://example.com/docs" },
+    {
+      "tab_id": "tab-2",
+      "title": "Pricing",
+      "url": "https://example.com/pricing",
+      "active": true
+    }
+  ],
+  "state_changes": [
+    {
+      "type": "download_completed",
+      "download_id": "dl-1",
+      "url": "https://example.com/pricing/price-list.csv",
+      "path": "/home/user/downloads/price-list.csv",
+      "size_bytes": 48213
+    }
+  ]
+}
+```
+
+Claude sees `Screenshot captured.` followed by a blank line and a line like this:
+
+```text wrap
+Download completed with download_id: dl-1, URL: "https://example.com/pricing/price-list.csv". Saved to "/home/user/downloads/price-list.csv". Size: 48213 bytes.
+```
+
+Download reports follow these rules:
+
+* At most one entry per `download_id` in a single block, so a download that starts and finishes during the same call reports only `download_completed`.
+* Never send `state_changes` on an `is_error: true` result; report a download event that occurred during a failed call on the next successful result.
+* `state_changes` isn't an inventory of downloads in progress; report each event once.
+* Each entry carries only the fields its `type` declares. `size_bytes` is a non-negative integer, `download_id` is non-empty, and `download_id`, `url`, `path`, and `error` are each at most 4,096 characters with no control characters or Unicode line or paragraph separators. The `url` comes from the remote server and often carries signed query-string credentials after redirects, so strip query parameters you don't want in Claude's context and sanitize it before reporting it or using it in a filesystem path.
+
+## Handle errors
+
+Report a failed call to Claude as an ordinary error result: `is_error: true`, text content that says what went wrong, `toolset_name` echoed, and no `browser_state` block.
+
+### Return errors from your executor
+
+Make error text specific, because Claude reads it and adapts: `Error: Navigation to https://example.com/status timed out after 30 seconds. The page may be unavailable.` gives Claude something to act on where a bare `Error: navigation failed` doesn't. Other common cases:
+
+<AccordionGroup>
+  <Accordion title="Refused navigation scheme">
+    ```json
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01LeUTyqkhRxBFq1QTG3pkwN",
+      "toolset_name": "browser",
+      "is_error": true,
+      "content": "Error: Navigation refused. Only http and https URLs are allowed."
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Stale or unknown element reference">
+    ```json
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01D7FLrfh4GYq7yT1ULFeyMV",
+      "toolset_name": "browser",
+      "is_error": true,
+      "content": "Error: ref_3 is stale or not found on the current page. Re-read the page to get fresh references."
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Disabled or unimplemented member">
+    ```json
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_013h2Q55HcNwVyapSpy2s5ZG",
+      "toolset_name": "browser",
+      "is_error": true,
+      "content": "Error: javascript_exec is not enabled in this environment."
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Skipped after an earlier failure in the turn">
+    When the `left_click` on `ref_3` from [Batch actions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#batch-actions) fails with the stale-reference error shown earlier, the `type` and `key` calls after it each get this result:
+
+    ```json
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01FkP8rTz6uYh2mNq4LsXw7v",
+      "toolset_name": "browser",
+      "is_error": true,
+      "content": "Not executed: an earlier action in this turn failed."
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Request errors
+
+The API validates the toolset entry and every member `tool_use` and `tool_result` block in the conversation. When one is malformed, the API returns an `invalid_request_error` before Claude runs. In the following table, the left column names what you sent.
+
+| Request                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Why it fails and what to do                                                                                                                                                                                                                                    |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| An option or combination the toolset entry doesn't accept, for example, a `name`, `strict: true`, `input_examples`, `defer_loading` on the entry itself, a `configs` key that isn't a member name, a field other than `enabled` or `defer_loading` in a member's `configs` value ([Configure the toolset](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#configure-the-toolset)), enabled members whose `defer_loading` values differ ([Configure the toolset](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#configure-the-toolset)), a `configs` that leaves no member enabled, a code execution caller in `allowed_callers`, the legacy `fine-grained-tool-streaming-2025-05-14` beta header on the request, a `tool_choice` of type `tool` naming `browser` or a member, or a second browser toolset entry or another tool named `browser` | These aren't supported on client toolsets. See [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets) for each rule and its alternative.                                                              |
+| A `tool_result` answering a member call without `"toolset_name": "browser"` or with a different value, or `toolset_name` on a result whose call wasn't a member call                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | Echo `toolset_name` exactly on member results, and only on them.                                                                                                                                                                                               |
+| A member `tool_use` from an earlier turn with no matching `tool_result`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Answer every member call, including the ones you didn't run after a failure.                                                                                                                                                                                   |
+| A content block other than `text`, `image`, or `browser_state` in a member result                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Member results accept only those three block types.                                                                                                                                                                                                            |
+| A `browser_state` block that breaks a rule in [Track tabs with `browser_state`](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#track-tabs-and-page-state), for example, one on an `is_error: true` result or on a result that doesn't answer a browser member call, more than one in a result, a non-empty `tabs` without exactly one `active: true` entry, a duplicate `tab_id`, an empty `state_changes` array, a `tab_opened` whose `tab_id` isn't in `tabs`, two state changes for one `download_id` or a state-change field its `type` doesn't declare ([Report downloads](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#report-downloads)), or a field over its limits                                                                                                                                                                  | Fix the block. "Nothing to report" is expressed by omitting the block or the `state_changes` field, never by an empty value.                                                                                                                                   |
+| A successful `new_tab`, `switch_tab`, `close_tab`, or `list_tabs` result whose `content` isn't exactly one `browser_state` block, or a `new_tab` result without exactly one `tab_opened` matching the active tab                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | The API renders these results from the block and needs it in that exact shape; see [Tab management results](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#tab-management-results).                                            |
+| An `image` in a result over your model's [image size limits](https://platform.claude.com/docs/en/build-with-claude/vision#evaluate-image-size), or over the stricter per-image limit that applies once the request holds [more than 20 images](https://platform.claude.com/docs/en/build-with-claude/vision#request-limits), counting screenshots and `zoom` images in earlier results                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | The API doesn't downscale toolset images. Resize screenshots before returning them ([Size screenshots to fit image limits](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#handle-coordinate-scaling-for-higher-resolutions)). |
+| A `model` that doesn't support `browser_toolset_20260801`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | See [Compatibility](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#compatibility) for the supported models.                                                                                                                    |
+
+## Limitations
+
+* **Platform availability:** Browser use is available on the Claude API and [Google Cloud](https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai).
+* **Whole-input streaming only:** When you stream, each member's `input` arrives as one complete `input_json_delta` ([Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets)).
+* **Element references are best-effort:** Highly dynamic pages (virtualized lists, canvas-rendered interfaces, pages that re-render on scroll) might not expose stable references, and Claude falls back to screenshots and coordinate clicks there.
+* **`read_console` and `read_network` depend on your browser automation:** They report only what it can capture, and only from the moment it attached to a tab.
+* **General agent limitations apply:** Latency, vision accuracy, and prompt-injection risks carry over from computer use (see the computer use tool's [Limitations](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#understand-computer-use-limitations)), and its guidance under [Optimize model performance with prompting](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#optimize-model-performance-with-prompting), [Manage screenshot history](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#manage-screenshot-history), and [Follow implementation best practices](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#follow-implementation-best-practices) (action delays, action validation, and logging) applies to browser executors too.
+
+## Pricing and data retention
+
+Browser use follows the standard [tool use pricing](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview#pricing). When using the browser use tool:
+
+**Toolset definition overhead:** Declaring `browser_toolset_20260801` with its default members adds about 6,600 input tokens to a request (about 6,670 on Claude Sonnet 5 and about 6,610 on the other supported models), which covers the member tool definitions and the tool use system prompt. Enabling all four optional members adds about 880 tokens, and disabling members with `configs` reduces the count. The exact count for a request is reported in the response `usage`, and you can estimate it in advance with the [token counting endpoint](https://platform.claude.com/docs/en/build-with-claude/token-counting).
+
+**Additional token consumption:**
+
+* Screenshot and zoom images returned in tool results, billed as image input (see [Vision pricing](https://platform.claude.com/docs/en/build-with-claude/vision#evaluate-image-size))
+* Text tool results returned to Claude, such as accessibility trees, page text, and console or network entries
+
+<Note>
+  If you also use the computer use tool, bash tool, text editor tool, or your own tools alongside browser use, those tools have their own token costs as documented on their respective pages.
+</Note>
+
+The browser session, downloads, and uploaded files stay in your environment; the screenshots, page text, and tab state you return are part of your API request content and follow the standard retention policy, or your ZDR arrangement if you have one. The browser use tool is ZDR eligible; see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention) for retention periods and eligibility across features.
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Browser and computer use with the SDK toolsets" icon="code" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk">
+    Start from a partner's driver, or write your own in Python or TypeScript. The SDK runs the loop and the checks you configure.
+  </Card>
+
+  <Card title="Computer use tool" icon="computer" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool">
+    Give Claude control of a full desktop when the task leaves the browser; its implementation guidance applies to browser executors too.
+  </Card>
+
+  <Card title="Handle tool calls" icon="wrench" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls">
+    Format `tool_result` blocks, return images and errors, and continue the conversation.
+  </Card>
+
+  <Card title="Tool reference" icon="book" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference">
+    Browse client toolsets and every other Anthropic-provided tool, with their versions and parameters.
+  </Card>
+</CardGroup>
 
 ---
 
-## "Tutorial: Build a tool-using agent"
+## \"Tutorial: Build a tool-using agent\"
 
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-tool-use-build-a-tool-using-agent.md`
@@ -9317,7 +13049,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
       --argjson tools "$TOOLS" \
       --arg msg "$USER_MSG" \
       '{
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         tools: $tools,
         tool_choice: {type: "auto", disable_parallel_tool_use: true},
@@ -9354,7 +13086,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
       --arg tool_use_id "$TOOL_USE_ID" \
       --arg result "$RESULT" \
       '{
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         tools: $tools,
         tool_choice: {type: "auto", disable_parallel_tool_use: true},
@@ -9394,7 +13126,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
     # JSON, which YAML accepts as flow syntax.
     {
       cat <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tool_choice: {type: auto, disable_parallel_tool_use: true}
   tools:
@@ -9505,7 +13237,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   # Send the user's request along with the tool definition. Claude decides
   # whether to call the tool based on the request and the tool description.
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=tools,
       tool_choice={"type": "auto", "disable_parallel_tool_use": True},
@@ -9535,7 +13267,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   # its tool_use_id must match the id from the tool_use block above. The
   # assistant's previous response is included so Claude has the full history.
   followup = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=tools,
       tool_choice={"type": "auto", "disable_parallel_tool_use": True},
@@ -9608,7 +13340,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   // Send the user's request along with the tool definition. Claude decides
   // whether to call the tool based on the request and the tool description.
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools,
     tool_choice: { type: "auto", disable_parallel_tool_use: true },
@@ -9641,7 +13373,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   // its tool_use_id must match the id from the tool_use block above. The
   // assistant's previous response is included so Claude has the full history.
   const followup = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools,
     tool_choice: { type: "auto", disable_parallel_tool_use: true },
@@ -9737,7 +13469,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   // whether to call the tool based on the request and the tool description.
   var response = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       ToolChoice = toolChoice,
@@ -9780,7 +13512,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
 
   var followup = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       ToolChoice = toolChoice,
@@ -9865,7 +13597,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   	// Send the user's request along with the tool definition. Claude decides
   	// whether to call the tool based on the request and the tool description.
   	response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  		Model:      anthropic.ModelClaudeOpus5,
+  		Model:      anthropic.ModelClaudeOpus5_5,
   		MaxTokens:  1024,
   		Tools:      tools,
   		ToolChoice: toolChoice,
@@ -9904,7 +13636,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   	}
 
   	followup, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  		Model:      anthropic.ModelClaudeOpus5,
+  		Model:      anthropic.ModelClaudeOpus5_5,
   		MaxTokens:  1024,
   		Tools:      tools,
   		ToolChoice: toolChoice,
@@ -9991,7 +13723,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
       // Send the user's request along with the tool definition. Claude decides
       // whether to call the tool based on the request and the tool description.
       Message response = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(calendarTool)
           .toolChoice(toolChoice)
@@ -10019,7 +13751,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
       // its tool_use_id must match the id from the tool_use block above. The
       // assistant's previous response is included so Claude has the full history.
       Message followup = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(calendarTool)
           .toolChoice(toolChoice)
@@ -10095,7 +13827,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   // Send the user's request along with the tool definition. Claude decides
   // whether to call the tool based on the request and the tool description.
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: $tools,
       toolChoice: $toolChoice,
@@ -10126,7 +13858,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   // its tool_use_id must match the id from the tool_use block above. The
   // assistant's previous response is included so Claude has the full history.
   $followup = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: $tools,
       toolChoice: $toolChoice,
@@ -10207,7 +13939,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   # Send the user's request along with the tool definition. Claude decides
   # whether to call the tool based on the request and the tool description.
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     tool_choice: tool_choice,
@@ -10232,7 +13964,7 @@ The request sends a `tools` array alongside the user message. When Claude determ
   # its tool_use_id must match the id from the tool_use block above. The
   # assistant's previous response is included so Claude has the full history.
   followup = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     tool_choice: tool_choice,
@@ -10328,7 +14060,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
       -H "anthropic-version: 2023-06-01" \
       -H "content-type: application/json" \
       -d "$(jq -n --argjson tools "$TOOLS" --argjson messages "$MESSAGES" \
-        '{model: "claude-opus-5", max_tokens: 1024, tools: $tools, tool_choice: {type: "auto", disable_parallel_tool_use: true}, messages: $messages}')"
+        '{model: "claude-opus-5-5", max_tokens: 1024, tools: $tools, tool_choice: {type: "auto", disable_parallel_tool_use: true}, messages: $messages}')"
   }
 
   RESPONSE=$(call_api)
@@ -10386,7 +14118,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
     # JSON, which YAML accepts as flow syntax.
     {
       cat <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tool_choice: {type: auto, disable_parallel_tool_use: true}
   tools:
@@ -10477,10 +14209,12 @@ The other change is conversation history. Instead of rebuilding the `messages` a
       }
   ]
 
+
   def run_tool(name, tool_input):
       if name == "create_calendar_event":
           return {"event_id": "evt_123", "status": "created", "title": tool_input["title"]}
       return {"error": f"Unknown tool: {name}"}
+
 
   # Keep the full conversation history in a list so each turn sees prior context.
   messages = [
@@ -10491,7 +14225,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
   ]
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=tools,
       tool_choice={"type": "auto", "disable_parallel_tool_use": True},
@@ -10519,7 +14253,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
       )
 
       response = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=1024,
           tools=tools,
           tool_choice={"type": "auto", "disable_parallel_tool_use": True},
@@ -10582,7 +14316,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
   ];
 
   let response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools,
     tool_choice: { type: "auto", disable_parallel_tool_use: true },
@@ -10610,7 +14344,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
     });
 
     response = await client.messages.create({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools,
       tool_choice: { type: "auto", disable_parallel_tool_use: true },
@@ -10696,7 +14430,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
 
   var response = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       ToolChoice = toolChoice,
@@ -10734,7 +14468,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
 
       response = await client.Messages.Create(new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = tools,
           ToolChoice = toolChoice,
@@ -10815,7 +14549,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
   	}
 
   	response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  		Model:      anthropic.ModelClaudeOpus5,
+  		Model:      anthropic.ModelClaudeOpus5_5,
   		MaxTokens:  1024,
   		Tools:      tools,
   		ToolChoice: toolChoice,
@@ -10852,7 +14586,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
   		))
 
   		response, err = client.Messages.New(ctx, anthropic.MessageNewParams{
-  			Model:      anthropic.ModelClaudeOpus5,
+  			Model:      anthropic.ModelClaudeOpus5_5,
   			MaxTokens:  1024,
   			Tools:      tools,
   			ToolChoice: toolChoice,
@@ -10941,7 +14675,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
           .build());
 
       Message response = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(calendarTool)
           .toolChoice(toolChoice)
@@ -10969,7 +14703,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
               .build());
 
           response = client.messages().create(MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addTool(calendarTool)
               .toolChoice(toolChoice)
@@ -11044,7 +14778,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
   ];
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: $tools,
       toolChoice: $toolChoice,
@@ -11077,7 +14811,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
       ];
 
       $response = $client->messages->create(
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           maxTokens: 1024,
           tools: $tools,
           toolChoice: $toolChoice,
@@ -11146,7 +14880,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
   ]
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     tool_choice: tool_choice,
@@ -11172,7 +14906,7 @@ The other change is conversation history. Instead of rebuilding the `messages` a
     }
 
     response = client.messages.create(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: tools,
       tool_choice: tool_choice,
@@ -11257,7 +14991,7 @@ When Claude has multiple independent tool calls to make, it might return several
       -H "anthropic-version: 2023-06-01" \
       -H "content-type: application/json" \
       -d "$(jq -n --argjson tools "$TOOLS" --argjson messages "$MESSAGES" \
-        '{model: "claude-opus-5", max_tokens: 1024, tools: $tools, messages: $messages}')"
+        '{model: "claude-opus-5-5", max_tokens: 1024, tools: $tools, messages: $messages}')"
   }
 
   RESPONSE=$(call_api)
@@ -11314,7 +15048,7 @@ When Claude has multiple independent tool calls to make, it might return several
     # which YAML accepts as flow syntax.
     {
       cat <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - name: create_calendar_event
@@ -11423,12 +15157,14 @@ When Claude has multiple independent tool calls to make, it might return several
       },
   ]
 
+
   def run_tool(name, tool_input):
       if name == "create_calendar_event":
           return {"event_id": "evt_123", "status": "created", "title": tool_input["title"]}
       if name == "list_calendar_events":
           return {"events": [{"title": "Existing meeting", "start": "14:00", "end": "15:00"}]}
       return {"error": f"Unknown tool: {name}"}
+
 
   messages = [
       {
@@ -11438,7 +15174,7 @@ When Claude has multiple independent tool calls to make, it might return several
   ]
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=tools,
       messages=messages,
@@ -11463,7 +15199,7 @@ When Claude has multiple independent tool calls to make, it might return several
       messages.append({"role": "user", "content": tool_results})
 
       response = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=1024,
           tools=tools,
           messages=messages,
@@ -11540,7 +15276,7 @@ When Claude has multiple independent tool calls to make, it might return several
   ];
 
   let response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools,
     messages,
@@ -11565,7 +15301,7 @@ When Claude has multiple independent tool calls to make, it might return several
     messages.push({ role: "user", content: toolResults });
 
     response = await client.messages.create({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools,
       messages,
@@ -11663,7 +15399,7 @@ When Claude has multiple independent tool calls to make, it might return several
 
   var response = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       Messages = messages,
@@ -11695,7 +15431,7 @@ When Claude has multiple independent tool calls to make, it might return several
 
       response = await client.Messages.Create(new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = tools,
           Messages = messages,
@@ -11783,7 +15519,7 @@ When Claude has multiple independent tool calls to make, it might return several
   	}
 
   	response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 1024,
   		Tools:     tools,
   		Messages:  messages,
@@ -11815,7 +15551,7 @@ When Claude has multiple independent tool calls to make, it might return several
   		messages = append(messages, anthropic.NewUserMessage(toolResults...))
 
   		response, err = client.Messages.New(ctx, anthropic.MessageNewParams{
-  			Model:     anthropic.ModelClaudeOpus5,
+  			Model:     anthropic.ModelClaudeOpus5_5,
   			MaxTokens: 1024,
   			Tools:     tools,
   			Messages:  messages,
@@ -11912,7 +15648,7 @@ When Claude has multiple independent tool calls to make, it might return several
           .build());
 
       Message response = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(calendarTool)
           .addTool(listTool)
@@ -11942,7 +15678,7 @@ When Claude has multiple independent tool calls to make, it might return several
               .build());
 
           response = client.messages().create(MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addTool(calendarTool)
               .addTool(listTool)
@@ -12029,7 +15765,7 @@ When Claude has multiple independent tool calls to make, it might return several
   ];
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: $tools,
       messages: $messages,
@@ -12053,7 +15789,7 @@ When Claude has multiple independent tool calls to make, it might return several
       $messages[] = ['role' => 'user', 'content' => $toolResults];
 
       $response = $client->messages->create(
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           maxTokens: 1024,
           tools: $tools,
           messages: $messages,
@@ -12131,7 +15867,7 @@ When Claude has multiple independent tool calls to make, it might return several
   ]
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     messages: messages
@@ -12152,7 +15888,7 @@ When Claude has multiple independent tool calls to make, it might return several
     messages << {role: "user", content: tool_results}
 
     response = client.messages.create(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: tools,
       messages: messages
@@ -12241,7 +15977,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
       -H "anthropic-version: 2023-06-01" \
       -H "content-type: application/json" \
       -d "$(jq -n --argjson tools "$TOOLS" --argjson messages "$MESSAGES" \
-        '{model: "claude-opus-5", max_tokens: 1024, tools: $tools, messages: $messages}')"
+        '{model: "claude-opus-5-5", max_tokens: 1024, tools: $tools, messages: $messages}')"
   }
 
   RESPONSE=$(call_api)
@@ -12310,7 +16046,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
     # which YAML accepts as flow syntax.
     {
       cat <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - name: create_calendar_event
@@ -12423,6 +16159,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
       },
   ]
 
+
   def run_tool(name, tool_input):
       if name == "create_calendar_event":
           if "attendees" in tool_input and len(tool_input["attendees"]) > 10:
@@ -12432,6 +16169,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
           return {"events": [{"title": "Existing meeting", "start": "14:00", "end": "15:00"}]}
       raise ValueError(f"Unknown tool: {name}")
 
+
   messages = [
       {
           "role": "user",
@@ -12440,7 +16178,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
   ]
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=tools,
       messages=messages,
@@ -12470,7 +16208,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
       messages.append({"role": "user", "content": tool_results})
 
       response = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=1024,
           tools=tools,
           messages=messages,
@@ -12551,7 +16289,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
   ];
 
   let response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools,
     messages,
@@ -12584,7 +16322,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
     messages.push({ role: "user", content: toolResults });
 
     response = await client.messages.create({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools,
       messages,
@@ -12685,7 +16423,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
 
   var response = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       Messages = messages,
@@ -12726,7 +16464,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
 
       response = await client.Messages.Create(new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = tools,
           Messages = messages,
@@ -12823,7 +16561,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
   	}
 
   	response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 1024,
   		Tools:     tools,
   		Messages:  messages,
@@ -12858,7 +16596,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
   		messages = append(messages, anthropic.NewUserMessage(toolResults...))
 
   		response, err = client.Messages.New(ctx, anthropic.MessageNewParams{
-  			Model:     anthropic.ModelClaudeOpus5,
+  			Model:     anthropic.ModelClaudeOpus5_5,
   			MaxTokens: 1024,
   			Tools:     tools,
   			Messages:  messages,
@@ -12968,7 +16706,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
           .build());
 
       Message response = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(calendarTool)
           .addTool(listTool)
@@ -13000,7 +16738,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
               .build());
 
           response = client.messages().create(MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addTool(calendarTool)
               .addTool(listTool)
@@ -13065,7 +16803,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
   {
       if ($name === 'create_calendar_event') {
           if (count($input['attendees'] ?? []) > 10) {
-              throw new InvalidArgumentException('Too many attendees (max 10)');
+              throw new \InvalidArgumentException('Too many attendees (max 10)');
           }
 
           return json_encode([
@@ -13080,7 +16818,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
           ]);
       }
 
-      throw new InvalidArgumentException("Unknown tool: {$name}");
+      throw new \InvalidArgumentException("Unknown tool: {$name}");
   }
 
   // Build a request that exceeds the tool's attendee limit so the error path runs.
@@ -13093,7 +16831,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
   ];
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: $tools,
       messages: $messages,
@@ -13109,7 +16847,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
                       'tool_use_id' => $block->id,
                       'content' => runTool($block->name, $block->input),
                   ];
-              } catch (Exception $e) {
+              } catch (\Exception $e) {
                   // Signal failure so Claude can retry or ask for clarification.
                   $toolResults[] = [
                       'type' => 'tool_result',
@@ -13125,7 +16863,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
       $messages[] = ['role' => 'user', 'content' => $toolResults];
 
       $response = $client->messages->create(
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           maxTokens: 1024,
           tools: $tools,
           messages: $messages,
@@ -13207,7 +16945,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
   ]
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     messages: messages
@@ -13236,7 +16974,7 @@ Tools fail. A calendar API might reject an event with too many attendees, or a d
     messages << {role: "user", content: tool_results}
 
     response = client.messages.create(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: tools,
       messages: messages
@@ -13259,35 +16997,18 @@ The `is_error` flag is the only difference from a successful result. Claude sees
 
 ## Ring 5: The Tool Runner SDK abstraction
 
-Rings 2 through 4 wrote the same loop by hand: call the API, check `stop_reason`, run tools, append results, repeat. The Tool Runner does this for you. Define each tool as a function, pass the list to `tool_runner`, and retrieve the final message once the loop completes. Error wrapping, result formatting, and conversation management are handled internally.
+Rings 2 through 4 wrote the same loop by hand: call the API, check `stop_reason`, run tools, append results, repeat. The Tool Runner does this for you. Define each tool as a function, pass the list to `client.beta.messages.tool_runner()` (typescript: `client.beta.messages.toolRunner()`; java: `client.beta().messages().toolRunner()`; php: `$client->beta->messages->toolRunner()`; csharp: `client.Beta.Messages.ToolRunner()`; go: `client.Beta.Messages.NewToolRunner()`), and retrieve the final message once the loop completes. Error wrapping, result formatting, and conversation management are handled internally.
 
 Each SDK provides a helper that turns an ordinary function into a runnable tool and derives the input schema from its signature; the tabs below show the idiomatic form for each language.
 
-<Note>
-  Tool Runner is available in all seven SDKs: Python, TypeScript, C#, Go, Java, PHP, and Ruby. See [Tool Runner](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner) for the full reference. The cURL and CLI tabs show a note instead of code; keep the Ring 4 loop for curl- or CLI-based scripts.
-</Note>
+<CodeGroup exclude="shell">
+  <CodeGroupItem language="cURL">
+    The Tool Runner is a helper in the Claude SDK. Raw HTTP requests have no equivalent. To keep using curl, use the loop from [Ring 4](https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent#ring-4-error-handling).
+  </CodeGroupItem>
 
-<CodeGroup>
-  ```bash cURL
-  #!/bin/bash
-  # Ring 5: The Tool Runner SDK abstraction.
-
-  # The Tool Runner SDK abstraction is available in all seven SDKs: Python,
-  # TypeScript, C#, Go, Java, PHP, and Ruby. There is no equivalent for raw
-  # curl requests. Switch to any SDK tab to see Ring 5, or keep the Ring 4
-  # loop as your shell implementation.
-  ```
-
-  ```bash CLI
-  #!/usr/bin/env bash
-  # Ring 5: The Tool Runner SDK abstraction.
-  set -euo pipefail
-
-  # The Tool Runner SDK abstraction is available in all seven SDKs: Python,
-  # TypeScript, C#, Go, Java, PHP, and Ruby. The ant CLI exposes the Messages
-  # API directly and has no equivalent helper. Switch to any SDK tab to see
-  # Ring 5, or keep the Ring 4 loop as your CLI implementation.
-  ```
+  <CodeGroupItem language="CLI">
+    The Tool Runner is a helper in the Claude SDK. The `ant` CLI has no equivalent. To keep using the CLI, use the loop from [Ring 4](https://platform.claude.com/docs/en/agents-and-tools/tool-use/build-a-tool-using-agent#ring-4-error-handling).
+  </CodeGroupItem>
 
   ```python Python
   # Ring 5: The Tool Runner SDK abstraction.
@@ -13298,6 +17019,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
   from anthropic import beta_tool
 
   client = anthropic.Anthropic()
+
 
   @beta_tool
   def create_calendar_event(
@@ -13320,6 +17042,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
           raise ValueError("Too many attendees (max 10)")
       return json.dumps({"event_id": "evt_123", "status": "created", "title": title})
 
+
   @beta_tool
   def list_calendar_events(date: str) -> str:
       """List all calendar events on a given date.
@@ -13329,8 +17052,9 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
       """
       return json.dumps({"events": [{"title": "Existing meeting", "start": "14:00", "end": "15:00"}]})
 
+
   final_message = client.beta.messages.tool_runner(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[create_calendar_event, list_calendar_events],
       messages=[
@@ -13397,7 +17121,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
   });
 
   const finalMessage = await client.beta.messages.toolRunner({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [createCalendarEvent, listCalendarEvents],
     messages: [
@@ -13508,7 +17232,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
   var runner = client.Beta.Messages.ToolRunner(
       new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Messages =
           [
@@ -13615,7 +17339,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
   		[]anthropic.BetaTool{createCalendarEvent, listCalendarEvents},
   		anthropic.BetaToolRunnerParams{
   			BetaMessageNewParams: anthropic.BetaMessageNewParams{
-  				Model:     anthropic.ModelClaudeOpus5,
+  				Model:     anthropic.ModelClaudeOpus5_5,
   				MaxTokens: 1024,
   				Messages: []anthropic.BetaMessageParam{
   					anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(
@@ -13701,7 +17425,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
       BetaToolRunner runner = client.beta()
               .messages()
               .toolRunner(MessageCreateParams.builder()
-                      .model(Model.CLAUDE_OPUS_5)
+                      .model(Model.CLAUDE_OPUS_5_5)
                       .maxTokens(1024)
                       .addBeta("structured-outputs-2025-11-13")
                       .addUserMessage("Check what I have on Monday, March 30, 2026, then schedule a one-hour planning session that day that avoids any conflicts.")
@@ -13762,7 +17486,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
       ],
       run: function (array $input): string {
           if (count($input['attendees'] ?? []) > 10) {
-              throw new InvalidArgumentException('Too many attendees (max 10)');
+              throw new \InvalidArgumentException('Too many attendees (max 10)');
           }
 
           return json_encode([
@@ -13800,7 +17524,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
               'content' => 'Check what I have on Monday, March 30, 2026, then schedule a one-hour planning session that day that avoids any conflicts.',
           ],
       ],
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       tools: [$createCalendarEvent, $listCalendarEvents],
   );
 
@@ -13866,7 +17590,7 @@ Each SDK provides a helper that turns an ordinary function into a runnable tool 
   # The runner calls the API, runs requested tools, and feeds results back
   # until Claude produces a final answer.
   runner = client.beta.messages.tool_runner(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [CreateCalendarEvent.new, ListCalendarEvents.new],
     messages: [
@@ -13921,7 +17645,1519 @@ You started with a single hardcoded tool call and ended with a production-shaped
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-tool-use-code-execution-tool.md`
 
+Claude can analyze data, create visualizations, perform complex calculations, run system commands, create and edit files, and process uploaded files directly within the API conversation. The code execution tool allows Claude to run Bash commands and manipulate files, including writing code, in a secure, sandboxed environment.
 
+**Code execution is free when used with web search or web fetch (`web_search_20260209`, `web_fetch_20260209`, or later).** When one of those tools is in your request, there are no additional charges for code execution in that request beyond standard token costs. This covers both the code execution behind dynamic filtering and any code Claude runs directly. Standard code execution pricing applies when they are not included.
+
+Code execution also powers dynamic filtering in the [web search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool) and [web fetch](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool) tools: Claude filters results inside the code execution environment before they reach the context window. When dynamic filtering runs, the API provisions the code execution it needs for the request automatically, so you don't add the code execution tool to your request for it.
+
+<Note>
+  Reach out through the [feedback form](https://forms.gle/LTAU6Xn2puCJMi1n6) to share your feedback on this feature.
+</Note>
+
+## Tool versions
+
+The code execution tool has three current versions, and every [supported model](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#compatibility) accepts all three. Each version builds on the previous one:
+
+* `code_execution_20250825` supports Bash commands and file operations.
+* `code_execution_20260120` adds REPL state persistence and [programmatic tool calling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling) from within the sandbox. Claude Haiku 4.5 accepts the `code_execution_20260120` and `code_execution_20260521` tool types, but programmatic tool calling and the REPL state persistence that depends on it aren't available on it, so the newer versions behave like `code_execution_20250825` there.
+* `code_execution_20260521` is the same runtime as `code_execution_20260120`. The difference is that the tool description tells Claude about the 90-second wall-clock limit on each Python cell in programmatic tool calling, so Claude can budget long-running cells. A cell that exceeds the limit returns a normal code execution result with a non-zero `return_code` and a `detection_timeout` status message in its output. This is separate from the `execution_time_exceeded` [error code](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#errors), which the API returns when a whole tool invocation exceeds the maximum execution time.
+
+None of the three tool versions requires an `anthropic-beta` header. The legacy code execution beta headers remain valid opt-ins.
+
+The examples on this page use `code_execution_20250825`, which covers the Bash and file operations they demonstrate and behaves the same way on every supported model; use `code_execution_20260120` or later when you need programmatic tool calling or REPL state persistence. The current [web search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool) and [web fetch](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool) tools (`web_search_20260209`, `web_fetch_20260209`, and later) require `code_execution_20260120` or later as their code execution version.
+
+Older tool versions aren't guaranteed to stay compatible with newer models. When you adopt a new model, check [Tool versions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#tool-versions) and [Compatibility](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#compatibility), and prefer the newest tool version your integration supports.
+
+To check whether a model accepts the code execution tool before you send a request, read its `capabilities.server_tools.code_execution.supported` value from the Models API. Don't use the top-level `capabilities.code_execution` value for this. It reports whether code running in this tool can call your request's other tools, as in programmatic tool calling. [Using the Models API](https://platform.claude.com/docs/en/models/overview#using-the-models-api) describes both fields.
+
+<Note>
+  If you're still using the legacy `code_execution_20250522` (Python only), see [Upgrade to latest tool version](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#upgrade-to-latest-tool-version) to migrate from it.
+</Note>
+
+## Quick start
+
+Here's an example that asks Claude to perform a calculation:
+
+<CodeGroup>
+  ```bash cURL
+  curl --fail-with-body -sS https://api.anthropic.com/v1/messages \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "content-type: application/json" \
+    -d '{
+      "model": "claude-opus-5-5",
+      "max_tokens": 4096,
+      "messages": [
+        {
+          "role": "user",
+          "content": "Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+        }
+      ],
+      "tools": [
+        {
+          "type": "code_execution_20250825",
+          "name": "code_execution"
+        }
+      ]
+    }'
+  ```
+
+  ```bash CLI
+  ant messages create \
+    --model claude-opus-5-5 \
+    --max-tokens 4096 \
+    --message '{
+      role: user,
+      content: "Use the code execution tool to calculate the mean and standard
+        deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+    }' \
+    --tool '{type: code_execution_20250825, name: code_execution}'
+  ```
+
+  ```python Python
+  client = anthropic.Anthropic()
+
+  response = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=4096,
+      messages=[
+          {
+              "role": "user",
+              "content": "Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]",
+          }
+      ],
+      tools=[{"type": "code_execution_20250825", "name": "code_execution"}],
+  )
+
+  print(response.to_json())
+  ```
+
+  ```typescript TypeScript
+  const client = new Anthropic();
+
+  const response = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content:
+          "Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+      }
+    ],
+    tools: [{ type: "code_execution_20250825", name: "code_execution" }]
+  });
+
+  console.log(JSON.stringify(response));
+  ```
+
+  ```csharp C#
+  AnthropicClient client = new();
+
+  var message = await client.Messages.Create(new()
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 4096,
+      Messages = [new() { Role = Role.User, Content = "Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]" }],
+      Tools = [new CodeExecutionTool20250825()]
+  });
+
+  Console.WriteLine(message);
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+
+  response, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 4096,
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(anthropic.NewTextBlock("Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]")),
+  	},
+  	Tools: []anthropic.ToolUnionParam{
+  		{OfCodeExecutionTool20250825: &anthropic.CodeExecutionTool20250825Param{}},
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response.RawJSON())
+  ```
+
+  ```java Java
+  AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+  MessageCreateParams params = MessageCreateParams.builder()
+      .model(Model.CLAUDE_OPUS_5_5)
+      .maxTokens(4096L)
+      .addUserMessage("Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]")
+      .addTool(CodeExecutionTool20250825.builder().build())
+      .build();
+
+  Message response = client.messages().create(params);
+  IO.println(ObjectMappers.jsonMapper().valueToTree(response));
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  $message = $client->messages->create(
+      maxTokens: 4096,
+      messages: [
+          [
+              'role' => 'user',
+              'content' => 'Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]',
+          ],
+      ],
+      model: Model::CLAUDE_OPUS_5_5,
+      tools: [new CodeExecutionTool20250825()],
+  );
+
+  echo json_encode($message, JSON_PRETTY_PRINT), PHP_EOL;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  message = client.messages.create(
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: "Use the code execution tool to calculate the mean and standard deviation of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]"
+      }
+    ],
+    tools: [Anthropic::CodeExecutionTool20250825.new]
+  )
+
+  puts message.to_json
+  ```
+</CodeGroup>
+
+The response interleaves `server_tool_use` blocks (the commands Claude ran) with their tool result blocks, followed by Claude's text. The top level also includes a `container` object whose `id` you can [reuse across requests](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#container-reuse). See [Response format](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#response-format) for the block shapes.
+
+## How code execution works
+
+When you add the code execution tool to your API request:
+
+1. Claude evaluates whether code execution would help answer your question
+
+2. The tool automatically provides Claude with the following capabilities:
+
+   * **Bash commands:** Run shell commands for system operations
+   * **File operations:** Create, view, and edit files directly, including writing code
+
+3. Claude can use any combination of these capabilities in a single request
+
+4. All operations run in a secure, sandboxed container. The container has no internet access, so Claude can't download packages at runtime: only the [pre-installed libraries](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#pre-installed-libraries) are available
+
+5. The API runs every command server-side and returns the results to Claude within the same request, so you never execute code or send back `tool_result` blocks yourself. One exception is when Claude calls one of your client tools alongside code execution: the API returns the code execution call without its result. The result arrives in a later response, after you send back the `tool_result` blocks for your client tools
+
+6. Each request runs in a new container unless you pass an earlier response's container ID back (see [Container reuse](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#container-reuse))
+
+7. Claude provides results with any generated charts, calculations, or analysis
+
+The container has Python pre-installed. Claude writes Python with the file operations sub-tool and runs it with a Bash command. With `code_execution_20260120` or later and [programmatic tool calling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling), the Python interpreter state (such as variable bindings) also persists across requests that reuse the container.
+
+### When Claude runs code
+
+Claude runs code when the request benefits from computation or file handling:
+
+* Non-trivial math (large numbers, many steps, precision-sensitive results)
+* Data analysis, file parsing, or visualization
+* Algorithm execution or simulation
+* Explicit requests to "run", "compute", or "execute"
+
+Claude answers directly without running code for:
+
+* Simple arithmetic and well-known math facts
+* Factual, conversational, or creative requests
+* Simple unit conversions or translations
+
+If you want Claude to run code for a borderline request, ask explicitly (for example, "run code to verify this").
+
+## Work with files
+
+### Upload and analyze your own files
+
+To analyze your own data files (such as CSV, Excel, or images), upload them through the Files API and reference them in your request.
+
+The Python environment can process various file types uploaded through the Files API, including:
+
+* CSV
+* Excel (.xlsx, .xls)
+* JSON
+* XML
+* Images (JPEG, PNG, GIF, WebP)
+* Text files (.txt, .md, .py, and others)
+
+#### Upload and analyze files
+
+1. **Upload your file** using the [Files API](https://platform.claude.com/docs/en/build-with-claude/files)
+2. **Reference the file** in your message using a `container_upload` content block
+3. **Include the code execution tool** in your API request
+
+<CodeGroup>
+  ```bash cURL
+  # First, upload a file and capture the file ID (using jq)
+  FILE_ID=$(curl --fail-with-body -sS https://api.anthropic.com/v1/files \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -F "file=@data.csv" | jq -r '.id')
+
+  # Then use the file_id with code execution
+  curl --fail-with-body -sS https://api.anthropic.com/v1/messages \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "content-type: application/json" \
+    -d '{
+      "model": "claude-opus-5-5",
+      "max_tokens": 4096,
+      "messages": [{
+        "role": "user",
+        "content": [
+          {"type": "text", "text": "Analyze this CSV data"},
+          {"type": "container_upload", "file_id": "'"$FILE_ID"'"}
+        ]
+      }],
+      "tools": [{
+        "type": "code_execution_20250825",
+        "name": "code_execution"
+      }]
+    }'
+  ```
+
+  ```bash CLI
+  # First, upload a file and capture the file ID
+  FILE_ID=$(ant files upload --file ./data.csv --transform id --raw-output)
+
+  # Then use the file_id with code execution
+  ant messages create <<YAML
+  model: claude-opus-5-5
+  max_tokens: 4096
+  messages:
+    - role: user
+      content:
+        - type: text
+          text: Analyze this CSV data
+        - type: container_upload
+          file_id: $FILE_ID
+  tools:
+    - type: code_execution_20250825
+      name: code_execution
+  YAML
+  ```
+
+  ```python Python
+  client = anthropic.Anthropic()
+
+  # Upload a file
+  file_object = client.files.upload(file=Path("data.csv"))
+
+  # Use the file_id with code execution
+  response = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=4096,
+      messages=[
+          {
+              "role": "user",
+              "content": [
+                  {"type": "text", "text": "Analyze this CSV data"},
+                  {"type": "container_upload", "file_id": file_object.id},
+              ],
+          }
+      ],
+      tools=[{"type": "code_execution_20250825", "name": "code_execution"}],
+  )
+
+  print(response.to_json())
+  ```
+
+  ```typescript TypeScript
+  import { createReadStream } from "node:fs";
+  // ...
+  const client = new Anthropic();
+
+  // Upload a file
+  const fileObject = await client.files.upload({
+    file: createReadStream("data.csv")
+  });
+
+  // Use the file_id with code execution
+  const response = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: "Analyze this CSV data" },
+          { type: "container_upload", file_id: fileObject.id }
+        ]
+      }
+    ],
+    tools: [
+      {
+        type: "code_execution_20250825",
+        name: "code_execution"
+      }
+    ]
+  });
+
+  console.log(JSON.stringify(response));
+  ```
+
+  ```csharp C#
+  AnthropicClient client = new();
+
+  // Upload a file
+  var fileObject = await client.Files.Upload(new FileUploadParams
+  {
+      File = File.OpenRead("data.csv")
+  });
+
+  // Use the file_id with code execution
+  var parameters = new MessageCreateParams
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 4096,
+      Messages = [
+          new()
+          {
+              Role = Role.User,
+              Content = new([
+                  new TextBlockParam { Text = "Analyze this CSV data" },
+                  new ContainerUploadBlockParam { FileID = fileObject.ID }
+              ])
+          }
+      ],
+      Tools = [new CodeExecutionTool20250825()]
+  };
+
+  var response = await client.Messages.Create(parameters);
+  Console.WriteLine(response);
+  ```
+
+  ```go Go
+  ctx := context.Background()
+  client := anthropic.NewClient()
+
+  // Upload a file
+  file, err := os.Open("data.csv")
+  if err != nil {
+  	log.Fatal(err)
+  }
+  defer file.Close()
+
+  fileObject, err := client.Files.Upload(ctx, anthropic.FileUploadParams{
+  	File: file,
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  // Use the file_id with code execution
+  response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 4096,
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(
+  			anthropic.NewTextBlock("Analyze this CSV data"),
+  			anthropic.NewContainerUploadBlock(fileObject.ID),
+  		),
+  	},
+  	Tools: []anthropic.ToolUnionParam{
+  		{OfCodeExecutionTool20250825: &anthropic.CodeExecutionTool20250825Param{}},
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  fmt.Println(response.RawJSON())
+  ```
+
+  ```java Java
+  AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+  // Upload a file
+  FileMetadata fileObject = client.files().upload(
+      FileUploadParams.builder()
+          .file(Path.of("data.csv"))
+          .build()
+  );
+
+  // Use the file_id with code execution
+  Message response = client.messages().create(
+      MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(4096L)
+          .addUserMessageOfBlockParams(List.of(
+              ContentBlockParam.ofText(TextBlockParam.builder()
+                  .text("Analyze this CSV data")
+                  .build()),
+              ContentBlockParam.ofContainerUpload(ContainerUploadBlockParam.builder()
+                  .fileId(fileObject.id())
+                  .build())
+          ))
+          .addTool(CodeExecutionTool20250825.builder().build())
+          .build()
+  );
+
+  IO.println(ObjectMappers.jsonMapper().valueToTree(response));
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  // Upload a file
+  $fileObject = $client->files->upload(
+      file: FileParam::fromResource(fopen('data.csv', 'r')),
+  );
+
+  // Use the file_id with code execution
+  $response = $client->messages->create(
+      model: Model::CLAUDE_OPUS_5_5,
+      maxTokens: 4096,
+      messages: [
+          [
+              'role' => 'user',
+              'content' => [
+                  TextBlockParam::with(text: 'Analyze this CSV data'),
+                  ContainerUploadBlockParam::with(fileID: $fileObject->id),
+              ],
+          ],
+      ],
+      tools: [new CodeExecutionTool20250825()],
+  );
+
+  echo json_encode($response), PHP_EOL;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  # Upload a file
+  file_object = client.files.upload(
+    file: Pathname("data.csv")
+  )
+
+  # Use the file_id with code execution
+  response = client.messages.create(
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: "Analyze this CSV data" },
+          { type: "container_upload", file_id: file_object.id }
+        ]
+      }
+    ],
+    tools: [
+      Anthropic::CodeExecutionTool20250825.new
+    ]
+  )
+
+  puts response.to_json
+  ```
+</CodeGroup>
+
+### Retrieve generated files
+
+When Claude saves files to its output directory during code execution (see [How generated files are captured](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#how-generated-files-are-captured)), each file's ID appears in the code execution tool result, and you can download it with the [Files API](https://platform.claude.com/docs/en/build-with-claude/files):
+
+<CodeGroup exclude="shell">
+  <CodeGroupItem language="cURL">
+    Downloading every generated file takes a loop over the file IDs in the tool result, which needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this.
+  </CodeGroupItem>
+
+  <CodeGroupItem language="CLI">
+    Downloading every generated file takes a loop over the file IDs in the tool result, which needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this.
+  </CodeGroupItem>
+
+  ```python Python
+  client = Anthropic()
+
+  # Request code execution that creates files
+  response = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=4096,
+      messages=[
+          {
+              "role": "user",
+              "content": "Create a matplotlib visualization and save it as output.png",
+          }
+      ],
+      tools=[{"type": "code_execution_20250825", "name": "code_execution"}],
+  )
+
+
+  # Extract file IDs from the response
+  def extract_file_ids(response: Message) -> list[str]:
+      file_ids: list[str] = []
+      for item in response.content:
+          if item.type == "bash_code_execution_tool_result":
+              content_item = item.content
+              if content_item.type == "bash_code_execution_result":
+                  for output_block in content_item.content:
+                      file_ids.append(output_block.file_id)
+      return file_ids
+
+
+  # Download the created files
+  for file_id in extract_file_ids(response):
+      file_metadata = client.files.retrieve_metadata(file_id)
+      file_content = client.files.download(file_id)
+      file_content.write_to_file(file_metadata.filename)
+      print(f"Downloaded: {file_metadata.filename}")
+  ```
+
+  ```typescript TypeScript
+  import { writeFile } from "node:fs/promises";
+
+  const client = new Anthropic();
+
+  // Request code execution that creates files
+  const response = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: "Create a matplotlib visualization and save it as output.png"
+      }
+    ],
+    tools: [
+      {
+        type: "code_execution_20250825",
+        name: "code_execution"
+      }
+    ]
+  });
+
+  // Extract the file IDs from the response and download each created file
+  for (const block of response.content) {
+    if (block.type === "bash_code_execution_tool_result") {
+      const result = block.content;
+      if (result.type === "bash_code_execution_result") {
+        for (const outputBlock of result.content) {
+          const [fileMetadata, fileResponse] = await Promise.all([
+            client.files.retrieveMetadata(outputBlock.file_id),
+            client.files.download(outputBlock.file_id)
+          ]);
+          await writeFile(fileMetadata.filename, await fileResponse.bytes());
+          console.log(`Downloaded: ${fileMetadata.filename}`);
+        }
+      }
+    }
+  }
+  ```
+
+  ```csharp C#
+  AnthropicClient client = new();
+
+  var parameters = new MessageCreateParams
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 4096,
+      Messages = [new() { Role = Role.User, Content = "Create a matplotlib visualization and save it as output.png" }],
+      Tools = [new CodeExecutionTool20250825()]
+  };
+
+  var response = await client.Messages.Create(parameters);
+
+  // Collect the file IDs from the tool results
+  List<string> fileIds = [];
+  foreach (var block in response.Content)
+  {
+      if (!block.TryPickBashCodeExecutionToolResult(out var toolResult))
+          continue;
+      if (!toolResult.Content.TryPickBashCodeExecutionResultBlock(out var result))
+          continue;
+      foreach (var output in result.Content)
+      {
+          fileIds.Add(output.FileID);
+      }
+  }
+
+  // Download each created file
+  foreach (var fileId in fileIds)
+  {
+      var fileMetadata = await client.Files.RetrieveMetadata(fileId);
+      using var download = await client.Files.Download(fileId);
+      var downloadStream = await download.ReadAsStream();
+      await using var target = File.Create(fileMetadata.Filename);
+      await downloadStream.CopyToAsync(target);
+      Console.WriteLine($"Downloaded: {fileMetadata.Filename}");
+  }
+  ```
+
+  ```go Go
+  	client := anthropic.NewClient()
+  	ctx := context.Background()
+
+  	response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
+  		Model:     anthropic.ModelClaudeOpus5_5,
+  		MaxTokens: 4096,
+  		Messages: []anthropic.MessageParam{
+  			anthropic.NewUserMessage(anthropic.NewTextBlock("Create a matplotlib visualization and save it as output.png")),
+  		},
+  		Tools: []anthropic.ToolUnionParam{
+  			{OfCodeExecutionTool20250825: &anthropic.CodeExecutionTool20250825Param{}},
+  		},
+  	})
+  	if err != nil {
+  		log.Fatal(err)
+  	}
+
+  	fileIDs := extractFileIDs(response)
+
+  	for _, fileID := range fileIDs {
+  		fileMetadata, err := client.Files.GetMetadata(ctx, fileID, anthropic.FileGetMetadataParams{})
+  		if err != nil {
+  			log.Fatal(err)
+  		}
+
+  		fileContent, err := client.Files.Download(ctx, fileID, anthropic.FileDownloadParams{})
+  		if err != nil {
+  			log.Fatal(err)
+  		}
+
+  		outFile, err := os.Create(fileMetadata.Filename)
+  		if err != nil {
+  			log.Fatal(err)
+  		}
+
+  		_, err = io.Copy(outFile, fileContent.Body)
+  		if err != nil {
+  			log.Fatal(err)
+  		}
+  		outFile.Close()
+  		fileContent.Body.Close()
+
+  		fmt.Printf("Downloaded: %s\n", fileMetadata.Filename)
+  	}
+  // ...
+
+  func extractFileIDs(response *anthropic.Message) []string {
+  	var fileIDs []string
+  	for _, item := range response.Content {
+  		switch variant := item.AsAny().(type) {
+  		case anthropic.BashCodeExecutionToolResultBlock:
+  			// Collect the file IDs from the tool result
+  			for _, file := range variant.Content.Content {
+  				if file.FileID != "" {
+  					fileIDs = append(fileIDs, file.FileID)
+  				}
+  			}
+  		}
+  	}
+  	return fileIDs
+  }
+  ```
+
+  ```java Java
+  void main() throws Exception {
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      MessageCreateParams params = MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(4096L)
+          .addUserMessage("Create a matplotlib visualization and save it as output.png")
+          .addTool(CodeExecutionTool20250825.builder().build())
+          .build();
+
+      Message response = client.messages().create(params);
+
+      List<String> fileIds = extractFileIds(response);
+
+      for (String fileId : fileIds) {
+          FileMetadata fileMetadata = client.files().retrieveMetadata(fileId);
+          try (HttpResponse fileContent = client.files().download(fileId)) {
+              Files.copy(
+                  fileContent.body(),
+                  Path.of(fileMetadata.filename()),
+                  StandardCopyOption.REPLACE_EXISTING);
+          }
+          IO.println("Downloaded: " + fileMetadata.filename());
+      }
+  }
+
+  List<String> extractFileIds(Message response) {
+      List<String> fileIds = new ArrayList<>();
+      // Collect the file IDs from the tool results
+      for (ContentBlock item : response.content()) {
+          item.bashCodeExecutionToolResult().ifPresent(toolResult -> {
+              if (toolResult.content().isBashCodeExecutionResultBlock()) {
+                  BashCodeExecutionResultBlock result =
+                      toolResult.content().asBashCodeExecutionResultBlock();
+                  for (BashCodeExecutionOutputBlock output : result.content()) {
+                      fileIds.add(output.fileId());
+                  }
+              }
+          });
+      }
+      return fileIds;
+  }
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  // Request code execution that creates files
+  $response = $client->messages->create(
+      maxTokens: 4096,
+      messages: [
+          [
+              'role' => 'user',
+              'content' => 'Create a matplotlib visualization and save it as output.png',
+          ],
+      ],
+      model: Model::CLAUDE_OPUS_5_5,
+      tools: [new CodeExecutionTool20250825()],
+  );
+
+  /**
+   * Extract file IDs from the response.
+   *
+   * @return list<string>
+   */
+  function extractFileIds(Message $response): array
+  {
+      $fileIds = [];
+      foreach ($response->content as $block) {
+          if ($block->type !== 'bash_code_execution_tool_result') {
+              continue;
+          }
+          $resultBlock = $block->content;
+          if ($resultBlock->type !== 'bash_code_execution_result') {
+              continue;
+          }
+          foreach ($resultBlock->content as $outputBlock) {
+              $fileIds[] = $outputBlock->fileID;
+          }
+      }
+      return $fileIds;
+  }
+
+  // Download the created files
+  foreach (extractFileIds($response) as $fileId) {
+      $fileMetadata = $client->files->retrieveMetadata($fileId);
+      $fileContent = $client->files->download($fileId);
+
+      file_put_contents($fileMetadata->filename, $fileContent);
+      echo "Downloaded: {$fileMetadata->filename}\n";
+  }
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  response = client.messages.create(
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: "Create a matplotlib visualization and save it as output.png"
+      }
+    ],
+    tools: [
+      {
+        type: "code_execution_20250825",
+        name: "code_execution"
+      }
+    ]
+  )
+
+  def extract_file_ids(response)
+    file_ids = []
+    response.content.each do |item|
+      if item.type == :bash_code_execution_tool_result
+        # WORKAROUND for anthropic-sdk-ruby union coercion bug (SDK-636): item.content is a
+        # nested content union, so the typed accessors on `item.content` are unreliable.
+        # Read the raw response data through the public `BaseModel#[]` API instead.
+        content_item = item.content
+        if content_item[:type].to_s == "bash_code_execution_result"
+          Array(content_item[:content]).each do |output_block|
+            file_ids << output_block[:file_id]
+          end
+        end
+      end
+    end
+    file_ids
+  end
+
+  extract_file_ids(response).each do |file_id|
+    file_metadata = client.files.retrieve_metadata(file_id)
+    file_content = client.files.download(file_id)
+
+    File.open(file_metadata.filename, "wb") do |f|
+      f.write(file_content.read)
+    end
+
+    puts "Downloaded: #{file_metadata.filename}"
+  end
+  ```
+</CodeGroup>
+
+#### How generated files are captured
+
+Each `bash_code_execution` call gets a new, empty directory, available to the command as `$OUTPUT_DIR`. When the command finishes, the files at the top level of that directory are captured and returned as the `file_id` entries in the result's `content` list. Files written anywhere else stay in the container and aren't returned.
+
+The tool description tells Claude to share files by copying them into `$OUTPUT_DIR`. If your application depends on receiving a file, prompt Claude to copy it into `$OUTPUT_DIR` and list the directory in the same command, so the `ls` output confirms the capture (Claude doesn't see the `content` list):
+
+```bash
+python /tmp/make_report.py && cp /tmp/report.pdf "$OUTPUT_DIR/" && ls "$OUTPUT_DIR"
+```
+
+A file Claude wrote elsewhere is still in the container, so you can [reuse the container](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#container-reuse) and ask Claude to copy it into `$OUTPUT_DIR`.
+
+### Content Credentials on generated files
+
+On the Claude API, supported image, video, and audio files that Claude produces in the code execution sandbox carry [C2PA](https://c2pa.org/) Content Credentials when you download them through the [Files API](https://platform.claude.com/docs/en/build-with-claude/files). [Supported formats](https://opensource.contentauthenticity.org/docs/sdk-repos/c2pa-python/docs/supported-formats/) include PNG, JPEG, GIF, WebP, TIFF, HEIC, AVIF, SVG, MP4, MOV, MP3, WAV, FLAC, and M4A. The credential is a cryptographically signed manifest embedded in the file's metadata. It identifies Anthropic as the issuer, carries a timestamp, and records the action description "Claude provided this file at the request of a user and may have created or modified the file contents."
+
+Signing requires no changes to your requests or response handling, and the manifest records nothing about you, your organization, or your request. The file's visible content is unchanged. The manifest adds a few kilobytes, so the downloaded file's size and checksum differ from the file as it exists inside the container. Text files, PDFs, and office documents are not signed because they are not supported formats for signing. Files you upload are stored as-is, including any Content Credentials they already carry.
+
+To verify a credential, inspect the file with any C2PA-compatible tool, such as the open-source [c2patool command-line utility](https://github.com/contentauth/c2pa-rs). Re-encoding, format conversion, screenshots, and tools that strip metadata remove the credential, so a missing credential doesn't mean a file wasn't produced with Claude. For more on why a credential can be missing, see [How Claude marks AI-generated content](https://support.claude.com/en/articles/16266773-how-claude-marks-ai-generated-content).
+
+## Tool definition
+
+The code execution tool requires no additional parameters:
+
+```json JSON
+{
+  "type": "code_execution_20250825",
+  "name": "code_execution"
+}
+```
+
+Both fields are fixed: `type` selects the tool version, and `name` must be `code_execution`.
+
+When you provide this tool, Claude automatically gains access to two sub-tools:
+
+* `bash_code_execution`: Run shell commands
+* `text_editor_code_execution`: View, create, and edit files, including writing code
+
+When Claude runs code, the response also includes a top-level `container` object with the container's `id` and `expires_at` timestamp. Pass that ID back in the top-level `container` request parameter to keep using the same container. See [Container reuse](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#container-reuse).
+
+## Response format
+
+The code execution tool can return two types of results depending on the operation:
+
+### Bash command response
+
+```json Output
+{
+  "type": "server_tool_use",
+  "id": "srvtoolu_01B3C4D5E6F7G8H9I0J1K2L3",
+  "name": "bash_code_execution",
+  "input": {
+    "command": "ls -la | head -5"
+  }
+},
+{
+  "type": "bash_code_execution_tool_result",
+  "tool_use_id": "srvtoolu_01B3C4D5E6F7G8H9I0J1K2L3",
+  "content": {
+    "type": "bash_code_execution_result",
+    "stdout": "total 24\ndrwxr-xr-x 2 user user 4096 Jan 1 12:00 .\ndrwxr-xr-x 3 user user 4096 Jan 1 11:00 ..\n-rw-r--r-- 1 user user  220 Jan 1 12:00 data.csv\n-rw-r--r-- 1 user user  180 Jan 1 12:00 config.json",
+    "stderr": "",
+    "return_code": 0,
+    "content": []
+  }
+}
+```
+
+### File operation responses
+
+**View file:**
+
+```json Output
+{
+  "type": "server_tool_use",
+  "id": "srvtoolu_01C4D5E6F7G8H9I0J1K2L3M4",
+  "name": "text_editor_code_execution",
+  "input": {
+    "command": "view",
+    "path": "config.json"
+  }
+},
+{
+  "type": "text_editor_code_execution_tool_result",
+  "tool_use_id": "srvtoolu_01C4D5E6F7G8H9I0J1K2L3M4",
+  "content": {
+    "type": "text_editor_code_execution_view_result",
+    "file_type": "text",
+    "content": "{\n  \"setting\": \"value\",\n  \"debug\": true\n}",
+    "num_lines": 4,
+    "start_line": 1,
+    "total_lines": 4
+  }
+}
+```
+
+**Create file:**
+
+```json Output
+{
+  "type": "server_tool_use",
+  "id": "srvtoolu_01D5E6F7G8H9I0J1K2L3M4N5",
+  "name": "text_editor_code_execution",
+  "input": {
+    "command": "create",
+    "path": "new_file.txt",
+    "file_text": "Hello, World!"
+  }
+},
+{
+  "type": "text_editor_code_execution_tool_result",
+  "tool_use_id": "srvtoolu_01D5E6F7G8H9I0J1K2L3M4N5",
+  "content": {
+    "type": "text_editor_code_execution_create_result",
+    "is_file_update": false
+  }
+}
+```
+
+**Edit file (str\_replace):**
+
+```json Output
+{
+  "type": "server_tool_use",
+  "id": "srvtoolu_01E6F7G8H9I0J1K2L3M4N5O6",
+  "name": "text_editor_code_execution",
+  "input": {
+    "command": "str_replace",
+    "path": "config.json",
+    "old_str": "\"debug\": true",
+    "new_str": "\"debug\": false"
+  }
+},
+{
+  "type": "text_editor_code_execution_tool_result",
+  "tool_use_id": "srvtoolu_01E6F7G8H9I0J1K2L3M4N5O6",
+  "content": {
+    "type": "text_editor_code_execution_str_replace_result",
+    "old_start": 3,
+    "old_lines": 1,
+    "new_start": 3,
+    "new_lines": 1,
+    "lines": ["-  \"debug\": true", "+  \"debug\": false"]
+  }
+}
+```
+
+### Results
+
+Bash command results (`bash_code_execution_result`) include:
+
+* `stdout`: Output from successful execution
+* `stderr`: Error messages if execution fails
+* `return_code`: 0 for success, non-zero for failure
+* `content`: A list with an entry for each file the command left in `$OUTPUT_DIR` (see [How generated files are captured](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#how-generated-files-are-captured)). Each entry carries the `file_id` to [retrieve the file](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#retrieve-generated-files) with the Files API
+
+File operation results have their own fields:
+
+* **View** (`text_editor_code_execution_view_result`): `file_type`, `content`, `num_lines`, `start_line`, `total_lines`
+* **Create** (`text_editor_code_execution_create_result`): `is_file_update` (whether the file already existed)
+* **Edit** (`text_editor_code_execution_str_replace_result`): `old_start`, `old_lines`, `new_start`, `new_lines`, `lines` (diff format)
+
+### Errors
+
+Each tool type can return specific errors:
+
+**Common errors (all tools):**
+
+```json Output
+{
+  "type": "bash_code_execution_tool_result",
+  "tool_use_id": "srvtoolu_01VfmxgZ46TiHbmXgy928hQR",
+  "content": {
+    "type": "bash_code_execution_tool_result_error",
+    "error_code": "unavailable"
+  }
+}
+```
+
+**Error codes by tool type:**
+
+| Tool         | Error code                | Description                                             |
+| ------------ | ------------------------- | ------------------------------------------------------- |
+| All tools    | `unavailable`             | The tool is temporarily unavailable                     |
+| All tools    | `execution_time_exceeded` | The tool invocation exceeded the maximum execution time |
+| All tools    | `invalid_tool_input`      | Invalid parameters provided to the tool                 |
+| All tools    | `too_many_requests`       | Rate limit exceeded for tool usage                      |
+| bash         | `output_file_too_large`   | Command output exceeded the maximum size                |
+| text\_editor | `file_not_found`          | File doesn't exist (for view/edit operations)           |
+
+An expired container can't be reused: requests that reference it return an error instead of restoring it. Send the request again without the `container` parameter to get a new container.
+
+### `pause_turn` stop reason
+
+The response might include a `pause_turn` stop reason, which indicates that the API paused a long-running turn. You may provide the response back as-is in a subsequent request to let Claude continue its turn, or modify the content if you want to interrupt the conversation.
+
+## Containers
+
+The code execution tool runs in a secure, containerized environment designed specifically for code execution, with a higher focus on Python.
+
+### Runtime environment
+
+* **Python version:** 3.11
+* **Operating system:** Linux-based container
+* **Architecture:** x86\_64 (AMD64)
+
+### Resource limits
+
+* **Memory:** 5 GiB RAM
+* **Disk space:** 5 GiB workspace storage
+* **CPU:** 1 CPU
+* **Execution time:** A tool invocation that runs past the maximum execution time returns an `execution_time_exceeded` [error](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#errors). With [programmatic tool calling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling), each REPL cell also has a 90-second wall-clock limit
+
+### Networking and security
+
+* **Internet access:** Completely disabled for security
+* **External connections:** No outbound network requests permitted
+* **Sandbox isolation:** Full isolation from host system and other containers
+* **File access:** Limited to workspace directory only
+* **Workspace scoping:** Like the [Files API](https://platform.claude.com/docs/en/build-with-claude/files), containers are scoped to the request's workspace
+* **Expiration:** Containers expire 30 days after creation
+
+### Pre-installed libraries
+
+The sandboxed Python environment includes these commonly used libraries:
+
+* **Data science:** pandas, numpy, scipy, scikit-learn, statsmodels
+* **Visualization:** matplotlib, seaborn
+* **File processing:** pyarrow, openpyxl, xlsxwriter, xlrd, pillow, python-pptx, python-docx, pypdf, pdfplumber, pypdfium2, pdf2image, pdfkit, tabula-py, reportlab\[pycairo], Img2pdf
+* **Math and computing:** sympy, mpmath
+* **Utilities:** tqdm, python-dateutil, pytz, joblib
+
+The container also includes command-line tools such as unzip, unrar, 7zip, bc, rg (ripgrep), fd, and sqlite.
+
+The container has no internet access, so Claude can't download or install additional packages at runtime: only the pre-installed libraries are available.
+
+## Container reuse
+
+You can reuse an existing container across multiple API requests by providing the container ID from a previous response. This allows you to maintain created files between requests. With `code_execution_20260120` or later and [programmatic tool calling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling), the Python interpreter state persists as well.
+
+Containers expire 30 days after creation. After about 5 minutes of inactivity a container is checkpointed, and sending a request with its ID inside the 30-day window restores it. The `expires_at` timestamp in the response's `container` object is a shorter rolling value and doesn't report the 30-day limit. A container that has expired can't be reused. Send the request again without the `container` parameter to get a new container.
+
+### Example
+
+<CodeGroup>
+  ```bash cURL
+  # First request: Create a file with a random number, capturing the container ID (using jq)
+  CONTAINER_ID=$(curl -s https://api.anthropic.com/v1/messages \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "content-type: application/json" \
+    -d '{
+      "model": "claude-opus-5-5",
+      "max_tokens": 4096,
+      "messages": [{
+        "role": "user",
+        "content": "Write a file with a random number and save it to \"/tmp/number.txt\""
+      }],
+      "tools": [{
+        "type": "code_execution_20250825",
+        "name": "code_execution"
+      }]
+    }' | jq -r '.container.id')
+
+  # Second request: Reuse the container to read the file
+  curl https://api.anthropic.com/v1/messages \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "content-type: application/json" \
+    -d '{
+      "container": "'"$CONTAINER_ID"'",
+      "model": "claude-opus-5-5",
+      "max_tokens": 4096,
+      "messages": [{
+        "role": "user",
+        "content": "Read the number from \"/tmp/number.txt\" and calculate its square"
+      }],
+      "tools": [{
+        "type": "code_execution_20250825",
+        "name": "code_execution"
+      }]
+    }'
+  ```
+
+  ```bash CLI
+  # First request: Create a file with a random number
+  CONTAINER_ID=$(ant messages create \
+    --model claude-opus-5-5 \
+    --max-tokens 4096 \
+    --message '{role: user, content: Write a file with a random number and save it to "/tmp/number.txt"}' \
+    --tool '{type: code_execution_20250825, name: code_execution}' \
+    --transform container.id --raw-output)
+
+  # Second request: Reuse the container to read the file
+  ant messages create \
+    --container "$CONTAINER_ID" \
+    --model claude-opus-5-5 \
+    --max-tokens 4096 \
+    --message '{role: user, content: Read the number from "/tmp/number.txt" and calculate its square}' \
+    --tool '{type: code_execution_20250825, name: code_execution}'
+  ```
+
+  ```python Python
+  client = anthropic.Anthropic()
+
+  # First request: create a file with a random number in a new container
+  response1 = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=4096,
+      messages=[
+          {
+              "role": "user",
+              "content": "Write a file with a random number and save it to '/tmp/number.txt'",
+          }
+      ],
+      tools=[{"type": "code_execution_20250825", "name": "code_execution"}],
+  )
+
+  # Second request: pass the container ID back so Claude reuses the same container
+  response2 = client.messages.create(
+      container=response1.container.id,
+      model="claude-opus-5-5",
+      max_tokens=4096,
+      messages=[
+          {
+              "role": "user",
+              "content": "Read the number from '/tmp/number.txt' and calculate its square",
+          }
+      ],
+      tools=[{"type": "code_execution_20250825", "name": "code_execution"}],
+  )
+
+  print(response2.to_json())
+  ```
+
+  ```typescript TypeScript
+  const client = new Anthropic();
+
+  // First request: Claude creates a file inside a fresh code execution container
+  const response1 = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: "Write a file with a random number and save it to '/tmp/number.txt'"
+      }
+    ],
+    tools: [{ type: "code_execution_20250825", name: "code_execution" }]
+  });
+
+  // The response includes the container once the code execution tool has run
+  if (!response1.container) {
+    throw new Error("Expected the first response to include a container");
+  }
+
+  // Second request: pass the container ID back so it reuses the same container
+  const response2 = await client.messages.create({
+    container: response1.container.id,
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    messages: [
+      { role: "user", content: "Read the number from /tmp/number.txt and calculate its square" }
+    ],
+    tools: [{ type: "code_execution_20250825", name: "code_execution" }]
+  });
+
+  console.log(JSON.stringify(response2));
+  ```
+
+  ```csharp C#
+  AnthropicClient client = new();
+
+  // First request: Claude creates a file inside a fresh code execution container
+  var response1 = await client.Messages.Create(new()
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 4096,
+      Messages = [new() { Role = Role.User, Content = "Write a file with a random number and save it to '/tmp/number.txt'" }],
+      Tools = [new CodeExecutionTool20250825()]
+  });
+
+  // Second request: pass the container ID back so Claude reuses the same container
+  var response2 = await client.Messages.Create(new()
+  {
+      Container = response1.Container!.ID,
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 4096,
+      Messages = [new() { Role = Role.User, Content = "Read the number from '/tmp/number.txt' and calculate its square" }],
+      Tools = [new CodeExecutionTool20250825()]
+  });
+
+  Console.WriteLine(response2);
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+  ctx := context.Background()
+
+  codeExecution := []anthropic.ToolUnionParam{
+  	{OfCodeExecutionTool20250825: &anthropic.CodeExecutionTool20250825Param{}},
+  }
+
+  // First request: create a file with a random number in a new container
+  response1, err := client.Messages.New(ctx, anthropic.MessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 4096,
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(anthropic.NewTextBlock("Write a file with a random number and save it to '/tmp/number.txt'")),
+  	},
+  	Tools: codeExecution,
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  // Reuse the container from the first request so the file is still there.
+  response2, err := client.Messages.New(ctx, anthropic.MessageNewParams{
+  	Container: anthropic.MessageCreateParamsContainerUnion{
+  		OfString: anthropic.String(response1.Container.ID),
+  	},
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 4096,
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(anthropic.NewTextBlock("Read the number from '/tmp/number.txt' and calculate its square")),
+  	},
+  	Tools: codeExecution,
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  fmt.Println(response2.RawJSON())
+  ```
+
+  ```java Java
+  AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+  // First request: create a file with a random number in a new container
+  MessageCreateParams params1 = MessageCreateParams.builder()
+      .model(Model.CLAUDE_OPUS_5_5)
+      .maxTokens(4096L)
+      .addUserMessage("Write a file with a random number and save it to '/tmp/number.txt'")
+      .addTool(CodeExecutionTool20250825.builder().build())
+      .build();
+
+  Message response1 = client.messages().create(params1);
+
+  // Second request: pass the container ID back so it reuses the same container
+  MessageCreateParams params2 = MessageCreateParams.builder()
+      .container(response1.container().orElseThrow().id())
+      .model(Model.CLAUDE_OPUS_5_5)
+      .maxTokens(4096L)
+      .addUserMessage("Read the number from '/tmp/number.txt' and calculate its square")
+      .addTool(CodeExecutionTool20250825.builder().build())
+      .build();
+
+  Message response2 = client.messages().create(params2);
+  IO.println(ObjectMappers.jsonMapper().valueToTree(response2));
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  // First request: Claude writes the file inside a fresh code execution container
+  $response1 = $client->messages->create(
+      maxTokens: 4096,
+      messages: [
+          [
+              'role' => 'user',
+              'content' => "Write a file with a random number and save it to '/tmp/number.txt'",
+          ],
+      ],
+      model: Model::CLAUDE_OPUS_5_5,
+      tools: [new CodeExecutionTool20250825()],
+  );
+
+  // Second request: reuse the container so '/tmp/number.txt' is still there
+  $response2 = $client->messages->create(
+      container: $response1->container->id,
+      maxTokens: 4096,
+      messages: [
+          [
+              'role' => 'user',
+              'content' => "Read the number from '/tmp/number.txt' and calculate its square",
+          ],
+      ],
+      model: Model::CLAUDE_OPUS_5_5,
+      tools: [new CodeExecutionTool20250825()],
+  );
+
+  echo json_encode($response2), PHP_EOL;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  # First request: Claude creates the file inside a fresh code execution container
+  response1 = client.messages.create(
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: "Write a file with a random number and save it to '/tmp/number.txt'"
+      }
+    ],
+    tools: [Anthropic::CodeExecutionTool20250825.new]
+  )
+
+  # Second request: pass the container ID back so Claude reuses the same container
+  response2 = client.messages.create(
+    container: response1.container.id,
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: "Read the number from '/tmp/number.txt' and calculate its square"
+      }
+    ],
+    tools: [Anthropic::CodeExecutionTool20250825.new]
+  )
+
+  puts response2.to_json
+  ```
+</CodeGroup>
+
+## Using code execution with other execution tools
+
+When you provide code execution alongside client-provided tools that also run code (such as a [Bash tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool) or custom REPL), Claude is operating in a multicomputer environment. The code execution tool runs in Anthropic's sandboxed container, while your client-provided tools run in a separate environment that you control. Claude can sometimes confuse these environments, attempting to use the wrong tool or assuming state is shared between them.
+
+To avoid this, add instructions to your system prompt that clarify the distinction:
+
+```text wrap
+When multiple code execution environments are available, be aware that:
+- Variables, files, and state do NOT persist between different execution environments
+- Use the code_execution tool for general-purpose computation in Anthropic's sandboxed environment
+- Use client-provided execution tools (e.g., bash) when you need access to the user's local system, files, or data
+- If you need to pass results between environments, explicitly include outputs in subsequent tool calls rather than assuming shared state
+```
+
+This is especially important when combining code execution with [web search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool) or [web fetch](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool), which enable code execution automatically. If your application already provides a client-side shell tool, the automatic code execution creates a second execution environment that Claude needs to distinguish between.
+
+When Claude calls one of your client tools alongside code execution, the API returns the code execution call without its result. The result arrives in a later response, after you send back the `tool_result` blocks for your client tools.
+
+## Streaming
+
+With [streaming](https://platform.claude.com/docs/en/build-with-claude/streaming) enabled (`"stream": true`), you'll receive code execution events as they occur. The sub-tool input streams as `input_json_delta` events, and each result block arrives whole in a single `content_block_start` event:
+
+```sse
+event: content_block_start
+data: {"type": "content_block_start", "index": 1, "content_block": {"type": "server_tool_use", "id": "srvtoolu_xyz789", "name": "bash_code_execution"}}
+
+// Tool input streamed as partial JSON
+event: content_block_delta
+data: {"type": "content_block_delta", "index": 1, "delta": {"type": "input_json_delta", "partial_json": "{\"command\": \"python analyze.py\"}"}}
+
+// Pause while the command runs
+
+// Execution result delivered as a complete block
+event: content_block_start
+data: {"type": "content_block_start", "index": 2, "content_block": {"type": "bash_code_execution_tool_result", "tool_use_id": "srvtoolu_xyz789", "content": {"type": "bash_code_execution_result", "stdout": "   A  B  C\n0  1  2  3\n1  4  5  6", "stderr": "", "return_code": 0, "content": []}}}
+```
+
+## Batch requests
+
+You can include the code execution tool in the [Messages Batches API](https://platform.claude.com/docs/en/build-with-claude/batch-processing). Code execution tool calls through the Messages Batches API are priced the same as those in regular Messages API requests.
+
+## Usage and pricing
+
+**Code execution is free when used with web search or web fetch.** When `web_search_20260209` (or later) or `web_fetch_20260209` (or later) is included in your API request, there are no additional charges for code execution tool calls beyond the standard input and output token costs.
+
+When used without these tools, code execution is billed by execution time, tracked separately from token usage:
+
+* Execution time has a minimum of 5 minutes
+* Each organization receives **1,550 free hours** of usage per month
+* Additional usage beyond 1,550 hours is billed at **$0.05 USD per hour, per container**
+* If files are included in the request, execution time is billed even if the tool is not called, because files are preloaded onto the container
+
+Code execution usage is tracked in the response:
+
+```json
+{
+  "usage": {
+    "input_tokens": 105,
+    "output_tokens": 239,
+    "server_tool_use": {
+      "code_execution_requests": 1
+    }
+  }
+}
+```
+
+## Upgrade to latest tool version
+
+The latest tool version is `code_execution_20260521`. To move between the three current versions, update the `type` string in your request: all three return the response blocks documented in [Response format](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#response-format). See [Tool versions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#tool-versions) for what each version adds and [Compatibility](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#compatibility) for the models that support them.
+
+The rest of this section covers migrating from the legacy Python-only `code_execution_20250522` to the current tool versions.
+
+### What's changed
+
+| Component      | Legacy                      | Current                                                             |
+| -------------- | --------------------------- | ------------------------------------------------------------------- |
+| Beta header    | `code-execution-2025-05-22` | None required                                                       |
+| Tool type      | `code_execution_20250522`   | `code_execution_20250825` or later                                  |
+| Capabilities   | Python only                 | Bash commands, file operations                                      |
+| Response types | `code_execution_result`     | `bash_code_execution_result`, `text_editor_code_execution_*_result` |
+
+### Backward compatibility
+
+* All existing Python code execution continues to work exactly as before
+* No changes required to existing Python-only workflows
+
+### Upgrade steps
+
+To upgrade, update the tool type in your API requests:
+
+```diff
+- "type": "code_execution_20250522"
++ "type": "code_execution_20250825"
+```
+
+**Review response handling** (if parsing responses programmatically):
+
+* The API no longer sends the previous blocks for Python execution responses
+* Instead, the API sends new response types for Bash and file operations (see [Response format](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#response-format))
+
+## Data retention
+
+Code execution runs in server-side sandbox containers. Container data, including execution artifacts, uploaded files, and outputs, is retained for up to 30 days. This retention applies to all data processed within the container environment. Files that code execution creates in the [Files API](https://platform.claude.com/docs/en/build-with-claude/files) (retrievable with `client.files.download()` (csharp, go: `client.Files.Download()`; java: `client.files().download()`; php: `$client->files->download()`)) persist until explicitly deleted.
+
+For ZDR eligibility across all features, see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Advisor tool" icon="compass" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool">
+    Pair a faster executor model with a higher-intelligence advisor model that provides strategic guidance mid-generation.
+  </Card>
+
+  <Card title="Programmatic tool calling" icon="code" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling">
+    Call your own tools from code that runs inside the code execution container.
+  </Card>
+
+  <Card title="Files API" icon="file" href="https://platform.claude.com/docs/en/build-with-claude/files">
+    Upload files for analysis and download the files that code execution creates.
+  </Card>
+
+  <Card title="Using Agent Skills with the API" icon="book" href="https://platform.claude.com/docs/en/build-with-claude/skills-guide">
+    Learn how to use Agent Skills to extend Claude's capabilities through the API.
+  </Card>
+</CardGroup>
 
 ---
 
@@ -13930,7 +19166,2229 @@ You started with a single hardcoded tool call and ended with a production-shaped
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-tool-use-computer-use-tool.md`
 
+<Note>
+  **Start with the SDK toolsets:** For `computer_toolset_20260801`, the Python and TypeScript SDKs have a computer toolset class, in beta. Start from [a partner's integration](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk#partner-integrations), or see the [computer toolset](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk#computer-toolset) section of the SDK toolsets page. Use this page as the tool reference, or when you handle the tool calls yourself.
+</Note>
 
+Claude can interact with computer environments through the computer use tool, which provides screenshot capabilities and mouse/keyboard control for autonomous desktop interaction.
+
+The computer use tool is an Anthropic-defined [client toolset](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets): one `{"type": "computer_toolset_20260801"}` entry in `tools` gives Claude 17 member tools such as `screenshot`, `left_click`, `type`, and `zoom`, and your application runs every call in an environment you control. It isn't currently available in [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/tools). Claude's calls are `tool_use` blocks whose `name` is the member and which carry `"toolset_name": "computer"`, often several per turn (a [batch action](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions)).
+
+For tasks that stay inside webpages, the [browser use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool) is the closer fit: its member tools read and act on the page itself, and it doesn't need a full desktop environment.
+
+<Note>
+  Computer use is available on the Claude API and [Google Cloud](https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai) as the `computer_toolset_20260801` toolset; see [Compatibility](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#compatibility) for the supported models.
+
+  Existing `computer_20251124` integrations keep working on the models listed for it under [Earlier tool versions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#earlier-tool-versions), and earlier tool versions remain available in beta for models and platforms that don't support the toolset. See [Migrate from `computer_20251124`](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#migrate-from-computer-20251124) to upgrade, or [Earlier tool versions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#earlier-tool-versions) for the beta headers.
+</Note>
+
+## Security considerations
+
+Computer use has unique risks distinct from standard API features. These risks are heightened when interacting with the internet.
+
+<Warning>
+  To minimize risks, consider taking precautions such as:
+
+  1. Using a dedicated virtual machine or container with minimal privileges to prevent direct system attacks or accidents.
+  2. Avoiding giving the model access to sensitive data, such as account login information, to prevent information theft.
+  3. Limiting internet access to an allowlist of domains to reduce exposure to malicious content.
+  4. Asking a human to confirm decisions that might result in meaningful real-world consequences and any tasks requiring affirmative consent, such as accepting cookies, completing financial transactions, or agreeing to terms of service.
+</Warning>
+
+In some circumstances, Claude will follow commands found in content even when they conflict with your instructions. For example, instructions on webpages or contained in images might override your instructions or cause Claude to make mistakes. Take precautions to isolate Claude from sensitive data and actions to avoid risks related to prompt injection.
+
+Anthropic has trained the model to resist these prompt injections and has added an extra layer of defense. If you use the computer use tools, classifiers will automatically scan what the tools return, such as screenshots, to flag potential prompt injections. When these classifiers identify a potential prompt injection, they will automatically steer the model to check whether the instruction really came from you before acting on it.
+
+This extra protection won't be ideal for every use case (for example, use cases without a human in the loop), so if you'd like to opt out and turn it off, [contact support](https://support.claude.com/en/). The precautions above remain important even with these classifiers in place.
+
+Inform end users of relevant risks and obtain their consent prior to enabling computer use in your own products.
+
+## Quick start
+
+Add the computer use toolset to the `tools` array of a [Messages API](https://platform.claude.com/docs/en/api/messages/create) request as `{"type": "computer_toolset_20260801"}`. The request needs no beta header. This example also declares the [text editor tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool) and [bash tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool), which Claude typically uses alongside computer use:
+
+<CodeGroup>
+  ```bash cURL
+  curl https://api.anthropic.com/v1/messages \
+    -H "content-type: application/json" \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -d '{
+      "model": "claude-opus-5-5",
+      "max_tokens": 1024,
+      "tools": [
+        {
+          "type": "computer_toolset_20260801"
+        },
+        {
+          "type": "text_editor_20250728",
+          "name": "str_replace_based_edit_tool"
+        },
+        {
+          "type": "bash_20250124",
+          "name": "bash"
+        }
+      ],
+      "messages": [
+        {
+          "role": "user",
+          "content": "Save a picture of a cat to my desktop."
+        }
+      ]
+    }'
+  ```
+
+  ```bash CLI
+  ant messages create <<'YAML'
+  model: claude-opus-5-5
+  max_tokens: 1024
+  tools:
+    - type: computer_toolset_20260801
+    - type: text_editor_20250728
+      name: str_replace_based_edit_tool
+    - type: bash_20250124
+      name: bash
+  messages:
+    - role: user
+      content: Save a picture of a cat to my desktop.
+  YAML
+  ```
+
+  ```python Python
+  client = anthropic.Anthropic()
+
+  response = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=1024,
+      tools=[
+          {"type": "computer_toolset_20260801"},
+          {"type": "text_editor_20250728", "name": "str_replace_based_edit_tool"},
+          {"type": "bash_20250124", "name": "bash"},
+      ],
+      messages=[{"role": "user", "content": "Save a picture of a cat to my desktop."}],
+  )
+  print(response)
+  ```
+
+  ```typescript TypeScript
+  const client = new Anthropic();
+
+  const response = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    tools: [
+      {
+        type: "computer_toolset_20260801"
+      },
+      {
+        type: "text_editor_20250728",
+        name: "str_replace_based_edit_tool"
+      },
+      {
+        type: "bash_20250124",
+        name: "bash"
+      }
+    ],
+    messages: [{ role: "user", content: "Save a picture of a cat to my desktop." }]
+  });
+
+  console.log(response);
+  ```
+
+  ```csharp C#
+  var client = new AnthropicClient();
+
+  var parameters = new MessageCreateParams
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 1024,
+      Tools =
+      [
+          new ComputerToolset20260801(),
+          new ToolTextEditor20250728(),
+          new ToolBash20250124(),
+      ],
+      Messages =
+      [
+          new MessageParam
+          {
+              Role = Role.User,
+              Content = "Save a picture of a cat to my desktop.",
+          },
+      ],
+  };
+
+  var response = await client.Messages.Create(parameters);
+  Console.WriteLine(response);
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+
+  response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 1024,
+  	Tools: []anthropic.ToolUnionParam{
+  		{OfComputerToolset20260801: &anthropic.ComputerToolset20260801Param{}},
+  		{OfTextEditor20250728: &anthropic.ToolTextEditor20250728Param{}},
+  		{OfBashTool20250124: &anthropic.ToolBash20250124Param{}},
+  	},
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(anthropic.NewTextBlock("Save a picture of a cat to my desktop.")),
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response.RawJSON())
+  ```
+
+  ```java Java
+  import com.anthropic.models.messages.ComputerToolset20260801;
+  // ...
+  import com.anthropic.models.messages.ToolBash20250124;
+  import com.anthropic.models.messages.ToolTextEditor20250728;
+
+  void main() {
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      MessageCreateParams params = MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(1024L)
+          .addTool(ComputerToolset20260801.builder().build())
+          .addTool(ToolTextEditor20250728.builder().build())
+          .addTool(ToolBash20250124.builder().build())
+          .addUserMessage("Save a picture of a cat to my desktop.")
+          .build();
+
+      Message response = client.messages().create(params);
+      IO.println(response);
+  }
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  $response = $client->messages->create(
+      maxTokens: 1024,
+      messages: [
+          ['role' => 'user', 'content' => 'Save a picture of a cat to my desktop.'],
+      ],
+      model: 'claude-opus-5-5',
+      tools: [
+          ['type' => 'computer_toolset_20260801'],
+          [
+              'type' => 'text_editor_20250728',
+              'name' => 'str_replace_based_edit_tool',
+          ],
+          [
+              'type' => 'bash_20250124',
+              'name' => 'bash',
+          ],
+      ],
+  );
+
+  echo $response;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  response = client.messages.create(
+    model: "claude-opus-5-5",
+    max_tokens: 1024,
+    tools: [
+      { type: "computer_toolset_20260801" },
+      {
+        type: "text_editor_20250728",
+        name: "str_replace_based_edit_tool"
+      },
+      {
+        type: "bash_20250124",
+        name: "bash"
+      }
+    ],
+    messages: [
+      { role: "user", content: "Save a picture of a cat to my desktop." }
+    ]
+  )
+
+  puts response
+  ```
+</CodeGroup>
+
+When Claude acts on the desktop, the response has a `stop_reason` of `tool_use` and contains one or more member `tool_use` blocks, each naming a member tool and carrying `"toolset_name": "computer"`. Partway through this task, after Claude has seen a screenshot of the desktop, a response might look like this:
+
+```json Output
+{
+  "id": "msg_01UZ3bXcQH8mTqNhVfL9eK2p",
+  "type": "message",
+  "role": "assistant",
+  "model": "claude-opus-5-5",
+  "content": [
+    {
+      "type": "text",
+      "text": "I'll open the web browser to find a picture of a cat."
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01WkoTUvSHDzTBu2xnGk8Ep8",
+      "name": "left_click",
+      "toolset_name": "computer",
+      "input": { "coordinate": [512, 742] }
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_017nJn3RgSCkTMwuZDb4uUov",
+      "name": "screenshot",
+      "toolset_name": "computer",
+      "input": {}
+    }
+  ],
+  "stop_reason": "tool_use",
+  "stop_sequence": null
+}
+```
+
+Your application runs each call in order in your own environment, returns one `tool_result` block per `tool_use` block, and calls the API again; [How computer use works](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#how-computer-use-works) describes that loop, and the rest of this page shows how to implement it.
+
+***
+
+## How computer use works
+
+<Steps>
+  <Step title="Provide Claude with the computer use tool and a user prompt">
+    * Add the computer use toolset (and optionally other tools) to the `tools` array of your API request.
+    * Include a user prompt that requires desktop interaction, for example, "Save a picture of a cat to my desktop."
+  </Step>
+
+  <Step title="Claude responds with member tool calls">
+    * Claude assesses whether acting on the desktop can help with the user's query.
+    * If so, Claude responds with one or more member `tool_use` blocks, such as `screenshot`, `left_click`, or `type`, each carrying `"toolset_name": "computer"`. A response with several of these blocks is a [batch action](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions).
+    * The API response has a `stop_reason` of `tool_use`, signaling a tool use request.
+  </Step>
+
+  <Step title="Run the calls in order and return results">
+    * Iterate over every `tool_use` block in the response, in order. For each one, dispatch on the member `name` together with `toolset_name`, and perform that action with the block's `input` on your container or virtual machine.
+    * Continue the conversation with a new `user` message that contains one `tool_result` block per `tool_use` block, matched by `tool_use_id` and each echoing `"toolset_name": "computer"`. Return an image for `screenshot` and `zoom`; a short text such as `OK` is enough for the other actions.
+    * If an action fails, return `is_error: true` for that block and answer the rest of the batch as described in [Batch actions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions).
+  </Step>
+
+  <Step title="Claude continues until the task is complete">
+    * Claude analyzes the tool results to determine if more actions are needed or the task has been completed.
+    * If Claude determines more actions are needed, it responds with another `tool_use` `stop_reason` and you should return to step 3.
+    * Otherwise, it returns a text response to the user.
+  </Step>
+</Steps>
+
+The repetition of steps 3 and 4 without user input is referred to as the "agent loop" (that is, Claude responding with a tool use request and your application responding to Claude with the results of evaluating that request).
+
+### Batch actions
+
+Claude can plan a short sequence of actions, such as click, type, and then take a screenshot, and return them together in one response. This is called a batch action; it uses the same response shape as [parallel tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use) with one difference: you run the blocks in order rather than concurrently.
+
+A response with a three-action batch looks like this:
+
+```json
+{
+  "role": "assistant",
+  "content": [
+    {
+      "type": "tool_use",
+      "id": "toolu_01HqCF3nJ4Vzr8sTkPZ2wxYA",
+      "name": "left_click",
+      "toolset_name": "computer",
+      "input": { "coordinate": [640, 60] }
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01Ppr3sZ3TnE9m6VUu4RyH2K",
+      "name": "type",
+      "toolset_name": "computer",
+      "input": { "text": "pictures of cats" }
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_01Xf5W1sD8Q9aBcJ7kLmN2pQ",
+      "name": "screenshot",
+      "toolset_name": "computer",
+      "input": {}
+    }
+  ]
+}
+```
+
+Return one `tool_result` block for each `tool_use` block, matched by `tool_use_id`, all in the next `user` message. Every result for a member tool must carry `"toolset_name": "computer"`; a result that omits it, or that names a different toolset than its `tool_use` block, is rejected. Only `screenshot` and `zoom` results need an image; for the other members, a short text acknowledgment such as `OK` is enough (`cursor_position` returns the coordinates as text):
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01HqCF3nJ4Vzr8sTkPZ2wxYA",
+      "toolset_name": "computer",
+      "content": [{ "type": "text", "text": "OK" }]
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Ppr3sZ3TnE9m6VUu4RyH2K",
+      "toolset_name": "computer",
+      "content": [{ "type": "text", "text": "OK" }]
+    },
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01Xf5W1sD8Q9aBcJ7kLmN2pQ",
+      "toolset_name": "computer",
+      "content": [
+        {
+          "type": "image",
+          "source": {
+            "type": "base64",
+            "media_type": "image/png",
+            "data": "iVBORw0KGgo..."
+          }
+        }
+      ]
+    }
+  ]
+}
+```
+
+**Run blocks in order and stop at the first failure.** Later actions in a batch usually depend on earlier ones: the `type` in this example enters text into whatever the preceding click focused. Run the blocks sequentially in the order they appear in `content`, and if one fails, don't run the rest. Every `tool_use` block still needs a `tool_result`, so answer the batch as follows:
+
+* For each action that succeeded, return its normal result.
+* For the action that failed, return `is_error: true` with a text description of what went wrong.
+* For every later action in the batch, return `is_error: true` with exactly this text (the browser use tool uses its own [halt text](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#batch-actions)):
+
+```json
+{
+  "type": "tool_result",
+  "tool_use_id": "toolu_01Xf5W1sD8Q9aBcJ7kLmN2pQ",
+  "toolset_name": "computer",
+  "is_error": true,
+  "content": "Not executed: an earlier computer action in this turn failed."
+}
+```
+
+Claude then sees which actions succeeded, which one failed, and which were skipped, and replans on its next turn. A request that leaves any `tool_use` block in the batch unanswered is rejected with an `invalid_request_error`, so an agent loop that reads only the first block fails on its next call. If your application asks a human to confirm consequential actions, make that check before each block runs, because a batch can complete a multistep action within one turn.
+
+Claude typically finishes a batch with `screenshot` so it can observe the outcome before determining what to do next. When a batch doesn't end with one, your application can attach a screenshot as an extra `image` block on the last result in the batch so that Claude always sees the current state of the screen, which saves a round trip compared with waiting for Claude to ask. You can also prompt Claude to end every batch with a screenshot (see [Optimize model performance with prompting](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#optimize-model-performance-with-prompting)).
+
+### The computing environment
+
+Computer use requires a sandboxed computing environment where Claude can safely interact with applications and the web. This environment includes:
+
+1. **Virtual display:** A virtual X11 display server (using Xvfb) that renders the desktop interface Claude will see through screenshots and control with mouse/keyboard actions.
+
+2. **Desktop environment:** A lightweight UI with window manager (Mutter) and panel (Tint2) running on Linux, which provides a consistent graphical interface for Claude to interact with.
+
+3. **Applications:** Pre-installed Linux applications such as Firefox, LibreOffice, text editors, and file managers that Claude can use to complete tasks.
+
+4. **Tool implementations:** Integration code that translates Claude's abstract tool requests (such as "move mouse" or "take screenshot") into actual operations in the virtual environment.
+
+5. **Agent loop:** A program that handles communication between Claude and the environment, sending Claude's actions to the environment and returning the results (screenshots, command outputs) back to Claude.
+
+When you use computer use, Claude doesn't directly connect to this environment. Instead, your application:
+
+1. Receives Claude's tool use requests
+2. Translates them into actions in your computing environment
+3. Captures the results (such as screenshots and command outputs)
+4. Returns these results to Claude
+
+For security and isolation, the reference implementation runs all of this inside a Docker container with appropriate port mappings for viewing and interacting with the environment.
+
+***
+
+## How to implement computer use
+
+Upgrading an existing `computer_20251124` integration? Start with [Migrate from `computer_20251124`](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#migrate-from-computer-20251124); the rest of this section applies to both new and migrated integrations.
+
+<Tip>
+  The [computer use reference implementation](https://github.com/anthropics/anthropic-quickstarts/tree/main/computer-use-demo) is a complete working example: a [containerized environment](https://github.com/anthropics/anthropic-quickstarts/blob/main/computer-use-demo/Dockerfile) suitable for computer use, implementations of [the computer use tools](https://github.com/anthropics/anthropic-quickstarts/tree/main/computer-use-demo/computer_use_demo/tools), an [agent loop](https://github.com/anthropics/anthropic-quickstarts/blob/main/computer-use-demo/computer_use_demo/loop.py) that calls the Claude API and runs the tools, and a web interface for the container, loop, and tools.
+</Tip>
+
+### Understand the agent loop
+
+The core of computer use is the "agent loop": a cycle where Claude requests tool actions, your application runs them, and returns results to Claude. The loop uses the client you created in the [Quick start](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#quick-start), a `tools` array that declares only the computer use toolset, and the tool-call processing helper under [Implement the computer use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#implement-the-computer-use-tool). If you also declare other tools, such as the Quick start's bash and text editor tools, dispatch their `tool_use` blocks in the same pass; the helper answers only computer use member calls, and the loop treats a turn with no answered calls as finished. Here's a simplified example:
+
+<CodeGroup exclude="shell">
+  ```python Python
+  def sampling_loop(model: str, messages: list[MessageParam], max_iterations: int = 10):
+      """
+      Run the computer-use agent loop until Claude stops requesting tools
+      or the iteration limit is reached.
+      """
+      for _ in range(max_iterations):
+          response = client.messages.create(
+              model=model,
+              max_tokens=4096,
+              messages=messages,
+              tools=TOOLS,
+          )
+
+          # Add Claude's response to the conversation history
+          messages.append({"role": "assistant", "content": response.content})
+
+          # Run the actions Claude requested, in order, and collect the results
+          tool_results = process_tool_calls(response)
+          if not tool_results:
+              return messages  # No more tool use; task complete
+
+          # Send every result back to Claude in a single user message
+          messages.append({"role": "user", "content": tool_results})
+
+      return messages
+  ```
+
+  ```typescript TypeScript
+  async function samplingLoop(
+    model: string,
+    messages: Anthropic.MessageParam[],
+    maxIterations = 10,
+  ): Promise<Anthropic.MessageParam[]> {
+    // Run the computer-use agent loop until Claude stops requesting tools
+    // or the iteration limit is reached.
+    for (let i = 0; i < maxIterations; i++) {
+      const response = await client.messages.create({
+        model,
+        max_tokens: 4096,
+        messages,
+        tools,
+      });
+
+      // Add Claude's response to the conversation history
+      messages.push({ role: "assistant", content: response.content });
+
+      // Run any tools Claude requested and collect results
+      const toolResults = processToolCalls(response);
+      if (toolResults.length === 0) {
+        return messages; // No more tool use; task complete
+      }
+
+      // Send tool results back to Claude for the next iteration
+      messages.push({ role: "user", content: toolResults });
+    }
+
+    return messages;
+  }
+  ```
+
+  ```csharp C#
+  async Task<List<MessageParam>> SamplingLoop(
+      Model model,
+      List<MessageParam> messages,
+      int maxIterations = 10
+  )
+  {
+      // Run the computer-use agent loop until Claude stops requesting tools
+      // or the iteration limit is reached.
+      for (var i = 0; i < maxIterations; i++)
+      {
+          var response = await client.Messages.Create(
+              new MessageCreateParams
+              {
+                  Model = model,
+                  MaxTokens = 4096,
+                  Messages = messages,
+                  Tools = tools,
+              }
+          );
+
+          // Add Claude's response to the conversation history
+          messages.Add(
+              new()
+              {
+                  Role = Role.Assistant,
+                  Content = response
+                      .Content.Select(block => new ContentBlockParam(block.Json))
+                      .ToList(),
+              }
+          );
+
+          // Run any tools Claude requested and collect results
+          var toolResults = ProcessToolCalls(response);
+          if (toolResults.Count == 0)
+          {
+              return messages; // No more tool use; task complete
+          }
+
+          // Send tool results back to Claude for the next iteration
+          messages.Add(new() { Role = Role.User, Content = toolResults });
+      }
+
+      return messages;
+  }
+  ```
+
+  ```go Go
+  // samplingLoop runs the computer-use agent loop until Claude stops
+  // requesting tools or the iteration limit is reached.
+  func samplingLoop(ctx context.Context, model anthropic.Model, messages []anthropic.MessageParam, maxIterations int) ([]anthropic.MessageParam, error) {
+  	for range maxIterations {
+  		response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
+  			Model:     model,
+  			MaxTokens: 4096,
+  			Messages:  messages,
+  			Tools:     tools,
+  		})
+  		if err != nil {
+  			return nil, err
+  		}
+
+  		// Add Claude's response to the conversation history
+  		messages = append(messages, response.ToParam())
+
+  		// Run the actions Claude requested, in order, and collect the results
+  		toolResults := processToolCalls(response)
+  		if len(toolResults) == 0 {
+  			return messages, nil // No more tool use; task complete
+  		}
+
+  		// Send every result back to Claude in a single user message
+  		messages = append(messages, anthropic.NewUserMessage(toolResults...))
+  	}
+  	return messages, nil
+  }
+
+  ```
+
+  ```java Java
+  /**
+   * Run the computer-use agent loop until Claude stops requesting tools
+   * or the iteration limit is reached.
+   */
+  List<MessageParam> samplingLoop(Model model, List<MessageParam> messages, int maxIterations) {
+      for (int i = 0; i < maxIterations; i++) {
+          Message response = client.messages().create(MessageCreateParams.builder()
+                  .model(model)
+                  .maxTokens(4096)
+                  .messages(messages)
+                  .addTool(COMPUTER_TOOLSET)
+                  .build());
+
+          // Add Claude's response to the conversation history
+          messages.add(MessageParam.builder()
+                  .role(MessageParam.Role.ASSISTANT)
+                  .contentOfBlockParams(response.content().stream().map(ContentBlock::toParam).toList())
+                  .build());
+
+          // Run any tools Claude requested and collect results
+          List<ContentBlockParam> toolResults = processToolCalls(response);
+          if (toolResults.isEmpty()) {
+              return messages; // No more tool use; task complete
+          }
+
+          // Send tool results back to Claude for the next iteration
+          messages.add(MessageParam.builder()
+                  .role(MessageParam.Role.USER)
+                  .contentOfBlockParams(toolResults)
+                  .build());
+      }
+      return messages;
+  }
+  ```
+
+  ```php PHP
+  /**
+   * Run the computer-use agent loop until Claude stops requesting tools
+   * or the iteration limit is reached.
+   */
+  function samplingLoop(string $model, array $messages, int $maxIterations = 10): array
+  {
+      global $client, $tools;
+
+      for ($i = 0; $i < $maxIterations; $i++) {
+          $response = $client->messages->create(
+              model: $model,
+              maxTokens: 4096,
+              messages: $messages,
+              tools: $tools,
+          );
+
+          // Add Claude's response to the conversation history
+          $messages[] = MessageParam::with(role: Role::ASSISTANT, content: $response->content);
+
+          // Run any tools Claude requested and collect results
+          $toolResults = processToolCalls($response);
+          if ($toolResults === []) {
+              return $messages; // No more tool use; task complete
+          }
+
+          // Send tool results back to Claude for the next iteration
+          $messages[] = MessageParam::with(role: Role::USER, content: $toolResults);
+      }
+
+      return $messages;
+  }
+  ```
+
+  ```ruby Ruby
+  # Run the computer-use agent loop until Claude stops requesting tools
+  # or the iteration limit is reached.
+  def sampling_loop(model, messages, max_iterations: 10)
+    max_iterations.times do
+      response = CLIENT.messages.create(
+        model: model,
+        max_tokens: 4096,
+        messages: messages,
+        tools: TOOLS
+      )
+
+      # Add Claude's response to the conversation history
+      messages << { role: "assistant", content: response.content }
+
+      # Run the actions Claude requested, in order, and collect the results
+      tool_results = process_tool_calls(response)
+      return messages if tool_results.empty? # No more tool use; task complete
+
+      # Send every result back to Claude in a single user message
+      messages << { role: "user", content: tool_results }
+    end
+
+    messages
+  end
+  ```
+</CodeGroup>
+
+The loop continues until either Claude responds without requesting any tools (task completion) or the maximum iteration limit is reached. This safeguard prevents potential infinite loops that could result in unexpected API costs.
+
+### Optimize model performance with prompting
+
+1. Specify simple, well-defined tasks and provide explicit instructions for each step.
+2. Claude sometimes assumes outcomes of its actions without explicitly checking their results. To prevent this you can prompt Claude with `After each step, take a screenshot and carefully evaluate if you have achieved the right outcome. State in one sentence what the screenshot shows and whether the step succeeded. If it didn't, try again. Only when you confirm a step was executed correctly should you move on to the next one.`
+3. Some UI elements (such as dropdowns and scrollbars) might be tricky for Claude to manipulate using mouse movements. If you experience this, try prompting the model to use keyboard shortcuts.
+4. For repeatable tasks or UI interactions, include example screenshots and tool calls of successful outcomes in your prompt.
+5. If you need the model to log in, provide it with the username and password in your prompt inside XML tags such as `<robot_credentials>`. Using computer use within applications that require login increases the risk of bad outcomes as a result of prompt injection. Review [Mitigate jailbreaks and prompt injections](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks) before providing the model with login credentials.
+6. When constructing a user turn's `content` array, place the instruction text *before* the screenshot image. Providing the target description before the image is processed improves click accuracy.
+7. Claude uses the `zoom` action to inspect a region at full resolution when asked about small text or specific UI elements that aren't legible at the screenshot's default resolution, such as file names in a sidebar, tab titles, status-bar text, line numbers, or button labels. If Claude isn't zooming when you expect, ask about a specific region or element rather than the screen as a whole.
+8. If you want every [batch action](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions) to end with a screenshot, say so in the system prompt, for example, `End each group of actions with a screenshot so you can verify the result before continuing.`
+
+<Tip>
+  If you repeatedly encounter a clear set of issues or know in advance the tasks Claude will need to complete, use the system prompt to provide Claude with explicit tips or instructions on how to do the tasks successfully.
+</Tip>
+
+<Tip>
+  For agents that span multiple sessions, run end-to-end verification at the start of each session, not only after implementation. Browser-based checks catch regressions from prior sessions that code-level review alone misses. See [Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) for details.
+</Tip>
+
+### System prompts
+
+When you include the computer use tool in a request, the API generates a computer use-specific system prompt. It's similar to the [tool use system prompt](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools#tool-use-system-prompt) but starts with:
+
+> You have access to a set of functions you can use to answer the user's question. This includes access to a sandboxed computing environment. You do NOT currently have the ability to inspect files or interact with external resources, except by invoking the below functions.
+
+As with regular tool use, the user-provided `system` parameter is still respected and used in the construction of the combined system prompt.
+
+### Available actions
+
+Each action is a member tool of the computer use toolset: Claude names the member in a `tool_use` block that carries `"toolset_name": "computer"`, and the block's `input` holds only that member's parameters, with no `action` field. The toolset has 17 member tools:
+
+| Member                                                        | Input                                                                                                                                                                                                        | Description                                                                                                                                                                                                                                                                   |
+| ------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `screenshot`                                                  | None (`{}`)                                                                                                                                                                                                  | Capture the full display and return it as an image.                                                                                                                                                                                                                           |
+| `zoom`                                                        | `region`: `[x0, y0, x1, y1]`, the top-left and bottom-right corners of the area to inspect                                                                                                                   | Capture only that region of the display at full resolution and return it as an image, scaled to fit within your usual screenshot dimensions with its aspect ratio preserved. This lets Claude read small text or dense UI that isn't legible in a downscaled full screenshot. |
+| `left_click`                                                  | `coordinate` (optional): `[x, y]`; `text` (optional): modifier keys to hold during the click: `shift`, `ctrl`, `alt`, `super` (the Command or Windows key), or a `+`-joined combination such as `ctrl+shift` | Click the left mouse button at `coordinate`, or at the current cursor position when `coordinate` is omitted.                                                                                                                                                                  |
+| `right_click`, `middle_click`, `double_click`, `triple_click` | Same as `left_click`                                                                                                                                                                                         | Other mouse buttons and multiple clicks.                                                                                                                                                                                                                                      |
+| `left_click_drag`                                             | `start_coordinate`: `[x, y]`; `coordinate`: `[x, y]`; `text` (optional): modifier keys                                                                                                                       | Press at `start_coordinate`, drag to `coordinate`, and release.                                                                                                                                                                                                               |
+| `mouse_move`                                                  | `coordinate`: `[x, y]`                                                                                                                                                                                       | Move the cursor without clicking, for example, to hover.                                                                                                                                                                                                                      |
+| `left_mouse_down`, `left_mouse_up`                            | None (`{}`)                                                                                                                                                                                                  | Press or release the left mouse button at the current cursor position, for drags that `left_click_drag` can't express. Move the cursor with `mouse_move` first.                                                                                                               |
+| `cursor_position`                                             | None (`{}`)                                                                                                                                                                                                  | Report the cursor's current `[x, y]` position as text.                                                                                                                                                                                                                        |
+| `scroll`                                                      | `scroll_direction`: `"up"`, `"down"`, `"left"`, or `"right"`; `scroll_amount`: number of scroll-wheel clicks; `coordinate` (optional): `[x, y]`; `text` (optional): modifier keys                            | Scroll at `coordinate`, or at the current cursor position.                                                                                                                                                                                                                    |
+| `type`                                                        | `text`: the string to type                                                                                                                                                                                   | Type literal text at the current keyboard focus.                                                                                                                                                                                                                              |
+| `key`                                                         | `text`: a key or a `+`-joined combination such as `"Return"`, `"ctrl+s"`, or `"alt+Tab"`; `repeat` (optional): 1 to 100, default 1                                                                           | Press a key or key combination, `repeat` times.                                                                                                                                                                                                                               |
+| `hold_key`                                                    | `text`: a key or combination; `duration`: seconds, up to 300                                                                                                                                                 | Hold a key down for the given duration.                                                                                                                                                                                                                                       |
+| `wait`                                                        | `duration`: seconds, up to 300                                                                                                                                                                               | Pause before the next action, for example, while an application loads.                                                                                                                                                                                                        |
+
+Keep the following in mind when implementing the members:
+
+* **Coordinates are in screenshot pixels.** Every `coordinate`, `start_coordinate`, and `region` value, and the position that `cursor_position` reports, is in the pixel space of the full-display screenshots you return, with the origin at the top left. Zoom images don't change this: after a `zoom`, Claude still expresses coordinates in the full screenshot's space, never relative to the zoomed image. If you scale screenshots down before returning them, scale Claude's coordinates back up before applying them to the real display (see [Size screenshots to fit image limits](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#handle-coordinate-scaling-for-higher-resolutions)).
+* **All members are enabled by default, including `zoom`.** If your environment can't produce zoom images, withhold the member with `configs` (see [Tool parameters](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#tool-parameters)) rather than leaving it enabled and returning errors. If Claude calls a member that you have withheld or don't implement, return a `tool_result` with `is_error: true` for that block.
+* **Dispatch on the pair (`toolset_name`, `name`).** `toolset_name` is what marks a block as a computer action: a custom tool in the same request can share a member's name, and a later toolset version can add members (see [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets)).
+
+<Accordion title="Example actions">
+  Each example is a complete `tool_use` block as it appears in Claude's response.
+
+  Shift+click at a position, for example, to extend a selection. Unlike `hold_key`, `text` holds the modifiers only for the duration of that click or scroll:
+
+  ```json
+  {
+    "type": "tool_use",
+    "id": "toolu_01Qg8m3XqC5aRy7tD2eS4jUg",
+    "name": "left_click",
+    "toolset_name": "computer",
+    "input": { "coordinate": [500, 300], "text": "shift" }
+  }
+  ```
+
+  Drag from one point to another:
+
+  ```json
+  {
+    "type": "tool_use",
+    "id": "toolu_01Ed6j9VnA3yPw5rB8cQ2gSe",
+    "name": "left_click_drag",
+    "toolset_name": "computer",
+    "input": {
+      "start_coordinate": [200, 300],
+      "coordinate": [600, 300]
+    }
+  }
+  ```
+
+  Scroll down three clicks of the wheel:
+
+  ```json
+  {
+    "type": "tool_use",
+    "id": "toolu_01Yc5h8UmZ2xNv4qA7bP9fRd",
+    "name": "scroll",
+    "toolset_name": "computer",
+    "input": {
+      "coordinate": [500, 400],
+      "scroll_direction": "down",
+      "scroll_amount": 3
+    }
+  }
+  ```
+
+  Press Tab four times:
+
+  ```json
+  {
+    "type": "tool_use",
+    "id": "toolu_01Sb4g7TkY9wLu3pX6zM8eQc",
+    "name": "key",
+    "toolset_name": "computer",
+    "input": { "text": "Tab", "repeat": 4 }
+  }
+  ```
+
+  Zoom in to inspect a region at full resolution:
+
+  ```json
+  {
+    "type": "tool_use",
+    "id": "toolu_01Kf7k2WpB4zQx6sC9dR3hTf",
+    "name": "zoom",
+    "toolset_name": "computer",
+    "input": { "region": [100, 200, 400, 350] }
+  }
+  ```
+
+  Report the cursor position. Answer this call with a short text result that gives the position in screenshot pixels, for example, `X=512, Y=384`:
+
+  ```json
+  {
+    "type": "tool_use",
+    "id": "toolu_01Ekh3vqB6yTs2mNc4Rw8pLd",
+    "name": "cursor_position",
+    "toolset_name": "computer",
+    "input": {}
+  }
+  ```
+</Accordion>
+
+### Tool parameters
+
+The toolset entry in the `tools` array accepts four parameters; the rules they share with the browser use toolset are listed under [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets).
+
+| Parameter         | Required | Description                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ----------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `type`            | Yes      | `computer_toolset_20260801`                                                                                                                                                                                                                                                                                                                                                                                        |
+| `configs`         | No       | Per-member settings keyed by member name; each member accepts `enabled` (default `true` for all 17, including `zoom`) and `defer_loading` (default `false`, for [tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool#deferred-tool-loading)), and members you omit keep their defaults.                                                                                    |
+| `cache_control`   | No       | [Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) breakpoint at the toolset definition; entry only. A breakpoint on any `tool_use` or `tool_result` block in a batch takes effect at the end of that batch; see [Tool use with prompt caching](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-use-with-prompt-caching#cache-control-on-tool-definitions). |
+| `allowed_callers` | No       | `["direct"]` only.                                                                                                                                                                                                                                                                                                                                                                                                 |
+
+For example, this entry withholds `zoom` for an environment that doesn't implement it and sets a cache breakpoint at the toolset definition:
+
+```json
+{
+  "type": "computer_toolset_20260801",
+  "configs": {
+    "zoom": { "enabled": false }
+  },
+  "cache_control": { "type": "ephemeral" }
+}
+```
+
+If your agent loop can run only one action per round trip, set `disable_parallel_tool_use` to `true` in `tool_choice`; Claude then returns at most one member `tool_use` block per turn (see [Disable parallel tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use#disable-parallel-tool-use)).
+
+The entry rejects these parameters from earlier tool versions, and a request that includes any of them returns an `invalid_request_error`:
+
+* `name`: member names are fixed by the toolset version.
+* `display_width_px`, `display_height_px`, and `display_number`: coordinates are always in the pixel space of the screenshots you return.
+* `enable_zoom`: zoom is a member tool that you control through `configs`.
+
+The entry also can't be declared in the same request as a `computer_20251124` entry or another tool named `computer`. For `strict`, `input_examples`, `defer_loading` placement, `tool_choice`, streaming, and caller restrictions, see [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets).
+
+### Combining with thinking
+
+To combine computer use with thinking, see [Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking).
+
+<Tip>
+  For the earlier `computer_20251124` tool, internal benchmarking on the models that use it suggests these `effort` settings:
+
+  * **Claude Opus 4.7:** use `high` as the default; use `low` for high-throughput or cost-sensitive workloads.
+  * **Claude Sonnet 4.6 and Claude Opus 4.6:** use `medium` as the default (best accuracy-to-cost ratio). Avoid `max`, which adds token cost without improving accuracy on UI tasks. On these models, `low` uses *fewer* output tokens than disabling thinking entirely (fewer mistakes mean fewer retries), making it a strong option for cost-sensitive loops.
+</Tip>
+
+### Augmenting computer use with other tools
+
+To add other tools alongside computer use, include them in the same `tools` array. The [Quick start](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#quick-start) section shows this pattern with the [bash tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool) and [text editor tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool). You can add your own [custom tool definitions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools) the same way.
+
+For tasks that stay inside webpages, you can also [declare the browser use tool in the same request](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool#combine-with-other-tools): the two toolsets work independently, each in its own coordinate frame, and calls to members that share a name, such as `screenshot` or `key`, are told apart by `toolset_name`.
+
+### Build a custom computer use environment
+
+The [reference implementation](https://github.com/anthropics/anthropic-quickstarts/tree/main/computer-use-demo) is meant to help you get started with computer use. It includes all of the components needed to have Claude use a computer. However, you can build your own environment for computer use to suit your needs. You'll need:
+
+* A virtualized or containerized environment suitable for computer use with Claude
+* An implementation of the computer use tool's actions
+* An agent loop that interacts with the Claude API and runs the `tool_use` results using your tool implementations
+* An API or UI that allows user input to start the agent loop
+
+### Implement the computer use tool
+
+The computer use tool is implemented as a schema-less tool. When using this tool, you don't need to provide an input schema as with other tools; the schema is built into Claude's model and can't be modified.
+
+<Steps>
+  <Step title="Set up your computing environment">
+    Create a virtual display or connect to an existing display that Claude will interact with. This typically involves setting up Xvfb (X Virtual Framebuffer) or similar technology.
+  </Step>
+
+  <Step title="Implement action handlers">
+    Create functions to handle each action type that Claude might request:
+
+    <CodeGroup exclude="shell">
+      ```python Python
+      # Placeholder image data; a real executor captures the screen and returns the PNG bytes
+      PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+
+
+      def capture_screenshot() -> list[ImageBlockParam]:
+          # screenshot answers with an image block rather than text: return the result content list
+          return [
+              {
+                  "type": "image",
+                  "source": {"type": "base64", "media_type": "image/png", "data": PLACEHOLDER_PNG},
+              }
+          ]
+
+
+      def click(coordinate=None):
+          if coordinate is None:
+              return "clicked at current cursor"
+          x, y = coordinate
+          return f"clicked at ({x}, {y})"
+
+
+      def type_text(text):
+          return f"typed: {text}"
+
+
+      def handle_computer_action(name, tool_input):
+          match name:
+              case "screenshot":
+                  return capture_screenshot()
+              case "left_click":
+                  # coordinate is optional; without it, click where the cursor already is
+                  return click(tool_input.get("coordinate"))
+              case "type":
+                  return type_text(tool_input["text"])
+          # Handle other actions as needed
+          raise ValueError(f"Unknown or unimplemented member: {name}")
+      ```
+
+      ```typescript TypeScript
+      // Placeholder image data; a real executor captures the screen as PNG bytes
+      const PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
+      function captureScreenshot(): Anthropic.ImageBlockParam[] {
+        // screenshot answers with an image block rather than text
+        return [
+          {
+            type: "image",
+            source: {
+              type: "base64",
+              media_type: "image/png",
+              data: PLACEHOLDER_PNG,
+            },
+          },
+        ];
+      }
+
+      function clickAt(x: number, y: number): string {
+        return `clicked at (${x}, ${y})`;
+      }
+
+      function clickAtCursor(): string {
+        return "clicked at the current cursor position";
+      }
+
+      function typeText(text: string): string {
+        return `typed: ${text}`;
+      }
+
+      function handleComputerAction(
+        action: string,
+        input: unknown,
+      ): string | Anthropic.ImageBlockParam[] {
+        const params: object =
+          typeof input === "object" && input !== null ? input : {};
+        switch (action) {
+          case "screenshot":
+            return captureScreenshot();
+          case "left_click":
+            // coordinate is optional on the toolset; without one, click at the cursor
+            if ("coordinate" in params && Array.isArray(params.coordinate)) {
+              const [x, y] = params.coordinate;
+              return clickAt(x, y);
+            }
+            return clickAtCursor();
+          case "type":
+            if ("text" in params) {
+              return typeText(String(params.text));
+            }
+            break;
+        }
+        // Handle other actions as needed
+        throw new Error(`Unknown or unimplemented member: ${action}`);
+      }
+      ```
+
+      ```csharp C#
+      // Placeholder image data; a real executor captures the screen and returns the PNG bytes
+      const string PlaceholderPng = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
+      // screenshot answers with an image block rather than text: return the result content list
+      List<Block> CaptureScreenshot() =>
+          [
+              new ImageBlockParam(
+                  new Base64ImageSource { Data = PlaceholderPng, MediaType = MediaType.ImagePng }
+              ),
+          ];
+
+      string ClickAt(int x, int y) => $"clicked at ({x}, {y})";
+
+      string ClickAtCursor() => "clicked at the current cursor position";
+
+      string TypeText(string text) => $"typed: {text}";
+
+      ToolResultBlockParamContent HandleComputerAction(
+          string action,
+          IReadOnlyDictionary<string, JsonElement> input
+      ) =>
+          action switch
+          {
+              "screenshot" => CaptureScreenshot(),
+              // coordinate is optional on click members; without it, click where the cursor is
+              "left_click" when input.TryGetValue("coordinate", out var xy) => ClickAt(
+                  xy[0].GetInt32(),
+                  xy[1].GetInt32()
+              ),
+              "left_click" => ClickAtCursor(),
+              "type" => TypeText(input["text"].GetString()!),
+              // Handle other actions as needed
+              _ => throw new NotSupportedException($"Unknown or unimplemented member: {action}"),
+          };
+      ```
+
+      ```go Go
+      // placeholderPNG stands in for a real capture: an executor returns the
+      // screen as base64-encoded PNG data.
+      const placeholderPNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+
+      // captureScreenshot returns an image block rather than text.
+      func captureScreenshot() []anthropic.ToolResultBlockParamContentUnion {
+      	return []anthropic.ToolResultBlockParamContentUnion{{
+      		OfImage: &anthropic.ImageBlockParam{
+      			Source: anthropic.ImageBlockParamSourceUnion{
+      				OfBase64: &anthropic.Base64ImageSourceParam{
+      					MediaType: anthropic.Base64ImageSourceMediaTypeImagePNG,
+      					Data:      placeholderPNG,
+      				},
+      			},
+      		},
+      	}}
+      }
+
+      // textContent wraps text as tool_result content.
+      func textContent(text string) []anthropic.ToolResultBlockParamContentUnion {
+      	return []anthropic.ToolResultBlockParamContentUnion{
+      		{OfText: &anthropic.TextBlockParam{Text: text}},
+      	}
+      }
+
+      func clickAt(x, y int) string {
+      	return fmt.Sprintf("clicked at (%d, %d)", x, y)
+      }
+
+      func clickAtCursor() string {
+      	return "clicked at the current cursor position"
+      }
+
+      func typeText(text string) string {
+      	return fmt.Sprintf("typed: %s", text)
+      }
+
+      func handleComputerAction(action string, params map[string]any) ([]anthropic.ToolResultBlockParamContentUnion, error) {
+      	switch action {
+      	case "screenshot":
+      		return captureScreenshot(), nil
+      	case "left_click":
+      		// coordinate is optional; without it, click where the cursor already is
+      		coord, ok := params["coordinate"].([]any)
+      		if !ok {
+      			return textContent(clickAtCursor()), nil
+      		}
+      		if len(coord) == 2 {
+      			x, xok := coord[0].(float64)
+      			y, yok := coord[1].(float64)
+      			if xok && yok {
+      				return textContent(clickAt(int(x), int(y))), nil
+      			}
+      		}
+      	case "type":
+      		if text, ok := params["text"].(string); ok {
+      			return textContent(typeText(text)), nil
+      		}
+      	// Handle other actions as needed
+      	default:
+      		return nil, fmt.Errorf("unknown or unimplemented member: %s", action)
+      	}
+      	// Reached when a member's input is missing a field or a field has the wrong type
+      	return nil, fmt.Errorf("invalid input for %s", action)
+      }
+
+      ```
+
+      ```java Java
+      /** Placeholder pixels; a real executor captures the screen and base64-encodes the PNG. */
+      static final String PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==";
+
+      ToolResultBlockParam.Content captureScreenshot() {
+          ImageBlockParam image = ImageBlockParam.builder()
+                  .source(Base64ImageSource.builder()
+                          .mediaType(Base64ImageSource.MediaType.IMAGE_PNG)
+                          .data(PLACEHOLDER_PNG)
+                          .build())
+                  .build();
+          return ToolResultBlockParam.Content.ofBlocks(
+                  List.of(ToolResultBlockParam.Content.Block.ofImage(image)));
+      }
+
+      String clickAt(long x, long y) {
+          return "clicked at (" + x + ", " + y + ")";
+      }
+
+      String clickAtCursor() {
+          return "clicked at current cursor";
+      }
+
+      String typeText(String text) {
+          return "typed: " + text;
+      }
+
+      /** Runs one computer toolset member; {@code action} is the tool_use block's name. */
+      ToolResultBlockParam.Content handleComputerAction(String action, Map<String, JsonValue> input) {
+          if (action.equals("screenshot")) {
+              return captureScreenshot(); // the one member here that answers with an image block
+          }
+          String output = switch (action) {
+              case "left_click" -> {
+                  JsonValue coordinate = input.get("coordinate"); // optional on the toolset
+                  if (coordinate == null) {
+                      yield clickAtCursor();
+                  }
+                  List<JsonValue> point = (List<JsonValue>) coordinate.asArray().get();
+                  long x = ((Number) point.get(0).asNumber().get()).longValue();
+                  long y = ((Number) point.get(1).asNumber().get()).longValue();
+                  yield clickAt(x, y);
+              }
+              case "type" -> typeText(input.get("text").asStringOrThrow());
+              // Handle other actions as needed
+              default -> throw new UnsupportedOperationException("Unknown or unimplemented member: " + action);
+          };
+          return ToolResultBlockParam.Content.ofString(output);
+      }
+      ```
+
+      ```php PHP
+      // Stand-in for real PNG bytes; a real executor captures the screen
+      const PLACEHOLDER_PNG = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+
+      function captureScreenshot(): array
+      {
+          // screenshot answers with an image block rather than text, so return the result content list
+          $image = [
+              'type' => 'image',
+              'source' => ['type' => 'base64', 'media_type' => 'image/png', 'data' => PLACEHOLDER_PNG],
+          ];
+
+          return [$image];
+      }
+
+      function clickAt(?array $coordinate): string
+      {
+          // left_click may omit coordinate, in which case the click lands where the cursor already is
+          if ($coordinate === null) {
+              return 'clicked at current cursor';
+          }
+          [$x, $y] = $coordinate;
+
+          return "clicked at ({$x}, {$y})";
+      }
+
+      function typeText(string $text): string
+      {
+          return "typed: {$text}";
+      }
+
+      function handleComputerAction(string $name, array $input): string|array
+      {
+          return match ($name) {
+              'screenshot' => captureScreenshot(),
+              'left_click' => clickAt($input['coordinate'] ?? null),
+              'type' => typeText($input['text']),
+              // Handle other actions as needed
+              default => throw new \RuntimeException("Unknown or unimplemented member: {$name}"),
+          };
+      }
+      ```
+
+      ```ruby Ruby
+      # Stand-in image data; a real executor captures the screen as a PNG.
+      PLACEHOLDER_PNG = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+
+      # screenshot answers with an image block rather than text
+      def capture_screenshot
+        [
+          {
+            type: "image",
+            source: { type: "base64", media_type: "image/png", data: PLACEHOLDER_PNG }
+          }
+        ]
+      end
+
+      def click(coordinate = nil)
+        return "clicked at current cursor" if coordinate.nil?
+
+        x, y = coordinate
+        "clicked at (#{x}, #{y})"
+      end
+
+      def type_text(text)
+        "typed: #{text}"
+      end
+
+      def handle_computer_action(name, input)
+        case name
+        when "screenshot"
+          capture_screenshot
+        when "left_click"
+          # coordinate is optional; without it, click where the cursor already is
+          click(input[:coordinate])
+        when "type"
+          type_text(input[:text])
+        # Handle other actions as needed
+        else
+          raise ArgumentError, "Unknown or unimplemented member: #{name}"
+        end
+      end
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Process Claude's tool calls">
+    Extract and run tool calls from Claude's responses:
+
+    <CodeGroup exclude="shell">
+      ```python Python
+      NOT_EXECUTED = "Not executed: an earlier computer action in this turn failed."
+
+
+      def process_tool_calls(response: Message) -> list[ToolResultBlockParam]:
+          """
+          Run the computer actions in Claude's response in order and answer each
+          one. After the first failure the rest are skipped, because Claude planned
+          them assuming the earlier actions succeeded.
+          """
+          tool_results: list[ToolResultBlockParam] = []
+          failed = False
+          for block in response.content:
+              # Only the computer toolset is declared; route other tools here if you add them
+              if block.type != "tool_use" or block.toolset_name != "computer":
+                  continue
+              result: ToolResultBlockParam = {
+                  "type": "tool_result",
+                  "tool_use_id": block.id,
+                  "toolset_name": "computer",
+              }
+              if failed:
+                  result["content"] = NOT_EXECUTED
+                  result["is_error"] = True
+              else:
+                  try:
+                      # A string, or a list of content blocks such as the screenshot image
+                      result["content"] = handle_computer_action(block.name, block.input)
+                  except Exception as err:
+                      result["content"] = f"Error: {err}"
+                      result["is_error"] = True
+                      failed = True
+              tool_results.append(result)
+          return tool_results
+      ```
+
+      ```typescript TypeScript
+      const HALT_TEXT =
+        "Not executed: an earlier computer action in this turn failed.";
+
+      function computerResult(
+        toolUseId: string,
+        content: string | Anthropic.ImageBlockParam[],
+        isError?: boolean,
+      ): Anthropic.ToolResultBlockParam {
+        return {
+          type: "tool_result",
+          tool_use_id: toolUseId,
+          toolset_name: "computer",
+          content,
+          is_error: isError,
+        };
+      }
+
+      function processToolCalls(
+        response: Anthropic.Message,
+      ): Anthropic.ToolResultBlockParam[] {
+        const toolResults: Anthropic.ToolResultBlockParam[] = [];
+        let failed = false;
+        for (const block of response.content) {
+          if (block.type !== "tool_use") {
+            continue;
+          }
+          if (block.toolset_name !== "computer") {
+            // This example declares only the computer toolset; route other tools
+            // here if you add them.
+            continue;
+          }
+          if (failed) {
+            // A batch stops at its first failure; answer later actions unexecuted
+            toolResults.push(computerResult(block.id, HALT_TEXT, true));
+            continue;
+          }
+          try {
+            // A string, or the image block list that screenshot returns
+            const result = handleComputerAction(block.name, block.input);
+            toolResults.push(computerResult(block.id, result));
+          } catch (error) {
+            failed = true;
+            const message = error instanceof Error ? error.message : String(error);
+            toolResults.push(computerResult(block.id, `Error: ${message}`, true));
+          }
+        }
+        return toolResults;
+      }
+      ```
+
+      ```csharp C#
+      const string HaltText = "Not executed: an earlier computer action in this turn failed.";
+
+      List<ContentBlockParam> ProcessToolCalls(Message response)
+      {
+          List<ContentBlockParam> toolResults = [];
+          var failed = false;
+          foreach (var block in response.Content)
+          {
+              if (!block.TryPickToolUse(out var toolUse))
+              {
+                  continue;
+              }
+
+              if (toolUse.ToolsetName != "computer")
+              {
+                  // This example declares only the computer toolset; route other tools
+                  // here if you add them.
+                  continue;
+              }
+
+              if (failed)
+              {
+                  // A batch stops at its first failure; answer later actions without running them
+                  toolResults.Add(
+                      new ToolResultBlockParam(toolUse.ID)
+                      {
+                          Content = HaltText,
+                          IsError = true,
+                          ToolsetName = "computer",
+                      }
+                  );
+                  continue;
+              }
+
+              try
+              {
+                  // A string, or the image block list that screenshot returns
+                  var result = HandleComputerAction(toolUse.Name, toolUse.Input);
+                  toolResults.Add(
+                      new ToolResultBlockParam(toolUse.ID) { Content = result, ToolsetName = "computer" }
+                  );
+              }
+              catch (Exception e)
+              {
+                  failed = true;
+                  toolResults.Add(
+                      new ToolResultBlockParam(toolUse.ID)
+                      {
+                          Content = $"Error: {e.Message}",
+                          IsError = true,
+                          ToolsetName = "computer",
+                      }
+                  );
+              }
+          }
+          return toolResults;
+      }
+      ```
+
+      ```go Go
+      const notExecuted = "Not executed: an earlier computer action in this turn failed."
+
+      // computerToolResult builds the result for one computer action. Unlike an
+      // ordinary tool result, it must echo the toolset name.
+      func computerToolResult(toolUseID string, content []anthropic.ToolResultBlockParamContentUnion, isError bool) anthropic.ContentBlockParamUnion {
+      	result := anthropic.ToolResultBlockParam{
+      		ToolUseID:   toolUseID,
+      		ToolsetName: anthropic.String("computer"),
+      		Content:     content,
+      	}
+      	if isError {
+      		result.IsError = anthropic.Bool(true)
+      	}
+      	return anthropic.ContentBlockParamUnion{OfToolResult: &result}
+      }
+
+      // processToolCalls runs the computer actions in Claude's response in order and
+      // builds one tool_result per tool_use block. After the first failure it skips
+      // the rest: Claude planned them assuming the earlier actions succeeded.
+      func processToolCalls(response *anthropic.Message) []anthropic.ContentBlockParamUnion {
+      	var toolResults []anthropic.ContentBlockParamUnion
+      	failed := false
+      	for _, block := range response.Content {
+      		switch variant := block.AsAny().(type) {
+      		case anthropic.ToolUseBlock:
+      			// This example declares only the computer toolset; route other tools here if you add them.
+      			if variant.ToolsetName != "computer" {
+      				continue
+      			}
+      			if failed {
+      				toolResults = append(toolResults, computerToolResult(variant.ID, textContent(notExecuted), true))
+      				continue
+      			}
+      			var input map[string]any
+      			var content []anthropic.ToolResultBlockParamContentUnion
+      			err := json.Unmarshal(variant.Input, &input)
+      			if err == nil {
+      				// Text, or the image block that screenshot returns
+      				content, err = handleComputerAction(variant.Name, input)
+      			}
+      			if err != nil {
+      				failed = true
+      				content = textContent("Error: " + err.Error())
+      			}
+      			toolResults = append(toolResults, computerToolResult(variant.ID, content, err != nil))
+      		}
+      	}
+      	return toolResults
+      }
+
+      ```
+
+      ```java Java
+      /** The exact text the toolset contract prescribes for member calls skipped after a failure. */
+      static final String HALT_TEXT = "Not executed: an earlier computer action in this turn failed.";
+
+      /** Every result answering a computer toolset member echoes toolset_name. */
+      ToolResultBlockParam.Builder computerResult(ToolUseBlock toolUse) {
+          return ToolResultBlockParam.builder()
+                  .toolUseId(toolUse.id())
+                  .toolsetName("computer");
+      }
+
+      /**
+       * Run the computer actions in Claude's response in order and build one
+       * tool_result per tool_use block. After the first failure, skip the rest:
+       * Claude planned them assuming the earlier actions succeeded.
+       */
+      List<ContentBlockParam> processToolCalls(Message response) {
+          List<ContentBlockParam> toolResults = new ArrayList<>();
+          boolean failed = false;
+          for (ContentBlock block : response.content()) {
+              // This example declares only the computer toolset; route other tools here if you add them.
+              if (!block.isToolUse() || !block.asToolUse().toolsetName().equals(Optional.of("computer"))) {
+                  continue;
+              }
+              ToolUseBlock toolUse = block.asToolUse();
+              ToolResultBlockParam result;
+              if (failed) {
+                  result = computerResult(toolUse).content(HALT_TEXT).isError(true).build();
+              } else {
+                  try {
+                      Map<String, JsonValue> input =
+                              (Map<String, JsonValue>) toolUse._input().asObject().get();
+                      // A string, or the image block that screenshot returns
+                      ToolResultBlockParam.Content output = handleComputerAction(toolUse.name(), input);
+                      result = computerResult(toolUse).content(output).build();
+                  } catch (RuntimeException e) {
+                      failed = true;
+                      result = computerResult(toolUse).content("Error: " + e.getMessage()).isError(true).build();
+                  }
+              }
+              toolResults.add(ContentBlockParam.ofToolResult(result));
+          }
+          return toolResults;
+      }
+      ```
+
+      ```php PHP
+      const HALT_TEXT = 'Not executed: an earlier computer action in this turn failed.';
+
+      function processToolCalls(Message $response): array
+      {
+          $toolResults = [];
+          $failed = false;
+          foreach ($response->content as $block) {
+              // This example declares only the computer toolset; route other tools here if you add them.
+              if (!($block instanceof \Anthropic\Messages\ToolUseBlock) || $block->toolsetName !== 'computer') {
+                  continue;
+              }
+              $result = ['type' => 'tool_result', 'tool_use_id' => $block->id, 'toolset_name' => 'computer'];
+              if ($failed) {
+                  // A batch stops at its first failure; the remaining actions are answered without running
+                  $toolResults[] = [...$result, 'content' => HALT_TEXT, 'is_error' => true];
+                  continue;
+              }
+              try {
+                  // A string, or the image block list that screenshot returns
+                  $toolResults[] = [...$result, 'content' => handleComputerAction($block->name, $block->input)];
+              } catch (\Throwable $e) {
+                  $failed = true;
+                  $toolResults[] = [...$result, 'content' => 'Error: ' . $e->getMessage(), 'is_error' => true];
+              }
+          }
+
+          return $toolResults;
+      }
+      ```
+
+      ```ruby Ruby
+      NOT_EXECUTED = "Not executed: an earlier computer action in this turn failed."
+
+      # Run the computer actions in Claude's response in order and build one
+      # tool_result per tool_use block. After the first failure, skip the rest:
+      # Claude planned them assuming the earlier actions succeeded.
+      def process_tool_calls(response)
+        tool_results = []
+        failed = false
+        response.content.each do |block|
+          # This example declares only the computer toolset; route other tools here
+          # if you add them.
+          next unless block.type == :tool_use && block.toolset_name == "computer"
+
+          result = { type: "tool_result", tool_use_id: block.id, toolset_name: "computer" }
+          if failed
+            result.update(content: NOT_EXECUTED, is_error: true)
+          else
+            begin
+              # A String, or the image content blocks that screenshot returns
+              result[:content] = handle_computer_action(block.name, block.input)
+            rescue => e
+              result.update(content: "Error: #{e.message}", is_error: true)
+              failed = true
+            end
+          end
+          tool_results << result
+        end
+        tool_results
+      end
+      ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Implement the agent loop">
+    Wrap the two previous steps in a loop that sends the results back and repeats until Claude returns no member tool calls; [Understand the agent loop](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#understanding-the-agentic-loop) shows this loop in each language.
+  </Step>
+</Steps>
+
+### Handle errors
+
+Report a failed action to Claude as a `tool_result` with `is_error: true` and a short description, and include `"toolset_name": "computer"` as on any other member result. If the failed action was part of a [batch action](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions), answer the remaining blocks in the batch with the halt text shown there instead of running them.
+
+For example, when screenshot capture fails:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01A09q90qw90lq917835lq9",
+      "toolset_name": "computer",
+      "content": "Error: Failed to capture screenshot. Display may be locked or unavailable.",
+      "is_error": true
+    }
+  ]
+}
+```
+
+Use the same shape for coordinates outside the display bounds and for actions that fail to run, with a message that says what went wrong.
+
+### Size screenshots to fit image limits
+
+Screenshots and zoom images that you return to the computer use toolset must already fit within your model's [image size limits](https://platform.claude.com/docs/en/build-with-claude/vision#evaluate-image-size): the toolset takes no display dimensions and the API doesn't downscale for you, so an oversized `tool_result` image is rejected with a validation error. Because Claude returns coordinates in the pixel space of the image it sees, keep the scale factor you used so you can map those coordinates back to your screen.
+
+<Note>
+  Limits vary by model. Claude Opus 4.7 and later models, including every model that supports `computer_toolset_20260801`, accept up to 2576 pixels on the long edge and 4784 visual tokens total (`⌈width / 28⌉ × ⌈height / 28⌉`, approximately 3.75 megapixels); earlier models accept up to 1568 pixels on the long edge and approximately 1.15 megapixels total (see [Resolution and token cost](https://platform.claude.com/docs/en/build-with-claude/vision#evaluate-image-size) for each model's tier). The following example uses the earlier-model 1568 px / 1.15 MP limits. For a high-resolution-tier model, size to the visual-token limit rather than a pixel total, for example with the resize helper in [Resize your image before uploading](https://platform.claude.com/docs/en/build-with-claude/vision-coordinates#resize-your-image-before-uploading).
+</Note>
+
+If your screen is larger than the limit, resize each screenshot before returning it and scale Claude's returned coordinates back to the original screen space. Because the toolset takes no display dimensions, the resize and the coordinate scaling in your application code are all you need:
+
+<CodeGroup exclude="shell">
+  ```python Python
+  import math
+
+  screen_width, screen_height = 1512, 982
+
+
+  def get_scale_factor(width, height):
+      """Calculate scale factor to meet API constraints."""
+      long_edge = max(width, height)
+      total_pixels = width * height
+
+      long_edge_scale = 1568 / long_edge
+      total_pixels_scale = math.sqrt(1_150_000 / total_pixels)
+
+      return min(1.0, long_edge_scale, total_pixels_scale)
+
+
+  # When capturing screenshot
+  scale = get_scale_factor(screen_width, screen_height)
+  scaled_width = int(screen_width * scale)
+  scaled_height = int(screen_height * scale)
+
+  # Resize image to scaled dimensions before sending to Claude
+  screenshot = capture_and_resize(scaled_width, scaled_height)
+
+
+  # When handling Claude's coordinates, scale them back up
+  def execute_click(x, y):
+      screen_x = x / scale
+      screen_y = y / scale
+      perform_click(screen_x, screen_y)
+  ```
+
+  ```typescript TypeScript
+  const screenWidth = 1512;
+  const screenHeight = 982;
+  const MAX_LONG_EDGE = 1568;
+  const MAX_PIXELS = 1_150_000;
+
+  function getScaleFactor(width: number, height: number): number {
+    const longEdge = Math.max(width, height);
+    const totalPixels = width * height;
+
+    const longEdgeScale = MAX_LONG_EDGE / longEdge;
+    const totalPixelsScale = Math.sqrt(MAX_PIXELS / totalPixels);
+
+    return Math.min(1.0, longEdgeScale, totalPixelsScale);
+  }
+
+  // When capturing screenshot
+  const scale = getScaleFactor(screenWidth, screenHeight);
+  const scaledWidth = Math.floor(screenWidth * scale);
+  const scaledHeight = Math.floor(screenHeight * scale);
+
+  // Resize image to scaled dimensions before sending to Claude
+  const screenshot = captureAndResize(scaledWidth, scaledHeight);
+
+  // When handling Claude's coordinates, scale them back up
+  function executeClick(x: number, y: number): void {
+    const screenX = x / scale;
+    const screenY = y / scale;
+    performClick(screenX, screenY);
+  }
+  ```
+
+  ```csharp C#
+  int screenWidth = 1512, screenHeight = 982;
+
+  double GetScaleFactor(int width, int height)
+  {
+      // Calculate scale factor to meet API constraints.
+      int longEdge = Math.Max(width, height);
+      int totalPixels = width * height;
+
+      double longEdgeScale = 1568.0 / longEdge;
+      double totalPixelsScale = Math.Sqrt(1_150_000.0 / totalPixels);
+
+      return Math.Min(1.0, Math.Min(longEdgeScale, totalPixelsScale));
+  }
+
+  // When capturing screenshot
+  double scale = GetScaleFactor(screenWidth, screenHeight);
+  int scaledWidth = (int)(screenWidth * scale);
+  int scaledHeight = (int)(screenHeight * scale);
+
+  // Resize image to scaled dimensions before sending to Claude
+  var screenshot = CaptureAndResize(scaledWidth, scaledHeight);
+
+  // When handling Claude's coordinates, scale them back up
+  void ExecuteClick(int x, int y)
+  {
+      double screenX = x / scale;
+      double screenY = y / scale;
+      PerformClick(screenX, screenY);
+  }
+  ```
+
+  ```go Go
+  func getScaleFactor(width, height int) float64 {
+  	longest := float64(max(width, height))
+  	area := float64(width * height)
+  	return min(1.0, 1568/longest, math.Sqrt(1_150_000/area))
+  }
+
+  // ...
+  	screenWidth, screenHeight := 1512, 982
+
+  	// When capturing screenshot
+  	scale := getScaleFactor(screenWidth, screenHeight)
+  	scaledWidth := int(float64(screenWidth) * scale)
+  	scaledHeight := int(float64(screenHeight) * scale)
+
+  	// Resize image to scaled dimensions before sending to Claude
+  	screenshot := captureAndResize(scaledWidth, scaledHeight)
+
+  	// When handling Claude's coordinates, scale them back up
+  	executeClick := func(x, y int) {
+  		performClick(float64(x)/scale, float64(y)/scale)
+  	}
+  ```
+
+  ```java Java
+  static double getScaleFactor(int width, int height) {
+      return Math.min(
+          1.0,
+          Math.min(
+              1568.0 / Math.max(width, height),
+              Math.sqrt(1_150_000.0 / (width * height))
+          )
+      );
+  }
+
+  void main() {
+      int screenWidth = 1512, screenHeight = 982;
+
+      // When capturing screenshot
+      double scale = getScaleFactor(screenWidth, screenHeight);
+      int scaledWidth = (int)(screenWidth * scale);
+      int scaledHeight = (int)(screenHeight * scale);
+
+      // Resize image to scaled dimensions before sending to Claude
+      var screenshot = captureAndResize(scaledWidth, scaledHeight);
+
+      // When handling Claude's coordinates, scale them back up
+      BiConsumer<Integer, Integer> executeClick =
+          (x, y) -> performClick(x / scale, y / scale);
+  // ...
+  }
+  ```
+
+  ```php PHP
+  function getScaleFactor(int $width, int $height): float
+  {
+      return min(
+          1.0,
+          1568 / max($width, $height),
+          sqrt(1_150_000 / ($width * $height)),
+      );
+  }
+
+  $screenWidth = 1512;
+  $screenHeight = 982;
+
+  // When capturing screenshot
+  $scale = getScaleFactor($screenWidth, $screenHeight);
+  $scaledWidth = (int)($screenWidth * $scale);
+  $scaledHeight = (int)($screenHeight * $scale);
+
+  // Resize image to scaled dimensions before sending to Claude
+  $screenshot = captureAndResize($scaledWidth, $scaledHeight);
+
+  // When handling Claude's coordinates, scale them back up
+  $executeClick = fn(int $x, int $y) => performClick($x / $scale, $y / $scale);
+  ```
+
+  ```ruby Ruby
+  def get_scale_factor(width, height)
+    [1.0, 1568.0 / [width, height].max, Math.sqrt(1_150_000.0 / (width * height))].min
+  end
+
+  screen_width, screen_height = 1512, 982
+
+  # When capturing screenshot
+  scale = get_scale_factor(screen_width, screen_height)
+  scaled_width = (screen_width * scale).to_i
+  scaled_height = (screen_height * scale).to_i
+
+  # Resize image to scaled dimensions before sending to Claude
+  screenshot = capture_and_resize(scaled_width, scaled_height)
+
+  # When handling Claude's coordinates, scale them back up
+  execute_click = ->(x, y) { perform_click(x / scale, y / scale) }
+  ```
+</CodeGroup>
+
+<Note>
+  **macOS Retina displays** capture screenshots at a device pixel ratio of 2, so the image is twice the resolution of the logical screen coordinates. Either downscale the screenshot by 2x before sending, or halve the coordinates Claude returns before issuing the click.
+</Note>
+
+When you choose a display resolution and return screenshots:
+
+* For general desktop tasks, use 1024x768 or 1280x720; for web applications, use 1280x800 or 1366x768.
+* Avoid resolutions above 1920x1080 to prevent performance issues.
+* Encode screenshots as base64 PNG or JPEG, and consider compressing large screenshots to improve performance.
+* Include relevant metadata such as timestamp or display state.
+* If you use higher resolutions, ensure coordinates are accurately scaled.
+
+### Manage screenshot history
+
+Long agent loops accumulate screenshots quickly (roughly 1,000–1,800 input tokens each). The API's [request limits](https://platform.claude.com/docs/en/build-with-claude/vision#request-limits) also apply. Once a single request carries more than 20 images, every image in it is held to a stricter per-side limit. A loop that keeps its screenshot history reaches that count within a few dozen turns, so either resize each screenshot so that neither side exceeds 2000 px or prune older screenshots to keep 20 or fewer in the request.
+
+To keep [Prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) effective while bounding context:
+
+* Place one `cache_control` breakpoint after the system prompt and tool definitions, and up to three more on the last `tool_result` block of each of the most recent turns, advancing them each turn. Within a [batch action](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions), markers on several blocks act as a single breakpoint but each still counts toward the limit of four, so use one per turn.
+* Prune old screenshots in *batches*, not one each turn. Dropping a screenshot every turn changes the prefix every turn and invalidates the cache. A reasonable default is to keep the last three screenshots and prune every 25 turns, so the prefix stays byte-identical between prune events; if your screenshots exceed 2000 px on either side, choose an interval that keeps each request at 20 or fewer images.
+* On Claude Fable 5.1, Claude Opus 5.5, Claude Sonnet 5.5, and Claude Haiku 5.5, avoid pruning on the client: removing an earlier screenshot [invalidates every later thinking block](https://platform.claude.com/docs/en/build-with-claude/thinking#preserved-in-conversation) in every request that still carries those turns. Resize screenshots to 2000 px or less per side instead, and use server-side [tool result clearing](https://platform.claude.com/docs/en/build-with-claude/context-editing#tool-result-clearing) to drop old ones from the context. If you must prune, keep [`prefix_mismatch_behavior: "drop_block"`](https://platform.claude.com/docs/en/build-with-claude/thinking#preserved-thinking-controls) set from then on; after each prune, Claude continues without the thinking produced since the pruned screenshot, on that request and every later one. On Claude Sonnet 5.5, `block_binding` works only with `thinking: {"type": "adaptive"}`. With `between_tools`, keep the history append-only, or strip the thinking blocks from the edited turn on. On Claude Haiku 5.5, `block_binding` works only with `thinking: {"type": "adaptive"}`; with `thinking: {"type": "disabled"}`, keep the history append-only, or strip the thinking blocks from the edited turn on.
+
+### Diagnose click issues
+
+If clicks miss their targets, the cause is usually one of the following:
+
+| Symptom                                           | Likely cause                                                                                                                                         | Try                                                                                                                                                                                                                                                                                                                                            |
+| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Clicks consistently offset in one direction       | Claude's coordinates, which are in the pixel space of the screenshots you return, are being applied to a display of a different size without scaling | Scale each coordinate by the ratio of your screen size to your screenshot size before clicking (see [Size screenshots to fit image limits](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#handle-coordinate-scaling-for-higher-resolutions)); on macOS Retina displays, account for the 2x device pixel ratio |
+| Clicks land in the right area but miss the target | Target is very small, detail was lost downscaling a 4K+ source, or aspect ratio was distorted                                                        | Keep the `zoom` member enabled and implement it so Claude can inspect the region at full resolution; capture at lower DPI or crop to the relevant region; preserve aspect ratio when resizing                                                                                                                                                  |
+| Claude clicks the wrong element entirely          | Ambiguous instruction, or visually similar elements nearby                                                                                           | Use positional prompts ("the blue Submit button in the bottom-right"); break the interaction into smaller steps                                                                                                                                                                                                                                |
+| Accuracy is consistently poor                     | Resolution too low                                                                                                                                   | Try 1280x720 as a baseline                                                                                                                                                                                                                                                                                                                     |
+
+<Tip>
+  **Model choice affects click precision.** Among the models that use the earlier `computer_20251124` tool, Claude Sonnet 4.6 is more mechanically precise at clicking than Claude Opus 4.6 and is more robust when screenshots require heavy downscaling. Claude Opus 4.7 narrows that gap: its click precision is roughly comparable to Sonnet 4.6, and its higher resolution limit means less downscaling is needed.
+</Tip>
+
+### Follow implementation best practices
+
+<AccordionGroup>
+  <Accordion title="Add action delays">
+    Some applications need time to respond to actions:
+
+    <CodeGroup exclude="shell">
+      ```python Python
+      def click_and_wait(x, y, wait_time=0.5):
+          click_at(x, y)
+          time.sleep(wait_time)  # Allow UI to update
+      ```
+
+      ```typescript TypeScript
+      async function clickAndWait(x: number, y: number, waitMs = 500): Promise<void> {
+        clickAt(x, y);
+        await setTimeout(waitMs); // Allow UI to update
+      }
+      ```
+
+      ```csharp C#
+      static void ClickAndWait(int x, int y, double waitSeconds = 0.5)
+      {
+          ClickAt(x, y);
+          Thread.Sleep(TimeSpan.FromSeconds(waitSeconds));  // Allow UI to update
+      }
+      ```
+
+      ```go Go
+      func clickAndWaitFor(x, y int, wait time.Duration) {
+      	clickAt(x, y)
+      	time.Sleep(wait) // Allow UI to update
+      }
+
+      func clickAndWait(x, y int) {
+      	clickAndWaitFor(x, y, 500*time.Millisecond)
+      }
+      ```
+
+      ```java Java
+      void clickAndWait(int x, int y) throws InterruptedException {
+          clickAndWait(x, y, 500);
+      }
+
+      void clickAndWait(int x, int y, long waitTimeMillis) throws InterruptedException {
+          clickAt(x, y);
+          Thread.sleep(waitTimeMillis);  // Allow UI to update
+      }
+      ```
+
+      ```php PHP
+      function clickAndWait(int $x, int $y, float $waitSeconds = 0.5): void
+      {
+          clickAt($x, $y);
+          usleep((int) ($waitSeconds * 1_000_000));  // Allow UI to update
+      }
+      ```
+
+      ```ruby Ruby
+      def click_and_wait(x, y, wait_time: 0.5)
+        click_at(x, y)
+        sleep(wait_time) # Allow UI to update
+      end
+      ```
+    </CodeGroup>
+  </Accordion>
+
+  <Accordion title="Validate actions before running them">
+    Check that requested actions are safe and valid:
+
+    <CodeGroup exclude="shell">
+      ```python Python
+      display_width, display_height = 1024, 768
+
+
+      def validate_action(action_type, params):
+          if action_type == "left_click" and "coordinate" in params:
+              x, y = params["coordinate"]
+              if not (0 <= x < display_width and 0 <= y < display_height):
+                  return False, "Coordinates out of bounds"
+          return True, None
+      ```
+
+      ```typescript TypeScript
+      const displayWidth = 1024;
+      const displayHeight = 768;
+
+      interface ActionParams {
+        coordinate?: [number, number];
+      }
+
+      function validateAction(actionType: string, params: ActionParams): [boolean, string | null] {
+        if (actionType === "left_click" && params.coordinate) {
+          const [x, y] = params.coordinate;
+          if (!(x >= 0 && x < displayWidth && y >= 0 && y < displayHeight)) {
+            return [false, "Coordinates out of bounds"];
+          }
+        }
+        return [true, null];
+      }
+      ```
+
+      ```csharp C#
+      const int DisplayWidth = 1024;
+      const int DisplayHeight = 768;
+      // ...
+      static (bool IsValid, string? Error) ValidateAction(string actionType, IReadOnlyDictionary<string, JsonElement> parameters)
+      {
+          if (actionType == "left_click" && parameters.TryGetValue("coordinate", out JsonElement coordinate))
+          {
+              int x = coordinate[0].GetInt32();
+              int y = coordinate[1].GetInt32();
+              if (x is < 0 or >= DisplayWidth || y is < 0 or >= DisplayHeight)
+              {
+                  return (false, "Coordinates out of bounds");
+              }
+          }
+          return (true, null);
+      }
+      ```
+
+      ```go Go
+      const (
+      	displayWidth  = 1024
+      	displayHeight = 768
+      )
+
+      func validateAction(actionType string, params map[string]any) (bool, string) {
+      	raw, hasCoordinate := params["coordinate"]
+      	if actionType == "left_click" && hasCoordinate {
+      		coord, ok := raw.([]any)
+      		if !ok || len(coord) != 2 {
+      			return false, "Invalid coordinate"
+      		}
+      		x, y := int(coord[0].(float64)), int(coord[1].(float64))
+      		if !(0 <= x && x < displayWidth && 0 <= y && y < displayHeight) {
+      			return false, "Coordinates out of bounds"
+      		}
+      	}
+      	return true, ""
+      }
+      ```
+
+      ```java Java
+      static final int DISPLAY_WIDTH = 1024;
+      static final int DISPLAY_HEIGHT = 768;
+
+      record Validation(boolean valid, String error) {}
+
+      Validation validateAction(String actionType, Map<String, JsonValue> params) {
+          if (actionType.equals("left_click") && params.containsKey("coordinate")) {
+              List<JsonValue> coord = (List<JsonValue>) params.get("coordinate").asArray().get();
+              long x = ((Number) coord.get(0).asNumber().get()).longValue();
+              long y = ((Number) coord.get(1).asNumber().get()).longValue();
+              if (!(0 <= x && x < DISPLAY_WIDTH && 0 <= y && y < DISPLAY_HEIGHT)) {
+                  return new Validation(false, "Coordinates out of bounds");
+              }
+          }
+          return new Validation(true, null);
+      }
+      ```
+
+      ```php PHP
+      const DISPLAY_WIDTH = 1024;
+      const DISPLAY_HEIGHT = 768;
+
+      /** @return array{bool, ?string} */
+      function validateAction(string $actionType, array $params): array
+      {
+          if ($actionType === 'left_click' && isset($params['coordinate'])) {
+              [$x, $y] = $params['coordinate'];
+              if (!(0 <= $x && $x < DISPLAY_WIDTH && 0 <= $y && $y < DISPLAY_HEIGHT)) {
+                  return [false, 'Coordinates out of bounds'];
+              }
+          }
+          return [true, null];
+      }
+      ```
+
+      ```ruby Ruby
+      DISPLAY_WIDTH = 1024
+      DISPLAY_HEIGHT = 768
+
+      def validate_action(action_type, params)
+        if action_type == "left_click" && params.key?(:coordinate)
+          x, y = params[:coordinate]
+          unless (0...DISPLAY_WIDTH).cover?(x) && (0...DISPLAY_HEIGHT).cover?(y)
+            return [false, "Coordinates out of bounds"]
+          end
+        end
+        [true, nil]
+      end
+      ```
+    </CodeGroup>
+  </Accordion>
+
+  <Accordion title="Log actions for debugging">
+    Keep a log of all actions for troubleshooting:
+
+    <CodeGroup exclude="shell">
+      ```python Python
+      import logging
+
+
+      def log_action(action_type, params, result):
+          logging.info(f"Action: {action_type}, Params: {params}, Result: {result}")
+      ```
+
+      ```typescript TypeScript
+      function logAction(actionType: string, params: unknown, result: unknown): void {
+        console.error(
+          `Action: ${actionType}, Params: ${JSON.stringify(params)}, Result: ${JSON.stringify(
+            result
+          )}`
+        );
+      }
+      ```
+
+      ```csharp C#
+      static void LogAction(string actionType, object? parameters, object? result)
+      {
+          Console.Error.WriteLine($"Action: {actionType}, Params: {parameters}, Result: {result}");
+      }
+      ```
+
+      ```go Go
+      func logAction(actionType string, params map[string]any, result any) {
+      	log.Printf("Action: %s, Params: %v, Result: %v", actionType, params, result)
+      }
+      ```
+
+      ```java Java
+      import static java.lang.System.Logger.Level.INFO;
+
+      static final System.Logger LOGGER = System.getLogger("computer-use");
+
+      void logAction(String actionType, Object params, Object result) {
+          LOGGER.log(INFO, "Action: {0}, Params: {1}, Result: {2}", actionType, params, result);
+      }
+      ```
+
+      ```php PHP
+      function logAction(string $actionType, array $params, mixed $result): void
+      {
+          error_log(sprintf(
+              'Action: %s, Params: %s, Result: %s',
+              $actionType,
+              json_encode($params),
+              json_encode($result),
+          ));
+      }
+      ```
+
+      ```ruby Ruby
+      require "logger"
+
+      LOGGER = Logger.new($stderr)
+
+      def log_action(action_type, params, result)
+        LOGGER.info("Action: #{action_type}, Params: #{params}, Result: #{result}")
+      end
+      ```
+    </CodeGroup>
+  </Accordion>
+</AccordionGroup>
+
+***
+
+## Migrate from `computer_20251124`
+
+Upgrading from `computer_20251124` to the toolset is optional: the models listed for `computer_20251124` under [Earlier tool versions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#earlier-tool-versions) keep accepting it with its beta header, so an existing integration keeps working until you change it. Claude 5.5 and later models are the exception on the Claude API and Google Cloud: there they accept only the toolset. Upgrade an integration before you move it to one of them. On Amazon Bedrock, Claude Opus 5.5, Claude Sonnet 5.5, and Claude Haiku 5.5 accept `computer_20251124`. To upgrade, make the following changes together:
+
+1. **Remove the beta header.** Drop `anthropic-beta: computer-use-2025-11-24` from your requests. With the SDK, remove `betas` (csharp, go: `Betas`; java: `.addBeta()`) and call the Messages API through the standard client rather than the beta namespace.
+2. **Change the `tools` entry.** Set `type` to `computer_toolset_20260801` and delete `name`, `display_width_px`, `display_height_px`, `display_number`, and `enable_zoom`. The toolset rejects each of these fields.
+3. **Choose whether to keep zoom enabled.** Zoom is enabled by default on the toolset, whereas `enable_zoom` defaults to `false`. If your environment doesn't implement zoom, add `"configs": {"zoom": {"enabled": false}}` to keep the previous behavior; otherwise implement it (see [Available actions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#available-actions)).
+4. **Handle every block in a turn.** Update your agent loop to iterate over every `tool_use` block in a response rather than reading only the first, and to dispatch on the block's `name` together with `toolset_name` instead of on `input.action`. Member inputs no longer contain an `action` field; the remaining fields are unchanged.
+5. **Run blocks in order and use the halt text.** Run the blocks sequentially, stop at the first failure, and answer the remaining blocks with `Not executed: an earlier computer action in this turn failed.` as described in [Batch actions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#batch-actions). If your loop can't run batches yet, [Tool parameters](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#tool-parameters) explains how to limit Claude to one action per turn.
+6. **Echo `toolset_name` on results.** Add `"toolset_name": "computer"` to every `tool_result` that answers a member call. Results may contain only `text` and `image` content.
+7. **Support `repeat` on `key`.** The `key` member accepts an optional `repeat` count from 1 to 100. A handler that ignores unrecognized fields would press the key once, so make your `key` handler honor `repeat`.
+8. **Resize screenshots yourself.** The toolset rejects a screenshot or zoom image that exceeds the model's image limits instead of downscaling it. Resize before returning the image and keep scaling coordinates as described in [Size screenshots to fit image limits](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#handle-coordinate-scaling-for-higher-resolutions).
+9. **Remove unsupported options.** Move any `defer_loading` from the entry into `configs`, with the same value on every enabled member. The other options not supported on toolset entries are listed under [Client toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference#client-toolsets).
+
+This is the `tools` entry before the change, sent with the `anthropic-beta: computer-use-2025-11-24` header:
+
+```json
+{
+  "type": "computer_20251124",
+  "name": "computer",
+  "display_width_px": 1024,
+  "display_height_px": 768,
+  "display_number": 1
+}
+```
+
+This is the `tools` entry after the change, sent with no beta header. The `configs` object keeps zoom off to match the earlier entry, which doesn't set `enable_zoom`; omit `configs` entirely to accept the default and let Claude zoom:
+
+```json
+{
+  "type": "computer_toolset_20260801",
+  "configs": {
+    "zoom": { "enabled": false }
+  }
+}
+```
+
+The following pair shows a `tool_use` block before and after the change. The action name moves from `input.action` to `name`, and the block gains `toolset_name`:
+
+```json
+{
+  "type": "tool_use",
+  "id": "toolu_01A9r5kQm2LxWc7vT3nZ4bJs",
+  "name": "computer",
+  "input": { "action": "left_click", "coordinate": [500, 300] }
+}
+```
+
+```json
+{
+  "type": "tool_use",
+  "id": "toolu_01A9r5kQm2LxWc7vT3nZ4bJs",
+  "name": "left_click",
+  "toolset_name": "computer",
+  "input": { "coordinate": [500, 300] }
+}
+```
+
+## Earlier tool versions
+
+Two earlier versions of the computer use tool remain available in beta for existing integrations, for models that don't support the toolset, and on platforms where the toolset isn't currently available. Each requires its [beta header](https://platform.claude.com/docs/en/api/beta-headers) on every request, and their parameters are documented in the [beta Messages API reference](https://platform.claude.com/docs/en/api/beta/messages/create). With the SDK, pass the header through `betas` (csharp, go: `Betas`; java: `.addBeta()`) and use the beta namespace; only the computer use tool needs the header, not the bash or text editor tools in the same request.
+
+| Tool version        | Beta header               | Use with                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Parameters                                                                    |
+| ------------------- | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `computer_20251124` | `computer-use-2025-11-24` | Claude Fable 5.1, Claude Mythos 5.1, Claude Fable 5, Claude Mythos 5, Claude Opus 5, Claude Sonnet 5, Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 4.6, and Claude Opus 4.5; on Amazon Bedrock, also Claude Opus 5.5, Claude Sonnet 5.5, and Claude Haiku 5.5                                                                                                                                                                                                                                               | [API reference](https://platform.claude.com/docs/en/api/beta/messages/create) |
+| `computer_20250124` | `computer-use-2025-01-24` | Claude Sonnet 4.5 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations)), Claude Haiku 4.5, Claude Opus 4.1 ([retired, except on Bedrock and Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations)), Claude Sonnet 4 ([retired, except on Bedrock and Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations)), and Claude Opus 4 ([retired, except on Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | [API reference](https://platform.claude.com/docs/en/api/beta/messages/create) |
+
+***
+
+## Limitations
+
+1. **Latency:** The current computer use latency for human-AI interactions might be too slow compared to regular human-directed computer actions. Focus on use cases where speed isn't critical (for example, background information gathering, automated software testing) in trusted environments.
+2. **Computer vision accuracy and reliability:** Claude might make mistakes or hallucinate when outputting specific coordinates while generating actions. Claude's [summarized thinking](https://platform.claude.com/docs/en/build-with-claude/thinking#summarized-thinking) output can help you understand the model's reasoning and identify potential issues; set `display: "summarized"` on the thinking configuration, because the models that support the toolset omit thinking text by default.
+3. **Tool selection accuracy and reliability:** Claude might make mistakes or hallucinate when selecting tools while generating actions or take unexpected actions to solve problems. Additionally, reliability might be lower when interacting with niche applications or multiple applications at once. Prompt the model carefully when requesting complex tasks.
+4. **Scrolling reliability:** The scroll action supports direction control (up, down, left, right) and a specified amount. In applications where scrolling doesn't take effect, keyboard alternatives such as Page Down can help.
+5. **Spreadsheet interaction:** Use the fine-grained mouse control actions (`left_mouse_down`, `left_mouse_up`) and modifier-key combinations to select individual cells. Complex spreadsheet operations might still require multiple attempts.
+6. **Account creation and content generation on social and communications platforms:** Although Claude visits websites, its ability to create accounts, generate and share content, or otherwise engage in human impersonation across social media websites and platforms is limited.
+7. **Vulnerabilities:** Jailbreaks and prompt injection can affect computer use as they can any frontier AI system, including through instructions embedded in webpages or images; apply the precautions in [Security considerations](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool#security-considerations).
+8. **Inappropriate or illegal actions:** Under Anthropic's Terms of Service, you must not employ computer use to violate any laws or the Acceptable Use Policy.
+
+Always carefully review and verify Claude's computer use actions and logs. Do not use Claude for tasks requiring perfect precision or sensitive user information without human oversight.
+
+## Data retention
+
+Computer use is a client-side tool. All screenshots, mouse actions, keyboard inputs, and any files involved in a session are captured and stored in your environment, not by Anthropic. Anthropic processes the screenshot images and action requests in real time as part of the API call. Retention for those API requests is governed by [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
+
+Because your application controls where and how computer use data is stored, computer use is ZDR eligible. For ZDR eligibility across all features, see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
+
+## Pricing
+
+Computer use follows the standard [tool use pricing](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview#pricing). When using the computer use tool:
+
+**Toolset definition overhead:** Declaring `computer_toolset_20260801` with its default members adds about 4,500 input tokens to a request (about 4,590 on Claude Sonnet 5 and about 4,520 on the other supported models), which covers the member tool definitions and the tool use system prompt. Disabling `zoom` with `configs` removes about 410 of those tokens. The exact count for a request is reported in the response `usage`, and you can estimate it in advance with the [token counting endpoint](https://platform.claude.com/docs/en/build-with-claude/token-counting).
+
+**Earlier tool versions:** The following figures apply to the `computer_20251124` and `computer_20250124` tool versions, not to `computer_toolset_20260801`:
+
+* System prompt overhead: 466–499 tokens added to the system prompt
+* Tool definition: about 735 input tokens per tool definition (measured with `computer_20250124`)
+
+**Additional token consumption:**
+
+* Screenshot and zoom images returned in tool results, billed as image input (see [Vision pricing](https://platform.claude.com/docs/en/build-with-claude/vision#evaluate-image-size))
+* Tool execution results returned to Claude
+
+<Note>
+  If you're also using bash or text editor tools alongside computer use, those tools have their own token costs as documented in their respective pages.
+</Note>
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Computer toolset in the SDKs" icon="code" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk#computer-toolset">
+    Start from a partner's driver, or write your own in Python or TypeScript. The SDK runs the loop and the approval callback you pass.
+  </Card>
+
+  <Card title="Troubleshooting tool use" icon="wrench" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/troubleshooting-tool-use">
+    Fix the most common tool-use errors with symptom-to-fix diagnostic tables.
+  </Card>
+
+  <Card title="Reference implementation" icon="github-logo" href="https://github.com/anthropics/anthropic-quickstarts/tree/main/computer-use-demo">
+    Get started with the complete Docker-based implementation
+  </Card>
+
+  <Card title="Tool use with Claude" icon="tool" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">
+    Connect Claude to external tools and APIs. See where tools execute, when Claude calls them, and which tool fits your task.
+  </Card>
+
+  <Card title="Best practices in detail" icon="book" href="https://claude.com/blog/best-practices-for-computer-and-browser-use-with-claude">
+    Benchmarked recommendations for resolution, thinking effort, and context management
+  </Card>
+
+  <Card title="Browser use tool" icon="browser" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool">
+    Let Claude navigate, read, and interact with webpages in your own browser environment, for tasks that stay inside the browser.
+  </Card>
+</CardGroup>
 
 ---
 
@@ -14010,7 +21468,7 @@ To get the best performance out of Claude when using tools, follow these guideli
   * What the tool does
   * When it should be used (and when it shouldn't)
   * What each parameter means and how it affects the tool's behavior
-  * Any important caveats or limitations, such as what information the tool does not return if the tool name is unclear. The more context you can give Claude about your tools, the better it will be at deciding when and how to use them. Aim for at least 3–4 sentences for each tool description, more if the tool is complex.
+  * Any important caveats or limitations, such as what information the tool does not return if the tool name is unclear. The more context you can give Claude about your tools, the better it will be at determining when and how to use them. Aim for at least 3–4 sentences for each tool description, more if the tool is complex.
 
 * **Prioritize descriptions, but consider using `input_examples` for complex tools.** Clear descriptions are most important, but for tools with complex inputs, nested objects, or format-sensitive parameters, you can use the `input_examples` field to provide schema-validated examples. See [Providing tool use examples](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools#providing-tool-use-examples) for details.
 
@@ -14019,6 +21477,8 @@ To get the best performance out of Claude when using tools, follow these guideli
 * **Use meaningful namespacing in tool names.** When your tools span multiple services or resources, prefix names with the service (for example, `github_list_prs`, `slack_send_message`). This makes tool selection unambiguous as your library grows, and is especially important when using [tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool).
 
 * **Design tool responses to return only high-signal information.** Return semantic, stable identifiers (for example, slugs or UUIDs) rather than opaque internal references, and include only the fields Claude needs to reason about its next step. Bloated responses waste context and make it harder for Claude to extract what matters.
+
+* **Ask for an explanation, not reasoning.** If a parameter asks Claude why it is making the call, ask for a short explanation or the supporting evidence. A parameter that asks for the model's thinking or step-by-step reasoning may lead to a `reasoning_extraction` refusal. See [Keep reasoning in thinking blocks](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#keep-reasoning-in-thinking-blocks).
 
 <AccordionGroup>
   <Accordion title="Example of a good tool description">
@@ -14079,46 +21539,44 @@ Add an optional `input_examples` field to your tool definition with an array of 
     -H "content-type: application/json" \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
-    -d @- <<'EOF'
-  {
-    "model": "claude-opus-5",
-    "max_tokens": 1024,
-    "tools": [
-      {
-        "name": "get_weather",
-        "description": "Get the current weather in a given location",
-        "input_schema": {
-          "type": "object",
-          "properties": {
-            "location": {
-              "type": "string",
-              "description": "The city and state, e.g. San Francisco, CA"
+    -d '{
+      "model": "claude-opus-5-5",
+      "max_tokens": 1024,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get the current weather in a given location",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city and state, e.g. San Francisco, CA"
+              },
+              "unit": {
+                "type": "string",
+                "enum": ["celsius", "fahrenheit"],
+                "description": "The unit of temperature"
+              }
             },
-            "unit": {
-              "type": "string",
-              "enum": ["celsius", "fahrenheit"],
-              "description": "The unit of temperature"
-            }
+            "required": ["location"]
           },
-          "required": ["location"]
-        },
-        "input_examples": [
-          {"location": "San Francisco, CA", "unit": "fahrenheit"},
-          {"location": "Tokyo, Japan", "unit": "celsius"},
-          {"location": "New York, NY"}
-        ]
-      }
-    ],
-    "messages": [
-      {"role": "user", "content": "What's the weather like in San Francisco?"}
-    ]
-  }
-  EOF
+          "input_examples": [
+            {"location": "San Francisco, CA", "unit": "fahrenheit"},
+            {"location": "Tokyo, Japan", "unit": "celsius"},
+            {"location": "New York, NY"}
+          ]
+        }
+      ],
+      "messages": [
+        {"role": "user", "content": "What is the weather like in San Francisco?"}
+      ]
+    }'
   ```
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - name: get_weather
@@ -14150,7 +21608,7 @@ Add an optional `input_examples` field to your tool definition with an array of 
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[
           {
@@ -14190,7 +21648,7 @@ Add an optional `input_examples` field to your tool definition with an array of 
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -14238,7 +21696,7 @@ Add an optional `input_examples` field to your tool definition with an array of 
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = [
           new ToolUnion(new Tool()
@@ -14286,7 +21744,7 @@ Add an optional `input_examples` field to your tool definition with an array of 
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfTool: &anthropic.ToolParam{
@@ -14340,7 +21798,7 @@ Add an optional `input_examples` field to your tool definition with an array of 
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(Tool.builder()
               .name("get_weather")
@@ -14389,7 +21847,7 @@ Add an optional `input_examples` field to your tool definition with an array of 
       messages: [
           ['role' => 'user', 'content' => "What's the weather like in San Francisco?"]
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'name' => 'get_weather',
@@ -14431,7 +21889,7 @@ Add an optional `input_examples` field to your tool definition with an array of 
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -14491,10 +21949,10 @@ In some cases, you may want Claude to use a specific tool to answer the user's q
 
 Not every model and setting supports forced tool use. Where it isn't supported, `tool_choice: {"type": "any"}` and `tool_choice: {"type": "tool", "name": "..."}` fail, while `tool_choice: {"type": "auto"}` (the default) and `tool_choice: {"type": "none"}` still work:
 
-| Model or setting                                                                                                                    | Restriction                                                                                                         | What to use instead                                                                                                                                                                                                                                                                                                                                                                |
-| ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Manual [extended thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking) (`thinking: {type: "enabled"}`) | `any` and `tool` are not supported and result in an error                                                           | `auto` or `none`. [Adaptive thinking](https://platform.claude.com/docs/en/build-with-claude/thinking), including on models where thinking is on by default such as Claude Opus 5, supports forced tool use                                                                                                                                                                         |
-| Claude Fable 5.1 and [Claude Mythos 5.1](https://anthropic.com/glasswing)                                                           | `any` and `tool` return a [400 error](https://platform.claude.com/docs/en/api/errors#forced-tool-use-not-supported) | `auto` with [strict tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use) to guarantee schema-valid tool inputs, or [structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) when you need a response in a fixed JSON shape. Prompting still influences which tool `auto` picks. `none` is also supported |
+| Model or setting                                                                                                                              | Restriction                                                                                                         | What to use instead                                                                                                                                                                                                                                                                                                                                                                                                             |
+| --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Manual [extended thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking) (`thinking: {type: "enabled"}`)           | `any` and `tool` are not supported and result in an error                                                           | `auto` or `none`. [Adaptive thinking](https://platform.claude.com/docs/en/build-with-claude/thinking) itself doesn't block forced tool use (models with thinking on by default, such as Claude Opus 5 and Claude Haiku 5.5, accept it, but a forced call skips thinking: the response starts with the tool call and has no `thinking` block); the models in the next row reject forced tool use regardless of thinking settings |
+| Claude Opus 5.5, Claude Sonnet 5.5, Claude Fable 5.1, and [Claude Mythos 5.1](https://platform.claude.com/docs/en/models/mythos-5-1/overview) | `any` and `tool` return a [400 error](https://platform.claude.com/docs/en/api/errors#forced-tool-use-not-supported) | `auto` with [strict tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use) to guarantee schema-valid tool inputs, or [structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) when you need a response in a fixed JSON shape. Prompting still influences which tool `auto` picks. `none` is also supported                                              |
 
 On models that support it, the highlighted lines are the only difference from a standard tool use request:
 
@@ -14504,32 +21962,30 @@ On models that support it, the highlighted lines are the only difference from a 
     -H "content-type: application/json" \
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
-    -d @- <<'EOF'
-  {
-    "model": "claude-opus-5",
-    "max_tokens": 1024,
-    "tools": [
-      {
-        "name": "get_weather",
-        "description": "Get the current weather in a given location",
-        "input_schema": {
-          "type": "object",
-          "properties": {
-            "location": {
-              "type": "string",
-              "description": "The city and state, e.g. San Francisco, CA"
-            }
-          },
-          "required": ["location"]
+    -d '{
+      "model": "claude-opus-5",
+      "max_tokens": 1024,
+      "tools": [
+        {
+          "name": "get_weather",
+          "description": "Get the current weather in a given location",
+          "input_schema": {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The city and state, e.g. San Francisco, CA"
+              }
+            },
+            "required": ["location"]
+          }
         }
-      }
-    ],
-    "tool_choice": {"type": "tool", "name": "get_weather"},
-    "messages": [
-      {"role": "user", "content": "What's the weather like in San Francisco?"}
-    ]
-  }
-  EOF
+      ],
+      "tool_choice": {"type": "tool", "name": "get_weather"},
+      "messages": [
+        {"role": "user", "content": "What is the weather like in San Francisco?"}
+      ]
+    }'
   ```
 
   ```bash CLI
@@ -14777,7 +22233,7 @@ On models that support it, the highlighted lines are the only difference from a 
 
 When working with the `tool_choice` parameter, there are four possible options:
 
-* `auto` allows Claude to decide whether to call any provided tools or not. This is the default value when `tools` are provided.
+* `auto` allows Claude to determine whether to call any provided tools or not. This is the default value when `tools` are provided.
 * `any` tells Claude that it must use one of the provided tools, but doesn't force a particular tool.
 * `tool` forces Claude to always use a particular tool.
 * `none` prevents Claude from using any tools. This is the default value when no `tools` are provided.
@@ -14789,11 +22245,14 @@ When working with the `tool_choice` parameter, there are four possible options:
 This diagram illustrates how each option works:
 
 <Frame>
+  ![Diagram of three tool\_choice options: auto (a tool or a plain response), any (one of the tools), and tool (the named tool)](https://platform.claude.com/docs/images/tool_choice.svg)
 </Frame>
 
 Note that when you have `tool_choice` as `any` or `tool`, the API prefills the assistant message to force a tool to be used. This means that the models will not emit a natural language response or explanation before `tool_use` content blocks, even if explicitly asked to do so.
 
 Testing has shown that this should not reduce performance. If you would like the model to provide natural language context or explanations while still requesting that the model use a specific tool, you can use `{"type": "auto"}` for `tool_choice` (the default) and add explicit instructions in a `user` message. For example: `What's the weather like in London? Use the get_weather tool in your response.`
+
+Forcing a tool also skips thinking on every model that accepts forced tool use: the response starts with the `tool_use` block and has no `thinking` block. To let the model think before it calls the tool, use `auto` with a prompt instruction in the same way.
 
 <Tip>
   **Guaranteed tool calls with strict tools**
@@ -14877,7 +22336,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 65536,
       "tools": [
         {
@@ -14912,7 +22371,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   ```bash CLI
   ant messages create --stream --format jsonl <<'YAML' |
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 65536
   tools:
     - name: make_file
@@ -14942,7 +22401,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   with client.messages.stream(
       max_tokens=65536,
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       tools=[
           {
               "name": "make_file",
@@ -14986,7 +22445,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
   const client = new Anthropic();
 
   const stream = client.messages.stream({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 65536,
     tools: [
       {
@@ -15035,7 +22494,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   MessageCreateParams parameters = new()
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 65536,
       Tools =
       [
@@ -15121,7 +22580,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
   }
 
   stream := client.Messages.NewStreaming(context.Background(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 65536,
   	Tools:     []anthropic.ToolUnionParam{{OfTool: &makeFileTool}},
   	Messages: []anthropic.MessageParam{
@@ -15177,7 +22636,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
       .build();
 
   MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(65536L)
       .addTool(makeFileTool)
       .addUserMessage("Can you write a long poem and make a file called poem.txt?")
@@ -15216,7 +22675,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   $stream = $client->messages->createStream(
       maxTokens: 65536,
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       tools: [
           [
               'name' => 'make_file',
@@ -15275,7 +22734,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
   client = Anthropic::Client.new
 
   stream = client.messages.stream(
-    model: Anthropic::Models::Model::CLAUDE_OPUS_5,
+    model: Anthropic::Models::Model::CLAUDE_OPUS_5_5,
     max_tokens: 65_536,
     tools: [
       {
@@ -15332,7 +22791,7 @@ The accumulation contract is the same as for standard tool-use streaming, so thi
 
 When a `tool_use` content block streams, the initial `content_block_start` event contains `input: {}` (an empty object). This is a placeholder. The actual input arrives as a series of `input_json_delta` events, each carrying a `partial_json` string fragment. To assemble the full input, concatenate these fragments and parse the result when the block closes.
 
-Where your SDK provides an accumulator helper (as the Python, TypeScript, Go, Java, and Ruby tabs in the previous example do), it handles this for you. The manual pattern is for SDKs without a helper, or when you want full control over how the input is assembled.
+Where your SDK provides an accumulator helper (as the Python, TypeScript, Go, Java, and Ruby tabs in the previous example do), it handles this for you. Use the manual pattern when your SDK has no helper or when you want full control over how the input is assembled.
 
 The accumulation contract:
 
@@ -15344,16 +22803,14 @@ Guard the parse, as the following SDK examples do. A response can also stop at `
 
 The type mismatch between the initial `input: {}` (object) and `partial_json` (string) is by design. The empty object marks the slot in the content array. The delta strings build the real value.
 
-<CodeGroup>
-  ```bash cURL
-  # Accumulating per-block input deltas needs a programming language; the first
-  # example's CLI tab shows the raw fragments with jq. See the SDK tabs.
-  ```
+<CodeGroup exclude="shell">
+  <CodeGroupItem language="cURL">
+    Accumulating the input fragments of each `tool_use` block needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this. To see the raw fragments as they stream, run the request in [How to use fine-grained tool streaming](https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming#how-to-use-fine-grained-tool-streaming).
+  </CodeGroupItem>
 
-  ```bash CLI
-  # Accumulating per-block input deltas needs a programming language; the first
-  # example's CLI tab shows the raw fragments with jq. See the SDK tabs.
-  ```
+  <CodeGroupItem language="CLI">
+    Accumulating the input fragments of each `tool_use` block needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this. To see the raw fragments as they stream, run the request in [How to use fine-grained tool streaming](https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming#how-to-use-fine-grained-tool-streaming).
+  </CodeGroupItem>
 
   ```python Python
   client = anthropic.Anthropic()
@@ -15361,7 +22818,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   tool_inputs: dict[int, str] = {}  # index -> accumulated JSON string
 
   with client.messages.stream(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[
           {
@@ -15401,7 +22858,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   const toolInputs = new Map<number, string>();
 
   const stream = client.messages.stream({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -15454,7 +22911,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
 
   MessageCreateParams parameters = new()
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools =
       [
@@ -15523,7 +22980,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   toolInputs := map[int64]string{} // content block index -> accumulated JSON
 
   stream := client.Messages.NewStreaming(context.Background(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{{
   		OfTool: &anthropic.ToolParam{
@@ -15588,7 +23045,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
           .build();
 
   MessageCreateParams createParams = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024)
           .addTool(weatherTool)
           .addUserMessage("Weather in Paris?")
@@ -15649,7 +23106,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
 
   $stream = $client->messages->createStream(
       maxTokens: 1024,
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       tools: [
           [
               'name' => 'get_weather',
@@ -15683,7 +23140,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
                   try {
                       $parsed = json_decode($accumulated, associative: true, flags: JSON_THROW_ON_ERROR);
                       echo "Tool input: " . json_encode($parsed) . "\n";
-                  } catch (JsonException $e) {
+                  } catch (\JsonException $e) {
                       // The accumulated string is not guaranteed to be valid JSON.
                       // See "Handling invalid JSON in tool responses" on this page.
                       echo "Invalid tool input: {$accumulated}\n";
@@ -15700,7 +23157,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   tool_inputs = {} # index -> accumulated JSON string
 
   stream = client.messages.stream_raw(
-    model: Anthropic::Models::Model::CLAUDE_OPUS_5,
+    model: Anthropic::Models::Model::CLAUDE_OPUS_5_5,
     max_tokens: 1024,
     tools: [
       {
@@ -15820,7 +23277,7 @@ A `tool_use` block for a member of the [computer use](https://platform.claude.co
   ```json JSON
   {
     "id": "msg_01Aq9w938a90dw8q",
-    "model": "claude-opus-5",
+    "model": "claude-opus-5-5",
     "stop_reason": "tool_use",
     "role": "assistant",
     "content": [
@@ -16364,7 +23821,7 @@ Using the memory tool takes two steps:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 2048,
       "messages": [
         {
@@ -16381,7 +23838,7 @@ Using the memory tool takes two steps:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 2048
   tools:
     - type: memory_20250818
@@ -16396,7 +23853,7 @@ Using the memory tool takes two steps:
   client = anthropic.Anthropic()
 
   message = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=2048,
       messages=[
           {
@@ -16414,7 +23871,7 @@ Using the memory tool takes two steps:
   const anthropic = new Anthropic();
 
   const message = await anthropic.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 2048,
     messages: [
       {
@@ -16434,7 +23891,7 @@ Using the memory tool takes two steps:
   var message = await client.Messages.Create(
       new()
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 2048,
           Messages =
           [
@@ -16455,7 +23912,7 @@ Using the memory tool takes two steps:
   client := anthropic.NewClient()
 
   message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 2048,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Help me respond to this customer service ticket.")),
@@ -16476,7 +23933,7 @@ Using the memory tool takes two steps:
     AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
     MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(2048L)
       .addTool(MemoryTool20250818.builder().build())
       .addUserMessage("Help me respond to this customer service ticket.")
@@ -16490,7 +23947,7 @@ Using the memory tool takes two steps:
   $client = new Client();
 
   $message = $client->messages->create(
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       maxTokens: 2048,
       messages: [
           [
@@ -16508,7 +23965,7 @@ Using the memory tool takes two steps:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: Anthropic::Model::CLAUDE_OPUS_5,
+    model: Anthropic::Model::CLAUDE_OPUS_5_5,
     max_tokens: 2048,
     messages: [
       {
@@ -16531,7 +23988,7 @@ Using the memory tool takes two steps:
 
 Claude's reply to a request like the previous one ends with a `tool_use` block that requests a memory operation, such as `view /memories`. Your application executes the operation and returns the result in a `tool_result` block, then sends the conversation back so Claude can continue: the standard [tool-use loop](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls).
 
-Four SDKs provide memory tool helpers that handle the tool interface and the loop. Subclass `BetaAbstractMemoryTool` (Python and C#), use `betaMemoryTool` (TypeScript), or implement `BetaMemoryToolHandler` (Java) to back memory with your own storage, such as files on disk, a database, cloud storage, or encrypted files. Python and TypeScript also ship a ready-made local-filesystem implementation, `BetaLocalFilesystemMemoryTool`. The helper and tool-runner surfaces live in each SDK's beta namespace even though the memory tool itself doesn't require a beta header. The Go and Ruby SDKs have no memory helper, so those examples run the tool-use loop themselves, and PHP wraps your handler closure in its generic `BetaRunnableTool`. All three use an in-memory store that you replace with your own storage.
+Four SDKs provide memory tool helpers that handle the tool interface and the loop. Subclass `BetaAbstractMemoryTool` (Python and C#), use `betaMemoryTool` (TypeScript), or implement `BetaMemoryToolHandler` (Java) to back memory with your own storage, such as files on disk, a database, cloud storage, or encrypted files. Python and TypeScript also ship a ready-made local-filesystem implementation, `BetaLocalFilesystemMemoryTool`. The helper and tool-runner surfaces live in your SDK's beta namespace even though the memory tool itself doesn't require a beta header. The Go and Ruby SDKs have no memory helper, so those examples run the tool-use loop themselves, and PHP wraps your handler closure in its generic `BetaRunnableTool`. All three use an in-memory store that you replace with your own storage.
 
 <CodeGroup exclude="shell">
   ```python Python
@@ -16542,7 +23999,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   memory = BetaLocalFilesystemMemoryTool(base_path="./memory")
 
   runner = client.beta.messages.tool_runner(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[
           {
@@ -16568,7 +24025,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   const memory = betaMemoryTool(backend); // or pass your own handlers object
 
   const runner = client.beta.messages.toolRunner({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -16597,7 +24054,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   var runner = client.Beta.Messages.ToolRunner(
       new MessageCreateParams
       {
-          Model = Anthropic.Models.Messages.Model.ClaudeOpus5,
+          Model = Anthropic.Models.Messages.Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Messages =
           [
@@ -16722,7 +24179,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
 
   	for {
   		message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  			Model:     anthropic.ModelClaudeOpus5,
+  			Model:     anthropic.ModelClaudeOpus5_5,
   			MaxTokens: 1024,
   			Messages:  messages,
   			Tools:     tools,
@@ -16768,7 +24225,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
     BetaMemoryToolHandler handler = new FileSystemMemoryToolHandler(Path.of("memories"));
 
     MessageCreateParams createParams = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024L)
       .addTool(BetaMemoryTool20250818.builder().build())
       .addUserMessage("Remember that customer Acme Corp prefers email follow-ups.")
@@ -16868,7 +24325,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   $runner = $client->beta->messages->toolRunner(
       maxTokens: 1024,
       messages: [['role' => 'user', 'content' => 'Remember that customer Acme Corp prefers email follow-ups.']],
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       tools: [$memory],
       maxIterations: 10,
   );
@@ -16938,7 +24395,7 @@ Four SDKs provide memory tool helpers that handle the tool interface and the loo
   messages = [{role: "user", content: "Remember that customer Acme Corp prefers email follow-ups."}]
   loop do
     message = client.messages.create(
-      model: Anthropic::Model::CLAUDE_OPUS_5,
+      model: Anthropic::Model::CLAUDE_OPUS_5_5,
       max_tokens: 1024,
       messages: messages,
       tools: TOOLS
@@ -16997,7 +24454,7 @@ Here're the files and directories up to 2 levels deep in {path}, excluding hidde
 * Excludes hidden items (files starting with `.`) and `node_modules`
 * Uses a tab character between the size and the path
 
-The first `view` of `/memories` on an empty store is not an error. The SDKs' local-filesystem memory tools (`BetaLocalFilesystemMemoryTool`) create the memory root before Claude's first call and return the listing header followed by a single size-and-path line for the empty directory itself.
+The first `view` of `/memories` on an empty store is not an error. Where your SDK ships a local-filesystem memory tool, `BetaLocalFilesystemMemoryTool`, it creates the memory root before Claude's first call and returns the listing header followed by a single size-and-path line for the empty directory itself.
 
 **For files:** Return file contents with a header and line numbers:
 
@@ -17288,7 +24745,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [{"type": "web_search_20260209", "name": "web_search"}],
       "messages": [{"role": "user", "content": "What'\''s the latest on the Mars rover?"}]
@@ -17297,7 +24754,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
 
   ```bash CLI
   ant messages create --transform content --format yaml \
-    --model claude-opus-5 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --tool '{type: web_search_20260209, name: web_search}' \
     --message '{role: user, content: "What is the latest on the Mars rover?"}'
@@ -17306,7 +24763,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
   ```python Python
   client = anthropic.Anthropic()
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[{"type": "web_search_20260209", "name": "web_search"}],
       messages=[{"role": "user", "content": "What's the latest on the Mars rover?"}],
@@ -17317,7 +24774,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
   ```typescript TypeScript
   const client = new Anthropic();
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [{ type: "web_search_20260209", name: "web_search" }],
     messages: [{ role: "user", content: "What's the latest on the Mars rover?" }]
@@ -17330,7 +24787,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = [new ToolUnion(new WebSearchTool20260209())],
       Messages = [new() { Role = Role.User, Content = "What's the latest on the Mars rover?" }]
@@ -17344,7 +24801,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfWebSearchTool20260209: &anthropic.WebSearchTool20260209Param{}},
@@ -17366,7 +24823,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(WebSearchTool20260209.builder().build())
           .addUserMessage("What's the latest on the Mars rover?")
@@ -17381,7 +24838,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
   $client = new Client();
 
   $message = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: [
           ['type' => 'web_search_20260209', 'name' => 'web_search'],
@@ -17398,7 +24855,7 @@ Here's a minimal example using a server tool, the [Web search tool](https://plat
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [{ type: "web_search_20260209", name: "web_search" }],
     messages: [{ role: "user", content: "What's the latest on the Mars rover?" }]
@@ -17437,7 +24894,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d "$(jq -n --argjson tools "$TOOLS" --arg msg "$USER_MSG" '{
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: $tools,
       # Ask for at most one tool call per turn.
@@ -17461,7 +24918,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
       --arg tool_use_id "$(echo "$TOOL_USE" | jq -r '.id')" \
       --arg weather "$WEATHER" \
       '{
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         tools: $tools,
         tool_choice: {type: "auto", disable_parallel_tool_use: true},
@@ -17483,7 +24940,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
   call_api() {
     {
       cat <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   # Ask for at most one tool call per turn.
   tool_choice: {type: auto, disable_parallel_tool_use: true}
@@ -17545,7 +25002,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
 
   # Claude replies with a tool_use block naming the tool and its arguments.
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=tools,
       # Ask for at most one tool call per turn.
@@ -17567,7 +25024,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
       },
   ]
   followup = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=tools,
       tool_choice={"type": "auto", "disable_parallel_tool_use": True},
@@ -17601,7 +25058,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
 
   // Claude replies with a tool_use block naming the tool and its arguments.
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools,
     // Ask for at most one tool call per turn.
@@ -17623,7 +25080,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
     }
   );
   const followup = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools,
     tool_choice: { type: "auto", disable_parallel_tool_use: true },
@@ -17669,7 +25126,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
   // Claude replies with a tool_use block naming the tool and its arguments.
   var response = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       ToolChoice = toolChoice,
@@ -17698,7 +25155,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
   ];
   var followup = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       ToolChoice = toolChoice,
@@ -17749,7 +25206,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
 
   // Claude replies with a tool_use block naming the tool and its arguments.
   response, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  	Model:      anthropic.ModelClaudeOpus5,
+  	Model:      anthropic.ModelClaudeOpus5_5,
   	MaxTokens:  1024,
   	Tools:      tools,
   	ToolChoice: toolChoice,
@@ -17778,7 +25235,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
   	anthropic.NewUserMessage(anthropic.NewToolResultBlock(toolUse.ID, weather, false)),
   )
   followup, err := client.Messages.New(ctx, anthropic.MessageNewParams{
-  	Model:      anthropic.ModelClaudeOpus5,
+  	Model:      anthropic.ModelClaudeOpus5_5,
   	MaxTokens:  1024,
   	Tools:      tools,
   	ToolChoice: toolChoice,
@@ -17833,7 +25290,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
 
       // Claude replies with a tool_use block naming the tool and its arguments.
       Message response = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(weatherTool)
           .toolChoice(toolChoice)
@@ -17848,7 +25305,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
       // Run the tool, then send the result back in a tool_result block.
       String weather = "15 degrees Celsius, partly cloudy";
       Message followup = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(weatherTool)
           .toolChoice(toolChoice)
@@ -17896,7 +25353,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
 
   // Claude replies with a tool_use block naming the tool and its arguments.
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: $tools,
       toolChoice: $toolChoice,
@@ -17914,7 +25371,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
   // Run the tool, then send the result back in a tool_result block.
   $weather = '15 degrees Celsius, partly cloudy';
   $followup = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: $tools,
       toolChoice: $toolChoice,
@@ -17962,7 +25419,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
 
   # Claude replies with a tool_use block naming the tool and its arguments.
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     # Ask for at most one tool call per turn.
@@ -17984,7 +25441,7 @@ Here's that round trip in full for a client tool. The first request defines a `g
     }
   ]
   followup = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     tool_choice: {type: "auto", disable_parallel_tool_use: true},
@@ -18002,7 +25459,7 @@ Claude called get_weather with {"location": "San Francisco, CA"}
 The current weather in San Francisco is 15 degrees Celsius with partly cloudy skies.
 ```
 
-[Handle tool calls](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls) covers each step in detail, including result formatting and error signaling; [Parallel tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use) covers responses that call several tools at once. To skip writing this round trip yourself, use [Tool Runner](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner): the SDKs execute your tools and send the results back automatically.
+[Handle tool calls](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls) covers each step in detail, including result formatting and error signaling; [Parallel tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use) covers responses that call several tools at once. To skip writing this round trip yourself, use [Tool Runner](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner): the SDK executes your tools and sends the results back automatically.
 
 For the full conceptual model including the agentic loop and when to choose each approach, see [How tool use works](https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works).
 
@@ -18137,21 +25594,28 @@ The additional tokens from tool use come from:
 
 When you use `tools`, the API also automatically includes a special system prompt for the model that enables tool use. The number of tool use tokens required for each model is listed in the following table (excluding the additional tokens listed earlier). Note that the table assumes at least 1 tool is provided. If no `tools` are provided, then a tool choice of `none` uses 0 additional system prompt tokens.
 
-| Model                                                                                                                                 | Tool choice                    | Tool use system prompt token count |
-| ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ---------------------------------- |
-| Claude Opus 5                                                                                                                         | `auto`, `none`***`any`, `tool` | 286 tokens***406 tokens            |
-| Claude Opus 4.8                                                                                                                       | `auto`, `none`***`any`, `tool` | 290 tokens***410 tokens            |
-| Claude Opus 4.7                                                                                                                       | `auto`, `none`***`any`, `tool` | 675 tokens***804 tokens            |
-| Claude Opus 4.6                                                                                                                       | `auto`, `none`***`any`, `tool` | 497 tokens***589 tokens            |
-| Claude Opus 4.5                                                                                                                       | `auto`, `none`***`any`, `tool` | 496 tokens***588 tokens            |
-| Claude Opus 4.1 ([retired, except on Bedrock and Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations))  | `auto`, `none`***`any`, `tool` | 313 tokens***315 tokens            |
-| Claude Opus 4 ([retired, except on Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations))                | `auto`, `none`***`any`, `tool` | 313 tokens***315 tokens            |
-| Claude Sonnet 5                                                                                                                       | `auto`, `none`***`any`, `tool` | 354 tokens***474 tokens            |
-| Claude Sonnet 4.6                                                                                                                     | `auto`, `none`***`any`, `tool` | 497 tokens***589 tokens            |
-| Claude Sonnet 4.5                                                                                                                     | `auto`, `none`***`any`, `tool` | 496 tokens***588 tokens            |
-| Claude Sonnet 4 ([retired, except on Bedrock and Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations))  | `auto`, `none`***`any`, `tool` | 313 tokens***315 tokens            |
-| Claude Haiku 4.5                                                                                                                      | `auto`, `none`***`any`, `tool` | 496 tokens***588 tokens            |
-| Claude Haiku 3.5 ([retired, except on Bedrock and Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | `auto`, `none`***`any`, `tool` | 264 tokens***355 tokens            |
+| Model                                                                                                                                | Tool use system prompt tokens: auto, none | Tool use system prompt tokens: any, tool |
+| :----------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------- | :--------------------------------------- |
+| Claude Opus 5.5                                                                                                                      | 286 tokens                                |                                          |
+| Claude Opus 5                                                                                                                        | 286 tokens                                | 406 tokens                               |
+| Claude Opus 4.8                                                                                                                      | 290 tokens                                | 410 tokens                               |
+| Claude Opus 4.7                                                                                                                      | 675 tokens                                | 804 tokens                               |
+| Claude Opus 4.6                                                                                                                      | 497 tokens                                | 589 tokens                               |
+| Claude Opus 4.5                                                                                                                      | 496 tokens                                | 588 tokens                               |
+| Claude Opus 4.1 ([retired, except on Bedrock and Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | 313 tokens                                | 315 tokens                               |
+| Claude Opus 4 ([retired, except on Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations))               | 313 tokens                                | 315 tokens                               |
+| Claude Sonnet 5.5                                                                                                                    | 286 tokens                                |                                          |
+| Claude Sonnet 5                                                                                                                      | 354 tokens                                | 474 tokens                               |
+| Claude Sonnet 4.6                                                                                                                    | 497 tokens                                | 589 tokens                               |
+| Claude Sonnet 4.5                                                                                                                    | 496 tokens                                | 588 tokens                               |
+| Claude Sonnet 4 ([retired, except on Bedrock and Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | 313 tokens                                | 315 tokens                               |
+| Claude Haiku 5.5                                                                                                                     | 286 tokens                                | 406 tokens                               |
+| Claude Haiku 4.5                                                                                                                     | 496 tokens                                | 588 tokens                               |
+| Claude Haiku 3.5 ([retired, except on Google Cloud](https://platform.claude.com/docs/en/about-claude/model-deprecations))            | 264 tokens                                | 355 tokens                               |
+
+* **auto, none:** The count when tool\_choice is auto or none.
+* **any, tool:** The count when tool\_choice is any or tool.
+* **Retired:** May still be available on other cloud platforms. See [Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations) for more.
 
 These token counts are added to your normal input and output tokens to calculate the total cost of a request.
 
@@ -18213,17 +25677,14 @@ The [computer use tool](https://platform.claude.com/docs/en/agents-and-tools/too
 
 The following script sends a request that should trigger parallel tool calls, verifies the response contains them, and formats the tool results so parallelism keeps working. Run it with `ANTHROPIC_API_KEY` set in your environment:
 
-<CodeGroup>
-  ```bash cURL
-  # This end-to-end test flow doesn't translate well to a one-off shell command.
-  # See the SDK tabs for the full flow. The underlying HTTP request is a standard
-  # tool use request with multiple tools defined.
-  ```
+<CodeGroup exclude="shell">
+  <CodeGroupItem language="cURL">
+    This end-to-end test needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it. The request it sends is a standard tool use request with two tools defined.
+  </CodeGroupItem>
 
-  ```bash CLI
-  # This end-to-end test flow doesn't translate well to a one-off shell command.
-  # See the SDK tabs for the full flow.
-  ```
+  <CodeGroupItem language="CLI">
+    This end-to-end test needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) to run it.
+  </CodeGroupItem>
 
   ```python Python
   client = Anthropic()
@@ -18271,7 +25732,7 @@ The following script sends a request that should trigger parallel tool calls, ve
   # Make initial request
   print("Requesting parallel tool calls...")
   response = client.messages.create(
-      model="claude-opus-5", max_tokens=1024, messages=messages, tools=tools
+      model="claude-opus-5-5", max_tokens=1024, messages=messages, tools=tools
   )
 
   # Check for parallel tool calls
@@ -18314,7 +25775,7 @@ The following script sends a request that should trigger parallel tool calls, ve
   # Get final response
   print("\nGetting final response...")
   final_response = client.messages.create(
-      model="claude-opus-5", max_tokens=1024, messages=messages, tools=tools
+      model="claude-opus-5-5", max_tokens=1024, messages=messages, tools=tools
   )
 
   final_text = next(
@@ -18367,7 +25828,7 @@ The following script sends a request that should trigger parallel tool calls, ve
   // Make initial request
   console.log("Requesting parallel tool calls...");
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -18417,7 +25878,7 @@ The following script sends a request that should trigger parallel tool calls, ve
   // Get final response with correct formatting
   console.log("\nGetting final response...");
   const finalResponse = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -18479,7 +25940,7 @@ The following script sends a request that should trigger parallel tool calls, ve
   Console.WriteLine("Requesting parallel tool calls...");
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [new() { Role = Role.User, Content = "What's the weather in SF and NYC, and what time is it there?" }],
       Tools = tools
@@ -18537,7 +25998,7 @@ The following script sends a request that should trigger parallel tool calls, ve
   Console.WriteLine("\nGetting final response...");
   var finalParameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [
           new() { Role = Role.User, Content = "What's the weather in SF and NYC, and what time is it there?" },
@@ -18591,7 +26052,7 @@ The following script sends a request that should trigger parallel tool calls, ve
 
   fmt.Println("Requesting parallel tool calls...")
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("What's the weather in SF and NYC, and what time is it there?")),
@@ -18656,7 +26117,7 @@ The following script sends a request that should trigger parallel tool calls, ve
 
   fmt.Println("\nGetting final response...")
   finalResponse, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("What's the weather in SF and NYC, and what time is it there?")),
@@ -18717,7 +26178,7 @@ The following script sends a request that should trigger parallel tool calls, ve
       .build();
 
   MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024L)
       .addTool(weatherTool)
       .addTool(timeTool)
@@ -18769,7 +26230,7 @@ The following script sends a request that should trigger parallel tool calls, ve
 
   IO.println("\nGetting final response...");
   MessageCreateParams finalParams = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024L)
       .addTool(weatherTool)
       .addTool(timeTool)
@@ -18829,7 +26290,7 @@ The following script sends a request that should trigger parallel tool calls, ve
       messages: [
           ['role' => 'user', 'content' => "What's the weather in SF and NYC, and what time is it there?"]
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: $tools,
   );
 
@@ -18872,7 +26333,7 @@ The following script sends a request that should trigger parallel tool calls, ve
           ['role' => 'assistant', 'content' => $response->content],
           ['role' => 'user', 'content' => $toolResults]
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: $tools,
   );
 
@@ -18921,7 +26382,7 @@ The following script sends a request that should trigger parallel tool calls, ve
 
   puts "Requesting parallel tool calls..."
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       { role: "user", content: "What's the weather in SF and NYC, and what time is it there?" }
@@ -18959,7 +26420,7 @@ The following script sends a request that should trigger parallel tool calls, ve
 
   puts "\nGetting final response..."
   final_response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       { role: "user", content: "What's the weather in SF and NYC, and what time is it there?" },
@@ -19039,7 +26500,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [{
         "name": "get_weather",
@@ -19064,7 +26525,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - name: get_weather
@@ -19089,7 +26550,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
   client = Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[
           {
@@ -19122,7 +26583,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -19151,7 +26612,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = [
           new ToolUnion(new Tool()
@@ -19180,7 +26641,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfTool: &anthropic.ToolParam{
@@ -19230,7 +26691,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
       .build();
 
   MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024L)
       .addTool(
           Tool.builder()
@@ -19255,7 +26716,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
       messages: [
           ['role' => 'user', 'content' => 'What is the weather in San Francisco and New York?']
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       toolChoice: ['type' => 'auto', 'disableParallelToolUse' => true],
       tools: [
           [
@@ -19282,7 +26743,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
   client = Anthropic::Client.new
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -19311,7 +26772,7 @@ When `tool_choice` type is `auto` (the default), setting `disable_parallel_tool_
 
 ### Exactly one tool call
 
-When `tool_choice` type is `any` or `tool`, setting `disable_parallel_tool_use: true` means Claude calls exactly one tool. Claude Fable 5.1 and Claude Mythos 5.1 don't support these `tool_choice` types (see [Forcing tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools#forcing-tool-use)). The following example uses `any`. The same field works with `tool`:
+When `tool_choice` type is `any` or `tool`, setting `disable_parallel_tool_use: true` means Claude calls exactly one tool. Claude Opus 5.5, Claude Sonnet 5.5, Claude Fable 5.1, and Claude Mythos 5.1 don't support these `tool_choice` types (see [Forcing tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools#forcing-tool-use)). The following example uses `any`. The same field works with `tool`:
 
 <CodeGroup>
   ```bash cURL
@@ -19628,16 +27089,14 @@ Default prompting might not be sufficient. Use the stronger system prompt from [
 
 To verify parallel tool calls are working:
 
-<CodeGroup>
-  ```bash cURL
-  # Measuring parallel tool use is client-side analysis of responses you've already
-  # collected, so it doesn't translate to a one-off shell command. See the SDK tabs.
-  ```
+<CodeGroup exclude="shell">
+  <CodeGroupItem language="cURL">
+    To measure parallel tool use, your code analyzes the responses that it already collected. This needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this.
+  </CodeGroupItem>
 
-  ```bash CLI
-  # Measuring parallel tool use is client-side analysis of responses you've already
-  # collected, so it doesn't translate to a one-off shell command. See the SDK tabs.
-  ```
+  <CodeGroupItem language="CLI">
+    To measure parallel tool use, your code analyzes the responses that it already collected. This needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this.
+  </CodeGroupItem>
 
   ```python Python
   messages = []  # Message objects returned by client.messages.create across your run
@@ -19780,7 +27239,1561 @@ Execution order is your choice. If your tools have ordering dependencies, runnin
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-tool-use-programmatic-tool-calling.md`
 
+Programmatic tool calling allows Claude to write code that calls your tools programmatically within a [code execution](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool) container, rather than requiring round trips through the model for each tool invocation. This reduces latency for multi-tool workflows and decreases token consumption by allowing Claude to filter or process data before it reaches the model's context window. On agentic search benchmarks like [BrowseComp](https://arxiv.org/abs/2504.12516) and [DeepSearchQA](https://github.com/google-deepmind/deepsearchqa), which test multistep web research and complex information retrieval, adding programmatic tool calling on top of basic search tools improved performance by an average of 11% while using 24% fewer input tokens (see [Improved web search with dynamic filtering](https://claude.com/blog/improved-web-search-with-dynamic-filtering)).
 
+Consider checking budget compliance across 20 employees: the traditional approach requires 20 separate model round-trips, pulling thousands of expense line items into the context along the way. With programmatic tool calling, a single script runs all 20 lookups, filters the results, and returns only the employees who exceeded their limits, shrinking what Claude needs to reason over from hundreds of kilobytes down to a handful of lines.
+
+<Tip>
+  For a deeper look at the inference and context costs that programmatic tool calling addresses, see [Advanced tool use](https://www.anthropic.com/engineering/advanced-tool-use).
+</Tip>
+
+Programmatic tool calling requires the [code execution tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool) with tool version `code_execution_20260120` or later. To check whether a model supports programmatic tool calling before you send a request, read its `capabilities.code_execution.supported` value from the Models API. [Using the Models API](https://platform.claude.com/docs/en/models/overview#using-the-models-api) describes the field.
+
+## Quick start
+
+Here's an example where Claude programmatically queries a database multiple times and aggregates results. Adding `allowed_callers: ["code_execution_20260120"]` to a tool definition is what makes that tool callable from within code execution (see [The `allowed_callers` field](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#the-allowed-callers-field)):
+
+<CodeGroup>
+  ```bash cURL
+  curl https://api.anthropic.com/v1/messages \
+      --header "x-api-key: $ANTHROPIC_API_KEY" \
+      --header "anthropic-version: 2023-06-01" \
+      --header "content-type: application/json" \
+      --data '{
+          "model": "claude-opus-5-5",
+          "max_tokens": 4096,
+          "messages": [
+              {
+                  "role": "user",
+                  "content": "Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue"
+              }
+          ],
+          "tools": [
+              {
+                  "type": "code_execution_20260120",
+                  "name": "code_execution"
+              },
+              {
+                  "name": "query_database",
+                  "description": "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+                  "input_schema": {
+                      "type": "object",
+                      "properties": {
+                          "sql": {
+                              "type": "string",
+                              "description": "SQL query to execute"
+                          }
+                      },
+                      "required": ["sql"]
+                  },
+                  "allowed_callers": ["code_execution_20260120"]
+              }
+          ]
+      }'
+  ```
+
+  ```bash CLI
+  ant messages create <<'YAML'
+  model: claude-opus-5-5
+  max_tokens: 4096
+  messages:
+    - role: user
+      content: >-
+        Query sales data for the West, East, and Central regions, then
+        tell me which region had the highest revenue
+  tools:
+    - type: code_execution_20260120
+      name: code_execution
+    - name: query_database
+      description: >-
+        Execute a SQL query against the sales database. Returns a list
+        of rows as JSON objects.
+      input_schema:
+        type: object
+        properties:
+          sql:
+            type: string
+            description: SQL query to execute
+        required:
+          - sql
+      allowed_callers:
+        - code_execution_20260120
+  YAML
+  ```
+
+  ```python Python
+  client = anthropic.Anthropic()
+
+  response = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=4096,
+      messages=[
+          {
+              "role": "user",
+              "content": "Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue",
+          }
+      ],
+      tools=[
+          {"type": "code_execution_20260120", "name": "code_execution"},
+          {
+              "name": "query_database",
+              "description": "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+              "input_schema": {
+                  "type": "object",
+                  "properties": {
+                      "sql": {"type": "string", "description": "SQL query to execute"}
+                  },
+                  "required": ["sql"],
+              },
+              "allowed_callers": ["code_execution_20260120"],
+          },
+      ],
+  )
+
+  print(response)
+  ```
+
+  ```typescript TypeScript
+  const client = new Anthropic();
+
+  const response = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content:
+          "Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue"
+      }
+    ],
+    tools: [
+      {
+        type: "code_execution_20260120",
+        name: "code_execution"
+      },
+      {
+        name: "query_database",
+        description:
+          "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+        input_schema: {
+          type: "object" as const,
+          properties: {
+            sql: {
+              type: "string",
+              description: "SQL query to execute"
+            }
+          },
+          required: ["sql"]
+        },
+        allowed_callers: ["code_execution_20260120"]
+      }
+    ]
+  });
+
+  console.log(response);
+  ```
+
+  ```csharp C#
+  AnthropicClient client = new();
+
+  var parameters = new MessageCreateParams
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 4096,
+      Messages = [
+          new() {
+              Role = Role.User,
+              Content = "Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue"
+          }
+      ],
+      Tools = [
+          new CodeExecutionTool20260120(),
+          new ToolUnion(new Tool()
+          {
+              Name = "query_database",
+              Description = "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+              InputSchema = new InputSchema()
+              {
+                  Properties = new Dictionary<string, JsonElement>
+                  {
+                      ["sql"] = JsonSerializer.SerializeToElement(new { type = "string", description = "SQL query to execute" }),
+                  },
+                  Required = ["sql"],
+              },
+              AllowedCallers = ["code_execution_20260120"]
+          }),
+      ]
+  };
+
+  var message = await client.Messages.Create(parameters);
+  Console.WriteLine(message);
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+
+  response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 4096,
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(anthropic.NewTextBlock("Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue")),
+  	},
+  	Tools: []anthropic.ToolUnionParam{
+  		{OfCodeExecutionTool20260120: &anthropic.CodeExecutionTool20260120Param{}},
+  		{OfTool: &anthropic.ToolParam{
+  			Name:        "query_database",
+  			Description: anthropic.String("Execute a SQL query against the sales database. Returns a list of rows as JSON objects."),
+  			InputSchema: anthropic.ToolInputSchemaParam{
+  				Properties: map[string]any{
+  					"sql": map[string]any{
+  						"type":        "string",
+  						"description": "SQL query to execute",
+  					},
+  				},
+  				Required: []string{"sql"},
+  			},
+  			AllowedCallers: []string{"code_execution_20260120"},
+  		}},
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response.RawJSON())
+  ```
+
+  ```java Java
+  import com.anthropic.models.messages.CodeExecutionTool20260120;
+  // ...
+
+  void main() {
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      MessageCreateParams params = MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(4096L)
+          .addUserMessage("Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue")
+          .addTool(CodeExecutionTool20260120.builder().build())
+          .addTool(Tool.builder()
+              .name("query_database")
+              .description("Execute a SQL query against the sales database. Returns a list of rows as JSON objects.")
+              .inputSchema(InputSchema.builder()
+                  .properties(JsonValue.from(Map.of(
+                      "sql", Map.of(
+                          "type", "string",
+                          "description", "SQL query to execute"
+                      )
+                  )))
+                  .putAdditionalProperty("required", JsonValue.from(List.of("sql")))
+                  .build())
+              .allowedCallers(List.of(Tool.AllowedCaller.of("code_execution_20260120")))
+              .build())
+          .build();
+
+      Message response = client.messages().create(params);
+      IO.println(response);
+  }
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  $message = $client->messages->create(
+      maxTokens: 4096,
+      messages: [
+          ['role' => 'user', 'content' => 'Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue'],
+      ],
+      model: 'claude-opus-5-5',
+      tools: [
+          [
+              'type' => 'code_execution_20260120',
+              'name' => 'code_execution',
+          ],
+          [
+              'name' => 'query_database',
+              'description' => 'Execute a SQL query against the sales database. Returns a list of rows as JSON objects.',
+              'input_schema' => [
+                  'type' => 'object',
+                  'properties' => [
+                      'sql' => [
+                          'type' => 'string',
+                          'description' => 'SQL query to execute',
+                      ],
+                  ],
+                  'required' => ['sql'],
+              ],
+              'allowed_callers' => ['code_execution_20260120'],
+          ],
+      ],
+  );
+
+  echo $message;
+  ```
+
+  ```ruby Ruby
+  client = Anthropic::Client.new
+
+  message = client.messages.create(
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    messages: [
+      {
+        role: "user",
+        content: "Query sales data for the West, East, and Central regions, then tell me which region had the highest revenue"
+      }
+    ],
+    tools: [
+      {
+        type: "code_execution_20260120",
+        name: "code_execution"
+      },
+      {
+        name: "query_database",
+        description: "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+        input_schema: {
+          type: "object",
+          properties: {
+            sql: {
+              type: "string",
+              description: "SQL query to execute"
+            }
+          },
+          required: ["sql"]
+        },
+        allowed_callers: ["code_execution_20260120"]
+      }
+    ]
+  )
+
+  puts message
+  ```
+</CodeGroup>
+
+The response stops with `stop_reason: "tool_use"`, a `container` ID, and a `tool_use` block for `query_database` whose `caller` field identifies the code execution run that called it. Return the result as shown in [Step 3 of the example workflow](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#step-3-provide-tool-result) so the code can finish.
+
+## How programmatic tool calling works
+
+When you configure a tool to be callable from code execution and Claude determines that tool is needed:
+
+1. Claude writes Python code that invokes the tool as a function, potentially including multiple tool calls and pre/post-processing logic
+2. Claude runs this code in a sandboxed container through code execution
+3. When a tool function is called, code execution pauses and the API returns a `tool_use` block
+4. You provide the tool result, and code execution continues (intermediate results are not loaded into Claude's context window)
+5. Once all code execution completes, Claude receives the final output and continues working on the task
+
+This approach is particularly useful for:
+
+* **Large data processing:** Filter or aggregate tool results before they reach Claude's context
+* **Multistep workflows:** Save tokens and latency by calling tools serially or in a loop without sampling Claude in-between tool calls
+* **Conditional logic:** Make decisions based on intermediate tool results
+
+<Note>
+  Tools that allow a code execution caller are exposed to Claude's code as async Python functions, so Claude can run them in parallel with `asyncio.gather`. Each function takes a single dict of arguments and returns a string: the text of the `tool_result` you send back. Claude's code awaits these functions with top-level `await` and parses results that it needs as structured data, for example `rows = json.loads(await query_database({"sql": "<sql>"}))`.
+</Note>
+
+## Core concepts
+
+### The `allowed_callers` field
+
+The `allowed_callers` field specifies which contexts can invoke a tool:
+
+```json
+{
+  "name": "query_database",
+  "description": "Execute a SQL query against the database",
+  "input_schema": {
+    // ...
+  },
+  "allowed_callers": ["code_execution_20260120"]
+}
+```
+
+**Possible values:**
+
+* `["direct"]` - Claude is guided to call this tool directly (default if omitted)
+* `["code_execution_20260120"]` - Claude is guided to call this tool only from within code execution
+* `["direct", "code_execution_20260120"]` - Claude may call this tool directly or from within code execution
+
+Both `"code_execution_20260120"` and `"code_execution_20260521"` are accepted in `allowed_callers` and are interchangeable: a request using either code-execution tool version satisfies tools that list either caller. Response blocks always tag the caller as `code_execution_20260120` regardless of which version the request declared.
+
+<Tip>
+  Choose either `["direct"]` or `["code_execution_20260120"]` for each tool rather than enabling both, as this provides clearer guidance to Claude for how best to use the tool.
+</Tip>
+
+<Note>
+  `allowed_callers` controls how the tool is presented to Claude and is validated against `tool_choice`, but it is not a hard API-level block on direct invocation. Claude is strongly guided to respect it, but your client should still be prepared to handle a direct `tool_use` for any tool it defines. Do not rely on `allowed_callers` as a security boundary.
+</Note>
+
+### The `caller` field in responses
+
+Every tool use block includes a `caller` field indicating how it was invoked:
+
+**Direct invocation (traditional tool use):**
+
+```json
+{
+  "type": "tool_use",
+  "id": "toolu_abc123",
+  "name": "query_database",
+  "input": { "sql": "<sql>" },
+  "caller": { "type": "direct" }
+}
+```
+
+**Programmatic invocation:**
+
+```json
+{
+  "type": "tool_use",
+  "id": "toolu_xyz789",
+  "name": "query_database",
+  "input": { "sql": "<sql>" },
+  "caller": {
+    "type": "code_execution_20260120",
+    "tool_id": "srvtoolu_abc123"
+  }
+}
+```
+
+The `tool_id` is the `id` of the code execution `server_tool_use` block that made the call, so you can match each programmatic `tool_use` to the code execution run that produced it.
+
+### Container lifecycle
+
+Programmatic tool calling uses the same containers as code execution:
+
+* **Container creation:** A new container is created for each request unless you reuse an existing one
+* **Container ID:** Returned in responses in the `container` field, along with an `expires_at` timestamp
+* **Reuse:** Pass the container ID back on the next request to keep state. While a programmatic tool call is waiting for your result, the container ID is required on that request, not optional: the API rejects the request without it.
+* **Expiration:** `expires_at` tells you how long the container has left. Idle containers are currently reclaimed after about 5 minutes, and no container can be reused more than 30 days after it was created.
+
+<Warning>
+  While Claude's code is waiting for a programmatic tool result, the pending call times out after about 4 minutes and raises a `TimeoutError` inside the code. Return each tool result well before the `expires_at` timestamp on the paused response. See [Container expiration during tool call](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#container-expiration-during-tool-call).
+</Warning>
+
+## Example workflow
+
+Here's how a complete programmatic tool calling flow works:
+
+### Step 1: Initial request
+
+Send a request with code execution and a tool that allows programmatic calling. To enable programmatic calling, add the `allowed_callers` field to your tool definition.
+
+<Note>
+  Provide detailed descriptions of your tool's output format in the tool description. If you specify that the tool returns JSON, Claude attempts to deserialize and process the result in code. The more detail you provide about the output schema, the better Claude can handle the response programmatically.
+</Note>
+
+The request shape is identical to the [Quick start](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#quick-start) example: include `code_execution` in your tools list, add `allowed_callers: ["code_execution_20260120"]` to any tool you want Claude to invoke from code, and send your user message. The remaining steps in this workflow use the user message `"Query customer purchase history from the last quarter and identify our top 5 customers by revenue"`.
+
+### Step 2: API response with tool call
+
+Claude writes code that calls your tool. The API pauses and returns:
+
+```json Output
+{
+  "role": "assistant",
+  "content": [
+    {
+      "type": "text",
+      "text": "I'll query the purchase history and analyze the results."
+    },
+    {
+      "type": "server_tool_use",
+      "id": "srvtoolu_abc123",
+      "name": "code_execution",
+      "input": {
+        "code": "import json\n\nrows = json.loads(await query_database({'sql': '<sql>'}))\ntop_customers = sorted(rows, key=lambda x: x['revenue'], reverse=True)[:5]\nprint(f'Top 5 customers: {top_customers}')"
+      }
+    },
+    {
+      "type": "tool_use",
+      "id": "toolu_def456",
+      "name": "query_database",
+      "input": { "sql": "<sql>" },
+      "caller": {
+        "type": "code_execution_20260120",
+        "tool_id": "srvtoolu_abc123"
+      }
+    }
+  ],
+  "container": {
+    "id": "container_xyz789",
+    "expires_at": "2026-01-20T14:30:00Z"
+  },
+  "stop_reason": "tool_use"
+}
+```
+
+### Step 3: Provide tool result
+
+Send the full conversation history plus your tool result. Three details matter on this request:
+
+* The user message that carries your result can contain only `tool_result` blocks. See [Message formatting restrictions](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#message-formatting-restrictions).
+* Pass the `container` ID from the paused response. The API rejects a continuation that has pending programmatic tool calls but no container ID.
+* Send the same `tools` array as the original request. The code execution tool must still be present for the paused code to resume, and the tools you send on this request are the definitions Claude and the running code can use for the rest of the turn.
+
+<CodeGroup>
+  ```bash cURL
+  curl https://api.anthropic.com/v1/messages \
+      --header "x-api-key: $ANTHROPIC_API_KEY" \
+      --header "anthropic-version: 2023-06-01" \
+      --header "content-type: application/json" \
+      --data '{
+          "model": "claude-opus-5-5",
+          "max_tokens": 4096,
+          "container": "container_xyz789",
+          "messages": [
+              {
+                  "role": "user",
+                  "content": "Query customer purchase history from the last quarter and identify our top 5 customers by revenue"
+              },
+              {
+                  "role": "assistant",
+                  "content": [
+                      {
+                          "type": "text",
+                          "text": "I'\''ll query the purchase history and analyze the results."
+                      },
+                      {
+                          "type": "server_tool_use",
+                          "id": "srvtoolu_abc123",
+                          "name": "code_execution",
+                          "input": {"code": "..."}
+                      },
+                      {
+                          "type": "tool_use",
+                          "id": "toolu_def456",
+                          "name": "query_database",
+                          "input": {"sql": "<sql>"},
+                          "caller": {
+                              "type": "code_execution_20260120",
+                              "tool_id": "srvtoolu_abc123"
+                          }
+                      }
+                  ]
+              },
+              {
+                  "role": "user",
+                  "content": [
+                      {
+                          "type": "tool_result",
+                          "tool_use_id": "toolu_def456",
+                          "content": "[{\"customer_id\": \"C1\", \"revenue\": 45000}, {\"customer_id\": \"C2\", \"revenue\": 38000}]"
+                      }
+                  ]
+              }
+          ],
+          "tools": [
+              {
+                  "type": "code_execution_20260120",
+                  "name": "code_execution"
+              },
+              {
+                  "name": "query_database",
+                  "description": "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+                  "input_schema": {
+                      "type": "object",
+                      "properties": {
+                          "sql": {
+                              "type": "string",
+                              "description": "SQL query to execute"
+                          }
+                      },
+                      "required": ["sql"]
+                  },
+                  "allowed_callers": ["code_execution_20260120"]
+              }
+          ]
+      }'
+  ```
+
+  ```bash CLI
+  ant messages create <<'YAML'
+  model: claude-opus-5-5
+  max_tokens: 4096
+  container: container_xyz789
+  messages:
+    - role: user
+      content: >-
+        Query customer purchase history from the last quarter and identify our
+        top 5 customers by revenue
+    - role: assistant
+      content:
+        - type: text
+          text: I'll query the purchase history and analyze the results.
+        - type: server_tool_use
+          id: srvtoolu_abc123
+          name: code_execution
+          input:
+            code: "..."
+        - type: tool_use
+          id: toolu_def456
+          name: query_database
+          input:
+            sql: "<sql>"
+          caller:
+            type: code_execution_20260120
+            tool_id: srvtoolu_abc123
+    - role: user
+      content:
+        - type: tool_result
+          tool_use_id: toolu_def456
+          content: >-
+            [{"customer_id": "C1", "revenue": 45000}, {"customer_id": "C2",
+            "revenue": 38000}, ...]
+  # Same tools array as the original request
+  tools:
+    - type: code_execution_20260120
+      name: code_execution
+    - name: query_database
+      description: >-
+        Execute a SQL query against the sales database. Returns a list
+        of rows as JSON objects.
+      input_schema:
+        type: object
+        properties:
+          sql:
+            type: string
+            description: SQL query to execute
+        required:
+          - sql
+      allowed_callers:
+        - code_execution_20260120
+  YAML
+  ```
+
+  ```python Python
+  response = client.messages.create(
+      model="claude-opus-5-5",
+      max_tokens=4096,
+      container="container_xyz789",  # Reuse the container
+      messages=[
+          {
+              "role": "user",
+              "content": "Query customer purchase history from the last quarter and identify our top 5 customers by revenue",
+          },
+          {
+              "role": "assistant",
+              "content": [
+                  {
+                      "type": "text",
+                      "text": "I'll query the purchase history and analyze the results.",
+                  },
+                  {
+                      "type": "server_tool_use",
+                      "id": "srvtoolu_abc123",
+                      "name": "code_execution",
+                      "input": {"code": "..."},
+                  },
+                  {
+                      "type": "tool_use",
+                      "id": "toolu_def456",
+                      "name": "query_database",
+                      "input": {"sql": "<sql>"},
+                      "caller": {
+                          "type": "code_execution_20260120",
+                          "tool_id": "srvtoolu_abc123",
+                      },
+                  },
+              ],
+          },
+          {
+              "role": "user",
+              "content": [
+                  {
+                      "type": "tool_result",
+                      "tool_use_id": "toolu_def456",
+                      "content": '[{"customer_id": "C1", "revenue": 45000}, {"customer_id": "C2", "revenue": 38000}, ...]',
+                  }
+              ],
+          },
+      ],
+      # Same tools array as the original request
+      tools=[
+          {"type": "code_execution_20260120", "name": "code_execution"},
+          {
+              "name": "query_database",
+              "description": "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+              "input_schema": {
+                  "type": "object",
+                  "properties": {
+                      "sql": {"type": "string", "description": "SQL query to execute"}
+                  },
+                  "required": ["sql"],
+              },
+              "allowed_callers": ["code_execution_20260120"],
+          },
+      ],
+  )
+
+  print(response)
+  ```
+
+  ```typescript TypeScript
+  const response = await client.messages.create({
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    container: "container_xyz789", // Reuse the container
+    messages: [
+      {
+        role: "user",
+        content:
+          "Query customer purchase history from the last quarter and identify our top 5 customers by revenue"
+      },
+      {
+        role: "assistant",
+        content: [
+          { type: "text", text: "I'll query the purchase history and analyze the results." },
+          {
+            type: "server_tool_use",
+            id: "srvtoolu_abc123",
+            name: "code_execution",
+            input: { code: "..." }
+          },
+          {
+            type: "tool_use",
+            id: "toolu_def456",
+            name: "query_database",
+            input: { sql: "<sql>" },
+            caller: {
+              type: "code_execution_20260120",
+              tool_id: "srvtoolu_abc123"
+            }
+          }
+        ]
+      },
+      {
+        role: "user",
+        content: [
+          {
+            type: "tool_result",
+            tool_use_id: "toolu_def456",
+            content:
+              '[{"customer_id": "C1", "revenue": 45000}, {"customer_id": "C2", "revenue": 38000}, ...]'
+          }
+        ]
+      }
+    ],
+    // Same tools array as the original request
+    tools: [
+      {
+        type: "code_execution_20260120",
+        name: "code_execution"
+      },
+      {
+        name: "query_database",
+        description:
+          "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+        input_schema: {
+          type: "object" as const,
+          properties: {
+            sql: {
+              type: "string",
+              description: "SQL query to execute"
+            }
+          },
+          required: ["sql"]
+        },
+        allowed_callers: ["code_execution_20260120"]
+      }
+    ]
+  });
+
+  console.log(response);
+  ```
+
+  ```csharp C#
+  AnthropicClient client = new();
+
+  var parameters = new MessageCreateParams
+  {
+      Model = Model.ClaudeOpus5_5,
+      MaxTokens = 4096,
+      Container = "container_xyz789",
+      Messages =
+      [
+          new()
+          {
+              Role = Role.User,
+              Content = "Query customer purchase history from the last quarter and identify our top 5 customers by revenue"
+          },
+          new()
+          {
+              Role = Role.Assistant,
+              Content = new ContentBlock[]
+              {
+                  new TextBlock { Text = "I'll query the purchase history and analyze the results." },
+                  new ServerToolUseBlock
+                  {
+                      Id = "srvtoolu_abc123",
+                      Name = "code_execution",
+                      Input = new { code = "..." }
+                  },
+                  new ToolUseBlock
+                  {
+                      Id = "toolu_def456",
+                      Name = "query_database",
+                      Input = new { sql = "<sql>" },
+                      Caller = new ToolCaller
+                      {
+                          Type = "code_execution_20260120",
+                          ToolId = "srvtoolu_abc123"
+                      }
+                  }
+              }
+          },
+          new()
+          {
+              Role = Role.User,
+              Content = new ContentBlockParam[]
+              {
+                  new ToolResultBlockParam
+                  {
+                      ToolUseID = "toolu_def456",
+                      Content = "[{\"customer_id\": \"C1\", \"revenue\": 45000}, {\"customer_id\": \"C2\", \"revenue\": 38000}, ...]"
+                  }
+              }
+          }
+      ],
+      // Same tools array as the original request
+      Tools = [
+          new CodeExecutionTool20260120(),
+          new ToolUnion(new Tool()
+          {
+              Name = "query_database",
+              Description = "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+              InputSchema = new InputSchema()
+              {
+                  Properties = new Dictionary<string, JsonElement>
+                  {
+                      ["sql"] = JsonSerializer.SerializeToElement(new { type = "string", description = "SQL query to execute" }),
+                  },
+                  Required = ["sql"],
+              },
+              AllowedCallers = ["code_execution_20260120"]
+          }),
+      ]
+  };
+
+  var message = await client.Messages.Create(parameters);
+  Console.WriteLine(message);
+  ```
+
+  ```go Go
+  client := anthropic.NewClient()
+
+  response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
+  	Model:     anthropic.ModelClaudeOpus5_5,
+  	MaxTokens: 4096,
+  	Container: anthropic.MessageCreateParamsContainerUnion{
+  		OfString: anthropic.String("container_xyz789"),
+  	},
+  	Messages: []anthropic.MessageParam{
+  		anthropic.NewUserMessage(anthropic.NewTextBlock("Query customer purchase history from the last quarter and identify our top 5 customers by revenue")),
+  		{
+  			Role: anthropic.MessageParamRoleAssistant,
+  			Content: []anthropic.ContentBlockParamUnion{
+  				anthropic.NewTextBlock("I'll query the purchase history and analyze the results."),
+  				{OfServerToolUse: &anthropic.ServerToolUseBlockParam{
+  					ID:    "srvtoolu_abc123",
+  					Name:  anthropic.ServerToolUseBlockParamNameCodeExecution,
+  					Input: map[string]any{"code": "..."},
+  				}},
+  				{OfToolUse: &anthropic.ToolUseBlockParam{
+  					ID:    "toolu_def456",
+  					Name:  "query_database",
+  					Input: map[string]any{"sql": "<sql>"},
+  					Caller: anthropic.ServerToolUseBlockParamCallerUnion{
+  						OfCodeExecution20260120: &anthropic.ServerToolCaller20260120Param{
+  							ToolID: "srvtoolu_abc123",
+  						},
+  					},
+  				}},
+  			},
+  		},
+  		{
+  			Role: anthropic.MessageParamRoleUser,
+  			Content: []anthropic.ContentBlockParamUnion{
+  				{OfToolResult: &anthropic.ToolResultBlockParam{
+  					ToolUseID: "toolu_def456",
+  					Content: []anthropic.ToolResultBlockParamContentUnion{
+  						{OfText: &anthropic.TextBlockParam{
+  							Text: `[{"customer_id": "C1", "revenue": 45000}, {"customer_id": "C2", "revenue": 38000}, ...]`,
+  						}},
+  					},
+  				}},
+  			},
+  		},
+  	},
+  	// Same tools array as the original request
+  	Tools: []anthropic.ToolUnionParam{
+  		{OfCodeExecutionTool20260120: &anthropic.CodeExecutionTool20260120Param{}},
+  		{OfTool: &anthropic.ToolParam{
+  			Name:        "query_database",
+  			Description: anthropic.String("Execute a SQL query against the sales database. Returns a list of rows as JSON objects."),
+  			InputSchema: anthropic.ToolInputSchemaParam{
+  				Properties: map[string]any{
+  					"sql": map[string]any{
+  						"type":        "string",
+  						"description": "SQL query to execute",
+  					},
+  				},
+  				Required: []string{"sql"},
+  			},
+  			AllowedCallers: []string{"code_execution_20260120"},
+  		}},
+  	},
+  })
+  if err != nil {
+  	log.Fatal(err)
+  }
+  fmt.Println(response.RawJSON())
+  ```
+
+  ```java Java
+  import com.anthropic.models.messages.CodeExecutionTool20260120;
+  // ...
+
+  void main() {
+      AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+
+      MessageCreateParams params = MessageCreateParams.builder()
+          .model(Model.CLAUDE_OPUS_5_5)
+          .maxTokens(4096L)
+          .container("container_xyz789")
+          .addUserMessage("Query customer purchase history from the last quarter and identify our top 5 customers by revenue")
+          .addAssistantMessageOfBlockParams(List.of(
+              ContentBlockParam.ofText(
+                  TextBlockParam.builder()
+                      .text("I'll query the purchase history and analyze the results.")
+                      .build()),
+              ContentBlockParam.ofServerToolUse(
+                  ServerToolUseBlockParam.builder()
+                      .id("srvtoolu_abc123")
+                      .name("code_execution")
+                      .input(JsonValue.from(Map.of("code", "...")))
+                      .build()),
+              ContentBlockParam.ofToolUse(
+                  ToolUseBlockParam.builder()
+                      .id("toolu_def456")
+                      .name("query_database")
+                      .input(JsonValue.from(Map.of("sql", "<sql>")))
+                      .codeExecution20260120Caller("srvtoolu_abc123")
+                      .build())
+          ))
+          .addUserMessageOfBlockParams(List.of(
+              ContentBlockParam.ofToolResult(
+                  ToolResultBlockParam.builder()
+                      .toolUseId("toolu_def456")
+                      .content("[{\"customer_id\": \"C1\", \"revenue\": 45000}, {\"customer_id\": \"C2\", \"revenue\": 38000}, ...]")
+                      .build())
+          ))
+          // Same tools array as the original request
+          .addTool(CodeExecutionTool20260120.builder().build())
+          .addTool(Tool.builder()
+              .name("query_database")
+              .description("Execute a SQL query against the sales database. Returns a list of rows as JSON objects.")
+              .inputSchema(InputSchema.builder()
+                  .properties(JsonValue.from(Map.of(
+                      "sql", Map.of(
+                          "type", "string",
+                          "description", "SQL query to execute"
+                      )
+                  )))
+                  .putAdditionalProperty("required", JsonValue.from(List.of("sql")))
+                  .build())
+              .allowedCallers(List.of(Tool.AllowedCaller.of("code_execution_20260120")))
+              .build())
+          .build();
+
+      Message response = client.messages().create(params);
+      IO.println(response);
+  }
+  ```
+
+  ```php PHP
+  $client = new Client();
+
+  $message = $client->messages->create(
+      maxTokens: 4096,
+      messages: [
+          [
+              'role' => 'user',
+              'content' => 'Query customer purchase history from the last quarter and identify our top 5 customers by revenue',
+          ],
+          [
+              'role' => 'assistant',
+              'content' => [
+                  [
+                      'type' => 'text',
+                      'text' => "I'll query the purchase history and analyze the results.",
+                  ],
+                  [
+                      'type' => 'server_tool_use',
+                      'id' => 'srvtoolu_abc123',
+                      'name' => 'code_execution',
+                      'input' => ['code' => '...'],
+                  ],
+                  [
+                      'type' => 'tool_use',
+                      'id' => 'toolu_def456',
+                      'name' => 'query_database',
+                      'input' => ['sql' => '<sql>'],
+                      'caller' => [
+                          'type' => 'code_execution_20260120',
+                          'tool_id' => 'srvtoolu_abc123',
+                      ],
+                  ],
+              ],
+          ],
+          [
+              'role' => 'user',
+              'content' => [
+                  [
+                      'type' => 'tool_result',
+                      'tool_use_id' => 'toolu_def456',
+                      'content' => '[{"customer_id": "C1", "revenue": 45000}, {"customer_id": "C2", "revenue": 38000}, ...]',
+                  ],
+              ],
+          ],
+      ],
+      model: 'claude-opus-5-5',
+      container: 'container_xyz789',
+      // Same tools array as the original request
+      tools: [
+          [
+              'type' => 'code_execution_20260120',
+              'name' => 'code_execution',
+          ],
+          [
+              'name' => 'query_database',
+              'description' => 'Execute a SQL query against the sales database. Returns a list of rows as JSON objects.',
+              'input_schema' => [
+                  'type' => 'object',
+                  'properties' => [
+                      'sql' => [
+                          'type' => 'string',
+                          'description' => 'SQL query to execute',
+                      ],
+                  ],
+                  'required' => ['sql'],
+              ],
+              'allowed_callers' => ['code_execution_20260120'],
+          ],
+      ],
+  );
+
+  echo $message;
+  ```
+
+  ```ruby Ruby
+  require "anthropic"
+
+  client = Anthropic::Client.new
+
+  message = client.messages.create(
+    model: "claude-opus-5-5",
+    max_tokens: 4096,
+    container: "container_xyz789",
+    messages: [
+      {
+        role: "user",
+        content: "Query customer purchase history from the last quarter and identify our top 5 customers by revenue"
+      },
+      {
+        role: "assistant",
+        content: [
+          {
+            type: "text",
+            text: "I'll query the purchase history and analyze the results."
+          },
+          {
+            type: "server_tool_use",
+            id: "srvtoolu_abc123",
+            name: "code_execution",
+            input: { code: "..." }
+          },
+          {
+            type: "tool_use",
+            id: "toolu_def456",
+            name: "query_database",
+            input: { sql: "<sql>" },
+            caller: {
+              type: "code_execution_20260120",
+              tool_id: "srvtoolu_abc123"
+            }
+          }
+        ]
+      },
+      {
+        role: "user",
+        content: [
+          {
+            type: "tool_result",
+            tool_use_id: "toolu_def456",
+            content: '[{"customer_id": "C1", "revenue": 45000}, {"customer_id": "C2", "revenue": 38000}, ...]'
+          }
+        ]
+      }
+    ],
+    # Same tools array as the original request
+    tools: [
+      {
+        type: "code_execution_20260120",
+        name: "code_execution"
+      },
+      {
+        name: "query_database",
+        description: "Execute a SQL query against the sales database. Returns a list of rows as JSON objects.",
+        input_schema: {
+          type: "object",
+          properties: {
+            sql: {
+              type: "string",
+              description: "SQL query to execute"
+            }
+          },
+          required: ["sql"]
+        },
+        allowed_callers: ["code_execution_20260120"]
+      }
+    ]
+  )
+
+  puts message
+  ```
+</CodeGroup>
+
+### Step 4: Next tool call or completion
+
+The code picks up where it paused and processes your result. Each continuation response either pauses again with more programmatic `tool_use` blocks, or completes the code execution and lets Claude continue the turn (Step 5). Check `stop_reason` and each `tool_use` block's `caller` to tell the two apart: a response that pauses for you has `stop_reason: "tool_use"` and a `tool_use` block whose `caller` names a code execution version, and you repeat Step 3 with a `tool_result` for every pending programmatic call in one user message.
+
+### Step 5: Final response
+
+Once the code execution completes, Claude provides the final response:
+
+```json Output
+{
+  "content": [
+    {
+      "type": "code_execution_tool_result",
+      "tool_use_id": "srvtoolu_abc123",
+      "content": {
+        "type": "code_execution_result",
+        "stdout": "Top 5 customers: [{'customer_id': 'C1', 'revenue': 45000}, {'customer_id': 'C2', 'revenue': 38000}, {'customer_id': 'C5', 'revenue': 32000}, {'customer_id': 'C8', 'revenue': 28500}, {'customer_id': 'C3', 'revenue': 24000}]",
+        "stderr": "",
+        "return_code": 0,
+        "content": []
+      }
+    },
+    {
+      "type": "text",
+      "text": "I've analyzed the purchase history from last quarter. Your top 5 customers generated $167,500 in total revenue, with Customer C1 leading at $45,000."
+    }
+  ],
+  "stop_reason": "end_turn"
+}
+```
+
+## Advanced patterns
+
+### Batch processing with loops
+
+Claude can write code that processes multiple items efficiently:
+
+```python
+regions = ["West", "East", "Central", "North", "South"]
+results = {}
+for region in regions:
+    rows = json.loads(await query_database({"sql": f"<sql for {region}>"}))
+    results[region] = sum(row["revenue"] for row in rows)
+
+# Process results programmatically
+top_region = max(results.items(), key=lambda x: x[1])
+print(f"Top region: {top_region[0]} with ${top_region[1]:,} in revenue")
+```
+
+This pattern:
+
+* Reduces model round-trips from N (one per region) to 1
+* Processes large result sets programmatically before returning to Claude
+* Saves tokens by only returning aggregated conclusions instead of raw data
+
+### Early termination
+
+Claude can stop processing as soon as success criteria are met:
+
+```python
+endpoints = ["us-east", "eu-west", "apac"]
+for endpoint in endpoints:
+    status = await check_health({"endpoint": endpoint})
+    if status == "healthy":
+        print(f"Found healthy endpoint: {endpoint}")
+        break  # Stop early, don't check remaining
+```
+
+### Conditional tool selection
+
+```python
+path = "/tmp/example.txt"
+file_info = json.loads(await get_file_info({"path": path}))
+if file_info["size"] < 10000:
+    content = await read_full_file({"path": path})
+else:
+    content = await read_file_summary({"path": path})
+print(content)
+```
+
+### Data filtering
+
+```python
+server_id = "srv-01"
+log_text = await fetch_logs({"server_id": server_id})
+errors = [line for line in log_text.splitlines() if "ERROR" in line]
+print(f"Found {len(errors)} errors")
+for error in errors[-10:]:  # Only return last 10 errors
+    print(error)
+```
+
+## Response format
+
+### Programmatic tool call
+
+When code execution calls a tool:
+
+```json
+{
+  "type": "tool_use",
+  "id": "toolu_abc123",
+  "name": "query_database",
+  "input": { "sql": "<sql>" },
+  "caller": {
+    "type": "code_execution_20260120",
+    "tool_id": "srvtoolu_xyz789"
+  }
+}
+```
+
+### Tool result handling
+
+Your tool result is passed back to the running code:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_abc123",
+      "content": "[{\"customer_id\": \"C1\", \"revenue\": 45000, \"orders\": 23}, {\"customer_id\": \"C2\", \"revenue\": 38000, \"orders\": 18}, ...]"
+    }
+  ]
+}
+```
+
+### Code execution completion
+
+When all tool calls are satisfied and code completes:
+
+```json
+{
+  "type": "code_execution_tool_result",
+  "tool_use_id": "srvtoolu_xyz789",
+  "content": {
+    "type": "code_execution_result",
+    "stdout": "Analysis complete. Top 5 customers identified from 847 total records.",
+    "stderr": "",
+    "return_code": 0,
+    "content": []
+  }
+}
+```
+
+## Error handling
+
+### Common errors
+
+| Error                                      | Where it appears                                                             | Description                                                                    | Solution                                                                                                                         |
+| ------------------------------------------ | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `invalid_tool_input`                       | `error_code` on the `code_execution_tool_result` error block in the response | Invalid parameters were passed to the code execution tool                      | See the [code execution tool errors](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#errors)   |
+| `invalid_request_error` (on `tool_choice`) | HTTP 400 error response                                                      | `tool_choice` names a tool whose `allowed_callers` does not include `"direct"` | Either add `"direct"` to that tool's `allowed_callers`, or remove the tool from `tool_choice` and let Claude invoke it from code |
+
+### Container expiration during tool call
+
+If your tool result doesn't arrive within about 4 minutes, the pending call raises a `TimeoutError` inside Claude's running code. Claude sees the error in `stderr` and typically retries the call:
+
+```json
+{
+  "type": "code_execution_tool_result",
+  "tool_use_id": "srvtoolu_abc123",
+  "content": {
+    "type": "code_execution_result",
+    "stdout": "",
+    "stderr": "TimeoutError: Calling tool ['query_database'] timed out (no response after 270s).",
+    "return_code": 0,
+    "content": []
+  }
+}
+```
+
+To prevent timeouts:
+
+* Monitor the `expires_at` field in responses
+* Implement timeouts for your tool execution
+* Consider breaking long operations into smaller chunks
+
+### Tool execution errors
+
+If your tool returns an error:
+
+```json
+{
+  "type": "tool_result",
+  "tool_use_id": "toolu_abc123",
+  "content": "Error: Query timeout - table lock exceeded 30 seconds"
+}
+```
+
+Claude's code receives this error and can handle it appropriately.
+
+## Constraints and limitations
+
+### Feature incompatibilities
+
+* **Structured outputs:** Tools with `strict: true` are not supported with programmatic calling
+* **Tool choice:** You cannot force programmatic calling of a specific tool through `tool_choice`
+* **Parallel tool use:** `disable_parallel_tool_use: true` is not supported with programmatic calling
+
+### Input schema limitations
+
+Custom tools whose `input_schema` contains a recursive `$ref` (a reference cycle, such as a schema that refers to itself) cannot be enabled for programmatic calling. Including a code execution tool version in `allowed_callers` for such a tool causes the request to fail with a `400 invalid_request_error` whose message contains `Circular $ref detected`. The same schema is accepted for direct tool calling.
+
+To work around this, do one of the following:
+
+* Keep the tool direct-only by omitting `allowed_callers` (or setting it to `["direct"]`). Other tools in the same request can still use programmatic calling.
+* Remove the cycle from the schema. For example, unroll the recursion to a fixed depth and describe any deeper nesting in the `description` of the innermost level, or replace the recursive property with a plain `{"type": "object"}` whose `description` explains the expected shape.
+
+### Tool restrictions
+
+The following tools cannot be called programmatically:
+
+* Tools provided by an [MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)
+* The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool) and [browser use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool) toolsets (`computer_toolset_20260801` and `browser_toolset_20260801`), whose `allowed_callers` field accepts only `"direct"`
+
+### Message formatting restrictions
+
+When responding to programmatic tool calls, there are strict formatting requirements:
+
+**Tool result only responses:** If there are pending programmatic tool calls waiting for results, your response message must contain **only** `tool_result` blocks. You cannot include any text content, even after the tool results.
+
+Invalid - Cannot include text when responding to programmatic tool calls:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01",
+      "content": "[{\"customer_id\": \"C1\", \"revenue\": 45000}]"
+    },
+    { "type": "text", "text": "What should I do next?" }
+  ]
+}
+```
+
+Valid - Only tool results when responding to programmatic tool calls:
+
+```json
+{
+  "role": "user",
+  "content": [
+    {
+      "type": "tool_result",
+      "tool_use_id": "toolu_01",
+      "content": "[{\"customer_id\": \"C1\", \"revenue\": 45000}]"
+    }
+  ]
+}
+```
+
+This restriction only applies when responding to programmatic (code execution) tool calls. For regular client-side tool calls, you can include text content after tool results.
+
+**Text-only tool result content:** The `content` of each `tool_result` that answers a programmatic call must be a string or `text` blocks. Image, document, and other content block types are rejected.
+
+### Rate limits
+
+Programmatic tool calls are subject to the same rate limits as regular tool calls. Each tool call from code execution counts as a separate invocation.
+
+### Validate tool results before use
+
+When implementing user-defined tools that will be called programmatically:
+
+* **Tool results are returned as strings:** They can contain any content, including code snippets or executable commands that may be processed by the execution environment.
+* **Validate external tool results:** If your tool returns data from external sources or accepts user input, be aware of code injection risks if the output will be interpreted or executed as code.
+
+## Token efficiency
+
+Programmatic tool calling reduces token consumption in three ways:
+
+* **Tool results from programmatic calls are not added to Claude's context** - only the final code output is
+* **Intermediate processing happens in code** - filtering, aggregation, and other transformations don't consume model tokens
+* **Multiple tool calls in one code execution** - reduces overhead compared to separate model turns
+
+For example, calling 10 tools directly uses \~10x the tokens of calling them programmatically and returning a summary.
+
+In Anthropic's internal evaluations on a production Claude model:
+
+* On a 75-tool project-management agent benchmark, enabling programmatic tool calling reduced billed input tokens by roughly 38% with no change in task accuracy.
+* On [τ²-bench](https://arxiv.org/abs/2506.07982) (airline, retail, and telecom domains), where each turn makes one or two sequential tool calls, programmatic tool calling left scores unchanged and cost roughly 8% more. Sequential single-call workflows do not benefit.
+* Across production API traffic, requests whose `tools` array contains 10 to 49 tool definitions see typical token savings of 20% to 40% with programmatic tool calling enabled.
+
+Actual savings vary with workload shape. See [When to use programmatic calling](https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling#when-to-use-programmatic-calling).
+
+## Usage and pricing
+
+Programmatic tool calling uses the same pricing as code execution. See the [code execution pricing](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool#usage-and-pricing) for details.
+
+<Note>
+  Token counting for programmatic tool calls: Tool results from programmatic invocations do not count toward your input/output token usage. Only the final code execution result and Claude's response count.
+</Note>
+
+## Best practices
+
+### Tool design
+
+* **Provide detailed output descriptions:** Because Claude deserializes tool results in code, document the format (JSON structure and field types)
+* **Return structured data:** JSON or other machine-readable formats work best for programmatic processing
+* **Keep responses concise:** Return only necessary data to minimize processing overhead
+
+### When to use programmatic calling
+
+Programmatic tool calling trades a small fixed overhead (container startup, script generation) for large savings on tool-result tokens and model round-trips. Whether that trade pays off depends on workload shape.
+
+**Strong fit:**
+
+* Fan-out or parallel operations across many items (for example, checking 50 endpoints or looking up 20 records)
+* Large tool results that can be filtered, aggregated, or summarized before reaching Claude's context
+* Agentic search and retrieval, where iterative querying and result filtering dominate the workflow
+
+**Weak fit:**
+
+* Strictly sequential workflows where each call depends on Claude reasoning over the previous result, because the script cannot skip the model round-trip in that case
+* A small number of tool calls with small responses, especially on the first turn of a conversation, where container and script overhead can exceed the savings
+* Tools that require immediate user feedback between calls
+
+If you are unsure, measure billed input tokens with and without `allowed_callers` on a representative sample of your traffic before enabling it broadly.
+
+### Performance optimization
+
+* **Reuse containers** when making multiple related requests to maintain state
+* **Batch similar operations** in a single code execution when possible
+
+## Troubleshooting
+
+### Common issues
+
+**`invalid_request_error` when setting `tool_choice`**
+
+* `tool_choice` cannot name a tool whose `allowed_callers` omits `"direct"`. Either add `"direct"` to that tool's `allowed_callers`, or remove the tool from `tool_choice` and let Claude invoke it from code.
+
+**Container expiration**
+
+* Respond to each programmatic tool call well before the paused response's `expires_at` timestamp. Claude's code stops waiting for a result after about 4 minutes, and idle containers are currently reclaimed after about 5 minutes.
+* Consider implementing faster tool execution
+
+**Tool result not parsed correctly**
+
+* Ensure your tool returns string data that Claude can deserialize
+* Provide clear output format documentation in your tool description
+
+### Debugging tips
+
+1. **Log all tool calls and results** to track the flow
+2. **Check the `caller` field** to confirm programmatic invocation
+3. **Monitor container IDs** to ensure proper reuse
+4. **Test tools independently** before enabling programmatic calling
+
+## Why programmatic tool calling works
+
+Claude is trained on large amounts of code, so presenting tools as callable Python functions lets it use that strength:
+
+* **Tool composition:** Chained calls, loops, and conditionals are ordinary Python control flow instead of a series of model round trips
+* **Result processing:** Claude's code filters and aggregates large tool outputs, or writes them to files, and only the final output enters the context window
+* **Latency:** The model is not re-sampled between the tool calls inside one code execution
+
+## Alternative implementations
+
+Programmatic tool calling is a generalizable pattern that can also be implemented on your own infrastructure. Here's how the approaches compare:
+
+### Client-side direct execution
+
+Provide Claude with a code execution tool and describe what functions are available in that environment. When Claude invokes the tool with code, your application executes it locally where those functions are defined.
+
+**Advantages:**
+
+* Minimal re-architecting of your application
+* Full control over the environment and instructions
+
+**Disadvantages:**
+
+* Executes untrusted code outside of a sandbox
+* Tool invocations can be vectors for code injection
+
+**Use when:** Your application can safely execute arbitrary code, you want the smallest implementation, and Anthropic's managed offering doesn't fit your needs.
+
+### Self-managed sandboxed execution
+
+Same approach from Claude's perspective, but code runs in a sandboxed container with security restrictions (for example, no network egress). If your tools require external resources, you'll need a protocol for executing tool calls outside the sandbox.
+
+**Advantages:**
+
+* Safe programmatic tool calling on your own infrastructure
+* Full control over the execution environment
+
+**Disadvantages:**
+
+* Complex to build and maintain
+* Requires managing both infrastructure and inter-process communication
+
+**Use when:** Security is critical and Anthropic's managed solution doesn't fit your requirements.
+
+### Anthropic-managed execution
+
+Anthropic's programmatic tool calling is a managed version of sandboxed execution with an opinionated Python environment tuned for Claude. Anthropic handles container management, code execution, and secure tool invocation communication.
+
+**Advantages:**
+
+* Safe and secure by default
+* Enabled with a tool definition, with no infrastructure to run
+* Environment and instructions optimized for Claude
+
+Consider using Anthropic's managed solution if you're using the Claude API, [Claude Platform on AWS](https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws), or [Microsoft Foundry](https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry). On Microsoft Foundry, programmatic tool calling requires a [Hosted on Anthropic deployment](https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry#additional-features-not-supported-when-hosted-on-azure).
+
+## Data retention
+
+Programmatic tool calling is built on the code execution infrastructure and uses the same sandbox containers. Container data, including execution artifacts and outputs, is retained for up to 30 days.
+
+For ZDR eligibility across all features, see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
+
+## Next steps
+
+<CardGroup cols={2}>
+  <Card title="Fine-grained tool streaming" icon="bolt" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming">
+    Stream tool inputs without server-side JSON buffering for latency-sensitive applications.
+  </Card>
+
+  <Card title="Code execution tool" icon="code" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool">
+    Run Python and bash code in a sandboxed container to analyze data, generate files, and iterate on solutions.
+  </Card>
+
+  <Card title="Tool use with Claude" icon="wrench" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview">
+    Connect Claude to external tools and APIs. See where tools execute, when Claude calls them, and which tool fits your task.
+  </Card>
+
+  <Card title="Define tools" icon="hammer" href="https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools">
+    Specify tool schemas, write effective descriptions, and control when Claude calls your tools.
+  </Card>
+</CardGroup>
 
 ---
 
@@ -19821,7 +28834,7 @@ Here's how to handle the `pause_turn` stop reason:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "messages": [
         {
@@ -19837,7 +28850,7 @@ Here's how to handle the `pause_turn` stop reason:
   # Initial request. If "stop_reason" in the output is "pause_turn", re-run with
   # the assistant content appended to messages (see the SDK tabs).
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - {type: web_search_20250305, name: web_search, max_uses: 10}
@@ -19851,7 +28864,7 @@ Here's how to handle the `pause_turn` stop reason:
 
   # Initial request with web search
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[
           {
@@ -19875,7 +28888,7 @@ Here's how to handle the `pause_turn` stop reason:
 
       # Send the continuation request
       continuation = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=1024,
           messages=messages,
           tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 10}],
@@ -19891,7 +28904,7 @@ Here's how to handle the `pause_turn` stop reason:
 
   // Initial request with web search
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -19923,7 +28936,7 @@ Here's how to handle the `pause_turn` stop reason:
 
     // Send the continuation request
     const continuation = await client.messages.create({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       messages,
       tools: [
@@ -19946,7 +28959,7 @@ Here's how to handle the `pause_turn` stop reason:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [
           new() {
@@ -19964,7 +28977,7 @@ Here's how to handle the `pause_turn` stop reason:
       // Continue the conversation with the paused content
       var continuationParams = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Messages = [
               new() {
@@ -19998,7 +29011,7 @@ Here's how to handle the `pause_turn` stop reason:
   }
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Search for comprehensive information about quantum computing breakthroughs in 2025")),
@@ -20012,7 +29025,7 @@ Here's how to handle the `pause_turn` stop reason:
   if response.StopReason == anthropic.StopReasonPauseTurn {
   	// Pass the paused response back as-is so Claude can continue the turn
   	continuation, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 1024,
   		Messages: []anthropic.MessageParam{
   			anthropic.NewUserMessage(anthropic.NewTextBlock("Search for comprehensive information about quantum computing breakthroughs in 2025")),
@@ -20037,7 +29050,7 @@ Here's how to handle the `pause_turn` stop reason:
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessage("Search for comprehensive information about quantum computing breakthroughs in 2025")
           .addTool(WebSearchTool20250305.builder()
@@ -20050,7 +29063,7 @@ Here's how to handle the `pause_turn` stop reason:
       if (response.stopReason().isPresent()
               && response.stopReason().get().equals(StopReason.PAUSE_TURN)) {
           MessageCreateParams continuationParams = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addUserMessage("Search for comprehensive information about quantum computing breakthroughs in 2025")
               .addMessage(response)
@@ -20078,7 +29091,7 @@ Here's how to handle the `pause_turn` stop reason:
               'content' => 'Search for comprehensive information about quantum computing breakthroughs in 2025'
           ]
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'web_search_20250305',
@@ -20103,7 +29116,7 @@ Here's how to handle the `pause_turn` stop reason:
       $continuation = $client->messages->create(
           maxTokens: 1024,
           messages: $messages,
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           tools: [
               [
                   'type' => 'web_search_20250305',
@@ -20123,7 +29136,7 @@ Here's how to handle the `pause_turn` stop reason:
   client = Anthropic::Client.new
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -20154,7 +29167,7 @@ Here's how to handle the `pause_turn` stop reason:
     ]
 
     continuation = client.messages.create(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       messages: messages,
       tools: [
@@ -20295,7 +29308,7 @@ The following example enables web fetch together with a user-defined `run_comman
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-4-8",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "messages": [
         {
@@ -20323,7 +29336,7 @@ The following example enables web fetch together with a user-defined `run_comman
   # result block, run the client tools and re-run with a user message of only
   # their tool_result blocks appended (see the SDK tabs).
   ant messages create <<'YAML'
-  model: claude-opus-4-8
+  model: claude-opus-5-5
   max_tokens: 1024
   messages:
     - role: user
@@ -20365,7 +29378,7 @@ The following example enables web fetch together with a user-defined `run_comman
   ]
 
   response = client.messages.create(
-      model="claude-opus-4-8", max_tokens=1024, tools=tools, messages=messages
+      model="claude-opus-5-5", max_tokens=1024, tools=tools, messages=messages
   )
 
   tool_results = [
@@ -20383,7 +29396,7 @@ The following example enables web fetch together with a user-defined `run_comman
       # A server_tool_use block with no result block in this response is not finished; its result arrives in a later response.
       # Send back only the client tool_result blocks, with the same tools.
       continuation = client.messages.create(
-          model="claude-opus-4-8",
+          model="claude-opus-5-5",
           max_tokens=1024,
           tools=tools,
           messages=[
@@ -20427,7 +29440,7 @@ The following example enables web fetch together with a user-defined `run_comman
   ];
 
   const response = await client.messages.create({
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [webFetchTool, runCommandTool],
     messages
@@ -20449,7 +29462,7 @@ The following example enables web fetch together with a user-defined `run_comman
     // A server_tool_use block with no result block in this response is not finished; its result arrives in a later response.
     // Send back only the client tool_result blocks, with the same tools.
     const continuation = await client.messages.create({
-      model: "claude-opus-4-8",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [webFetchTool, runCommandTool],
       messages: [
@@ -20496,7 +29509,7 @@ The following example enables web fetch together with a user-defined `run_comman
 
   var response = await client.Messages.Create(new MessageCreateParams
   {
-      Model = Model.ClaudeOpus4_8,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools = tools,
       Messages = [userMessage]
@@ -20522,7 +29535,7 @@ The following example enables web fetch together with a user-defined `run_comman
       // Send back only the client tool_result blocks, with the same tools.
       var continuation = await client.Messages.Create(new MessageCreateParams
       {
-          Model = Model.ClaudeOpus4_8,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = tools,
           Messages =
@@ -20570,7 +29583,7 @@ The following example enables web fetch together with a user-defined `run_comman
   userMessage := anthropic.NewUserMessage(anthropic.NewTextBlock("Summarize https://example.com/article and run uname -a to tell me what system this is on."))
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus4_8,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools:     tools,
   	Messages:  []anthropic.MessageParam{userMessage},
@@ -20592,7 +29605,7 @@ The following example enables web fetch together with a user-defined `run_comman
   	// A server_tool_use block with no result block in this response is not finished; its result arrives in a later response.
   	// Send back only the client tool_result blocks, with the same tools.
   	continuation, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus4_8,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 1024,
   		Tools:     tools,
   		Messages: []anthropic.MessageParam{
@@ -20629,7 +29642,7 @@ The following example enables web fetch together with a user-defined `run_comman
       String prompt = "Summarize https://example.com/article and run uname -a to tell me what system this is on.";
 
       Message response = client.messages().create(MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_4_8)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addTool(WebFetchTool20250910.builder().maxUses(5L).build())
           .addTool(runCommandTool)
@@ -20654,7 +29667,7 @@ The following example enables web fetch together with a user-defined `run_comman
           // A server_tool_use block with no result block in this response is not finished; its result arrives in a later response.
           // Send back only the client tool_result blocks, with the same tools.
           Message continuation = client.messages().create(MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_4_8)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addTool(WebFetchTool20250910.builder().maxUses(5L).build())
               .addTool(runCommandTool)
@@ -20693,7 +29706,7 @@ The following example enables web fetch together with a user-defined `run_comman
   $response = $client->messages->create(
       maxTokens: 1024,
       messages: [$userMessage],
-      model: 'claude-opus-4-8',
+      model: 'claude-opus-5-5',
       tools: $tools,
   );
 
@@ -20719,7 +29732,7 @@ The following example enables web fetch together with a user-defined `run_comman
               ['role' => 'assistant', 'content' => $response->content],
               ['role' => 'user', 'content' => $toolResults],
           ],
-          model: 'claude-opus-4-8',
+          model: 'claude-opus-5-5',
           tools: $tools,
       );
       // If a web_fetch was deferred, it runs on this request and its
@@ -20753,7 +29766,7 @@ The following example enables web fetch together with a user-defined `run_comman
   }
 
   response = client.messages.create(
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: tools,
     messages: [user_message]
@@ -20775,7 +29788,7 @@ The following example enables web fetch together with a user-defined `run_comman
     # A server_tool_use block with no result block in this response is not finished; its result arrives in a later response.
     # Send back only the client tool_result blocks, with the same tools.
     continuation = client.messages.create(
-      model: "claude-opus-4-8",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: tools,
       messages: [
@@ -20856,9 +29869,9 @@ Invalid domain formats are rejected at request time with a 400 `invalid_request_
   Unicode characters in domain names can bypass domain filters through homograph attacks: `аmazon.com` (with a Cyrillic `а`) looks identical to `amazon.com` but is a different domain. Use ASCII-only domain names in allow and block lists, and audit existing entries for non-ASCII characters.
 </Warning>
 
-[Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) uses the same `allowed_domains` and `blocked_domains` fields on the `web_search` and `web_fetch` entries of the agent toolset. On Managed Agents, each list holds at most 64 entries, domains listed for `web_fetch` cannot include a path, and fields specific to the Messages API tools, such as `max_uses`, `citations`, and `cache_control`, are not available. See [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains) for the full rules.
+[Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) uses the same `allowed_domains` and `blocked_domains` fields on the `web_search` and `web_fetch` entries of the agent toolset. On Managed Agents, each list holds at most 64 entries, domains listed for `web_fetch` cannot include a path, and fields specific to the Messages API tools, such as `max_uses`, `citations`, and `cache_control`, are not available. See [Domain list rules](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions#domain-list-rules) for the full rules.
 
-Organization-level web search and web fetch settings in the Claude Console apply to Messages API requests only; they do not apply to Managed Agents sessions, which use only the per-tool lists on the agent toolset.
+Organization-level web search and web fetch settings in the Claude Console apply to Messages API requests only. They do not apply to Managed Agents sessions, which use the per-tool lists on the agent toolset instead. For a session in a cloud environment with `limited` networking, the environment's `allowed_hosts` also applies to `web_search` and `web_fetch`; see [Networking](https://platform.claude.com/docs/en/managed-agents/environments#networking). The per-tool lists restrict these tools further, within the hosts that `allowed_hosts` allows.
 
 ## Dynamic filtering with code execution
 
@@ -20941,7 +29954,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "messages": [
         {"role": "user", "content": "What is the weather in San Francisco?"}
@@ -20971,7 +29984,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
 
   ```bash CLI
   ant messages create --transform content <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   messages:
     - role: user
@@ -20998,7 +30011,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[{"role": "user", "content": "What's the weather like in San Francisco?"}],
       tools=[
@@ -21034,7 +30047,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
   });
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -21077,7 +30090,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [new() { Role = Role.User, Content = "What's the weather like in San Francisco?" }],
       Tools = [
@@ -21108,7 +30121,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("What's the weather like in San Francisco?")),
@@ -21165,7 +30178,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
       .build();
 
   MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024L)
       .addUserMessage("What's the weather like in San Francisco?")
       .addTool(
@@ -21190,7 +30203,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
       messages: [
           ['role' => 'user', 'content' => "What's the weather like in San Francisco?"]
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'name' => 'get_weather',
@@ -21222,7 +30235,7 @@ For example, suppose a booking system needs `passengers: int`. Without strict mo
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       { role: "user", content: "What's the weather like in San Francisco?" }
@@ -21302,7 +30315,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
         -H "x-api-key: $ANTHROPIC_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -d '{
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
           "max_tokens": 1024,
           "messages": [
             {"role": "user", "content": "Search for flights to Tokyo departing June 1, 2026"}
@@ -21326,7 +30339,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
 
       ```bash CLI
       ant messages create <<'YAML'
-      model: claude-opus-5
+      model: claude-opus-5-5
       max_tokens: 1024
       messages:
         - role: user
@@ -21353,7 +30366,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       ```python Python
       client = Anthropic()
       response = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=1024,
           messages=[
               {
@@ -21404,7 +30417,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       };
 
       const response = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         messages: [{ role: "user", content: "Search for flights to Tokyo departing June 1, 2026" }],
         tools: [searchFlightsTool]
@@ -21422,7 +30435,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
 
       var parameters = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Messages = [new() { Role = Role.User, Content = "Search for flights to Tokyo departing June 1, 2026" }],
           Tools = [
@@ -21453,7 +30466,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       client := anthropic.NewClient()
 
       response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus5,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 1024,
       	Messages: []anthropic.MessageParam{
       		anthropic.NewUserMessage(anthropic.NewTextBlock("Search for flights to Tokyo departing June 1, 2026")),
@@ -21510,7 +30523,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
           .build();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessage("Search for flights to Tokyo departing June 1, 2026")
           .addTool(
@@ -21534,7 +30547,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
           messages: [
               ['role' => 'user', 'content' => 'Search for flights to Tokyo departing June 1, 2026']
           ],
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           tools: [
               [
                   'name' => 'search_flights',
@@ -21563,7 +30576,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       client = Anthropic::Client.new
 
       message = client.messages.create(
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         messages: [
           { role: "user", content: "Search for flights to Tokyo departing June 1, 2026" }
@@ -21603,7 +30616,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
         -H "x-api-key: $ANTHROPIC_API_KEY" \
         -H "anthropic-version: 2023-06-01" \
         -d '{
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
           "max_tokens": 1024,
           "messages": [
             {"role": "user", "content": "Help me plan a trip from New York to Paris for 2 people, departing June 1, 2026"}
@@ -21644,7 +30657,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
 
       ```bash CLI
       ant messages create <<'YAML'
-      model: claude-opus-5
+      model: claude-opus-5-5
       max_tokens: 1024
       messages:
         - role: user
@@ -21679,7 +30692,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       ```python Python
       client = Anthropic()
       response = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=1024,
           messages=[
               {
@@ -21759,7 +30772,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       ];
 
       const response = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         messages: [
           {
@@ -21783,7 +30796,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
 
       var parameters = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Messages = [new() { Role = Role.User, Content = "Help me plan a trip from New York to Paris for 2 people, departing June 1, 2026" }],
           Tools = [
@@ -21831,7 +30844,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       client := anthropic.NewClient()
 
       response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus5,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 1024,
       	Messages: []anthropic.MessageParam{
       		anthropic.NewUserMessage(anthropic.NewTextBlock("Help me plan a trip from New York to Paris for 2 people, departing June 1, 2026")),
@@ -21907,7 +30920,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
           .build();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessage("Help me plan a trip from New York to Paris for 2 people, departing June 1, 2026")
           .addTool(
@@ -21938,7 +30951,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
           messages: [
               ['role' => 'user', 'content' => 'Help me plan a trip from New York to Paris for 2 people, departing June 1, 2026']
           ],
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           tools: [
               [
                   'name' => 'search_flights',
@@ -21979,7 +30992,7 @@ The [computer use](https://platform.claude.com/docs/en/agents-and-tools/tool-use
       client = Anthropic::Client.new
 
       message = client.messages.create(
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 1024,
         messages: [
           { role: "user", content: "Help me plan a trip from New York to Paris for 2 people, departing June 1, 2026" }
@@ -22091,7 +31104,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [
         {
@@ -22111,7 +31124,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
 
   ```bash CLI
   ant messages create \
-    --model claude-opus-5 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --tool '{type: text_editor_20250728, name: str_replace_based_edit_tool, max_characters: 10000}' \
     --message '{role: user, content: There is a syntax error in my primes.py file. Can you help me fix it?}'
@@ -22121,7 +31134,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[
           {
@@ -22145,7 +31158,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
   const anthropic = new Anthropic();
 
   const response = await anthropic.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -22171,7 +31184,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
   var response = await client.Messages.Create(
       new()
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = [new ToolTextEditor20250728 { MaxCharacters = 10000 }],
           Messages =
@@ -22192,7 +31205,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfTextEditor20250728: &anthropic.ToolTextEditor20250728Param{
@@ -22221,7 +31234,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
         .build();
 
     MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024)
       .addTool(editorTool)
       .addUserMessage("There's a syntax error in my primes.py file. Can you help me fix it?")
@@ -22236,7 +31249,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
   $client = new Client();
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: [ToolTextEditor20250728::with(maxCharacters: 10000)],
       messages: [
@@ -22254,7 +31267,7 @@ You can optionally specify a `max_characters` parameter to control truncation wh
   client = Anthropic::Client.new
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -22447,7 +31460,7 @@ First, your application provides Claude with the text editor tool and a prompt t
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [
         {
@@ -22466,7 +31479,7 @@ First, your application provides Claude with the text editor tool and a prompt t
 
   ```bash CLI
   ant messages create \
-    --model claude-opus-5 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --tool '{type: text_editor_20250728, name: str_replace_based_edit_tool}' \
     --message '{role: user, content: There is a syntax error in my primes.py file. Can you help me fix it?}'
@@ -22476,7 +31489,7 @@ First, your application provides Claude with the text editor tool and a prompt t
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[{"type": "text_editor_20250728", "name": "str_replace_based_edit_tool"}],
       messages=[
@@ -22494,7 +31507,7 @@ First, your application provides Claude with the text editor tool and a prompt t
   const anthropic = new Anthropic();
 
   const response = await anthropic.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -22519,7 +31532,7 @@ First, your application provides Claude with the text editor tool and a prompt t
   var response = await client.Messages.Create(
       new()
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = [new ToolTextEditor20250728()],
           Messages =
@@ -22540,7 +31553,7 @@ First, your application provides Claude with the text editor tool and a prompt t
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfTextEditor20250728: &anthropic.ToolTextEditor20250728Param{}},
@@ -22565,7 +31578,7 @@ First, your application provides Claude with the text editor tool and a prompt t
       ToolTextEditor20250728.builder().build();
 
     MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024)
       .addTool(editorTool)
       .addUserMessage("There's a syntax error in my primes.py file. Can you help me fix it?")
@@ -22580,7 +31593,7 @@ First, your application provides Claude with the text editor tool and a prompt t
   $client = new Client();
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: [new ToolTextEditor20250728()],
       messages: [
@@ -22598,7 +31611,7 @@ First, your application provides Claude with the text editor tool and a prompt t
   client = Anthropic::Client.new
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [{type: "text_editor_20250728", name: "str_replace_based_edit_tool"}],
     messages: [
@@ -22618,7 +31631,7 @@ Claude uses the text editor tool first to view the file:
 ```json Output
 {
   "id": "msg_01XAbCDeFgHiJkLmNoPQrStU",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "stop_reason": "tool_use",
   "role": "assistant",
   "content": [
@@ -22648,7 +31661,7 @@ Your application should then read the file and return its contents to Claude:
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [
         {
@@ -22695,7 +31708,7 @@ Your application should then read the file and return its contents to Claude:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - type: text_editor_20250728
@@ -22758,7 +31771,7 @@ Your application should then read the file and return its contents to Claude:
 
   ```python Python
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[{"type": "text_editor_20250728", "name": "str_replace_based_edit_tool"}],
       messages=[
@@ -22801,7 +31814,7 @@ Your application should then read the file and return its contents to Claude:
   const anthropic = new Anthropic();
 
   const response = await anthropic.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -22855,7 +31868,7 @@ Your application should then read the file and return its contents to Claude:
   var response = await client.Messages.Create(
       new()
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = [new ToolTextEditor20250728()],
           Messages =
@@ -22909,7 +31922,7 @@ Your application should then read the file and return its contents to Claude:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfTextEditor20250728: &anthropic.ToolTextEditor20250728Param{}},
@@ -22943,7 +31956,7 @@ Your application should then read the file and return its contents to Claude:
   AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
   MessageCreateParams params = MessageCreateParams.builder()
-    .model(Model.CLAUDE_OPUS_5)
+    .model(Model.CLAUDE_OPUS_5_5)
     .maxTokens(1024)
     .addTool(ToolTextEditor20250728.builder().build())
     .addUserMessage("There's a syntax error in my primes.py file. Can you help me fix it?")
@@ -22988,7 +32001,7 @@ Your application should then read the file and return its contents to Claude:
   $client = new Client();
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: [new ToolTextEditor20250728()],
       messages: [
@@ -23031,7 +32044,7 @@ Your application should then read the file and return its contents to Claude:
   client = Anthropic::Client.new
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [{type: "text_editor_20250728", name: "str_replace_based_edit_tool"}],
     messages: [
@@ -23082,7 +32095,7 @@ Claude identifies the syntax error and uses the `str_replace` command to fix it:
 ```json Output
 {
   "id": "msg_01VwXyZAbCdEfGhIjKlMnO",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "stop_reason": "tool_use",
   "role": "assistant",
   "content": [
@@ -23114,7 +32127,7 @@ Your application should then make the edit and return the result:
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "tools": [
         {
@@ -23159,7 +32172,7 @@ Your application should then make the edit and return the result:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 1024
   tools:
     - type: text_editor_20250728
@@ -23191,7 +32204,7 @@ Your application should then make the edit and return the result:
 
   ```python Python
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[{"type": "text_editor_20250728", "name": "str_replace_based_edit_tool"}],
       messages=[
@@ -23234,7 +32247,7 @@ Your application should then make the edit and return the result:
 
   ```typescript TypeScript
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -23286,7 +32299,7 @@ Your application should then make the edit and return the result:
   var response = await client.Messages.Create(
       new()
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 1024,
           Tools = [new ToolTextEditor20250728()],
           Messages =
@@ -23338,7 +32351,7 @@ Your application should then make the edit and return the result:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{
   		{OfTextEditor20250728: &anthropic.ToolTextEditor20250728Param{}},
@@ -23377,7 +32390,7 @@ Your application should then make the edit and return the result:
   AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
   MessageCreateParams params = MessageCreateParams.builder()
-    .model(Model.CLAUDE_OPUS_5)
+    .model(Model.CLAUDE_OPUS_5_5)
     .maxTokens(1024)
     .addTool(ToolTextEditor20250728.builder().build())
     // Previous messages would go here
@@ -23432,7 +32445,7 @@ Your application should then make the edit and return the result:
   $client = new Client();
 
   $response = $client->messages->create(
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       maxTokens: 1024,
       tools: [new ToolTextEditor20250728()],
       messages: [
@@ -23477,7 +32490,7 @@ Your application should then make the edit and return the result:
   client = Anthropic::Client.new
 
   response = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [{type: "text_editor_20250728", name: "str_replace_based_edit_tool"}],
     messages: [
@@ -23524,7 +32537,7 @@ Finally, Claude provides a complete explanation of the fix:
 ````json Output
 {
   "id": "msg_01IjKlMnOpQrStUvWxYzAb",
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "stop_reason": "end_turn",
   "role": "assistant",
   "content": [
@@ -24291,9 +33304,10 @@ The text editor tool uses the same pricing structure as other tools used with Cl
 
 In addition to the base tokens, the following additional input tokens are needed for the text editor tool:
 
-| Tool                                | Additional input tokens |
-| ----------------------------------- | ----------------------- |
-| `text_editor_20250429` (Claude 4.x) | 700 tokens              |
+| Tool                                                                           | Additional input tokens |
+| ------------------------------------------------------------------------------ | ----------------------- |
+| `text_editor_20250728` (Claude 4.7 and later models and Claude Mythos Preview) | 974 tokens              |
+| `text_editor_20250728` (Claude 4.6 and earlier models)                         | 745 tokens              |
 
 For more detailed information about tool pricing, see [Tool use pricing](https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview#pricing).
 
@@ -24456,21 +33470,21 @@ This page is a reference for the tools Anthropic provides and the optional prope
 
 Anthropic provides two kinds of tools: **server tools** that execute on Anthropic's infrastructure, and **client tools** where Anthropic defines the schema but your application handles execution. Both kinds appear in your request's `tools` array alongside any user-defined tools.
 
-| Tool                                                                                                     | `type`                                                                              | Execution | [Beta header](https://platform.claude.com/docs/en/api/beta-headers) |
-| -------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------- |
-| [Web search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool)         | `web_search_20260318` `web_search_20260209` `web_search_20250305`                   | Server    | None                                                                |
-| [Web fetch tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool)           | `web_fetch_20260318` `web_fetch_20260309` `web_fetch_20260209` `web_fetch_20250910` | Server    | None                                                                |
-| [Code execution tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool) | `code_execution_20260521` `code_execution_20260120` `code_execution_20250825`       | Server    | None                                                                |
-| [Advisor tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)               | `advisor_20260301`                                                                  | Server    | `advisor-tool-2026-03-01`                                           |
-| [Tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)       | `tool_search_tool_regex_20251119` `tool_search_tool_bm25_20251119`                  | Server    | None                                                                |
-| [MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)                      | `mcp_toolset`                                                                       | Server    | `mcp-client-2025-11-20`                                             |
-| [Memory tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool)                 | `memory_20250818`                                                                   | Client    | None                                                                |
-| [Bash tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool)                     | `bash_20250124`                                                                     | Client    | None                                                                |
-| [Text editor tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool)       | `text_editor_20250728` `text_editor_20250124`                                       | Client    | None                                                                |
-| [Computer use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool)     | `computer_toolset_20260801` `computer_20251124` `computer_20250124`                 | Client    | None `computer-use-2025-11-24` `computer-use-2025-01-24`            |
-| [Browser use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool)       | `browser_toolset_20260801`                                                          | Client    | None                                                                |
+| Tool                                                                                                     | `type`                                                                                             | Execution | [Beta header](https://platform.claude.com/docs/en/api/beta-headers) |
+| -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------- | ------------------------------------------------------------------- |
+| [Web search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool)         | `web_search_20260318`<br />`web_search_20260209`<br />`web_search_20250305`                        | Server    | None                                                                |
+| [Web fetch tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool)           | `web_fetch_20260318`<br />`web_fetch_20260309`<br />`web_fetch_20260209`<br />`web_fetch_20250910` | Server    | None                                                                |
+| [Code execution tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool) | `code_execution_20260521`<br />`code_execution_20260120`<br />`code_execution_20250825`            | Server    | None                                                                |
+| [Advisor tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/advisor-tool)               | `advisor_20260301`                                                                                 | Server    | `advisor-tool-2026-03-01`                                           |
+| [Tool search tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool)       | `tool_search_tool_regex_20251119`<br />`tool_search_tool_bm25_20251119`                            | Server    | None                                                                |
+| [MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector)                      | `mcp_toolset`                                                                                      | Server    | `mcp-client-2025-11-20`                                             |
+| [Memory tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/memory-tool)                 | `memory_20250818`                                                                                  | Client    | None                                                                |
+| [Bash tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool)                     | `bash_20250124`                                                                                    | Client    | None                                                                |
+| [Text editor tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/text-editor-tool)       | `text_editor_20250728`<br />`text_editor_20250124`                                                 | Client    | None                                                                |
+| [Computer use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool)     | `computer_toolset_20260801`<br />`computer_20251124`<br />`computer_20250124`                      | Client    | None<br />`computer-use-2025-11-24`<br />`computer-use-2025-01-24`  |
+| [Browser use tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-tool)       | `browser_toolset_20260801`                                                                         | Client    | None                                                                |
 
-For model compatibility, see each tool's page. Supported models vary by tool and by tool version.
+For model compatibility, see each tool's page. Supported models vary by tool and by tool version. To check from your code whether a model accepts web search or code execution, see [Using the Models API](https://platform.claude.com/docs/en/models/overview#using-the-models-api).
 
 <Note>
   The tool search `type` values also accept undated aliases: `tool_search_tool_regex` and `tool_search_tool_bm25`. These resolve to the latest dated version.
@@ -24579,7 +33593,7 @@ Instead of manually handling tool calls, tool results, and conversation manageme
 * Provides type safety and validation
 
 <Note>
-  The tool runner is in beta and available in the [Python SDK](https://github.com/anthropics/anthropic-sdk-python/blob/main/tools.md), [TypeScript SDK](https://github.com/anthropics/anthropic-sdk-typescript/blob/main/helpers.md#tool-helpers), [C# SDK](https://github.com/anthropics/anthropic-sdk-csharp/blob/main/examples/ToolRunnerExample/Program.cs), [Go SDK](https://github.com/anthropics/anthropic-sdk-go/blob/main/tools.md), [Java SDK](https://github.com/anthropics/anthropic-sdk-java/blob/main/anthropic-java-example/src/main/java/com/anthropic/example/BetaToolRunnerExample.java), [PHP SDK](https://github.com/anthropics/anthropic-sdk-php/blob/main/examples/beta/beta_tool_runner.php), and [Ruby SDK](https://github.com/anthropics/anthropic-sdk-ruby/blob/main/helpers.md#3-auto-looping-tool-runner-beta).
+  The tool runner is in beta and available in the [Python SDK](https://github.com/anthropics/anthropic-sdk-python/blob/main/tools.md), [TypeScript SDK](https://github.com/anthropics/anthropic-sdk-typescript/blob/main/helpers.md#tool-helpers), [C# SDK](https://github.com/anthropics/anthropic-sdk-csharp/blob/main/examples/ToolRunnerExample/Program.cs), [Go SDK](https://github.com/anthropics/anthropic-sdk-go/blob/main/tools.md), [Java SDK](https://github.com/anthropics/anthropic-sdk-java/blob/main/anthropic-java-example/src/main/java/com/anthropic/example/BetaToolRunnerRunnableToolExample.java), [PHP SDK](https://github.com/anthropics/anthropic-sdk-php/blob/main/examples/beta/beta_tool_runner.php), and [Ruby SDK](https://github.com/anthropics/anthropic-sdk-ruby/blob/main/helpers.md#3-auto-looping-tool-runner-beta).
 </Note>
 
 ## Basic usage
@@ -24588,7 +33602,7 @@ Define tools using the SDK helpers, then use the tool runner to run them.
 
 Depending on the SDK's tool signature, a tool returns its result as a string or as content blocks (text, image, or document blocks), so a tool can return multimodal results. A returned string becomes a single text content block. To return structured data, such as a JSON object or a number, encode it as a string first.
 
-<Tabs>
+<Tabs exclude="shell">
   <Tab title="Python">
     Use the `@beta_tool` decorator to define tools with type hints and docstrings.
 
@@ -24602,6 +33616,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
 
     client = Anthropic()
 
+
     @beta_tool
     def get_weather(location: str, unit: str = "fahrenheit") -> str:
         """Get the current weather in a given location.
@@ -24611,6 +33626,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
             unit: Temperature unit, either 'celsius' or 'fahrenheit'
         """
         return json.dumps({"temperature": "20°C", "condition": "Sunny"})
+
 
     @beta_tool
     def calculate_sum(a: int, b: int) -> str:
@@ -24622,8 +33638,9 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
         """
         return str(a + b)
 
+
     runner = client.beta.messages.tool_runner(
-        model="claude-opus-5",
+        model="claude-opus-5-5",
         max_tokens=1024,
         tools=[get_weather, calculate_sum],
         messages=[
@@ -24667,7 +33684,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
     });
 
     const finalMessage = await client.beta.messages.toolRunner({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [getWeatherTool],
       messages: [{ role: "user", content: "What's the weather like in Paris?" }]
@@ -24709,7 +33726,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
     });
 
     const finalMessage = await client.beta.messages.toolRunner({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [calculateSumTool],
       messages: [{ role: "user", content: "What's 15 + 27?" }]
@@ -24793,7 +33810,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
     var runner = client.Beta.Messages.ToolRunner(
         new MessageCreateParams
         {
-            Model = Model.ClaudeOpus5,
+            Model = Model.ClaudeOpus5_5,
             MaxTokens = 1024,
             Messages =
             [
@@ -24873,7 +33890,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
     		[]anthropic.BetaTool{getWeather, calculateSum},
     		anthropic.BetaToolRunnerParams{
     			BetaMessageNewParams: anthropic.BetaMessageNewParams{
-    				Model:     anthropic.ModelClaudeOpus5,
+    				Model:     anthropic.ModelClaudeOpus5_5,
     				MaxTokens: 1024,
     				Messages: []anthropic.BetaMessageParam{
     					anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(
@@ -24912,59 +33929,72 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
   </Tab>
 
   <Tab title="Java">
-    Define each tool as a class implementing `Supplier<String>`. Annotate the class with `@JsonClassDescription` for the tool description, and each public field with `@JsonPropertyDescription` for parameter descriptions. The SDK derives the JSON schema, tool name (snake-cased class name), and input parsing from the class, and marks the tool with `strict: true` ([strict tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use)).
+    Define each tool as a `BetaRunnableTool` that pairs an input class with a function that runs when Claude calls the tool. Annotate the input class with `@JsonClassDescription` for the tool description, and each public field with `@JsonPropertyDescription` for parameter descriptions. The SDK derives the JSON schema, tool name (snake-cased class name), and input parsing from the class, and marks the tool with `strict: true` ([strict tool use](https://platform.claude.com/docs/en/agents-and-tools/tool-use/strict-tool-use)).
+
+    The function receives the parsed input as an instance of that class and returns a `BetaToolResultBlockParam.Content`. To return text, wrap it with `BetaToolResultBlockParam.Content.ofString()`. Because the function is a lambda, it can use objects from your application, such as the `WeatherService` in the following example.
 
     ```java
     import com.anthropic.client.AnthropicClient;
     import com.anthropic.client.okhttp.AnthropicOkHttpClient;
+    import com.anthropic.helpers.BetaRunnableTool;
     import com.anthropic.helpers.BetaToolRunner;
     import com.anthropic.models.beta.messages.BetaMessage;
+    import com.anthropic.models.beta.messages.BetaToolResultBlockParam;
     import com.anthropic.models.beta.messages.MessageCreateParams;
     import com.anthropic.models.messages.Model;
     import com.fasterxml.jackson.annotation.JsonClassDescription;
     import com.fasterxml.jackson.annotation.JsonPropertyDescription;
-    import java.util.function.Supplier;
 
     @JsonClassDescription("Get the current weather in a given location")
-    static class GetWeather implements Supplier<String> {
+    static class GetWeather {
         @JsonPropertyDescription("The city and state, e.g. San Francisco, CA")
         public String location;
 
         @JsonPropertyDescription("Temperature unit, either 'celsius' or 'fahrenheit'")
         public String unit;
-
-        @Override
-        public String get() {
-            return "{\"temperature\": \"20°C\", \"condition\": \"Sunny\"}";
-        }
     }
 
     @JsonClassDescription("Add two numbers together")
-    static class CalculateSum implements Supplier<String> {
+    static class CalculateSum {
         @JsonPropertyDescription("First number")
         public double a;
 
         @JsonPropertyDescription("Second number")
         public double b;
+    }
 
-        @Override
-        public String get() {
-            return String.valueOf(a + b);
+    // Stands in for a class your application already has,
+    // such as a database client or an API wrapper.
+    static class WeatherService {
+        String currentWeather(String location, String unit) {
+            return "{\"temperature\": \"20°C\", \"condition\": \"Sunny\"}";
         }
     }
 
     void main() {
         AnthropicClient client = AnthropicOkHttpClient.fromEnv();
+        WeatherService weatherService = new WeatherService();
+
+        // The lambda can use weatherService.
+        BetaRunnableTool getWeather = BetaRunnableTool.of(
+                GetWeather.class,
+                input -> BetaToolResultBlockParam.Content.ofString(
+                        weatherService.currentWeather(input.location, input.unit)));
+
+        BetaRunnableTool calculateSum = BetaRunnableTool.of(
+                CalculateSum.class,
+                input -> BetaToolResultBlockParam.Content.ofString(
+                        String.valueOf(input.a + input.b)));
 
         BetaToolRunner runner = client.beta()
                 .messages()
                 .toolRunner(MessageCreateParams.builder()
-                        .model(Model.CLAUDE_OPUS_5)
+                        .model(Model.CLAUDE_OPUS_5_5)
                         .maxTokens(1024)
                         .addBeta("structured-outputs-2025-11-13")
                         .addUserMessage("What's the weather like in Paris? Also, what's 15 + 27?")
-                        .addTool(GetWeather.class)
-                        .addTool(CalculateSum.class)
+                        .addTool(getWeather)
+                        .addTool(calculateSum)
                         .build());
 
         for (BetaMessage message : runner) {
@@ -25053,7 +34083,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
         messages: [
             ['role' => 'user', 'content' => "What's the weather like in Paris? Also, what's 15 + 27?"],
         ],
-        model: Model::CLAUDE_OPUS_5,
+        model: Model::CLAUDE_OPUS_5_5,
         tools: [$getWeather, $calculateSum],
     );
 
@@ -25115,7 +34145,7 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
 
     # Use the tool runner
     runner = client.beta.messages.tool_runner(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [GetWeather.new, CalculateSum.new],
       messages: [
@@ -25138,11 +34168,11 @@ Depending on the SDK's tool signature, a tool returns its result as a string or 
 
 The tool runner is an iterable that yields messages from Claude. On each iteration, the runner checks whether Claude requested a tool use. If so, it runs the tool and sends the result back to Claude automatically, then yields the next message from Claude to continue your loop.
 
-You can end the loop at any iteration with a `break` statement. The runner loops until Claude returns a message without a tool use, or until it reaches `max_iterations` if you set it.
+You can end the loop at any iteration with a `break` statement. The runner loops until Claude returns a message without a tool use, or until it reaches `max_iterations` (csharp, java, php: `maxIterations`; go: `MaxIterations`) if you set it.
 
 If you don't need intermediate messages, you can get the final message directly:
 
-<Tabs>
+<Tabs exclude="shell">
   <Tab title="Python">
     Use `runner.until_done()` to get the final message.
 
@@ -25150,7 +34180,7 @@ If you don't need intermediate messages, you can get the final message directly:
     client = anthropic.Anthropic()
     # ...
     runner = client.beta.messages.tool_runner(
-        model="claude-opus-5",
+        model="claude-opus-5-5",
         max_tokens=1024,
         tools=[get_weather, calculate_sum],
         messages=[
@@ -25174,7 +34204,7 @@ If you don't need intermediate messages, you can get the final message directly:
     const client = new Anthropic();
     // ...
     const runner = client.beta.messages.toolRunner({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [getWeatherTool],
       messages: [{ role: "user", content: "What's the weather like in Paris?" }]
@@ -25198,7 +34228,7 @@ If you don't need intermediate messages, you can get the final message directly:
     var runner = client.Beta.Messages.ToolRunner(
         new MessageCreateParams
         {
-            Model = Model.ClaudeOpus5,
+            Model = Model.ClaudeOpus5_5,
             MaxTokens = 1024,
             Messages =
             [
@@ -25234,7 +34264,7 @@ If you don't need intermediate messages, you can get the final message directly:
     	[]anthropic.BetaTool{getWeather},
     	anthropic.BetaToolRunnerParams{
     		BetaMessageNewParams: anthropic.BetaMessageNewParams{
-    			Model:     anthropic.ModelClaudeOpus5,
+    			Model:     anthropic.ModelClaudeOpus5_5,
     			MaxTokens: 1024,
     			Messages: []anthropic.BetaMessageParam{
     				anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(
@@ -25266,12 +34296,12 @@ If you don't need intermediate messages, you can get the final message directly:
     BetaToolRunner runner = client.beta()
             .messages()
             .toolRunner(MessageCreateParams.builder()
-                    .model(Model.CLAUDE_OPUS_5)
+                    .model(Model.CLAUDE_OPUS_5_5)
                     .maxTokens(1024)
                     .addBeta("structured-outputs-2025-11-13")
                     .addUserMessage("What's the weather like in Paris? Also, what's 15 + 27?")
-                    .addTool(GetWeather.class)
-                    .addTool(CalculateSum.class)
+                    .addTool(getWeather)
+                    .addTool(calculateSum)
                     .build());
 
     BetaMessage finalMessage = null;
@@ -25295,7 +34325,7 @@ If you don't need intermediate messages, you can get the final message directly:
         messages: [
             ['role' => 'user', 'content' => "What's the weather like in Paris? Also, what's 15 + 27?"],
         ],
-        model: Model::CLAUDE_OPUS_5,
+        model: Model::CLAUDE_OPUS_5_5,
         tools: [$getWeather, $calculateSum],
     );
 
@@ -25315,7 +34345,7 @@ If you don't need intermediate messages, you can get the final message directly:
     client = Anthropic::Client.new
     # ...
     runner = client.beta.messages.tool_runner(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [GetWeather.new, CalculateSum.new],
       messages: [
@@ -25346,6 +34376,8 @@ Within the loop, you can read each response message and modify the runner's stat
 
 ```mermaid
 sequenceDiagram
+  accTitle: The tool runner loop
+  accDescr: In each iteration, the tool runner sends a request with the current state to the Messages API. It receives the response message and yields it to your code. Your loop body runs, then the tool runner resumes. If the message history is unchanged and there are tool calls, it appends the assistant message and the tool results and continues. If there are none, it exits the loop. If the message history changed, it uses your state unchanged.
   participant U as Your code
   participant TR as ToolRunner
   participant API as Messages API
@@ -25370,15 +34402,15 @@ By default, the runner manages conversation state for you: after each tool-call 
 
 You take over by modifying the runner's messages from inside the loop body. The exact method depends on the SDK. See the per-language tabs that follow.
 
-When you take over for an iteration, the runner does not append the assistant message or tool results from that turn. You become responsible for keeping the conversation valid: append the assistant message and a tool result yourself (if you want the turn to count), modify state conditionally so the loop can still exit when there are no tool calls, and pass `max_iterations` to bound the loop. All seven SDKs support `max_iterations`.
+When you take over for an iteration, the runner does not append the assistant message or tool results from that turn. You become responsible for keeping the conversation valid: append the assistant message and a tool result yourself (if you want the turn to count), modify state conditionally so the loop can still exit when there are no tool calls, and pass `max_iterations` (csharp, java, php: `maxIterations`; go: `MaxIterations`) to bound the loop. All seven SDKs support `max_iterations` (csharp, java, php: `maxIterations`; go: `MaxIterations`).
 
-<Tabs>
+<Tabs exclude="shell">
   <Tab title="Python">
     Use `generate_tool_call_response()` to inspect or compute the tool result. Calling `append_messages()` inside the loop tells the runner you're managing history yourself, so include the assistant message and tool result in what you append.
 
     ```python
     runner = client.beta.messages.tool_runner(
-        model="claude-opus-5",
+        model="claude-opus-5-5",
         max_tokens=1024,
         max_iterations=10,
         tools=[get_weather],
@@ -25414,7 +34446,7 @@ When you take over for an iteration, the runner does not append the assistant me
 
     ```typescript
     const runner = client.beta.messages.toolRunner({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       max_iterations: 10,
       tools: [getWeatherTool],
@@ -25454,7 +34486,7 @@ When you take over for an iteration, the runner does not append the assistant me
     var runner = client.Beta.Messages.ToolRunner(
         new MessageCreateParams
         {
-            Model = Model.ClaudeOpus5,
+            Model = Model.ClaudeOpus5_5,
             MaxTokens = 1024,
             Messages = [new() { Role = Role.User, Content = "What's the weather in San Francisco?" }],
         },
@@ -25511,7 +34543,7 @@ When you take over for an iteration, the runner does not append the assistant me
     	[]anthropic.BetaTool{getWeather},
     	anthropic.BetaToolRunnerParams{
     		BetaMessageNewParams: anthropic.BetaMessageNewParams{
-    			Model:     anthropic.ModelClaudeOpus5,
+    			Model:     anthropic.ModelClaudeOpus5_5,
     			MaxTokens: 1024,
     			Messages: []anthropic.BetaMessageParam{
     				anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(
@@ -25549,11 +34581,11 @@ When you take over for an iteration, the runner does not append the assistant me
             .messages()
             .toolRunner(ToolRunnerCreateParams.builder()
                     .initialMessageParams(MessageCreateParams.builder()
-                            .model(Model.CLAUDE_OPUS_5)
+                            .model(Model.CLAUDE_OPUS_5_5)
                             .maxTokens(1024)
                             .addBeta("structured-outputs-2025-11-13")
                             .addUserMessage("Give me a detailed weather report for every major US city.")
-                            .addTool(GetWeather.class)
+                            .addTool(getWeather)
                             .build())
                     .maxIterations(10L)
                     .build());
@@ -25593,7 +34625,7 @@ When you take over for an iteration, the runner does not append the assistant me
         messages: [
             ['role' => 'user', 'content' => 'Give a detailed weather report for every major US city.'],
         ],
-        model: Model::CLAUDE_OPUS_5,
+        model: Model::CLAUDE_OPUS_5_5,
         tools: [$getWeather],
         maxIterations: 10,
     );
@@ -25629,7 +34661,7 @@ When you take over for an iteration, the runner does not append the assistant me
 
     ```ruby
     runner = client.beta.messages.tool_runner(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       max_iterations: 10,
       tools: [GetWeather.new],
@@ -25655,7 +34687,7 @@ When you take over for an iteration, the runner does not append the assistant me
 
 ### Automatic context management
 
-For long-running agentic tasks, the TypeScript and Ruby tool runners support automatic [compaction](https://platform.claude.com/docs/en/build-with-claude/context-editing#client-side-compaction-sdk), which generates summaries when token usage exceeds a threshold so the conversation can continue beyond context window limits. Both SDKs have deprecated this client-side option in favor of [server-side compaction](https://platform.claude.com/docs/en/build-with-claude/compaction-threshold), which works with every SDK's tool runner through the `context_management` request parameter. The Python SDK (v1.0 and later) and the Go, Java, C#, and PHP tool runners don't include client-side compaction. The Python, TypeScript, C#, Go, and Java tool runners have a `compact_before_next_turn()` helper for on-demand compaction, spelled in each language's own casing. See [Compact in a loop](https://platform.claude.com/docs/en/build-with-claude/compaction-on-demand#compact-in-a-loop). Use it or a `context_management` compaction edit on a runner, not both.
+For long-running agentic tasks, the TypeScript and Ruby tool runners support automatic [compaction](https://platform.claude.com/docs/en/build-with-claude/context-editing#client-side-compaction-sdk), which generates summaries when token usage exceeds a threshold so the conversation can continue beyond context window limits. Both SDKs have deprecated this client-side option in favor of [server-side compaction](https://platform.claude.com/docs/en/build-with-claude/compaction-threshold), which works with every SDK's tool runner through the `context_management` request parameter. The Python SDK (v1.0 and later) and the Go, Java, C#, and PHP tool runners don't include client-side compaction. The tool runner has a `compact_before_next_turn()` (typescript, java, php: `compactBeforeNextTurn()`; csharp, go: `CompactBeforeNextTurn()`) helper for on-demand compaction. See [Compact in a loop](https://platform.claude.com/docs/en/build-with-claude/compaction-on-demand#compact-in-a-loop). Use it or a `context_management` compaction edit on a runner, not both.
 
 ### Debugging tool execution
 
@@ -25677,15 +34709,13 @@ The Go, Ruby, C#, and PHP SDKs don't read `ANTHROPIC_LOG`. Outside Python, no SD
 
 By default, tool errors are passed back to Claude, which can then respond appropriately. However, you might want to detect errors and handle them differently, for example, to stop execution early or implement custom error handling.
 
-In the Python and TypeScript SDKs, use the tool response method (`generate_tool_call_response()` in Python, `generateToolResponse()` in TypeScript) to intercept tool results and check for errors before they're sent to Claude. The other SDKs don't expose that hook. Their tabs describe the closest alternative:
-
-<Tabs>
+<Tabs exclude="shell">
   <Tab title="Python">
     ```python
     client = anthropic.Anthropic()
     # ...
     runner = client.beta.messages.tool_runner(
-        model="claude-opus-5",
+        model="claude-opus-5-5",
         max_tokens=1024,
         tools=[my_tool],
         messages=[{"role": "user", "content": "Run my_tool with the query 'hello'."}],
@@ -25708,6 +34738,14 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
         # Process the message normally
         print(message.content)
     ```
+
+    <Note>
+      Call 
+
+      `runner.generate_tool_call_response()`
+
+       in the loop to get the tool results and check them for errors before the runner sends them to Claude.
+    </Note>
   </Tab>
 
   <Tab title="TypeScript">
@@ -25715,7 +34753,7 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
     const client = new Anthropic();
     // ...
     const runner = client.beta.messages.toolRunner({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [myTool],
       messages: [{ role: "user", content: "Run my_tool with the query 'hello'." }]
@@ -25741,6 +34779,14 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
       console.log(message.content);
     }
     ```
+
+    <Note>
+      Call 
+
+      `runner.generateToolResponse()`
+
+       in the loop to get the tool results and check them for errors before the runner sends them to Claude.
+    </Note>
   </Tab>
 
   <Tab title="C#">
@@ -25785,7 +34831,7 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
     var runner = client.Beta.Messages.ToolRunner(
         new MessageCreateParams
         {
-            Model = Model.ClaudeOpus5,
+            Model = Model.ClaudeOpus5_5,
             MaxTokens = 1024,
             Messages =
             [
@@ -25804,7 +34850,7 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
   </Tab>
 
   <Tab title="Java">
-    Intercepting tool errors before they're sent to Claude is not currently supported in the Java SDK. The runner catches any exception thrown from a tool's `get()` method and converts it into a tool result with `is_error: true` automatically. To control the error content, catch the exception inside your tool and return a custom string.
+    Intercepting tool errors before they're sent to Claude is not currently supported in the Java SDK. The runner catches any exception thrown from a tool's function and converts it into a tool result with `is_error: true` automatically. To control the error content, catch the exception inside the function and return your own content.
   </Tab>
 
   <Tab title="PHP">
@@ -25816,7 +34862,7 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
     client = Anthropic::Client.new
     # ...
     runner = client.beta.messages.tool_runner(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [MyTool.new],
       messages: [{role: "user", content: "Run my_tool with the query 'hello'."}]
@@ -25847,6 +34893,18 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
       break if message.stop_reason != :tool_use
     end
     ```
+
+    <Note>
+      The Ruby tool runner has no hook that returns the tool results. Once 
+
+      `runner.next_message`
+
+       returns, they are the last entry in 
+
+      `runner.params[:messages]`
+
+      , so check them there before the next request sends them to Claude.
+    </Note>
   </Tab>
 </Tabs>
 
@@ -25854,15 +34912,13 @@ In the Python and TypeScript SDKs, use the tool response method (`generate_tool_
 
 You can modify tool results before they're sent back to Claude. This is useful for adding metadata such as `cache_control` to enable [prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching) on tool results, or for transforming the tool output.
 
-In the Python and TypeScript SDKs, use the tool response method to get the tool result, then modify it before the runner proceeds. Whether you explicitly append the modified result or mutate it in place depends on the SDK. See the code comments in each tab.
-
-<Tabs>
+<Tabs exclude="shell">
   <Tab title="Python">
     ```python
     client = anthropic.Anthropic()
     # ...
     runner = client.beta.messages.tool_runner(
-        model="claude-opus-5",
+        model="claude-opus-5-5",
         max_tokens=1024,
         tools=[search_documents],
         messages=[
@@ -25889,6 +34945,18 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
 
         print(message.content)
     ```
+
+    <Note>
+      Call 
+
+      `runner.generate_tool_call_response()`
+
+       to get the tool result, modify it, and pass it to 
+
+      `runner.append_messages()`
+
+       so the runner does not append the original.
+    </Note>
   </Tab>
 
   <Tab title="TypeScript">
@@ -25896,7 +34964,7 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
     const client = new Anthropic();
     // ...
     const runner = client.beta.messages.toolRunner({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [searchDocuments],
       messages: [
@@ -25922,6 +34990,14 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
       console.log(message.content);
     }
     ```
+
+    <Note>
+      Call 
+
+      `runner.generateToolResponse()`
+
+       to get the tool result, then modify it in place. The runner appends the modified result for you.
+    </Note>
   </Tab>
 
   <Tab title="C#">
@@ -25958,7 +35034,7 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
     	[]anthropic.BetaTool{searchDocuments},
     	anthropic.BetaToolRunnerParams{
     		BetaMessageNewParams: anthropic.BetaMessageNewParams{
-    			Model:     anthropic.ModelClaudeOpus5,
+    			Model:     anthropic.ModelClaudeOpus5_5,
     			MaxTokens: 1024,
     			Messages: []anthropic.BetaMessageParam{
     				anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock(
@@ -25978,25 +35054,24 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
   </Tab>
 
   <Tab title="Java">
-    To set `cache_control` on a tool result, return `BetaToolResultBlockParam.Content` from the tool instead of `String` and set `cacheControl` on the inner text block. The runner does not currently support setting `cache_control` on the outer `tool_result` block.
+    To set `cache_control` on a tool result, build the returned `BetaToolResultBlockParam.Content` with `ofBlocks()` instead of `ofString()` and set `cacheControl` on the inner text block. The runner does not currently support setting `cache_control` on the outer `tool_result` block.
 
     ```java
     @JsonClassDescription("Look up reference documentation for a topic")
-    static class SearchDocuments implements Supplier<BetaToolResultBlockParam.Content> {
+    static class SearchDocuments {
         @JsonPropertyDescription("The search query")
         public String query;
-
-        @Override
-        public BetaToolResultBlockParam.Content get() {
-            String largeResult = "..."; // a long document worth caching
-            return BetaToolResultBlockParam.Content.ofBlocks(List.of(
-                    BetaToolResultBlockParam.Content.Block.ofText(
-                            BetaTextBlockParam.builder()
-                                    .text(largeResult)
-                                    .cacheControl(BetaCacheControlEphemeral.builder().build())
-                                    .build())));
-        }
     }
+
+    BetaRunnableTool searchDocuments = BetaRunnableTool.of(SearchDocuments.class, input -> {
+        String largeResult = "..."; // a long document worth caching
+        return BetaToolResultBlockParam.Content.ofBlocks(List.of(
+                BetaToolResultBlockParam.Content.Block.ofText(
+                        BetaTextBlockParam.builder()
+                                .text(largeResult)
+                                .cacheControl(BetaCacheControlEphemeral.builder().build())
+                                .build())));
+    });
     ```
   </Tab>
 
@@ -26011,7 +35086,7 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
         messages: [
             ['role' => 'user', 'content' => 'Search for information about the climate of San Francisco.'],
         ],
-        model: Model::CLAUDE_OPUS_5,
+        model: Model::CLAUDE_OPUS_5_5,
         tools: [$searchDocuments],
     );
 
@@ -26047,7 +35122,7 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
     client = Anthropic::Client.new
     # ...
     runner = client.beta.messages.tool_runner(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [SearchDocuments.new],
       messages: [{role: "user", content: "Search for information about the climate of San Francisco"}]
@@ -26074,6 +35149,18 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
       break if message.stop_reason != :tool_use
     end
     ```
+
+    <Note>
+      The Ruby tool runner has no hook that returns the tool results. Once 
+
+      `runner.next_message`
+
+       returns, they are the last entry in 
+
+      `runner.params[:messages]`
+
+      , so modify them there before the next request sends them to Claude.
+    </Note>
   </Tab>
 </Tabs>
 
@@ -26085,7 +35172,7 @@ In the Python and TypeScript SDKs, use the tool response method to get the tool 
 
 Enable streaming to process each turn's response incrementally. Each iteration yields a stream object that you can iterate for events.
 
-<Tabs>
+<Tabs exclude="shell">
   <Tab title="Python">
     Set `stream=True` and use `get_final_message()` to get the accumulated message.
 
@@ -26093,7 +35180,7 @@ Enable streaming to process each turn's response incrementally. Each iteration y
     client = anthropic.Anthropic()
     # ...
     runner = client.beta.messages.tool_runner(
-        model="claude-opus-5",
+        model="claude-opus-5-5",
         max_tokens=1024,
         tools=[calculate_sum],
         messages=[{"role": "user", "content": "What is 15 + 27?"}],
@@ -26117,7 +35204,7 @@ Enable streaming to process each turn's response incrementally. Each iteration y
     const client = new Anthropic();
     // ...
     const runner = client.beta.messages.toolRunner({
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       messages: [{ role: "user", content: "What is the weather in San Francisco?" }],
       tools: [getWeatherTool],
@@ -26145,7 +35232,7 @@ Enable streaming to process each turn's response incrementally. Each iteration y
     var runner = client.Beta.Messages.ToolRunner(
         new MessageCreateParams
         {
-            Model = Model.ClaudeOpus5,
+            Model = Model.ClaudeOpus5_5,
             MaxTokens = 1024,
             Messages =
             [
@@ -26183,7 +35270,7 @@ Enable streaming to process each turn's response incrementally. Each iteration y
     	[]anthropic.BetaTool{calculateSum},
     	anthropic.BetaToolRunnerParams{
     		BetaMessageNewParams: anthropic.BetaMessageNewParams{
-    			Model:     anthropic.ModelClaudeOpus5,
+    			Model:     anthropic.ModelClaudeOpus5_5,
     			MaxTokens: 1024,
     			Messages: []anthropic.BetaMessageParam{
     				anthropic.NewBetaUserMessage(anthropic.NewBetaTextBlock("What is 15 + 27?")),
@@ -26226,11 +35313,11 @@ Enable streaming to process each turn's response incrementally. Each iteration y
         BetaToolRunner runner = client.beta()
                 .messages()
                 .toolRunner(MessageCreateParams.builder()
-                        .model(Model.CLAUDE_OPUS_5)
+                        .model(Model.CLAUDE_OPUS_5_5)
                         .maxTokens(1024)
                         .addBeta("structured-outputs-2025-11-13")
                         .addUserMessage("What is 15 + 27?")
-                        .addTool(CalculateSum.class)
+                        .addTool(calculateSum)
                         .build());
 
         for (StreamResponse<BetaRawMessageStreamEvent> stream : runner.streaming()) {
@@ -26253,7 +35340,7 @@ Enable streaming to process each turn's response incrementally. Each iteration y
     client = Anthropic::Client.new
     # ...
     runner = client.beta.messages.tool_runner(
-      model: "claude-opus-5",
+      model: "claude-opus-5-5",
       max_tokens: 1024,
       tools: [CalculateSum.new],
       messages: [{role: "user", content: "What is 15 + 27?"}]
@@ -26336,20 +35423,24 @@ Tool search runs as a server-side tool, but you can also implement your own clie
 
 Both tool search variants are available on the following models:
 
-| Model                                          | Tool versions                                                       |
-| ---------------------------------------------- | ------------------------------------------------------------------- |
-| Claude Fable 5.1 (claude-fable-5-1)            | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Mythos 5.1 (claude-mythos-5-1)          | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Fable 5 (claude-fable-5)                | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Mythos 5 (claude-mythos-5)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 5 (claude-opus-5)                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.8 (claude-opus-4-8)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.7 (claude-opus-4-7)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.6 (claude-opus-4-6)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Sonnet 4.6 (claude-sonnet-4-6)          | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.5 (claude-opus-4-5-20251101)     | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Haiku 4.5 (claude-haiku-4-5-20251001)   | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Model                                                                                                                              | Tool versions                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Claude Fable 5.1 (claude-fable-5-1)                                                                                                | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Mythos 5.1 (claude-mythos-5-1)                                                                                              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Fable 5 (claude-fable-5)                                                                                                    | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Mythos 5 (claude-mythos-5)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 5.5 (claude-opus-5-5)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 5 (claude-opus-5)                                                                                                      | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 5.5 (claude-sonnet-5-5)                                                                                              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 5 (claude-sonnet-5)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Haiku 5.5 (claude-haiku-5-5)                                                                                                | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.8 (claude-opus-4-8)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.7 (claude-opus-4-7)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.6 (claude-opus-4-6)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 4.6 (claude-sonnet-4-6)                                                                                              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.5 (claude-opus-4-5-20251101)                                                                                         | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Haiku 4.5 (claude-haiku-4-5-20251001)                                                                                       | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
 
 Claude Opus 4.1 and earlier models don't support the tool search tool.
 
@@ -26381,7 +35472,7 @@ The following example includes the tool search tool and two deferred tools:
       -H "anthropic-version: 2023-06-01" \
       -H "content-type: application/json" \
       -d '{
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
           "max_tokens": 2048,
           "messages": [
               {
@@ -26432,7 +35523,7 @@ The following example includes the tool search tool and two deferred tools:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 2048
   messages:
     - role: user
@@ -26472,7 +35563,7 @@ The following example includes the tool search tool and two deferred tools:
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=2048,
       messages=[{"role": "user", "content": "What is the weather in San Francisco?"}],
       tools=[
@@ -26513,7 +35604,7 @@ The following example includes the tool search tool and two deferred tools:
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 2048,
     messages: [
       {
@@ -26569,7 +35660,7 @@ The following example includes the tool search tool and two deferred tools:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 2048,
       Messages = [
           new() {
@@ -26623,7 +35714,7 @@ The following example includes the tool search tool and two deferred tools:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 2048,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("What is the weather in San Francisco?")),
@@ -26696,7 +35787,7 @@ The following example includes the tool search tool and two deferred tools:
           .build();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(2048L)
           .addUserMessage("What is the weather in San Francisco?")
           .addTool(ToolSearchToolRegex20251119.builder()
@@ -26729,7 +35820,7 @@ The following example includes the tool search tool and two deferred tools:
       messages: [
           ['role' => 'user', 'content' => 'What is the weather in San Francisco?'],
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'tool_search_tool_regex_20251119',
@@ -26777,7 +35868,7 @@ The following example includes the tool search tool and two deferred tools:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 2048,
     messages: [
       { role: "user", content: "What is the weather in San Francisco?" }
@@ -27172,7 +36263,7 @@ Tool search isn't metered as a separate server tool. The response's `usage.serve
 
 ---
 
-## To learn how to combine `defer_loading` with `cache_control` breakpoints, see the [Tool search tool prompt caching guidance](https://platform.claude.com/docs/en/agents-and-tools/too
+## To learn how to combine `defer_loading` with `cache_control`
 
 - 官方原文：https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-use-with-prompt-caching
 - 存档：`01-Raw/VibeCoding/anthropic-docs/anthropic-docs-en-agents-and-tools-tool-use-tool-use-with-prompt-caching.md`
@@ -27281,6 +36372,7 @@ This behavior only applies when your request already has at least one `cache_con
   </Card>
 </CardGroup>
 
+
 ### Context management
 
 ---
@@ -27342,7 +36434,7 @@ See [Thinking blocks cannot be modified](https://platform.claude.com/docs/en/api
 | -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Claude refuses to act on a tool result, or asks the user to confirm instructions that came from it | Your own instructions are being delivered inside the `tool_result` content | Claude is trained to treat instructions inside tool results as potentially untrusted third-party content. Move your instructions out of the tool result: send them in a `user` turn after the `tool_result` block, or, on supported models, in a [mid-conversation system message](https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages). Keep the tool result to just the data. See [Mitigate jailbreaks and prompt injections](https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks#indirect-prompt-injection). |
 
-## JSON escaping differences (Opus 4.6+)
+## JSON escaping differences between model versions
 
 | Symptom                                                  | Cause                                                             | Fix                                                                                            |
 | -------------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
@@ -27377,7 +36469,7 @@ See [Thinking blocks cannot be modified](https://platform.claude.com/docs/en/api
 
 The web fetch tool allows Claude to retrieve full content from specified web pages and PDF documents.
 
-The latest web fetch tool version (`web_fetch_20260318`) supports **dynamic filtering**: Claude can write and execute code to filter fetched content before it reaches the context window, keeping only relevant information and discarding the rest. This reduces token consumption while maintaining response quality. Dynamic filtering is available with Claude Fable 5.1, Claude Mythos 5.1, Claude Fable 5, Claude Mythos 5, [Claude Mythos Preview](https://anthropic.com/glasswing), Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 5, and Claude Sonnet 4.6. `web_fetch_20260318` also adds [response inclusion](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool#response-inclusion) control for agentic workflows. The previous versions (`web_fetch_20260309` for dynamic filtering and [cache bypass](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool#cache-bypass), `web_fetch_20260209` for dynamic filtering only, `web_fetch_20250910` for basic fetch) remain available.
+The latest web fetch tool version (`web_fetch_20260318`) supports **dynamic filtering**: Claude can write and execute code to filter fetched content before it reaches the context window, keeping only relevant information and discarding the rest. This reduces token consumption while maintaining response quality. Dynamic filtering is available with Claude 4.6 and later models and [Claude Mythos Preview](https://anthropic.com/glasswing). `web_fetch_20260318` also adds [response inclusion](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool#response-inclusion) control for agentic workflows. The previous versions (`web_fetch_20260309` for dynamic filtering and [cache bypass](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool#cache-bypass), `web_fetch_20260209` for dynamic filtering only, `web_fetch_20250910` for basic fetch) remain available.
 
 Web fetch (with and without dynamic filtering) is available on the Claude API, [Claude Platform on AWS](https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws), and [Microsoft Foundry](https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry). On Microsoft Foundry, deployments [hosted on Azure](https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry#additional-features-not-supported-when-hosted-on-azure) support only the basic web fetch tool (`web_fetch_20250910`, without dynamic filtering). Deployments hosted on Anthropic support all versions. Web fetch is not currently available on Amazon Bedrock or Google Cloud.
 
@@ -27394,7 +36486,9 @@ For Zero Data Retention eligibility and the `allowed_callers` workaround, see [S
 <Warning>
   Enabling the web fetch tool in environments where Claude processes untrusted input alongside sensitive data poses data exfiltration risks. Only use this tool in trusted environments or when handling non-sensitive data.
 
-  To minimize exfiltration risks, Claude cannot fetch URLs that appear only in its own output. Claude can only fetch URLs that have previously appeared in the conversation: URLs in user messages, URLs in client-side tool results (even when a result echoes text that Claude generated), and URLs from previous web search or web fetch results (see [URL validation](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool#url-validation)). However, there is still residual risk that you should carefully consider when using this tool.
+  To minimize exfiltration risks, Claude cannot fetch URLs that appear only in its own output. Claude can only fetch URLs that have previously appeared in the conversation: URLs in user messages, URLs in client-side tool results (even when a result echoes text that Claude generated), and URLs from previous web search or web fetch results (see [URL validation](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool#url-validation)). Claude also cannot fetch a URL that appears to contain a credential, such as an API key or a password, unless that credential appears in the system prompt or in the text of a user message.
+
+  However, there is still residual risk that you should carefully consider when using this tool.
 
   If data exfiltration is a concern, consider:
 
@@ -27453,7 +36547,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-4-8",
+      "model": "claude-opus-5-5",
       "max_tokens": 4096,
       "messages": [
         {
@@ -27470,7 +36564,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-4-8
+  model: claude-opus-5-5
   max_tokens: 4096
   messages:
     - role: user
@@ -27487,7 +36581,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-4-8",
+      model="claude-opus-5-5",
       max_tokens=4096,
       messages=[
           {
@@ -27504,7 +36598,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       {
@@ -27524,7 +36618,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus4_8,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 4096,
       Messages = [new() { Role = Role.User, Content = "Fetch the content at https://example.com/research-paper and extract the key findings." }],
       Tools = [new ToolUnion(new WebFetchTool20260318())]
@@ -27538,7 +36632,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus4_8,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 4096,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Fetch the content at https://example.com/research-paper and extract the key findings.")),
@@ -27560,7 +36654,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_4_8)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(4096L)
           .addUserMessage("Fetch the content at https://example.com/research-paper and extract the key findings.")
           .addTool(WebFetchTool20260318.builder().build())
@@ -27579,7 +36673,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
       messages: [
           ['role' => 'user', 'content' => 'Fetch the content at https://example.com/research-paper and extract the key findings.']
       ],
-      model: 'claude-opus-4-8',
+      model: 'claude-opus-5-5',
       tools: [[
           'type' => 'web_fetch_20260318',
           'name' => 'web_fetch',
@@ -27592,7 +36686,7 @@ To enable dynamic filtering, use `web_fetch_20260209` or any later version. The 
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       { role: "user", content: "Fetch the content at https://example.com/research-paper and extract the key findings." }
@@ -27617,7 +36711,7 @@ Provide the web fetch tool in your API request:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-4-8",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "messages": [
         {
@@ -27635,7 +36729,7 @@ Provide the web fetch tool in your API request:
 
   ```bash CLI
   ant messages create \
-    --model claude-opus-4-8 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --message '{role: user, content: "Please analyze the content at https://example.com/article"}' \
     --tool '{type: web_fetch_20250910, name: web_fetch, max_uses: 5}'
@@ -27645,7 +36739,7 @@ Provide the web fetch tool in your API request:
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-4-8",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[
           {
@@ -27662,7 +36756,7 @@ Provide the web fetch tool in your API request:
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -27687,7 +36781,7 @@ Provide the web fetch tool in your API request:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus4_8,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [new() { Role = Role.User, Content = "Please analyze the content at https://example.com/article" }],
       Tools = [new ToolUnion(new WebFetchTool20250910() { MaxUses = 5 })]
@@ -27701,7 +36795,7 @@ Provide the web fetch tool in your API request:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus4_8,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Please analyze the content at https://example.com/article")),
@@ -27725,7 +36819,7 @@ Provide the web fetch tool in your API request:
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_4_8)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessage("Please analyze the content at https://example.com/article")
           .addTool(WebFetchTool20250910.builder()
@@ -27746,7 +36840,7 @@ Provide the web fetch tool in your API request:
       messages: [
           ['role' => 'user', 'content' => 'Please analyze the content at https://example.com/article']
       ],
-      model: 'claude-opus-4-8',
+      model: 'claude-opus-5-5',
       tools: [[
           'type' => 'web_fetch_20250910',
           'name' => 'web_fetch',
@@ -27760,7 +36854,7 @@ Provide the web fetch tool in your API request:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       { role: "user", content: "Please analyze the content at https://example.com/article" }
@@ -27813,7 +36907,7 @@ The `max_uses` parameter limits the number of web fetches performed. Failed fetc
 
 For domain filtering with `allowed_domains` and `blocked_domains`, see [Server tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools#domain-filtering).
 
-On [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview), set these fields on the `web_fetch` entry of the agent toolset, where each listed domain must be a plain hostname with no path; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+On [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview), set these fields on the `web_fetch` entry of the agent toolset, where each listed domain must be a plain hostname with no path; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions).
 
 ### Content limits
 
@@ -27823,7 +36917,7 @@ The `max_content_tokens` parameter limits the amount of content included in the 
   The `max_content_tokens` parameter limit is approximate. The actual number of input tokens used can vary by a small amount.
 </Note>
 
-On Claude Managed Agents, the `web_fetch` entry of the agent toolset also accepts `max_content_tokens`; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+On Claude Managed Agents, the `web_fetch` entry of the agent toolset also accepts `max_content_tokens`; see the [web tool settings](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions#settings).
 
 ### Cache bypass
 
@@ -28001,7 +37095,7 @@ These are the possible error codes:
 
 * `invalid_tool_input`: Invalid tool input, such as a malformed URL or a non-HTTP(S) scheme
 * `url_too_long`: URL exceeds maximum length (250 characters)
-* `url_not_allowed`: URL blocked by domain filtering rules (including your organization's settings) or by Anthropic-side restrictions, such as private addresses and `robots.txt`
+* `url_not_allowed`: URL blocked by domain filtering rules (including your organization's settings) or by Anthropic-side restrictions, such as private addresses, `robots.txt`, and URLs that appear to contain a credential you did not provide
 * `url_not_in_prior_context`: URL did not appear earlier in the conversation (see [URL validation](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool#url-validation))
 * `url_not_accessible`: Failed to fetch content (HTTP error)
 * `too_many_requests`: Rate limit exceeded
@@ -28019,6 +37113,8 @@ For security reasons, the web fetch tool can only fetch URLs that have previousl
 
 The tool cannot fetch URLs that appear only in Claude's own output or only in the system prompt. To make a URL from the system prompt fetchable, also include it in a user message. Results of other server-side tools, such as [code execution](https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool), the [MCP connector](https://platform.claude.com/docs/en/agents-and-tools/mcp-connector), or [tool search](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool), are not an allowed source either. Client-side tool results are an allowed source even when they echo text that Claude produced (for example, a command that prints its input, or an error message that quotes it).
 
+The tool also refuses a URL that appears to contain a credential, such as an API key or a password, unless that credential appears in the system prompt or in the text of a user message. A credential that appears only in a tool result does not count. The result is a `url_not_allowed` error. To fetch such a URL, include it in a user message.
+
 ## Combined search and fetch
 
 When both the web search and web fetch tools are enabled, and the user names a specific page or document without providing a URL (for example, "read the README from the anthropics/anthropic-sdk-python repository"), Claude uses web search to locate it, then fetches the result. The following example asks for a search and an analysis in one request:
@@ -28030,7 +37126,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-4-8",
+      "model": "claude-opus-5-5",
       "max_tokens": 4096,
       "messages": [
         {
@@ -28056,7 +37152,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-4-8
+  model: claude-opus-5-5
   max_tokens: 4096
   messages:
     - role: user
@@ -28079,7 +37175,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-4-8",
+      model="claude-opus-5-5",
       max_tokens=4096,
       messages=[
           {
@@ -28104,7 +37200,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       {
@@ -28132,7 +37228,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus4_8,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 4096,
       Messages = [new() { Role = Role.User, Content = "Find recent articles about quantum computing and analyze the most relevant one in detail" }],
       Tools = [
@@ -28149,7 +37245,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus4_8,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 4096,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Find recent articles about quantum computing and analyze the most relevant one in detail")),
@@ -28180,7 +37276,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_4_8)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(4096L)
           .addUserMessage("Find recent articles about quantum computing and analyze the most relevant one in detail")
           .addTool(WebSearchTool20250305.builder()
@@ -28205,7 +37301,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
       messages: [
           ['role' => 'user', 'content' => 'Find recent articles about quantum computing and analyze the most relevant one in detail']
       ],
-      model: 'claude-opus-4-8',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'web_search_20250305',
@@ -28227,7 +37323,7 @@ When both the web search and web fetch tools are enabled, and the user names a s
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-4-8",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       { role: "user", content: "Find recent articles about quantum computing and analyze the most relevant one in detail" }
@@ -28369,6 +37465,8 @@ For web search's Zero Data Retention eligibility and the related `allowed_caller
 
 For model support, see the [Tool reference](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference).
 
+To check whether a model accepts web search before you send a request, read its `capabilities.server_tools.web_search.supported` value from the Models API. [Using the Models API](https://platform.claude.com/docs/en/models/overview#using-the-models-api) describes the field.
+
 ## How web search works
 
 When you add the web search tool to your API request:
@@ -28416,7 +37514,7 @@ The following examples use `web_search_20260318`:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 4096,
       "messages": [
         {
@@ -28433,7 +37531,7 @@ The following examples use `web_search_20260318`:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 4096
   messages:
     - role: user
@@ -28450,7 +37548,7 @@ The following examples use `web_search_20260318`:
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=4096,
       messages=[
           {
@@ -28467,7 +37565,7 @@ The following examples use `web_search_20260318`:
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       {
@@ -28487,7 +37585,7 @@ The following examples use `web_search_20260318`:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 4096,
       Messages = [new() { Role = Role.User, Content = "Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio." }],
       Tools = [new ToolUnion(new WebSearchTool20260318())]
@@ -28501,7 +37599,7 @@ The following examples use `web_search_20260318`:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 4096,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio.")),
@@ -28523,7 +37621,7 @@ The following examples use `web_search_20260318`:
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(4096L)
           .addUserMessage("Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio.")
           .addTool(WebSearchTool20260318.builder().build())
@@ -28542,7 +37640,7 @@ The following examples use `web_search_20260318`:
       messages: [
           ['role' => 'user', 'content' => 'Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio.'],
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'web_search_20260318',
@@ -28558,7 +37656,7 @@ The following examples use `web_search_20260318`:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       { role: "user", content: "Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio." }
@@ -28575,10 +37673,10 @@ The following examples use `web_search_20260318`:
 ## How to use web search
 
 <Note>
-  Web search is enabled for your organization unless an administrator has disabled it in the [Claude Console](https://platform.claude.com/settings/privacy), where they can also restrict which domains it searches. If it's disabled, a request that includes the tool fails with a 400 `invalid_request_error` that says web search is not enabled, rather than an [error code](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool#errors) inside a search result.
+  Web search is enabled for your organization unless an administrator has disabled it in the [Claude Console](https://platform.claude.com/settings/capabilities), where they can also restrict which domains it searches. If it's disabled, a request that includes the tool fails with a 400 `invalid_request_error` that says web search is not enabled, rather than an [error code](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool#errors) inside a search result.
 </Note>
 
-These organization-level settings in the Claude Console apply to Messages API requests only. [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) sessions use only the per-tool `allowed_domains` and `blocked_domains` lists on the agent toolset; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+These organization-level settings in the Claude Console apply to Messages API requests only. [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) sessions use the per-tool `allowed_domains` and `blocked_domains` lists on the agent toolset instead; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions). For a session in a cloud environment with `limited` networking, the environment's `allowed_hosts` also applies to `web_search` and `web_fetch`; see [Networking](https://platform.claude.com/docs/en/managed-agents/environments#networking). The per-tool lists restrict these tools further, within the hosts that `allowed_hosts` allows.
 
 Provide the web search tool in your API request:
 
@@ -28589,7 +37687,7 @@ Provide the web search tool in your API request:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "messages": [
         {
@@ -28607,7 +37705,7 @@ Provide the web search tool in your API request:
 
   ```bash CLI
   ant messages create \
-    --model claude-opus-5 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --message '{role: user, content: What is the weather in NYC?}' \
     --tool '{type: web_search_20250305, name: web_search, max_uses: 5}'
@@ -28617,7 +37715,7 @@ Provide the web search tool in your API request:
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[{"role": "user", "content": "What's the weather in NYC?"}],
       tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
@@ -28629,7 +37727,7 @@ Provide the web search tool in your API request:
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -28654,7 +37752,7 @@ Provide the web search tool in your API request:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [new() { Role = Role.User, Content = "What's the weather in NYC?" }],
       Tools = [new ToolUnion(new WebSearchTool20250305() { MaxUses = 5 })]
@@ -28668,7 +37766,7 @@ Provide the web search tool in your API request:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("What's the weather in NYC?")),
@@ -28692,7 +37790,7 @@ Provide the web search tool in your API request:
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessage("What's the weather in NYC?")
           .addTool(WebSearchTool20250305.builder()
@@ -28713,7 +37811,7 @@ Provide the web search tool in your API request:
       messages: [
           ['role' => 'user', 'content' => "What's the weather in NYC?"],
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'web_search_20250305',
@@ -28730,7 +37828,7 @@ Provide the web search tool in your API request:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       { role: "user", content: "What's the weather in NYC?" }
@@ -28789,7 +37887,7 @@ Provide `allowed_domains` or `blocked_domains`, not both. If a request includes 
 
 For the full domain filtering rules, see [Domain filtering](https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools#domain-filtering) in the Server tools guide.
 
-On [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview), set these fields on the `web_search` entry of the agent toolset; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+On [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview), set these fields on the `web_search` entry of the agent toolset; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions).
 
 ### Localization
 
@@ -28801,7 +37899,7 @@ The `user_location` parameter allows you to localize search results based on a u
 * `country`: The two-letter [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. The API rejects unsupported country codes with a 400 error.
 * `timezone`: The [IANA timezone ID](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
-On Claude Managed Agents, the `web_search` entry of the agent toolset accepts a `user_location` object with the same fields. The API rejects an unsupported `country` code with a 400 error when you create or update the agent, or when you create or update a session that supplies the setting. See [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+On Claude Managed Agents, the `web_search` entry of the agent toolset accepts a `user_location` object with the same fields. The API rejects an unsupported `country` code with a 400 error when you create or update the agent, or when you create or update a session that supplies the setting. See the [web tool settings](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions#settings).
 
 ### Response inclusion
 
@@ -28989,7 +38087,7 @@ data: {"type": "content_block_start", "index": 2, "content_block": {"type": "web
 
 You can include the web search tool in the [Messages Batches API](https://platform.claude.com/docs/en/build-with-claude/batch-processing). Web search tool calls through the Messages Batches API are priced the same as those in regular Messages API requests.
 
-To protect shared capacity, the Batches API throttles web search requests per organization, so large batches with many searches might take longer to complete. You can see your organization's web search rate limit on the [Rate limits](https://platform.claude.com/settings/limits) page in the Claude Console. To request a higher limit, contact sales from that page.
+To protect shared capacity, the Batches API throttles web search requests per organization, so large batches with many searches might take longer to complete. You can see your organization's web search rate limit on the [Rate limits](https://platform.claude.com/usage/limits) page in the Claude Console. To request a higher limit, contact sales from that page.
 
 ## Usage and pricing
 
@@ -29029,4 +38127,6 @@ Each web search counts as one use, regardless of the number of results returned.
   </Card>
 </CardGroup>
 
+
 ### Tool infrastructure
+

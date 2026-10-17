@@ -22,7 +22,7 @@ state:
 related: null
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:35+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations
 
 Even the most advanced language models, like Claude, can sometimes generate text that is factually incorrect or inconsistent with the given context. This phenomenon, known as "hallucination," can undermine the reliability of your AI-driven solutions. This guide will explore techniques to minimize hallucinations and ensure Claude's outputs are accurate and trustworthy.
@@ -75,7 +75,7 @@ Even the most advanced language models, like Claude, can sometimes generate text
 
 ## Advanced techniques
 
-* **Chain-of-thought verification**: Ask Claude to explain its reasoning step-by-step before giving a final answer. This can reveal faulty logic or assumptions.
+* **Chain-of-thought verification**: Use [thinking](https://platform.claude.com/docs/en/build-with-claude/thinking) with `display: "summarized"`, and review the summarized reasoning in the `thinking` blocks when an answer looks wrong. This can reveal faulty logic or assumptions.
 
 * **Best-of-N verification**: Run Claude through the same prompt multiple times and compare the outputs. Inconsistencies across outputs could indicate hallucinations.
 

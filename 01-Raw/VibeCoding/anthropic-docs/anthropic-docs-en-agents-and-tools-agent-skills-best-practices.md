@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:30+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices
 
 Good Skills are concise, well-structured, and tested with real usage. This guide provides practical authoring decisions to help you write Skills that Claude can discover and use effectively.
@@ -276,11 +276,15 @@ SKILL.md serves as an overview that points Claude to detailed materials as neede
 
 A basic Skill starts with just a SKILL.md file containing metadata and instructions:
 
-![Simple SKILL.md file showing YAML frontmatter and markdown body](https://platform.claude.com/docs/images/agent-skills-simple-file.png)
+<Frame>
+  ![Simple SKILL.md file showing YAML frontmatter and markdown body](https://platform.claude.com/docs/images/agent-skills-simple-file.svg)
+</Frame>
 
 As your Skill grows, you can bundle additional content that Claude loads only when needed:
 
-![Bundling additional reference files like reference.md and forms.md.](https://platform.claude.com/docs/images/agent-skills-bundling-content.png)
+<Frame>
+  ![Bundling additional reference files like reference.md and forms.md.](https://platform.claude.com/docs/images/agent-skills-bundling-content.svg)
+</Frame>
 
 The complete Skill directory structure might look like this:
 
@@ -951,7 +955,9 @@ Even if Claude could write a script, pre-made scripts offer advantages:
 * Save time (no code generation required)
 * Ensure consistency across uses
 
-![Bundling executable scripts alongside instruction files](https://platform.claude.com/docs/images/agent-skills-executable-scripts.png)
+<Frame>
+  ![Bundling executable scripts alongside instruction files](https://platform.claude.com/docs/images/agent-skills-executable-scripts.svg)
+</Frame>
 
 The preceding diagram shows how executable scripts work alongside instruction files. The instruction file (forms.md) references the script, and Claude can execute it without loading its contents into context.
 

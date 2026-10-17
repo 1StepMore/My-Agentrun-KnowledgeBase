@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/go
 
 The Anthropic Go library provides convenient access to the Claude API from applications written in Go.
@@ -64,7 +64,7 @@ func main() {
 		Messages: []anthropic.MessageParam{
 			anthropic.NewUserMessage(anthropic.NewTextBlock("What is a quaternion?")),
 		},
-		Model: anthropic.ModelClaudeOpus5,
+		Model: anthropic.ModelClaudeOpus5_5,
 	})
 	if err != nil {
 		panic(err.Error())
@@ -87,7 +87,7 @@ For authentication options including Workload Identity Federation, see [Authenti
     }
 
     message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-    	Model:     anthropic.ModelClaudeOpus5,
+    	Model:     anthropic.ModelClaudeOpus5_5,
     	Messages:  messages,
     	MaxTokens: 1024,
     })
@@ -103,7 +103,7 @@ For authentication options including Workload Identity Federation, see [Authenti
     ))
 
     message, err = client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-    	Model:     anthropic.ModelClaudeOpus5,
+    	Model:     anthropic.ModelClaudeOpus5_5,
     	Messages:  messages,
     	MaxTokens: 1024,
     })
@@ -118,7 +118,7 @@ For authentication options including Workload Identity Federation, see [Authenti
   <Accordion title="System prompts">
     ```go
     message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-    	Model:     anthropic.ModelClaudeOpus5,
+    	Model:     anthropic.ModelClaudeOpus5_5,
     	MaxTokens: 1024,
     	System: []anthropic.TextBlockParam{
     		{Text: "Be very serious at all times."},
@@ -137,7 +137,7 @@ For authentication options including Workload Identity Federation, see [Authenti
     content := "What is a quaternion?"
 
     stream := client.Messages.NewStreaming(context.TODO(), anthropic.MessageNewParams{
-    	Model:     anthropic.ModelClaudeOpus5,
+    	Model:     anthropic.ModelClaudeOpus5_5,
     	MaxTokens: 1024,
     	Messages: []anthropic.MessageParam{
     		anthropic.NewUserMessage(anthropic.NewTextBlock(content)),
@@ -188,7 +188,7 @@ For authentication options including Workload Identity Federation, see [Authenti
 
     for {
     	message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-    		Model:     anthropic.ModelClaudeOpus5,
+    		Model:     anthropic.ModelClaudeOpus5_5,
     		MaxTokens: 1024,
     		Messages:  messages,
     		Tools:     tools,
@@ -256,13 +256,13 @@ For authentication options including Workload Identity Federation, see [Authenti
 
 ## Request fields
 
-The anthropic library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson) semantics from the Go 1.24+ `encoding/json` release for request fields.
+The Anthropic library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson) semantics from the Go 1.24+ `encoding/json` release for request fields.
 
 Required primitive fields (such as `int64` or `string`) feature the tag `` `json:"...,required"` ``. These fields are always serialized, even their zero values.
 
 Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, such as `anthropic.String(string)` or `anthropic.Int(int64)`.
 
-Any `param.Opt[T]`, map, slice, struct or string enum uses the tag `` `json:"...,omitzero"` ``. Its zero value is considered omitted.
+Any `param.Opt[T]`, map, slice, struct, or string enum uses the tag `` `json:"...,omitzero"` ``. Its zero value is considered omitted.
 
 The `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
 
@@ -312,7 +312,7 @@ custom := param.Override[anthropic.FooParams](12)
 
 ### Request unions
 
-Unions are represented as a struct with fields prefixed by "Of" for each of its variants, only one field can be non-zero. The non-zero field will be serialized.
+Unions are represented as a struct with fields prefixed by "Of" for each of its variants. Only one field can be non-zero. The non-zero field will be serialized.
 
 Subproperties of the union can be accessed through methods on the union struct. These methods return a mutable pointer to the underlying data, if present.
 
@@ -421,7 +421,7 @@ res.JSON.Age.Raw() == ""               // true
 res.JSON.Age.Raw() == respjson.Omitted // true
 ```
 
-These `.JSON` structs also include an `ExtraFields` map containing any properties in the json response that were not specified in the struct. This can be useful for API features not yet present in the SDK.
+These `.JSON` structs also include an `ExtraFields` map containing any properties in the JSON response that were not specified in the struct. This can be useful for API features not yet present in the SDK.
 
 ```go
 body := res.JSON.ExtraFields["my_unexpected_field"].Raw()
@@ -480,7 +480,7 @@ _, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
 		}},
 		Role: anthropic.MessageParamRoleUser,
 	}},
-	Model: anthropic.ModelClaudeOpus5,
+	Model: anthropic.ModelClaudeOpus5_5,
 })
 if err != nil {
 	var apierr *anthropic.Error
@@ -521,7 +521,7 @@ client := anthropic.NewClient(
 				}},
 				Role: anthropic.MessageParamRoleUser,
 			}},
-			Model: anthropic.ModelClaudeOpus5,
+			Model: anthropic.ModelClaudeOpus5_5,
 		},
 		option.WithMaxRetries(5),
 	)
@@ -550,7 +550,7 @@ defer cancel()
 				}},
 				Role: anthropic.MessageParamRoleUser,
 			}},
-			Model: anthropic.ModelClaudeOpus5,
+			Model: anthropic.ModelClaudeOpus5_5,
 		},
 		// This sets the per-retry timeout
 		option.WithRequestTimeout(20*time.Second),
@@ -563,13 +563,13 @@ defer cancel()
   Consider using the streaming Messages API for longer running requests.
 </Warning>
 
-Avoid setting a large `MaxTokens` value without using streaming as some networks may drop idle connections after a certain period of time, which can cause the request to fail or [timeout](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/go#timeouts) without receiving a response from Anthropic.
+Avoid setting a large `MaxTokens` value without using streaming as some networks may drop idle connections after a certain period of time, which can cause the request to fail or [time out](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/go#timeouts) without receiving a response from Anthropic.
 
 This SDK will also return an error if a non-streaming request is expected to be above roughly 10 minutes long. Calling `.Messages.NewStreaming()` or [setting a custom timeout](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/go#timeouts) disables this error.
 
 ## File uploads
 
-Request parameters that correspond to file uploads in multipart requests are typed as `io.Reader`. The contents of the `io.Reader` will by default be sent as a multipart form part with the file name of "anonymous\_file" and content-type of "application/octet-stream", so the recommended approach is to specify a custom content-type with the `anthropic.File(reader io.Reader, filename string, contentType string)` helper, which wraps any `io.Reader` with the appropriate file name and content type.
+Request parameters that correspond to file uploads in multipart requests are typed as `io.Reader`. The contents of the `io.Reader` will by default be sent as a multipart form part with the file name of `anonymous_file` and content type of `application/octet-stream`, so the recommended approach is to specify a custom content type with the `anthropic.File(reader io.Reader, filename string, contentType string)` helper, which wraps any `io.Reader` with the appropriate file name and content type.
 
 ```go
 // A file from the file system
@@ -584,7 +584,7 @@ anthropic.FileUploadParams{
 }
 ```
 
-The file name and content-type can also be customized by implementing `Name() string` or `ContentType() string` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a file returned by `os.Open` will be sent with the file name on disk.
+The file name and content type can also be customized by implementing `Name() string` or `ContentType() string` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a file returned by `os.Open` will be sent with the file name on disk.
 
 ## Pagination
 
@@ -658,6 +658,7 @@ For request middleware (`option.WithMiddleware`) and replacing the default `http
   * [Amazon Bedrock (Opus 4.6 and earlier)](https://platform.claude.com/docs/en/build-with-claude/claude-on-amazon-bedrock-legacy)
   * [Claude Platform on AWS](https://platform.claude.com/docs/en/build-with-claude/claude-platform-on-aws)
   * [Google Cloud](https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai)
+  * [Microsoft Foundry](https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry)
 </Note>
 
 The Go SDK supports the following platforms:
@@ -665,7 +666,7 @@ The Go SDK supports the following platforms:
 * **Agent Platform:** `import "github.com/anthropics/anthropic-sdk-go/vertex"`. Use `vertex.WithGoogleAuth(ctx, region, projectID)` or `vertex.WithCredentials(ctx, region, projectID, creds)`.
 * **Bedrock:** `import "github.com/anthropics/anthropic-sdk-go/bedrock"`. Use `bedrock.NewMantleClient` for the Messages-API Bedrock endpoint (streams over SSE), or `bedrock.WithLoadDefaultConfig(ctx)` / `bedrock.WithConfig(cfg)` (`bedrock-runtime` path). Importing the `bedrock` package globally registers a decoder for `application/vnd.amazon.eventstream` with the SDK's streaming layer (through package `init()`). This applies whether you use the `bedrock-runtime` `WithConfig`/`WithLoadDefaultConfig` path or `NewMantleClient`.
 * **Claude Platform on AWS:** `import anthropicaws "github.com/anthropics/anthropic-sdk-go/aws"`. Use `anthropicaws.NewClient(ctx, cfg)` with an `anthropicaws.ClientConfig` value to construct a client; set `WorkspaceID` on the config or the `ANTHROPIC_AWS_WORKSPACE_ID` environment variable. The `anthropicaws` import alias avoids a name collision with `github.com/aws/aws-sdk-go-v2/aws` when both are imported. Available in beta.
-* **Foundry:** Not currently supported in the Go SDK. See [Claude in Microsoft Foundry](https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry) for supported SDKs.
+* **Foundry:** `import "github.com/anthropics/anthropic-sdk-go/foundry"`. Use `foundry.NewClient(cfg)` with a `foundry.ClientConfig` value to construct a client; set `APIKey` (or `AzureADTokenProvider` for Microsoft Entra ID) and `Resource` on the config, or the `ANTHROPIC_FOUNDRY_API_KEY` and `ANTHROPIC_FOUNDRY_RESOURCE` environment variables.
 
 Use `bedrock.NewMantleClient` for new projects; `bedrock.WithLoadDefaultConfig`/`WithConfig` remain for existing applications using the Bedrock `InvokeModel` API.
 
@@ -690,7 +691,7 @@ message, err := client.Messages.New(
 			}},
 			Role: anthropic.MessageParamRoleUser,
 		}},
-		Model: anthropic.ModelClaudeOpus5,
+		Model: anthropic.ModelClaudeOpus5_5,
 	},
 	option.WithResponseInto(&response),
 )
@@ -754,7 +755,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 1. Changes to library internals that are technically public but not intended or documented for external use.
 2. Changes that aren't expected to impact the vast majority of users in practice.
 
-Backward-compatibility is taken seriously to ensure you can rely on a smooth upgrade experience.
+Backward compatibility is taken seriously to ensure you can rely on a smooth upgrade experience.
 
 Your feedback is welcome; open an [issue](https://github.com/anthropics/anthropic-sdk-go/issues) with questions, bugs, or suggestions.
 

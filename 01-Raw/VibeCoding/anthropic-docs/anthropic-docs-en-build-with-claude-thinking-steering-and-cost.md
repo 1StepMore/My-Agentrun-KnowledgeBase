@@ -15,22 +15,22 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:33+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost
 
 <Note>
   To learn how zero data retention (ZDR) applies to this feature, see [API and data retention](https://platform.claude.com/docs/en/manage-claude/api-and-data-retention).
 </Note>
 
-Claude's thinking is adaptive: the model evaluates each request and decides for itself whether to think and how much. You set an intent, optionally specify the effort, and the model allocates reasoning where it judges reasoning will help.
+Claude's thinking is adaptive: the model evaluates each request and determines whether to think and how much. You set an intent, optionally specify the effort, and the model allocates reasoning where it judges reasoning will help.
 
 This makes thinking a strong fit for workloads that mix trivial and complex requests, and for long-horizon agentic workflows where the right amount of reasoning varies from step to step.
 
-To learn how to turn thinking on, how to read thinking output, and about [thinking output on Claude Fable 5 and Claude Mythos 5](https://platform.claude.com/docs/en/build-with-claude/thinking#thinking-output-on-claude-fable-5-and-claude-mythos-5), see the [Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking) overview. This page covers how Claude decides when to think, how to steer that decision, and the caching, cost, and pricing mechanics that follow from it.
+To learn how to turn thinking on, how to read thinking output, and about [thinking output on Claude Fable 5 and Claude Mythos 5](https://platform.claude.com/docs/en/build-with-claude/thinking#thinking-output-on-claude-fable-5-and-claude-mythos-5), see the [Thinking](https://platform.claude.com/docs/en/build-with-claude/thinking) overview. This page covers how Claude determines when to think, how to steer thinking, and the caching, cost, and pricing mechanics that follow from it.
 
-## How Claude decides when to think
+## How Claude determines when to think
 
-Thinking is optional for the model. On each request, Claude weighs the complexity of the input and decides whether deeper reasoning would improve the answer. A simple factual question may get a direct response with no thinking block at all; a multistep math problem or a tricky debugging task triggers deeper reasoning.
+Thinking is optional for the model. On each request, Claude weighs the complexity of the input and determines whether deeper reasoning would improve the answer. A simple factual question may get a direct response with no thinking block at all; a multistep math problem or a tricky debugging task triggers deeper reasoning.
 
 The decision happens per request. The same conversation can contain turns with and without thinking, and a turn where Claude chose not to think contains no thinking block. Don't build application logic that assumes every assistant turn starts with one.
 
@@ -38,7 +38,7 @@ The primary control over this decision is the [effort](https://platform.claude.c
 
 If you want Claude to think less often, lower the effort level before reaching for prompt-based steering.
 
-Thinking also interleaves with tool use automatically: Claude can think between tool calls, reflecting on each tool result before deciding what to do next ([interleaved thinking](https://platform.claude.com/docs/en/build-with-claude/thinking#interleaved-thinking)). You don't need a beta header or any additional configuration for this.
+Thinking also interleaves with tool use automatically: Claude can think between tool calls, reflecting on each tool result before determining what to do next ([interleaved thinking](https://platform.claude.com/docs/en/build-with-claude/thinking#interleaved-thinking)). You don't need a beta header or any additional configuration for this.
 
 For the full picture of how the thinking configuration and the effort parameter interact, see [Thinking and effort](https://platform.claude.com/docs/en/build-with-claude/thinking#thinking-and-effort).
 
@@ -51,21 +51,25 @@ Use the two levers together in this order:
 1. Set the effort level that matches your workload's default balance of quality and latency.
 2. Add prompt guidance only if Claude's triggering still doesn't match your needs at that level.
 
+<Note>
+  To get less thinking on Claude Sonnet 5.5 and Claude Haiku 5.5, lower the effort level. Asking Claude Sonnet 5.5 in the system prompt to think less doesn't reliably reduce its thinking, and in Anthropic's testing, telling Claude Haiku 5.5 in the prompt to answer directly didn't stop it from thinking. See [Prompting Claude Sonnet 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-sonnet-5-5#calibrate-effort) and [Prompting Claude Haiku 5.5](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-haiku-5-5#use-effort-to-control-thinking).
+</Note>
+
 For broader prompting guidance with thinking, see [leverage thinking and interleaved thinking capabilities](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices#leverage-thinking-and-interleaved-thinking-capabilities).
 
 ### Effort levels
 
 Effort is the primary steering lever for thinking. Each level sets a different default for how often Claude thinks and how deeply:
 
-| Effort level     | Thinking behavior                                                                                |
-| ---------------- | ------------------------------------------------------------------------------------------------ |
-| `max`            | Claude thinks the most readily and at the greatest depth, with no constraint on thinking length. |
-| `xhigh`          | Claude thinks more readily and at greater depth than at `high`, suited to extended exploration.  |
-| `high` (default) | Claude thinks on most requests that benefit from it. Provides deep reasoning on complex tasks.   |
-| `medium`         | Claude uses moderate thinking. May skip thinking for simple queries.                             |
-| `low`            | Claude minimizes thinking. Skips thinking for simple tasks where speed matters most.             |
+| Effort level                                               | Thinking behavior                                                                                |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `max`                                                      | Claude thinks the most readily and at the greatest depth, with no constraint on thinking length. |
+| `xhigh`                                                    | Claude thinks more readily and at greater depth than at `high`, suited to extended exploration.  |
+| `high` (default on most models)                            | Claude thinks on most requests that benefit from it. Provides deep reasoning on complex tasks.   |
+| `medium` (default on Claude Opus 5.5 and Claude Haiku 5.5) | Claude uses moderate thinking. May skip thinking for simple queries.                             |
+| `low`                                                      | Claude minimizes thinking. Skips thinking for simple tasks where speed matters most.             |
 
-At every level, Claude decides per request whether to think. In a tool-use loop, the first request after new user input typically carries most of the reasoning, and follow-up requests that only process tool results can skip thinking, including at `xhigh` and `max`. Thinking per request also tends to decrease as a conversation grows longer. No level guarantees a thinking block on every request.
+At every level, Claude determines per request whether to think. In a tool-use loop, the first request after new user input typically carries most of the reasoning, and follow-up requests that only process tool results can skip thinking, including at `xhigh` and `max`. Thinking per request also tends to decrease as a conversation grows longer. No level guarantees a thinking block on every request.
 
 This table describes how each level changes thinking behavior. For guidance on which level to choose for a given workload, including per-model recommendations, see [When to adjust the effort parameter](https://platform.claude.com/docs/en/build-with-claude/effort#when-to-adjust-the-effort-parameter) on the effort page.
 
@@ -73,7 +77,7 @@ Effort is set at `output_config.effort`, not inside the `thinking` object; for f
 
 ```json
 {
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "max_tokens": 4096,
   "output_config": { "effort": "medium" },
   "messages": [{ "role": "user", "content": "..." }]
@@ -102,9 +106,11 @@ Steering effectiveness can be sensitive to exact wording. If one phrasing doesn'
 
 ### Per-message steering
 
-You can also steer thinking on a per-message basis from the user turn, independently of the system prompt. Appending `"Please think hard before responding."` to a user message encourages Claude to think on that turn; `"Answer directly without deliberating."` suppresses it.
+You can also steer thinking on a per-message basis from the user turn, independently of the system prompt. Appending `"Please think hard before responding."` to a user message encourages Claude to think on that turn; `"Answer directly without deliberating."` discourages it.
 
-Per-message steering is useful when only some requests in a conversation warrant extended reasoning. An agent harness, for example, can append the encouraging phrase on planning steps and the suppressing phrase on routine confirmations, without touching the system prompt or changing any request parameters between turns.
+Per-message steering is useful when only some requests in a conversation warrant extended reasoning. An agent harness, for example, can append the encouraging phrase on planning steps and the discouraging phrase on routine confirmations, without touching the system prompt or changing any request parameters between turns.
+
+On Claude Haiku 5.5, the discouraging phrase doesn't reliably reduce thinking. On the Claude API and Google Cloud, run routine turns on that model with less thinking by using a [per-message effort change](https://platform.claude.com/docs/en/build-with-claude/effort#change-effort-mid-conversation-beta) (beta) instead, which also keeps the prompt cache.
 
 ### Verify steering on your workload
 
@@ -134,7 +140,7 @@ The relaxation is about validation, not about what you should send. When you hav
 
 Consecutive requests that keep the same thinking configuration and effort level preserve prompt caching; see [Thinking and prompt caching](https://platform.claude.com/docs/en/build-with-claude/thinking#thinking-and-prompt-caching) for the full rules. The resolved effort value is rendered into the prompt, so changing it between requests invalidates cache breakpoints, just as changing the legacy [`budget_tokens`](https://platform.claude.com/docs/en/build-with-claude/extended-thinking#extended-thinking-with-prompt-caching) parameter does on models that use it. Setting `effort` explicitly to the model's default is equivalent to omitting it and does not break the cache.
 
-The practical consequence: pick a thinking configuration and an effort level per conversation and keep them. If some turns need more or less thinking, steer with [per-message prompting](https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost#tuning-thinking-behavior): guidance appended to the newest user message leaves earlier cache breakpoints intact, where a configuration or effort change does not.
+The practical consequence: pick a thinking configuration and a top-level effort level per conversation and keep them. If some turns need more or less thinking, use a [per-message effort change](https://platform.claude.com/docs/en/build-with-claude/effort#change-effort-mid-conversation-beta) (beta) on models that support it, or steer with [per-message prompting](https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost#tuning-thinking-behavior). Both leave earlier cache breakpoints intact, where a change to the thinking configuration or the top-level effort level does not.
 
 The following example demonstrates the invalidation with a multi-turn script you can run yourself:
 
@@ -189,7 +195,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       # First request - establish cache
       print("First request - establishing cache")
       response1 = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=16000,
           thinking={"type": "adaptive"},
           messages=MESSAGES,
@@ -203,7 +209,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       # Second request - same configuration (cache hit expected)
       print("\nSecond request - same configuration (cache hit expected)")
       response2 = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=16000,
           thinking={"type": "adaptive"},
           messages=MESSAGES,
@@ -217,10 +223,10 @@ The following example demonstrates the invalidation with a multi-turn script you
       # Third request - different effort level (cache miss expected)
       print("\nThird request - different effort level (cache miss expected)")
       response3 = client.messages.create(
-          model="claude-opus-5",
+          model="claude-opus-5-5",
           max_tokens=16000,
           thinking={"type": "adaptive"},
-          output_config={"effort": "medium"},
+          output_config={"effort": "low"},
           messages=MESSAGES,
       )
 
@@ -265,7 +271,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       // First request - establish cache
       console.log("First request - establishing cache");
       const response1 = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: { type: "adaptive" },
         messages
@@ -281,7 +287,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       // Second request - same configuration (cache hit expected)
       console.log("\nSecond request - same configuration (cache hit expected)");
       const response2 = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: { type: "adaptive" },
         messages
@@ -297,10 +303,10 @@ The following example demonstrates the invalidation with a multi-turn script you
       // Third request - different effort level (cache miss expected)
       console.log("\nThird request - different effort level (cache miss expected)");
       const response3 = await client.messages.create({
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: { type: "adaptive" },
-        output_config: { effort: "medium" },
+        output_config: { effort: "low" },
         messages
       });
 
@@ -319,7 +325,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       Console.WriteLine("First request - establishing cache");
       var parameters1 = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Thinking = new ThinkingConfigAdaptive(),
           Messages =
@@ -349,7 +355,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       Console.WriteLine("\nSecond request - same configuration (cache hit expected)");
       var parameters2 = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Thinking = new ThinkingConfigAdaptive(),
           Messages =
@@ -389,12 +395,12 @@ The following example demonstrates the invalidation with a multi-turn script you
       Console.WriteLine("\nThird request - different effort level (cache miss expected)");
       var parameters3 = new MessageCreateParams
       {
-          Model = Model.ClaudeOpus5,
+          Model = Model.ClaudeOpus5_5,
           MaxTokens = 16000,
           Thinking = new ThinkingConfigAdaptive(),
           OutputConfig = new OutputConfig
           {
-              Effort = Effort.Medium
+              Effort = Effort.Low
           },
           Messages =
           [
@@ -478,7 +484,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       // First request - establish cache
       fmt.Println("First request - establishing cache")
       response1, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus5,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 16000,
       	Thinking: anthropic.ThinkingConfigParamUnion{
       		OfAdaptive: &anthropic.ThinkingConfigAdaptiveParam{},
@@ -496,7 +502,7 @@ The following example demonstrates the invalidation with a multi-turn script you
       // Second request - same configuration (cache hit expected)
       fmt.Println("\nSecond request - same configuration (cache hit expected)")
       response2, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus5,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 16000,
       	Thinking: anthropic.ThinkingConfigParamUnion{
       		OfAdaptive: &anthropic.ThinkingConfigAdaptiveParam{},
@@ -514,13 +520,13 @@ The following example demonstrates the invalidation with a multi-turn script you
       // Third request - different effort level (cache miss expected)
       fmt.Println("\nThird request - different effort level (cache miss expected)")
       response3, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-      	Model:     anthropic.ModelClaudeOpus5,
+      	Model:     anthropic.ModelClaudeOpus5_5,
       	MaxTokens: 16000,
       	Thinking: anthropic.ThinkingConfigParamUnion{
       		OfAdaptive: &anthropic.ThinkingConfigAdaptiveParam{},
       	},
       	OutputConfig: anthropic.OutputConfigParam{
-      		Effort: anthropic.OutputConfigEffortMedium,
+      		Effort: anthropic.OutputConfigEffortLow,
       	},
       	Messages: messages,
       })
@@ -545,7 +551,7 @@ The following example demonstrates the invalidation with a multi-turn script you
           // First request - establishing cache
           IO.println("First request - establishing cache");
           MessageCreateParams params1 = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(16000L)
               .thinking(ThinkingConfigAdaptive.builder().build())
               .addUserMessageOfBlockParams(List.of(
@@ -565,7 +571,7 @@ The following example demonstrates the invalidation with a multi-turn script you
           // Second request - same configuration (cache hit expected)
           IO.println("\nSecond request - same configuration (cache hit expected)");
           MessageCreateParams params2 = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(16000L)
               .thinking(ThinkingConfigAdaptive.builder().build())
               .addUserMessageOfBlockParams(List.of(
@@ -589,11 +595,11 @@ The following example demonstrates the invalidation with a multi-turn script you
           // Third request - different effort level (cache miss expected)
           IO.println("\nThird request - different effort level (cache miss expected)");
           MessageCreateParams params3 = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(16000L)
               .thinking(ThinkingConfigAdaptive.builder().build())
               .outputConfig(OutputConfig.builder()
-                  .effort(OutputConfig.Effort.MEDIUM)
+                  .effort(OutputConfig.Effort.LOW)
                   .build())
               .addUserMessageOfBlockParams(List.of(
                   ContentBlockParam.ofText(TextBlockParam.builder()
@@ -661,7 +667,7 @@ The following example demonstrates the invalidation with a multi-turn script you
                   ]
               ]
           ]],
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           thinking: ['type' => 'adaptive'],
       );
 
@@ -694,7 +700,7 @@ The following example demonstrates the invalidation with a multi-turn script you
                   'content' => 'Analyze the characters in this passage.'
               ]
           ],
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           thinking: ['type' => 'adaptive'],
       );
 
@@ -735,9 +741,9 @@ The following example demonstrates the invalidation with a multi-turn script you
                   'content' => 'Analyze the setting in this passage.'
               ]
           ],
-          model: 'claude-opus-5',
+          model: 'claude-opus-5-5',
           thinking: ['type' => 'adaptive'],
-          outputConfig: ['effort' => 'medium'],
+          outputConfig: ['effort' => 'low'],
       );
 
       echo "Third response usage: " . json_encode($response3->usage) . "\n";
@@ -766,7 +772,7 @@ The following example demonstrates the invalidation with a multi-turn script you
 
       puts "First request - establishing cache"
       response1 = client.messages.create(
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"
@@ -791,7 +797,7 @@ The following example demonstrates the invalidation with a multi-turn script you
 
       puts "\nSecond request - same configuration (cache hit expected)"
       response2 = client.messages.create(
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"
@@ -826,13 +832,13 @@ The following example demonstrates the invalidation with a multi-turn script you
 
       puts "\nThird request - different effort level (cache miss expected)"
       response3 = client.messages.create(
-        model: "claude-opus-5",
+        model: "claude-opus-5-5",
         max_tokens: 16000,
         thinking: {
           type: "adaptive"
         },
         output_config: {
-          effort: "medium"
+          effort: "low"
         },
         messages: [
           {
@@ -886,7 +892,7 @@ The following example demonstrates the invalidation with a multi-turn script you
   Third response usage: { cache_creation_input_tokens: 3546, cache_read_input_tokens: 0, input_tokens: 2706, output_tokens: 1468 }
   ```
 
-  With the cache breakpoint in the messages array, changing effort from the default `high` to `medium` invalidates it: the third request shows `cache_creation_input_tokens=3546` and `cache_read_input_tokens=0` where the second showed a full cache read.
+  With the cache breakpoint in the messages array, changing effort from `medium`, the default on Claude Opus 5.5, to `low` invalidates it: the third request shows `cache_creation_input_tokens=3546` and `cache_read_input_tokens=0` where the second showed a full cache read.
 </Accordion>
 
 ### Cost control

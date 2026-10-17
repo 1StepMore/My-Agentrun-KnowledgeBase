@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:31+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls
 
 This page covers the tool-call lifecycle: reading `tool_use` blocks from Claude's response, formatting `tool_result` blocks in your reply, and signaling errors. For the SDK abstraction that handles this automatically, see [Tool Runner](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-runner).
@@ -40,7 +40,7 @@ A `tool_use` block for a member of the [computer use](https://platform.claude.co
   ```json JSON
   {
     "id": "msg_01Aq9w938a90dw8q",
-    "model": "claude-opus-5",
+    "model": "claude-opus-5-5",
     "stop_reason": "tool_use",
     "role": "assistant",
     "content": [

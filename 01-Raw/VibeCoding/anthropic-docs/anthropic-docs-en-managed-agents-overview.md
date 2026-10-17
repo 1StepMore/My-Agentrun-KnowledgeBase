@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:35+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/managed-agents/overview
 
 Anthropic offers two ways to build with Claude, each suited to different use cases:
@@ -64,7 +64,7 @@ Claude Managed Agents is built around four concepts:
   </Step>
 
   <Step title="Create an environment">
-    Configure where the agent runs: a cloud sandbox, or a [self-hosted sandbox](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes) on your own infrastructure.
+    [Configure where the agent runs](https://platform.claude.com/docs/en/managed-agents/choosing-an-environment): a cloud sandbox, or a [self-hosted sandbox](https://platform.claude.com/docs/en/managed-agents/self-hosted-sandboxes) on your own infrastructure.
   </Step>
 
   <Step title="Start a session">

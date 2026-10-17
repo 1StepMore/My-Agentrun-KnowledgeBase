@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:32+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/claude-on-vertex-ai
 
 The API for accessing Claude on Google Cloud's Agent Platform is nearly identical to the [Messages API](https://platform.claude.com/docs/en/api/messages/create), with two key differences in request format:
@@ -59,20 +59,20 @@ First, install Anthropic's [client SDK](https://platform.claude.com/docs/en/cli-
   <Tab title="Java">
     <CodeGroup exclude="shell, python, typescript, csharp, go, php, ruby">
       ```groovy Gradle
-      implementation("com.anthropic:anthropic-java:2.63.0")
-      implementation("com.anthropic:anthropic-java-vertex:2.63.0")
+      implementation("com.anthropic:anthropic-java:2.73.0")
+      implementation("com.anthropic:anthropic-java-vertex:2.73.0")
       ```
 
       ```xml Maven
       <dependency>
           <groupId>com.anthropic</groupId>
           <artifactId>anthropic-java</artifactId>
-          <version>2.63.0</version>
+          <version>2.73.0</version>
       </dependency>
       <dependency>
           <groupId>com.anthropic</groupId>
           <artifactId>anthropic-java-vertex</artifactId>
-          <version>2.63.0</version>
+          <version>2.73.0</version>
       </dependency>
       ```
 
@@ -83,14 +83,21 @@ First, install Anthropic's [client SDK](https://platform.claude.com/docs/en/cli-
       import com.anthropic.models.messages.MessageCreateParams;
       import com.anthropic.models.messages.Model;
       import com.anthropic.vertex.backends.VertexBackend;
+      import com.google.auth.oauth2.GoogleCredentials;
 
-      void main() {
+      void main() throws Exception {
           AnthropicClient client = AnthropicOkHttpClient.builder()
-              .backend(VertexBackend.fromEnv())
+              .backend(
+                  VertexBackend.builder()
+                      .googleCredentials(GoogleCredentials.getApplicationDefault())
+                      .region("global")
+                      .project("MY_PROJECT_ID")
+                      .build()
+              )
               .build();
 
           MessageCreateParams params = MessageCreateParams.builder()
-              .model(Model.CLAUDE_OPUS_5)
+              .model(Model.CLAUDE_OPUS_5_5)
               .maxTokens(1024L)
               .addUserMessage("What is the capital of France?")
               .build();
@@ -129,23 +136,28 @@ Note that Anthropic model availability varies by region. Search for "Claude" in 
 
 Lifecycle terms (Deprecated, Retired) are defined in [Model deprecations](https://platform.claude.com/docs/en/about-claude/model-deprecations). Lifecycle dates on partner-operated platforms are set by the partner and can differ from the Claude API schedule. For the current retirement date of any model on Agent Platform, see [Google Cloud's documentation for Claude models on Agent Platform](https://docs.cloud.google.com/gemini-enterprise-agent-platform/models/partner-models/claude).
 
-| Model                                                                                                | Agent Platform API model ID  |
-| :--------------------------------------------------------------------------------------------------- | :--------------------------- |
-| Claude Fable 5.1                                                                                     | `claude-fable-5-1`           |
-| Claude Fable 5                                                                                       | `claude-fable-5`             |
-| Claude Opus 5                                                                                        | `claude-opus-5`              |
-| Claude Opus 4.8                                                                                      | `claude-opus-4-8`            |
-| Claude Opus 4.7                                                                                      | `claude-opus-4-7`            |
-| Claude Opus 4.6                                                                                      | `claude-opus-4-6`            |
-| Claude Opus 4.5                                                                                      | `claude-opus-4-5@20251101`   |
-| Claude Opus 4.1 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations))  | `claude-opus-4-1@20250805`   |
-| Claude Opus 4 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations))    | `claude-opus-4@20250514`     |
-| Claude Sonnet 5                                                                                      | `claude-sonnet-5`            |
-| Claude Sonnet 4.6                                                                                    | `claude-sonnet-4-6`          |
-| Claude Sonnet 4.5                                                                                    | `claude-sonnet-4-5@20250929` |
-| Claude Sonnet 4 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations))  | `claude-sonnet-4@20250514`   |
-| Claude Haiku 4.5                                                                                     | `claude-haiku-4-5@20251001`  |
-| Claude Haiku 3.5 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | `claude-3-5-haiku@20241022`  |
+| Model                                                                                                 | Agent Platform API model ID  |
+| :---------------------------------------------------------------------------------------------------- | :--------------------------- |
+| Claude Fable 5.1                                                                                      | `claude-fable-5-1`           |
+| Claude Mythos 5.1 ([limited availability](https://support.claude.com/en/articles/14604842))           | `claude-mythos-5-1`          |
+| Claude Fable 5                                                                                        | `claude-fable-5`             |
+| Claude Mythos 5 ([limited availability](https://support.claude.com/en/articles/14604842))             | `claude-mythos-5`            |
+| Claude Opus 5.5                                                                                       | `claude-opus-5-5`            |
+| Claude Opus 5                                                                                         | `claude-opus-5`              |
+| Claude Opus 4.8                                                                                       | `claude-opus-4-8`            |
+| Claude Opus 4.7                                                                                       | `claude-opus-4-7`            |
+| Claude Opus 4.6                                                                                       | `claude-opus-4-6`            |
+| Claude Opus 4.5                                                                                       | `claude-opus-4-5@20251101`   |
+| Claude Opus 4.1 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations))   | `claude-opus-4-1@20250805`   |
+| Claude Opus 4 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations))     | `claude-opus-4@20250514`     |
+| Claude Sonnet 5.5                                                                                     | `claude-sonnet-5-5`          |
+| Claude Sonnet 5                                                                                       | `claude-sonnet-5`            |
+| Claude Sonnet 4.6                                                                                     | `claude-sonnet-4-6`          |
+| Claude Sonnet 4.5 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | `claude-sonnet-4-5@20250929` |
+| Claude Sonnet 4 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations))   | `claude-sonnet-4@20250514`   |
+| Claude Haiku 5.5                                                                                      | `claude-haiku-5-5`           |
+| Claude Haiku 4.5                                                                                      | `claude-haiku-4-5@20251001`  |
+| Claude Haiku 3.5 ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations))  | `claude-3-5-haiku@20241022`  |
 
 <Tip>
   Upgrading to a newer Claude model? In Claude Code, run `/claude-api migrate` to apply model ID swaps and breaking parameter changes across your codebase. The skill detects which cloud platform your code targets and adjusts model ID formats and feature changes for that platform. See [Migrating to a newer Claude model](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/claude-api-skill#migrating-to-a-newer-claude-model).
@@ -157,9 +169,9 @@ Before running requests you might need to run `gcloud auth application-default l
 
 The following examples show how to generate text from Claude on Agent Platform:
 
-<CodeGroup>
+<CodeGroup exclude="shell:CLI">
   ```bash cURL
-  MODEL_ID=claude-opus-5
+  MODEL_ID=claude-opus-5-5
   PROJECT_ID=MY_PROJECT_ID
 
   curl https://aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/global/publishers/anthropic/models/${MODEL_ID}:rawPredict \
@@ -172,9 +184,9 @@ The following examples show how to generate text from Claude on Agent Platform:
     }'
   ```
 
-  ```bash CLI
-  # The ant CLI does not support Agent Platform.
-  ```
+  <CodeGroupItem language="CLI">
+    The `ant` CLI doesn't support Agent Platform.
+  </CodeGroupItem>
 
   ```python Python
   from anthropic import AnthropicVertex
@@ -185,7 +197,7 @@ The following examples show how to generate text from Claude on Agent Platform:
   client = AnthropicVertex(project_id=project_id, region=region)
 
   message = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=100,
       messages=[
           {
@@ -210,7 +222,7 @@ The following examples show how to generate text from Claude on Agent Platform:
   });
 
   const result = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 100,
     messages: [
       {
@@ -233,7 +245,7 @@ The following examples show how to generate text from Claude on Agent Platform:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 100,
       Messages = [new() { Role = Role.User, Content = "Hey Claude!" }]
   };
@@ -257,7 +269,7 @@ The following examples show how to generate text from Claude on Agent Platform:
   	)
 
   	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 100,
   		Messages: []anthropic.MessageParam{
   			anthropic.NewUserMessage(anthropic.NewTextBlock("Hey Claude!")),
@@ -276,18 +288,24 @@ The following examples show how to generate text from Claude on Agent Platform:
   import com.anthropic.models.messages.MessageCreateParams;
   import com.anthropic.models.messages.Model;
   import com.anthropic.vertex.backends.VertexBackend;
+  import com.google.auth.oauth2.GoogleCredentials;
 
-  void main() {
-      // Uses default Google Cloud credentials
+  void main() throws Exception {
       AnthropicClient client = AnthropicOkHttpClient.builder()
-          .backend(VertexBackend.fromEnv())
+          .backend(
+              VertexBackend.builder()
+                  .googleCredentials(GoogleCredentials.getApplicationDefault())
+                  .region("global")
+                  .project("MY_PROJECT_ID")
+                  .build()
+          )
           .build();
 
       Message message = client
           .messages()
           .create(
               MessageCreateParams.builder()
-                  .model(Model.CLAUDE_OPUS_5)
+                  .model(Model.CLAUDE_OPUS_5_5)
                   .maxTokens(100)
                   .addUserMessage("Hey Claude!")
                   .build()
@@ -303,7 +321,7 @@ The following examples show how to generate text from Claude on Agent Platform:
   use Anthropic\Vertex;
 
   $client = Vertex\Client::fromEnvironment(
-      location: 'global',
+      region: 'global',
       projectId: 'MY_PROJECT_ID',
   );
 
@@ -312,7 +330,7 @@ The following examples show how to generate text from Claude on Agent Platform:
       messages: [
           ['role' => 'user', 'content' => 'Hey Claude!']
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
   );
   $textBlock = array_find($message->content, static fn ($block): bool => $block->type === 'text');
   echo $textBlock->text;
@@ -327,7 +345,7 @@ The following examples show how to generate text from Claude on Agent Platform:
   )
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 100,
     messages: [{role: "user", content: "Hey Claude!"}]
   )
@@ -379,7 +397,7 @@ For the full feature list with Google Cloud availability, see [Features overview
 
 ### Context window
 
-Claude Fable 5.1, Claude Fable 5, Claude Opus 5, Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 5, and Claude Sonnet 4.6 have a [1M-token context window](https://platform.claude.com/docs/en/build-with-claude/context-windows) on Agent Platform. Other Claude models, including Sonnet 4.5 and Sonnet 4 (deprecated), have a 200k-token context window.
+Claude Fable 5.1, Claude Fable 5, Claude Opus 5.5, Claude Opus 5, Claude Opus 4.8, Claude Opus 4.7, Claude Opus 4.6, Claude Sonnet 5.5, Claude Sonnet 5, Claude Sonnet 4.6, and Claude Haiku 5.5 have a [1M-token context window](https://platform.claude.com/docs/en/build-with-claude/context-windows) on Agent Platform. Other Claude models, including Sonnet 4.5 (deprecated) and Sonnet 4 (deprecated), have a 200k-token context window.
 
 Agent Platform limits request payloads to 30 MB. When sending large documents or many images, you might reach this limit before the token limit.
 
@@ -394,7 +412,7 @@ Agent Platform offers three endpoint types:
 Regional and multi-region endpoints include a 10% pricing premium over global endpoints.
 
 <Note>
-  This applies to Claude Sonnet 4.5 and future models only. Older models (Claude Sonnet 4 (deprecated), Opus 4 (deprecated), and earlier) maintain their existing pricing structures.
+  This applies to Claude Sonnet 4.5 (deprecated) and future models only. Older models (Claude Sonnet 4 (deprecated), Opus 4 (deprecated), and earlier) maintain their existing pricing structures.
 </Note>
 
 ### When to use each option
@@ -427,9 +445,9 @@ Regional and multi-region endpoints include a 10% pricing premium over global en
 
 Set the `region` parameter to `"global"` when initializing the client:
 
-<CodeGroup>
+<CodeGroup exclude="shell:CLI">
   ```bash cURL
-  MODEL_ID=claude-opus-5
+  MODEL_ID=claude-opus-5-5
   PROJECT_ID=MY_PROJECT_ID
 
   curl https://aiplatform.googleapis.com/v1/projects/${PROJECT_ID}/locations/global/publishers/anthropic/models/${MODEL_ID}:rawPredict \
@@ -442,9 +460,9 @@ Set the `region` parameter to `"global"` when initializing the client:
     }'
   ```
 
-  ```bash CLI
-  # The ant CLI does not support Agent Platform.
-  ```
+  <CodeGroupItem language="CLI">
+    The `ant` CLI doesn't support Agent Platform.
+  </CodeGroupItem>
 
   ```python Python
   from anthropic import AnthropicVertex
@@ -455,7 +473,7 @@ Set the `region` parameter to `"global"` when initializing the client:
   client = AnthropicVertex(project_id=project_id, region=region)
 
   message = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=100,
       messages=[
           {
@@ -479,7 +497,7 @@ Set the `region` parameter to `"global"` when initializing the client:
   });
 
   const result = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 100,
     messages: [
       {
@@ -502,7 +520,7 @@ Set the `region` parameter to `"global"` when initializing the client:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 100,
       Messages = [new() { Role = Role.User, Content = "Hey Claude!" }]
   };
@@ -526,7 +544,7 @@ Set the `region` parameter to `"global"` when initializing the client:
   	)
 
   	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 100,
   		Messages: []anthropic.MessageParam{
   			anthropic.NewUserMessage(anthropic.NewTextBlock("Hey Claude!")),
@@ -547,7 +565,6 @@ Set the `region` parameter to `"global"` when initializing the client:
   import com.google.auth.oauth2.GoogleCredentials;
 
   void main() throws Exception {
-      // Uses default Google Cloud credentials
       AnthropicClient client = AnthropicOkHttpClient.builder()
           .backend(
               VertexBackend.builder()
@@ -562,7 +579,7 @@ Set the `region` parameter to `"global"` when initializing the client:
           .messages()
           .create(
               MessageCreateParams.builder()
-                  .model(Model.CLAUDE_OPUS_5)
+                  .model(Model.CLAUDE_OPUS_5_5)
                   .maxTokens(100)
                   .addUserMessage("Hey Claude!")
                   .build()
@@ -578,7 +595,7 @@ Set the `region` parameter to `"global"` when initializing the client:
   use Anthropic\Vertex;
 
   $client = Vertex\Client::fromEnvironment(
-      location: 'global',
+      region: 'global',
       projectId: 'MY_PROJECT_ID',
   );
 
@@ -587,7 +604,7 @@ Set the `region` parameter to `"global"` when initializing the client:
       messages: [
           ['role' => 'user', 'content' => 'Hey Claude!']
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
   );
 
   $textBlock = array_find($message->content, static fn ($block): bool => $block->type === 'text');
@@ -603,7 +620,7 @@ Set the `region` parameter to `"global"` when initializing the client:
   )
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 100,
     messages: [{role: "user", content: "Hey Claude!"}]
   )
@@ -616,9 +633,9 @@ Set the `region` parameter to `"global"` when initializing the client:
 
 Set the `region` parameter to a multi-region identifier: `"us"` for the United States or `"eu"` for the European Union. The SDK routes requests to the corresponding multi-region endpoint (`https://aiplatform.us.rep.googleapis.com` or `https://aiplatform.eu.rep.googleapis.com`), which dynamically balances traffic across regions within that geography.
 
-<CodeGroup>
+<CodeGroup exclude="shell:CLI">
   ```bash cURL
-  MODEL_ID=claude-opus-5
+  MODEL_ID=claude-opus-5-5
   LOCATION=us # Multi-region identifier: "us" or "eu"
   PROJECT_ID=MY_PROJECT_ID
 
@@ -632,9 +649,9 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
     }'
   ```
 
-  ```bash CLI
-  # The ant CLI does not support Agent Platform.
-  ```
+  <CodeGroupItem language="CLI">
+    The `ant` CLI doesn't support Agent Platform.
+  </CodeGroupItem>
 
   ```python Python
   from anthropic import AnthropicVertex
@@ -645,7 +662,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
   client = AnthropicVertex(project_id=project_id, region=region)
 
   message = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=100,
       messages=[
           {
@@ -669,7 +686,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
   });
 
   const result = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 100,
     messages: [
       {
@@ -692,7 +709,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 100,
       Messages = [new() { Role = Role.User, Content = "Hey Claude!" }]
   };
@@ -716,7 +733,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
   	)
 
   	message, err := client.Messages.New(context.Background(), anthropic.MessageNewParams{
-  		Model:     anthropic.ModelClaudeOpus5,
+  		Model:     anthropic.ModelClaudeOpus5_5,
   		MaxTokens: 100,
   		Messages: []anthropic.MessageParam{
   			anthropic.NewUserMessage(anthropic.NewTextBlock("Hey Claude!")),
@@ -752,7 +769,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
           .messages()
           .create(
               MessageCreateParams.builder()
-                  .model(Model.CLAUDE_OPUS_5)
+                  .model(Model.CLAUDE_OPUS_5_5)
                   .maxTokens(100)
                   .addUserMessage("Hey Claude!")
                   .build()
@@ -768,7 +785,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
   use Anthropic\Vertex;
 
   $client = Vertex\Client::fromEnvironment(
-      location: 'us', // Multi-region identifier: "us" or "eu"
+      region: 'us', // Multi-region identifier: "us" or "eu"
       projectId: 'MY_PROJECT_ID',
   );
 
@@ -777,7 +794,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
       messages: [
           ['role' => 'user', 'content' => 'Hey Claude!']
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
   );
   $textBlock = array_find($message->content, static fn ($block): bool => $block->type === 'text');
   echo $textBlock->text;
@@ -792,7 +809,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
   )
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 100,
     messages: [{role: "user", content: "Hey Claude!"}]
   )
@@ -805,7 +822,7 @@ Set the `region` parameter to a multi-region identifier: `"us"` for the United S
 
 Specify a specific region such as `"us-east5"` or `"europe-west1"`:
 
-<CodeGroup>
+<CodeGroup exclude="shell:CLI">
   ```bash cURL
   # Specific regional endpoints support Claude Sonnet 4.6 and earlier; newer models use the global or multi-region endpoints
   MODEL_ID=claude-sonnet-4-6
@@ -822,9 +839,9 @@ Specify a specific region such as `"us-east5"` or `"europe-west1"`:
     }'
   ```
 
-  ```bash CLI
-  # The ant CLI does not support Agent Platform.
-  ```
+  <CodeGroupItem language="CLI">
+    The `ant` CLI doesn't support Agent Platform.
+  </CodeGroupItem>
 
   ```python Python
   from anthropic import AnthropicVertex
@@ -931,7 +948,6 @@ Specify a specific region such as `"us-east5"` or `"europe-west1"`:
   import com.google.auth.oauth2.GoogleCredentials;
 
   void main() throws Exception {
-      // Uses default Google Cloud credentials with specific region
       AnthropicClient client = AnthropicOkHttpClient.builder()
           .backend(
               VertexBackend.builder()
@@ -963,7 +979,7 @@ Specify a specific region such as `"us-east5"` or `"europe-west1"`:
   use Anthropic\Vertex;
 
   $client = Vertex\Client::fromEnvironment(
-      location: 'us-east5',
+      region: 'us-east5',
       projectId: 'MY_PROJECT_ID',
   );
 

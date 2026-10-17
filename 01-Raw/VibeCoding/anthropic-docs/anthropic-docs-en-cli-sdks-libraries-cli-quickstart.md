@@ -15,13 +15,16 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/cli/quickstart
 
 The `ant` CLI provides access to the Claude API from your terminal. Every API resource is exposed as a subcommand, with output formatting, response filtering, and YAML or JSON file input.
 
 <Frame caption="The ant CLI in action.">
-  [](https://platform.claude.com/docs/videos/ant-cli-demo.webm)
+  <video aria-label="Screen recording of the ant CLI running in a terminal.">
+    <source src="https://platform.claude.com/docs/videos/ant-cli-demo.webm" type="video/webm" />
+    <source src="https://platform.claude.com/docs/videos/ant-cli-demo.mp4" type="video/mp4" />
+  </video>
 </Frame>
 
 Compared to `curl`, `ant` builds request bodies from typed flags or piped YAML instead of hand-written JSON, and inlines file contents into string fields with an `@path` reference. It extracts response fields with a built-in `--transform` query, so you don't need a separate tool such as `jq`, and it paginates list endpoints automatically.
@@ -43,7 +46,7 @@ Compared to `curl`, `ant` builds request bodies from typed flags or piped YAML i
     For Linux environments, download the release binary directly.
 
     ```bash
-    VERSION=1.33.0
+    VERSION=1.42.0
     OS=$(uname -s | tr '[:upper:]' '[:lower:]')
     case $(uname -m) in
       x86_64) ARCH=amd64 ;;
@@ -95,14 +98,14 @@ With the binary installed and authenticated, call the [Messages API](https://pla
 
 ```bash
 ant messages create \
-  --model claude-opus-5 \
+  --model claude-opus-5-5 \
   --max-tokens 1024 \
   --message '{role: user, content: "Hello, Claude"}'
 ```
 
 ```text Output wrap
 {
-  "model": "claude-opus-5",
+  "model": "claude-opus-5-5",
   "id": "msg_01YMmR5XodC5nTqMxLZMKaq6",
   "type": "message",
   "role": "assistant",

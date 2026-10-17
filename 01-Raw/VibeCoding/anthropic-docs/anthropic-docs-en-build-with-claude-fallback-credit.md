@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:32+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/fallback-credit
 
 Prompt caches are per-model. When a model declines a request and you retry on another model, the conversation prefix already cached for the first model must be written into the new model's cache from scratch. Cache writes cost more than cache reads. Fallback credit removes that extra cost. The refusal carries a credit token, you echo the token on the retry, and the retry is billed as though the conversation had been on the new model all along.
@@ -28,7 +28,7 @@ You need this page only when you build the retry yourself: over raw HTTP or with
 
 <Steps>
   <Step title="Opt in with the beta header">
-    Send the request that may be refused with the `anthropic-beta: fallback-credit-2026-07-01` header. The `server-side-fallback-2026-07-01` header also grants the same fields, and the earlier `fallback-credit-2026-06-01` header remains accepted and grants the same fields.
+    Send the request that may be refused with the `anthropic-beta: fallback-credit-2026-07-01` header. The `server-side-fallback-2026-07-01` header also grants the same fields, except on Amazon Bedrock and Google Cloud, which return a 400 error for that header. The earlier `fallback-credit-2026-06-01` header remains accepted and grants the same fields.
   </Step>
 
   <Step title="Read two fields from the refusal">
@@ -261,21 +261,21 @@ The following example makes a request that may be refused and redeems the credit
   [
       new() { Role = Role.User, Content = "Hello, Claude" },
   ];
-  MessageCreateParams Request(string model) => new()
+  MessageCreateParams Request(Model model) => new()
   {
       Model = model,
       MaxTokens = 1024,
       Messages = requestMessages,
       Betas = [beta],
   };
-  var response = await client.Beta.Messages.Create(Request("claude-fable-5"));
+  var response = await client.Beta.Messages.Create(Request(Model.ClaudeFable5));
 
   if (
       response.StopReason == BetaStopReason.Refusal
       && response.StopDetails is { FallbackCreditToken: string token } details
   )
   {
-      var exactBody = Request("claude-opus-4-8") with { FallbackCreditToken = token };
+      var exactBody = Request(Model.ClaudeOpus4_8) with { FallbackCreditToken = token };
       var attempt = exactBody;
       // Prefer the continuation shape unless the claim is false
       if (details.FallbackHasPrefillClaim is not false)
@@ -322,7 +322,7 @@ The following example makes a request that may be refused and redeems the credit
               when (!retryError.Message.Contains("redemption temporarily unavailable"))
           {
               // The token itself was rejected: forfeit it and retry without.
-              response = await client.Beta.Messages.Create(Request("claude-opus-4-8"));
+              response = await client.Beta.Messages.Create(Request(Model.ClaudeOpus4_8));
           }
       }
   }
@@ -576,9 +576,9 @@ The following example makes a request that may be refused and redeems the credit
 
 ## Where it works
 
-Fallback credit is in beta on the Claude API, Amazon Bedrock, Claude Platform on AWS, Google Cloud, and Microsoft Foundry. Refusals in [Message Batches](https://platform.claude.com/docs/en/build-with-claude/batch-processing) don't mint credit tokens, and redemption applies only to direct Messages API requests: a token passed on a batch request is accepted but ignored.
+Fallback credit is in beta on the Claude API, Amazon Bedrock, Claude Platform on AWS, Google Cloud, and Microsoft Foundry. Refusals in [Message Batches](https://platform.claude.com/docs/en/build-with-claude/batch-processing) don't mint credit tokens, and redemption applies only to direct Messages API requests: a token passed on a batch request is accepted but ignored. A Claude Haiku 5.5 refusal carries no fallback credit, so a retry after one pays the full cost of writing the fallback model's prompt cache.
 
-The retry model must be one of the refused model's permitted fallback targets. For Claude Fable 5.1 and Claude Fable 5, those are Claude Opus 4.8 (`claude-opus-4-8`) and Claude Opus 5 (`claude-opus-5`).
+The retry model must be one of the refused model's permitted fallback targets. For Claude Fable 5.1, Claude Fable 5, and Claude Opus 5.5, those are Claude Opus 4.8 (`claude-opus-4-8`) and Claude Opus 5 (`claude-opus-5`). For Claude Opus 5, it is Claude Opus 4.8. For Claude Sonnet 5.5, it is Claude Sonnet 5 (`claude-sonnet-5`).
 
 <Accordion title="Looking up permitted fallback targets programmatically">
   On the Claude API and Claude Platform on AWS, the target list is published as `allowed_fallback_models` on each model's entry in the [Models API](https://platform.claude.com/docs/en/api/models/list) when the `server-side-fallback-2026-07-01` beta header is set. The list is not yet visible under the `fallback-credit-*` header alone. It is not exposed on Amazon Bedrock, Google Cloud, or Microsoft Foundry.
@@ -636,12 +636,12 @@ The following sections cover edge cases and the complete redemption rules. Most 
   * **`fallback-credit-*`:** keep this header on both requests. The retry needs it to redeem the token.
 
   <Note>
-    On models that include the 1M token context window by default, such as Claude Fable 5.1, Claude Fable 5, Claude Opus 5, and Claude Opus 4.8, the `context-1m-2025-08-07` beta header has no effect. To keep the two requests identical, omit that header on both rather than sending it on one and not the other.
+    On models that include the 1M token context window by default, such as Claude Fable 5.1, Claude Fable 5, Claude Opus 5.5, Claude Opus 5, Claude Opus 4.8, Claude Sonnet 5.5, and Claude Sonnet 5, the `context-1m-2025-08-07` beta header has no effect. To keep the two requests identical, omit that header on both rather than sending it on one and not the other.
   </Note>
 </Accordion>
 
 <Accordion title="When fallback_has_prefill_claim is absent">
-  The field is `null` only when the token is also `null`, so a value you observe while holding a token is never `null`. It can still be absent (`None` in the typed SDKs) on Amazon Bedrock, Google Cloud, and Microsoft Foundry while their support for the field rolls out. In that case, treat the retry shape as unknown rather than as `false`. Try the appended-assistant-message shape first, and rely on the rejection handling in [When a retry is rejected](https://platform.claude.com/docs/en/build-with-claude/fallback-credit#when-a-retry-is-rejected), which falls back to the unchanged body.
+  The field has no value only when the token has none either, so while you hold a token the field has a value, except on Amazon Bedrock, Google Cloud, and Microsoft Foundry, where it can still be absent while their support for the field rolls out. In that case, treat the retry shape as unknown rather than as `false` (python: `False`). Try the appended-assistant-message shape first, and rely on the rejection handling in [When a retry is rejected](https://platform.claude.com/docs/en/build-with-claude/fallback-credit#when-a-retry-is-rejected), which falls back to the unchanged body.
 </Accordion>
 
 <Accordion title="Echoing the refused response's content">

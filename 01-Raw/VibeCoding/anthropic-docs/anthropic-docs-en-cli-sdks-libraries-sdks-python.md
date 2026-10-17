@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python
 
 The Anthropic Python SDK provides convenient access to the Claude API from Python applications. It supports both synchronous and asynchronous operations, streaming, and integrations with Amazon Bedrock, Claude Platform on AWS, Google Cloud, and Microsoft Foundry.
@@ -71,7 +71,7 @@ message = client.messages.create(
             "content": "Hello, Claude",
         }
     ],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
 )
 
 for block in message.content:
@@ -106,7 +106,7 @@ async def main() -> None:
                 "content": "Hello, Claude",
             }
         ],
-        model="claude-opus-5",
+        model="claude-opus-5-5",
     )
     print(message.content)
 
@@ -137,7 +137,7 @@ async def main() -> None:
                     "content": "Hello, Claude",
                 }
             ],
-            model="claude-opus-5",
+            model="claude-opus-5-5",
         )
         print(message.content)
 
@@ -160,7 +160,7 @@ stream = client.messages.create(
             "content": "Hello, Claude",
         }
     ],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
     stream=True,
 )
 for event in stream:
@@ -180,7 +180,7 @@ stream = await client.messages.create(
             "content": "Hello, Claude",
         }
     ],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
     stream=True,
 )
 async for event in stream:
@@ -201,7 +201,7 @@ async def main() -> None:
                 "content": "Say hello there!",
             }
         ],
-        model="claude-opus-5",
+        model="claude-opus-5-5",
     ) as stream:
         async for text in stream.text_stream:
             print(text, end="", flush=True)
@@ -232,7 +232,8 @@ You can also count tokens before making a request:
 
 ```python
 count = client.messages.count_tokens(
-    model="claude-opus-5", messages=[{"role": "user", "content": "Hello, world"}]
+    model="claude-opus-5-5",
+    messages=[{"role": "user", "content": "Hello, world"}],
 )
 print(count.input_tokens)  # 10
 ```
@@ -273,7 +274,7 @@ def get_weather(location: str) -> str:
 # Use the tool_runner to automatically handle tool calls
 runner = client.beta.messages.tool_runner(
     max_tokens=1024,
-    model="claude-opus-5",
+    model="claude-opus-5-5",
     tools=[get_weather],
     messages=[
         {"role": "user", "content": "What is the weather in SF?"},
@@ -284,6 +285,8 @@ for message in runner:
 ```
 
 On every iteration, an API request is made. If the response includes a call to one of the given tools, the tool is automatically called, and the result is returned directly to the model in the next iteration.
+
+To run the browser use tool or the computer use tool with this SDK, see [Browser and computer use with the SDK toolsets](https://platform.claude.com/docs/en/agents-and-tools/tool-use/browser-use-sdk).
 
 ## Message batches
 
@@ -299,7 +302,7 @@ client.messages.batches.create(
         {
             "custom_id": "my-first-request",
             "params": {
-                "model": "claude-opus-5",
+                "model": "claude-opus-5-5",
                 "max_tokens": 1024,
                 "messages": [{"role": "user", "content": "Hello, world"}],
             },
@@ -307,7 +310,7 @@ client.messages.batches.create(
         {
             "custom_id": "my-second-request",
             "params": {
-                "model": "claude-opus-5",
+                "model": "claude-opus-5-5",
                 "max_tokens": 1024,
                 "messages": [{"role": "user", "content": "Hi again, friend"}],
             },
@@ -372,7 +375,7 @@ try:
                 "content": "Hello, Claude",
             }
         ],
-        model="claude-opus-5",
+        model="claude-opus-5-5",
     )
 except anthropic.APIConnectionError as e:
     print("The server could not be reached")
@@ -409,7 +412,7 @@ All object responses in the SDK provide a `_request_id` property which is added 
 message = client.messages.create(
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello, Claude"}],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
 )
 print(message._request_id)  # e.g., req_018EeWyXxfu5pfWkrYcMdjWG
 ```
@@ -434,7 +437,7 @@ client = Anthropic(
 client.with_options(max_retries=5).messages.create(
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello, Claude"}],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
 )
 ```
 
@@ -460,7 +463,7 @@ client = Anthropic(
 client.with_options(timeout=5.0).messages.create(
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello, Claude"}],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
 )
 ```
 
@@ -474,7 +477,7 @@ Note that requests that time out are [retried twice by default](https://platform
   Consider using the streaming [Messages API](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python#streaming-responses) for longer running requests.
 </Warning>
 
-Avoid setting a large `max_tokens` value without using streaming. Some networks may drop idle connections after a certain period of time, which can cause the request to fail or [timeout](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python#timeouts) without receiving a response from Anthropic.
+Avoid setting a large `max_tokens` value without using streaming. Some networks may drop idle connections after a certain period of time, which can cause the request to fail or [time out](https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python#timeouts) without receiving a response from Anthropic.
 
 The SDK will throw a `ValueError` if a non-streaming request is expected to take longer than approximately 10 minutes. Passing `stream=True` or overriding the `timeout` option at the client or request level disables this error.
 
@@ -554,7 +557,7 @@ client = Anthropic(
 client.messages.with_raw_response.create(
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello, Claude"}],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
     extra_headers={"anthropic-version": "My-Custom-Value"},
 )
 ```
@@ -587,7 +590,7 @@ In responses, you can distinguish between fields that are explicitly `null` vers
 
 ```python
 response = client.messages.create(
-    model="claude-opus-5",
+    model="claude-opus-5-5",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello"}],
 )
@@ -610,7 +613,7 @@ client = Anthropic()
 response = client.messages.with_raw_response.create(
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello, Claude"}],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
 )
 
 print(response.headers.get("request-id"))
@@ -630,7 +633,7 @@ The `.with_raw_response` approach eagerly reads the full response body when you 
 with client.messages.with_streaming_response.create(
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello, Claude"}],
-    model="claude-opus-5",
+    model="claude-opus-5-5",
 ) as response:
     print(response.headers.get("request-id"))
 
@@ -725,7 +728,7 @@ with Anthropic() as client:
 
 ## Beta features
 
-Beta features are available before general release to get early feedback and test new functionality. You can check the availability of all of Claude's capabilities and tools in the [build with Claude overview](https://platform.claude.com/docs/en/build-with-claude/overview).
+Beta features are available before general release to get early feedback and test new functionality. You can check the availability of all of Claude's capabilities and tools in the [Features overview](https://platform.claude.com/docs/en/build-with-claude/overview).
 
 You can access most beta API features through the `beta` property of the client. To enable a particular beta feature, you need to add the appropriate [beta header](https://platform.claude.com/docs/en/api/beta-headers) to the `betas` field when creating a message.
 
@@ -735,7 +738,7 @@ For example, to enable [context editing](https://platform.claude.com/docs/en/bui
 client = Anthropic()
 
 response = client.beta.messages.create(
-    model="claude-opus-5",
+    model="claude-opus-5-5",
     max_tokens=1024,
     messages=[{"role": "user", "content": "Hello, Claude"}],
     betas=["context-management-2025-06-27"],

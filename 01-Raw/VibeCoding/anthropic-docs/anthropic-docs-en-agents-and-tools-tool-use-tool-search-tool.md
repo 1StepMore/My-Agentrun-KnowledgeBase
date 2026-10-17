@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:31+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-search-tool
 
 The tool search tool lets Claude work with hundreds or thousands of tools by discovering and loading them on demand. Instead of loading all tool definitions into the context window up front, Claude searches your tool catalog (including tool names, descriptions, argument names, and argument descriptions) and loads only the tools it needs.
@@ -53,20 +53,24 @@ Tool search runs as a server-side tool, but you can also implement your own clie
 
 Both tool search variants are available on the following models:
 
-| Model                                          | Tool versions                                                       |
-| ---------------------------------------------- | ------------------------------------------------------------------- |
-| Claude Fable 5.1 (claude-fable-5-1)            | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Mythos 5.1 (claude-mythos-5-1)          | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Fable 5 (claude-fable-5)                | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Mythos 5 (claude-mythos-5)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 5 (claude-opus-5)                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.8 (claude-opus-4-8)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.7 (claude-opus-4-7)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.6 (claude-opus-4-6)              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Sonnet 4.6 (claude-sonnet-4-6)          | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Opus 4.5 (claude-opus-4-5-20251101)     | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
-| Claude Haiku 4.5 (claude-haiku-4-5-20251001)   | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Model                                                                                                                              | Tool versions                                                       |
+| ---------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Claude Fable 5.1 (claude-fable-5-1)                                                                                                | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Mythos 5.1 (claude-mythos-5-1)                                                                                              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Fable 5 (claude-fable-5)                                                                                                    | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Mythos 5 (claude-mythos-5)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 5.5 (claude-opus-5-5)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 5 (claude-opus-5)                                                                                                      | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 5.5 (claude-sonnet-5-5)                                                                                              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 5 (claude-sonnet-5)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Haiku 5.5 (claude-haiku-5-5)                                                                                                | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.8 (claude-opus-4-8)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.7 (claude-opus-4-7)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.6 (claude-opus-4-6)                                                                                                  | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 4.6 (claude-sonnet-4-6)                                                                                              | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Opus 4.5 (claude-opus-4-5-20251101)                                                                                         | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Sonnet 4.5 (claude-sonnet-4-5-20250929) ([deprecated](https://platform.claude.com/docs/en/about-claude/model-deprecations)) | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
+| Claude Haiku 4.5 (claude-haiku-4-5-20251001)                                                                                       | `tool_search_tool_regex_20251119`, `tool_search_tool_bm25_20251119` |
 
 Claude Opus 4.1 and earlier models don't support the tool search tool.
 
@@ -98,7 +102,7 @@ The following example includes the tool search tool and two deferred tools:
       -H "anthropic-version: 2023-06-01" \
       -H "content-type: application/json" \
       -d '{
-          "model": "claude-opus-5",
+          "model": "claude-opus-5-5",
           "max_tokens": 2048,
           "messages": [
               {
@@ -149,7 +153,7 @@ The following example includes the tool search tool and two deferred tools:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 2048
   messages:
     - role: user
@@ -189,7 +193,7 @@ The following example includes the tool search tool and two deferred tools:
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=2048,
       messages=[{"role": "user", "content": "What is the weather in San Francisco?"}],
       tools=[
@@ -230,7 +234,7 @@ The following example includes the tool search tool and two deferred tools:
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 2048,
     messages: [
       {
@@ -286,7 +290,7 @@ The following example includes the tool search tool and two deferred tools:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 2048,
       Messages = [
           new() {
@@ -340,7 +344,7 @@ The following example includes the tool search tool and two deferred tools:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 2048,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("What is the weather in San Francisco?")),
@@ -413,7 +417,7 @@ The following example includes the tool search tool and two deferred tools:
           .build();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(2048L)
           .addUserMessage("What is the weather in San Francisco?")
           .addTool(ToolSearchToolRegex20251119.builder()
@@ -446,7 +450,7 @@ The following example includes the tool search tool and two deferred tools:
       messages: [
           ['role' => 'user', 'content' => 'What is the weather in San Francisco?'],
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'tool_search_tool_regex_20251119',
@@ -494,7 +498,7 @@ The following example includes the tool search tool and two deferred tools:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 2048,
     messages: [
       { role: "user", content: "What is the weather in San Francisco?" }

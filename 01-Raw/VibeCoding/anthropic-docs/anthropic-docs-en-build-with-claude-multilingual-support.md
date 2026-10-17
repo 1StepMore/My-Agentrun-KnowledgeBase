@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:33+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/multilingual-support
 
 ## Overview
@@ -28,23 +28,23 @@ Claude is capable in many languages beyond those benchmarked in the following ta
 
 The following table shows zero-shot chain-of-thought evaluation scores for Claude models across languages, expressed as a percentage relative to English performance (100%):
 
-| Language                          | Claude Sonnet 4.51 | Claude Haiku 4.51 |
-| --------------------------------- | ------------------ | ----------------- |
-| English (baseline, fixed to 100%) | 100%               | 100%              |
-| Spanish                           | 98.2%              | 96.4%             |
-| Portuguese (Brazil)               | 97.8%              | 96.1%             |
-| Italian                           | 97.9%              | 96.0%             |
-| French                            | 97.5%              | 95.7%             |
-| Indonesian                        | 97.3%              | 94.2%             |
-| German                            | 97.0%              | 94.3%             |
-| Arabic                            | 97.2%              | 92.5%             |
-| Chinese (Simplified)              | 96.9%              | 94.2%             |
-| Korean                            | 96.7%              | 93.3%             |
-| Japanese                          | 96.8%              | 93.5%             |
-| Hindi                             | 96.7%              | 92.4%             |
-| Bengali                           | 95.4%              | 90.4%             |
-| Swahili                           | 91.1%              | 78.3%             |
-| Yoruba                            | 79.7%              | 52.7%             |
+| Language                          | Claude Sonnet 4.5 (deprecated)1 | Claude Haiku 4.51 |
+| --------------------------------- | ------------------------------- | ----------------- |
+| English (baseline, fixed to 100%) | 100%                            | 100%              |
+| Spanish                           | 98.2%                           | 96.4%             |
+| Portuguese (Brazil)               | 97.8%                           | 96.1%             |
+| Italian                           | 97.9%                           | 96.0%             |
+| French                            | 97.5%                           | 95.7%             |
+| Indonesian                        | 97.3%                           | 94.2%             |
+| German                            | 97.0%                           | 94.3%             |
+| Arabic                            | 97.2%                           | 92.5%             |
+| Chinese (Simplified)              | 96.9%                           | 94.2%             |
+| Korean                            | 96.7%                           | 93.3%             |
+| Japanese                          | 96.8%                           | 93.5%             |
+| Hindi                             | 96.7%                           | 92.4%             |
+| Bengali                           | 95.4%                           | 90.4%             |
+| Swahili                           | 91.1%                           | 78.3%             |
+| Yoruba                            | 79.7%                           | 52.7%             |
 
 1 With [extended thinking](https://platform.claude.com/docs/en/build-with-claude/extended-thinking).
 
@@ -65,7 +65,7 @@ Claude infers the response language from the conversation, but for production ap
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "system": "Always respond in French, regardless of the language the user writes in.",
       "messages": [
@@ -76,7 +76,7 @@ Claude infers the response language from the conversation, but for production ap
 
   ```bash CLI
   ant messages create \
-    --model claude-opus-5 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --system "Always respond in French, regardless of the language the user writes in." \
     --message '{role: user, content: "How do I reset my password?"}'
@@ -86,7 +86,7 @@ Claude infers the response language from the conversation, but for production ap
   client = anthropic.Anthropic()
 
   message = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       system="Always respond in French, regardless of the language the user writes in.",
       messages=[{"role": "user", "content": "How do I reset my password?"}],
@@ -99,7 +99,7 @@ Claude infers the response language from the conversation, but for production ap
   const client = new Anthropic();
 
   const message = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     system: "Always respond in French, regardless of the language the user writes in.",
     messages: [{ role: "user", content: "How do I reset my password?" }]
@@ -113,7 +113,7 @@ Claude infers the response language from the conversation, but for production ap
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       System = "Always respond in French, regardless of the language the user writes in.",
       Messages =
@@ -130,7 +130,7 @@ Claude infers the response language from the conversation, but for production ap
   client := anthropic.NewClient()
 
   message, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	System: []anthropic.TextBlockParam{
   		{Text: "Always respond in French, regardless of the language the user writes in."},
@@ -149,7 +149,7 @@ Claude infers the response language from the conversation, but for production ap
   AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
   MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(1024)
       .system("Always respond in French, regardless of the language the user writes in.")
       .addUserMessage("How do I reset my password?")
@@ -167,7 +167,7 @@ Claude infers the response language from the conversation, but for production ap
       messages: [
           ['role' => 'user', 'content' => 'How do I reset my password?']
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       system: 'Always respond in French, regardless of the language the user writes in.',
   );
 
@@ -178,7 +178,7 @@ Claude infers the response language from the conversation, but for production ap
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     system: "Always respond in French, regardless of the language the user writes in.",
     messages: [

@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/csharp
 
 The Anthropic C# SDK provides convenient access to the Claude API from applications written in C#.
@@ -60,7 +60,7 @@ MessageCreateParams parameters = new()
             Content = "Hello, Claude",
         },
     ],
-    Model = Model.ClaudeOpus5,
+    Model = Model.ClaudeOpus5_5,
 };
 
 var message = await client.Messages.Create(parameters);
@@ -152,7 +152,7 @@ MessageCreateParams parameters = new()
             Content = "Hello, Claude",
         },
     ],
-    Model = Model.ClaudeOpus5,
+    Model = Model.ClaudeOpus5_5,
 };
 
 await foreach (var message in client.Messages.CreateStreaming(parameters))
@@ -334,7 +334,7 @@ using ModelContextProtocol.Client;
 // Configured using the ANTHROPIC_API_KEY, ANTHROPIC_AUTH_TOKEN and ANTHROPIC_BASE_URL environment variables
 AnthropicClient client = new();
 
-IChatClient chatClient = client.AsIChatClient("claude-opus-5")
+IChatClient chatClient = client.AsIChatClient("claude-opus-5-5")
     .AsBuilder()
     .UseFunctionInvocation()
     .Build();
@@ -463,7 +463,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 1. Changes to library internals that are technically public but not intended or documented for external use.
 2. Changes that aren't expected to impact the vast majority of users in practice.
 
-Backward-compatibility is taken seriously to ensure you can rely on a smooth upgrade experience.
+Backward compatibility is taken seriously to ensure you can rely on a smooth upgrade experience.
 
 ## Additional resources
 

@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:34+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/cli-sdks-libraries/libraries/apple-foundation-models
 
 [Claude for Foundation Models](https://github.com/anthropics/ClaudeForFoundationModels) is a Swift package that makes Claude available as a server-side language model in Apple's [Foundation Models](https://developer.apple.com/documentation/foundationmodels) framework. The package conforms Claude to the framework's `LanguageModel` protocol, so you drive it with the same `LanguageModelSession` API you use for Apple's on-device model: `respond(to:)`, streaming, guided generation, and tool calling all work the same way.
@@ -82,7 +82,7 @@ For a complete working program, the repository includes [`Examples/ClaudeExample
 Model identifiers are values of `ClaudeModel`. Use a compiled-in constant, or construct one with explicit capabilities for an ID that isn't compiled in yet (see [Capabilities](https://platform.claude.com/docs/en/cli-sdks-libraries/libraries/apple-foundation-models#capabilities)):
 
 ```swift
-ClaudeLanguageModel(name: .opus5, auth: auth)
+ClaudeLanguageModel(name: .opus5_5, auth: auth)
 ```
 
 Constants mirror API model IDs (`.opus5` is `claude-opus-5`) and carry each model's capabilities. New models ship as new constants in package releases; check `ClaudeModel` in Xcode for the current list, and the [Models overview](https://platform.claude.com/docs/en/models/overview) to compare models.
@@ -101,10 +101,10 @@ ClaudeLanguageModel(name: model, auth: auth)
 
 ### Effort
 
-Pin a Claude [effort level](https://platform.claude.com/docs/en/build-with-claude/effort) for every request with `fixedEffort:`. It takes precedence over the framework's per-request reasoning hints. The framework's named reasoning levels stop at high; to request more effort for a single request instead, pass a custom reasoning level naming the Claude effort (`.custom("xhigh")` or `.custom("max")`), which maps directly. The API defaults to `high` when no effort is sent:
+Pin a Claude [effort level](https://platform.claude.com/docs/en/build-with-claude/effort) for every request with `fixedEffort:`. It takes precedence over the framework's per-request reasoning hints. The framework's named reasoning levels stop at high; to request more effort for a single request instead, pass a custom reasoning level naming the Claude effort (`.custom("xhigh")` or `.custom("max")`), which maps directly. When no effort is sent, the API uses the model's default level, which differs by model (see [Effort levels](https://platform.claude.com/docs/en/build-with-claude/effort#effort-levels)):
 
 ```swift
-ClaudeLanguageModel(name: .opus5, auth: auth, fixedEffort: .xhigh)
+ClaudeLanguageModel(name: .opus5_5, auth: auth, fixedEffort: .xhigh)
 ```
 
 The level must be one the model accepts. Each `ClaudeModel` declares which of the five levels (`low`, `medium`, `high`, `xhigh`, `max`) its model takes, if any: some models don't accept effort at all.
@@ -139,7 +139,7 @@ ClaudeLanguageModel(
 To set up App Attest, you need your Apple Developer Team ID and the admin, owner, or primary owner role in your organization. Configure your Xcode project and register your app in the [Claude Console](https://platform.claude.com/):
 
 1. In Xcode, add the **App Attest** capability to your app target under **Signing & Capabilities**.
-2. In your workspace's settings in the Claude Console, open **App integrations**.
+2. In the Claude Console, go to the [App integrations](https://platform.claude.com/settings/workspaces/default/app-integrations) page (`platform.claude.com/settings/workspaces/default/app-integrations`). Each app integration belongs to one workspace. Select the workspace you want in the workspace picker in the sidebar.
 3. Click **Create app integration** and enter a name, your Apple Developer Team ID, and one or more bundle IDs (up to 32).
 4. Copy the client ID (`clid_...`) from the integration's **Overview** tab and pass it to your app's Claude configuration.
 
@@ -147,7 +147,7 @@ The first time your app uses Claude on a device, the app requests a challenge fr
 
 Tokens are scoped to your workspace, expire after one hour, and authorize only [Messages API](https://platform.claude.com/docs/en/api/messages/create) calls. They carry no end-user identity: App Attest identifies your app, not the person using it, so handle any per-user logic in your app.
 
-To stop a compromised or retired app, revoke its integration: in your workspace's settings in the Claude Console, open **App integrations**, select the integration, and click **Revoke**, then confirm. Revoking an integration revokes its outstanding tokens, and its registered devices can no longer request new ones. Revocation is permanent, so create a new app integration to restore access.
+To stop a compromised or retired app, revoke its integration. In the Claude Console, go to the [App integrations](https://platform.claude.com/settings/workspaces/default/app-integrations) page (`platform.claude.com/settings/workspaces/default/app-integrations`). Each app integration belongs to one workspace. In the workspace picker in the sidebar, select the workspace that holds the integration. Select the integration and click **Revoke**, then confirm. Revoking an integration revokes its outstanding tokens, and its registered devices can no longer request new ones. Revocation is permanent, so create a new app integration to restore access.
 
 ### Proxy (production)
 

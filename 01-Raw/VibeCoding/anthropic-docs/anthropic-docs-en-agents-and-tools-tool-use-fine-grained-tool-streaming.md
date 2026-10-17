@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:31+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming
 
 <Note>
@@ -43,7 +43,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
     -H "x-api-key: $ANTHROPIC_API_KEY" \
     -H "anthropic-version: 2023-06-01" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 65536,
       "tools": [
         {
@@ -78,7 +78,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   ```bash CLI
   ant messages create --stream --format jsonl <<'YAML' |
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 65536
   tools:
     - name: make_file
@@ -108,7 +108,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   with client.messages.stream(
       max_tokens=65536,
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       tools=[
           {
               "name": "make_file",
@@ -152,7 +152,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
   const client = new Anthropic();
 
   const stream = client.messages.stream({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 65536,
     tools: [
       {
@@ -201,7 +201,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   MessageCreateParams parameters = new()
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 65536,
       Tools =
       [
@@ -287,7 +287,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
   }
 
   stream := client.Messages.NewStreaming(context.Background(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 65536,
   	Tools:     []anthropic.ToolUnionParam{{OfTool: &makeFileTool}},
   	Messages: []anthropic.MessageParam{
@@ -343,7 +343,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
       .build();
 
   MessageCreateParams params = MessageCreateParams.builder()
-      .model(Model.CLAUDE_OPUS_5)
+      .model(Model.CLAUDE_OPUS_5_5)
       .maxTokens(65536L)
       .addTool(makeFileTool)
       .addUserMessage("Can you write a long poem and make a file called poem.txt?")
@@ -382,7 +382,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
 
   $stream = $client->messages->createStream(
       maxTokens: 65536,
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       tools: [
           [
               'name' => 'make_file',
@@ -441,7 +441,7 @@ The following example turns on fine-grained streaming for a `make_file` tool and
   client = Anthropic::Client.new
 
   stream = client.messages.stream(
-    model: Anthropic::Models::Model::CLAUDE_OPUS_5,
+    model: Anthropic::Models::Model::CLAUDE_OPUS_5_5,
     max_tokens: 65_536,
     tools: [
       {
@@ -498,7 +498,7 @@ The accumulation contract is the same as for standard tool-use streaming, so thi
 
 When a `tool_use` content block streams, the initial `content_block_start` event contains `input: {}` (an empty object). This is a placeholder. The actual input arrives as a series of `input_json_delta` events, each carrying a `partial_json` string fragment. To assemble the full input, concatenate these fragments and parse the result when the block closes.
 
-Where your SDK provides an accumulator helper (as the Python, TypeScript, Go, Java, and Ruby tabs in the previous example do), it handles this for you. The manual pattern is for SDKs without a helper, or when you want full control over how the input is assembled.
+Where your SDK provides an accumulator helper (as the Python, TypeScript, Go, Java, and Ruby tabs in the previous example do), it handles this for you. Use the manual pattern when your SDK has no helper or when you want full control over how the input is assembled.
 
 The accumulation contract:
 
@@ -510,16 +510,14 @@ Guard the parse, as the following SDK examples do. A response can also stop at `
 
 The type mismatch between the initial `input: {}` (object) and `partial_json` (string) is by design. The empty object marks the slot in the content array. The delta strings build the real value.
 
-<CodeGroup>
-  ```bash cURL
-  # Accumulating per-block input deltas needs a programming language; the first
-  # example's CLI tab shows the raw fragments with jq. See the SDK tabs.
-  ```
+<CodeGroup exclude="shell">
+  <CodeGroupItem language="cURL">
+    Accumulating the input fragments of each `tool_use` block needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this. To see the raw fragments as they stream, run the request in [How to use fine-grained tool streaming](https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming#how-to-use-fine-grained-tool-streaming).
+  </CodeGroupItem>
 
-  ```bash CLI
-  # Accumulating per-block input deltas needs a programming language; the first
-  # example's CLI tab shows the raw fragments with jq. See the SDK tabs.
-  ```
+  <CodeGroupItem language="CLI">
+    Accumulating the input fragments of each `tool_use` block needs more logic than a single shell command. Use the [Claude SDK](https://platform.claude.com/docs/en/cli-sdks-libraries/overview) for this. To see the raw fragments as they stream, run the request in [How to use fine-grained tool streaming](https://platform.claude.com/docs/en/agents-and-tools/tool-use/fine-grained-tool-streaming#how-to-use-fine-grained-tool-streaming).
+  </CodeGroupItem>
 
   ```python Python
   client = anthropic.Anthropic()
@@ -527,7 +525,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   tool_inputs: dict[int, str] = {}  # index -> accumulated JSON string
 
   with client.messages.stream(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       tools=[
           {
@@ -567,7 +565,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   const toolInputs = new Map<number, string>();
 
   const stream = client.messages.stream({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     tools: [
       {
@@ -620,7 +618,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
 
   MessageCreateParams parameters = new()
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Tools =
       [
@@ -689,7 +687,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   toolInputs := map[int64]string{} // content block index -> accumulated JSON
 
   stream := client.Messages.NewStreaming(context.Background(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Tools: []anthropic.ToolUnionParam{{
   		OfTool: &anthropic.ToolParam{
@@ -754,7 +752,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
           .build();
 
   MessageCreateParams createParams = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024)
           .addTool(weatherTool)
           .addUserMessage("Weather in Paris?")
@@ -815,7 +813,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
 
   $stream = $client->messages->createStream(
       maxTokens: 1024,
-      model: Model::CLAUDE_OPUS_5,
+      model: Model::CLAUDE_OPUS_5_5,
       tools: [
           [
               'name' => 'get_weather',
@@ -849,7 +847,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
                   try {
                       $parsed = json_decode($accumulated, associative: true, flags: JSON_THROW_ON_ERROR);
                       echo "Tool input: " . json_encode($parsed) . "\n";
-                  } catch (JsonException $e) {
+                  } catch (\JsonException $e) {
                       // The accumulated string is not guaranteed to be valid JSON.
                       // See "Handling invalid JSON in tool responses" on this page.
                       echo "Invalid tool input: {$accumulated}\n";
@@ -866,7 +864,7 @@ The type mismatch between the initial `input: {}` (object) and `partial_json` (s
   tool_inputs = {} # index -> accumulated JSON string
 
   stream = client.messages.stream_raw(
-    model: Anthropic::Models::Model::CLAUDE_OPUS_5,
+    model: Anthropic::Models::Model::CLAUDE_OPUS_5_5,
     max_tokens: 1024,
     tools: [
       {

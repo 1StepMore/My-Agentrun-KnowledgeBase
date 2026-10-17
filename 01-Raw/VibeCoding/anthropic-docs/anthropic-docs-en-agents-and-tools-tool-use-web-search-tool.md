@@ -15,7 +15,7 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:32+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool
 
 <Note>
@@ -41,6 +41,8 @@ The examples on this page use `web_search_20250305` for basic search and `web_se
 For web search's Zero Data Retention eligibility and the related `allowed_callers` configuration, see [Server tools](https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools#zdr-and-allowed-callers).
 
 For model support, see the [Tool reference](https://platform.claude.com/docs/en/agents-and-tools/tool-use/tool-reference).
+
+To check whether a model accepts web search before you send a request, read its `capabilities.server_tools.web_search.supported` value from the Models API. [Using the Models API](https://platform.claude.com/docs/en/models/overview#using-the-models-api) describes the field.
 
 ## How web search works
 
@@ -89,7 +91,7 @@ The following examples use `web_search_20260318`:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 4096,
       "messages": [
         {
@@ -106,7 +108,7 @@ The following examples use `web_search_20260318`:
 
   ```bash CLI
   ant messages create <<'YAML'
-  model: claude-opus-5
+  model: claude-opus-5-5
   max_tokens: 4096
   messages:
     - role: user
@@ -123,7 +125,7 @@ The following examples use `web_search_20260318`:
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=4096,
       messages=[
           {
@@ -140,7 +142,7 @@ The following examples use `web_search_20260318`:
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       {
@@ -160,7 +162,7 @@ The following examples use `web_search_20260318`:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 4096,
       Messages = [new() { Role = Role.User, Content = "Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio." }],
       Tools = [new ToolUnion(new WebSearchTool20260318())]
@@ -174,7 +176,7 @@ The following examples use `web_search_20260318`:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 4096,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio.")),
@@ -196,7 +198,7 @@ The following examples use `web_search_20260318`:
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(4096L)
           .addUserMessage("Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio.")
           .addTool(WebSearchTool20260318.builder().build())
@@ -215,7 +217,7 @@ The following examples use `web_search_20260318`:
       messages: [
           ['role' => 'user', 'content' => 'Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio.'],
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'web_search_20260318',
@@ -231,7 +233,7 @@ The following examples use `web_search_20260318`:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 4096,
     messages: [
       { role: "user", content: "Search for the current prices of AAPL and GOOGL, then calculate which has a better P/E ratio." }
@@ -248,10 +250,10 @@ The following examples use `web_search_20260318`:
 ## How to use web search
 
 <Note>
-  Web search is enabled for your organization unless an administrator has disabled it in the [Claude Console](https://platform.claude.com/settings/privacy), where they can also restrict which domains it searches. If it's disabled, a request that includes the tool fails with a 400 `invalid_request_error` that says web search is not enabled, rather than an [error code](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool#errors) inside a search result.
+  Web search is enabled for your organization unless an administrator has disabled it in the [Claude Console](https://platform.claude.com/settings/capabilities), where they can also restrict which domains it searches. If it's disabled, a request that includes the tool fails with a 400 `invalid_request_error` that says web search is not enabled, rather than an [error code](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool#errors) inside a search result.
 </Note>
 
-These organization-level settings in the Claude Console apply to Messages API requests only. [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) sessions use only the per-tool `allowed_domains` and `blocked_domains` lists on the agent toolset; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+These organization-level settings in the Claude Console apply to Messages API requests only. [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview) sessions use the per-tool `allowed_domains` and `blocked_domains` lists on the agent toolset instead; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions). For a session in a cloud environment with `limited` networking, the environment's `allowed_hosts` also applies to `web_search` and `web_fetch`; see [Networking](https://platform.claude.com/docs/en/managed-agents/environments#networking). The per-tool lists restrict these tools further, within the hosts that `allowed_hosts` allows.
 
 Provide the web search tool in your API request:
 
@@ -262,7 +264,7 @@ Provide the web search tool in your API request:
     -H "anthropic-version: 2023-06-01" \
     -H "content-type: application/json" \
     -d '{
-      "model": "claude-opus-5",
+      "model": "claude-opus-5-5",
       "max_tokens": 1024,
       "messages": [
         {
@@ -280,7 +282,7 @@ Provide the web search tool in your API request:
 
   ```bash CLI
   ant messages create \
-    --model claude-opus-5 \
+    --model claude-opus-5-5 \
     --max-tokens 1024 \
     --message '{role: user, content: What is the weather in NYC?}' \
     --tool '{type: web_search_20250305, name: web_search, max_uses: 5}'
@@ -290,7 +292,7 @@ Provide the web search tool in your API request:
   client = anthropic.Anthropic()
 
   response = client.messages.create(
-      model="claude-opus-5",
+      model="claude-opus-5-5",
       max_tokens=1024,
       messages=[{"role": "user", "content": "What's the weather in NYC?"}],
       tools=[{"type": "web_search_20250305", "name": "web_search", "max_uses": 5}],
@@ -302,7 +304,7 @@ Provide the web search tool in your API request:
   const client = new Anthropic();
 
   const response = await client.messages.create({
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       {
@@ -327,7 +329,7 @@ Provide the web search tool in your API request:
 
   var parameters = new MessageCreateParams
   {
-      Model = Model.ClaudeOpus5,
+      Model = Model.ClaudeOpus5_5,
       MaxTokens = 1024,
       Messages = [new() { Role = Role.User, Content = "What's the weather in NYC?" }],
       Tools = [new ToolUnion(new WebSearchTool20250305() { MaxUses = 5 })]
@@ -341,7 +343,7 @@ Provide the web search tool in your API request:
   client := anthropic.NewClient()
 
   response, err := client.Messages.New(context.TODO(), anthropic.MessageNewParams{
-  	Model:     anthropic.ModelClaudeOpus5,
+  	Model:     anthropic.ModelClaudeOpus5_5,
   	MaxTokens: 1024,
   	Messages: []anthropic.MessageParam{
   		anthropic.NewUserMessage(anthropic.NewTextBlock("What's the weather in NYC?")),
@@ -365,7 +367,7 @@ Provide the web search tool in your API request:
       AnthropicClient client = AnthropicOkHttpClient.fromEnv();
 
       MessageCreateParams params = MessageCreateParams.builder()
-          .model(Model.CLAUDE_OPUS_5)
+          .model(Model.CLAUDE_OPUS_5_5)
           .maxTokens(1024L)
           .addUserMessage("What's the weather in NYC?")
           .addTool(WebSearchTool20250305.builder()
@@ -386,7 +388,7 @@ Provide the web search tool in your API request:
       messages: [
           ['role' => 'user', 'content' => "What's the weather in NYC?"],
       ],
-      model: 'claude-opus-5',
+      model: 'claude-opus-5-5',
       tools: [
           [
               'type' => 'web_search_20250305',
@@ -403,7 +405,7 @@ Provide the web search tool in your API request:
   client = Anthropic::Client.new
 
   message = client.messages.create(
-    model: "claude-opus-5",
+    model: "claude-opus-5-5",
     max_tokens: 1024,
     messages: [
       { role: "user", content: "What's the weather in NYC?" }
@@ -462,7 +464,7 @@ Provide `allowed_domains` or `blocked_domains`, not both. If a request includes 
 
 For the full domain filtering rules, see [Domain filtering](https://platform.claude.com/docs/en/agents-and-tools/tool-use/server-tools#domain-filtering) in the Server tools guide.
 
-On [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview), set these fields on the `web_search` entry of the agent toolset; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+On [Claude Managed Agents](https://platform.claude.com/docs/en/managed-agents/overview), set these fields on the `web_search` entry of the agent toolset; see [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions).
 
 ### Localization
 
@@ -474,7 +476,7 @@ The `user_location` parameter allows you to localize search results based on a u
 * `country`: The two-letter [ISO 3166-1 alpha-2](https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2) country code. The API rejects unsupported country codes with a 400 error.
 * `timezone`: The [IANA timezone ID](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
-On Claude Managed Agents, the `web_search` entry of the agent toolset accepts a `user_location` object with the same fields. The API rejects an unsupported `country` code with a 400 error when you create or update the agent, or when you create or update a session that supplies the setting. See [Restrict web search and web fetch domains](https://platform.claude.com/docs/en/managed-agents/tools#restrict-web-search-and-web-fetch-domains).
+On Claude Managed Agents, the `web_search` entry of the agent toolset accepts a `user_location` object with the same fields. The API rejects an unsupported `country` code with a 400 error when you create or update the agent, or when you create or update a session that supplies the setting. See the [web tool settings](https://platform.claude.com/docs/en/managed-agents/tools-web-restrictions#settings).
 
 ### Response inclusion
 
@@ -662,7 +664,7 @@ data: {"type": "content_block_start", "index": 2, "content_block": {"type": "web
 
 You can include the web search tool in the [Messages Batches API](https://platform.claude.com/docs/en/build-with-claude/batch-processing). Web search tool calls through the Messages Batches API are priced the same as those in regular Messages API requests.
 
-To protect shared capacity, the Batches API throttles web search requests per organization, so large batches with many searches might take longer to complete. You can see your organization's web search rate limit on the [Rate limits](https://platform.claude.com/settings/limits) page in the Claude Console. To request a higher limit, contact sales from that page.
+To protect shared capacity, the Batches API throttles web search requests per organization, so large batches with many searches might take longer to complete. You can see your organization's web search rate limit on the [Rate limits](https://platform.claude.com/usage/limits) page in the Claude Console. To request a higher limit, contact sales from that page.
 
 ## Usage and pricing
 

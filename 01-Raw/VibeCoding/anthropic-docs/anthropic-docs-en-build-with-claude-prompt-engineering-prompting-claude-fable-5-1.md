@@ -23,7 +23,7 @@ state:
 related: null
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:33+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1
 
 For the model's capabilities, API changes, pricing, and availability, see [What's new in Claude Fable 5.1](https://platform.claude.com/docs/en/models/fable-5-1/whats-new-fable-5-1). For techniques that apply across Claude models, see [Prompting best practices](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices).
@@ -49,6 +49,8 @@ Your existing Claude Fable 5 prompts should perform well on Claude Fable 5.1 wit
 
 <Note>
   Claude Fable 5.1 runs safety classifiers and can return `stop_reason: "refusal"`. See [Refusals, fallback, and billing](https://platform.claude.com/docs/en/models/fable-5-1/whats-new-fable-5-1#refusals-fallback-and-billing) and [Reduce safeguard false positives](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-fable-5-1#reduce-safeguard-false-positives).
+
+  Prompts, skills, and tool descriptions that ask the model to write out its thinking or reasoning may be declined with the `reasoning_extraction` category. Ask for a short explanation or a summary of the actions taken instead, or read the reasoning from [summarized thinking](https://platform.claude.com/docs/en/build-with-claude/thinking#summarized-thinking) blocks (`display: "summarized"`). See [Keep reasoning in thinking blocks](https://platform.claude.com/docs/en/build-with-claude/refusals-and-fallback#keep-reasoning-in-thinking-blocks).
 </Note>
 
 ## Consider all effort levels
@@ -285,6 +287,7 @@ The following loop shows this placement. Each assistant turn goes back exactly a
   using System.Text.Json;
   using Anthropic;
   using Anthropic.Models.Beta.Messages;
+  using Model = Anthropic.Models.Messages.Model;
 
   AnthropicClient client = new();
 
@@ -335,7 +338,7 @@ The following loop shows this placement. Each assistant turn goes back exactly a
   {
       response = await client.Beta.Messages.Create(new MessageCreateParams
       {
-          Model = "claude-fable-5-1",
+          Model = Model.ClaudeFable5_1,
           MaxTokens = 16000,
           Betas = ["mid-conversation-system-clear-at-2026-08-21"],
           Tools = tools,
@@ -449,7 +452,7 @@ The following loop shows this placement. Each assistant turn goes back exactly a
   	for {
   		var err error
   		response, err = client.Beta.Messages.New(ctx, anthropic.BetaMessageNewParams{
-  			Model:     "claude-fable-5-1",
+  			Model:     anthropic.ModelClaudeFable5_1,
   			MaxTokens: 16000,
   			Betas:     []anthropic.AnthropicBeta{"mid-conversation-system-clear-at-2026-08-21"},
   			Tools:     tools,
@@ -515,6 +518,7 @@ The following loop shows this placement. Each assistant turn goes back exactly a
   import com.anthropic.models.beta.messages.BetaToolResultBlockParam;
   import com.anthropic.models.beta.messages.BetaToolUseBlock;
   import com.anthropic.models.beta.messages.MessageCreateParams;
+  import com.anthropic.models.messages.Model;
 
   static final String BATCH_NUDGE =
       "First privately list what you need next; then request every item "
@@ -554,7 +558,7 @@ The following loop shows this placement. Each assistant turn goes back exactly a
       BetaMessage response;
       while (true) {
           response = client.beta().messages().create(MessageCreateParams.builder()
-              .model("claude-fable-5-1")
+              .model(Model.CLAUDE_FABLE_5_1)
               .maxTokens(16000)
               .addBeta("mid-conversation-system-clear-at-2026-08-21")
               .addTool(readFileTool)
@@ -775,7 +779,7 @@ The following loop shows this placement. Each assistant turn goes back exactly a
 
 ## Keep the conversation history append-only
 
-Append each assistant turn to the history exactly as the API returned it, thinking blocks included, and don't edit earlier turns between requests. For new accounts created on or after August 31, 2026, Claude Fable 5.1's thinking blocks are valid [only in the exact conversation that produced them](https://platform.claude.com/docs/en/build-with-claude/thinking#preserved-in-conversation): a request that replays a thinking block after its prefix (the system prompt, the tool list, or any earlier message) has changed returns a 400, or drops the affected blocks if you set `thinking.block_binding.prefix_mismatch_behavior: "drop_block"` (beta, `thinking-binding-controls-2026-08-01` header). Future models are expected to enforce this check for all accounts, so adopt the pattern now even if yours isn't enforced today.
+Append each assistant turn to the history exactly as the API returned it, thinking blocks included, and don't edit earlier turns between requests. For new accounts created on or after August 31, 2026, Claude Fable 5.1's thinking blocks are valid [only in the exact conversation that produced them](https://platform.claude.com/docs/en/build-with-claude/thinking#preserved-in-conversation): a request that replays a thinking block after its prefix (the system prompt, the tool list, or any earlier message) has changed returns a 400, or drops the affected blocks if you set `thinking.block_binding.prefix_mismatch_behavior: "drop_block"` (beta, `thinking-binding-controls-2026-08-01` header). Adopt the pattern even if the check isn't enforced for your account, so the same code works on every account.
 
 The history edits that trip the check are the same ones that restart the [prompt cache](https://platform.claude.com/docs/en/build-with-claude/prompt-caching): injecting and removing per-turn reminders, summarizing older turns in place, or changing the system prompt mid-session. Send per-turn reminders as [turn-scoped system messages](https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages#turn-scoped-system-messages), change instructions or tools with a [mid-conversation system message](https://platform.claude.com/docs/en/build-with-claude/mid-conversation-system-messages) instead of rewriting `system` or `tools`, and let server-side [compaction](https://platform.claude.com/docs/en/build-with-claude/compaction) or [context editing](https://platform.claude.com/docs/en/build-with-claude/context-editing) do any trimming. If you compact on the client, the simplest shape is to replace the whole history with one summary message plus the new user turn and replay nothing else: no thinking blocks carry over, so nothing fails, and the model thinks afresh on the compacted conversation (see [Custom compaction on the client](https://platform.claude.com/docs/en/build-with-claude/preserved-thinking#custom-compaction-on-the-client)). Because cache reads are now cheaper (see [Pricing](https://platform.claude.com/docs/en/models/fable-5-1/whats-new-fable-5-1#pricing)), compacting early to save cost may no longer be the right cost-intelligence tradeoff on Claude Fable 5.1, so experiment with later compaction points.
 
@@ -783,7 +787,7 @@ To find edits your harness already makes, run a session with `prefix_mismatch_be
 
 ## Writing density
 
-Claude Fable 5.1's writing is generally a step up from earlier Claude models, with fewer stock phrases and less unexplained jargon. In some cases, though, its prose is denser than Claude Fable 5's: sentences run longer and there are fewer paragraph breaks. An instruction that defines the anti-pattern, mannered prose, helps. Add it to a user message (preferred) or the system prompt:
+Claude Fable 5.1's writing has few stock phrases and little unexplained jargon. In some cases, though, its prose is denser than Claude Fable 5's: sentences run longer and there are fewer paragraph breaks. An instruction that defines the anti-pattern, mannered prose, helps. Add it to a user message (preferred) or the system prompt:
 
 ```text wrap
 Mannered prose substitutes metaphor and flourish for direct statement. Instead of "a parameter worth varying," the mannered writer produces "a dial worth turning." Instead of "this point still matters," they write "this point earns its keep." The phrases exist to display the writer, not to convey the idea, and readers can tell. That is why mannered prose irritates: it makes the reader work harder so the writer can perform. It is also imprecise. Metaphors drag in connotations the writer did not choose and cannot control. The fix is to say what you mean. When a literal phrase is available, use it.

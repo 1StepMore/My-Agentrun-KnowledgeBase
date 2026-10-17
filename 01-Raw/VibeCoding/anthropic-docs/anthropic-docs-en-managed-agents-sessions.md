@@ -15,14 +15,14 @@ state:
 related:
 ---
 
-> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-09-23T03:00:00+08:00。
+> 溯源：Anthropic 官方文档全文（llms-full.txt 官方机器可读版，证据等级 E1）。抓取 2026-10-17T21:02:35+08:00（2026-10-17 重编译）。
 > 原始地址：https://platform.claude.com/docs/en/managed-agents/sessions
 
-A session is an agent instance within an environment. Each session references an [agent](https://platform.claude.com/docs/en/managed-agents/agent-setup) and an [environment](https://platform.claude.com/docs/en/managed-agents/environments) (both created separately), and maintains conversation history across multiple interactions. Sessions follow a two-step lifecycle: first [create the session](https://platform.claude.com/docs/en/managed-agents/sessions#creating-a-session), then [send a user event](https://platform.claude.com/docs/en/managed-agents/sessions#starting-the-session) to start work. You can also collapse both steps into one call with [`initial_events`](https://platform.claude.com/docs/en/managed-agents/sessions#seed-the-session-with-initial-events).
+A session is an agent instance within an environment. Each session references an [agent](https://platform.claude.com/docs/en/managed-agents/agent-setup) and an [environment](https://platform.claude.com/docs/en/managed-agents/environments) (both created separately), and maintains conversation history across multiple interactions. Sessions follow a two-step lifecycle: first [create the session](https://platform.claude.com/docs/en/managed-agents/sessions#creating-a-session), then [send a user event](https://platform.claude.com/docs/en/managed-agents/sessions#starting-the-session) to start work. You can also collapse both steps into one call with [`initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`)](https://platform.claude.com/docs/en/managed-agents/sessions#seed-the-session-with-initial-events).
 
 ## Creating a session
 
-A session requires an `agent` ID and an `environment` ID. Agents are versioned resources; passing in the `agent` ID as a string creates the session with the latest agent version.
+A session requires an `agent` ID and an `environment` ID. Agents are versioned resources; passing in the `agent` (csharp, go: `Agent`) ID as a string creates the session with the latest agent version.
 
 <CodeGroup>
   ```bash cURL
@@ -31,12 +31,10 @@ A session requires an `agent` ID and an `environment` ID. Agents are versioned r
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: managed-agents-2026-04-01" \
     -H "content-type: application/json" \
-    -d @- <<EOF
-  {
-    "agent": "$AGENT_ID",
-    "environment_id": "$ENVIRONMENT_ID"
-  }
-  EOF
+    -d '{
+      "agent": "'"$AGENT_ID"'",
+      "environment_id": "'"$ENVIRONMENT_ID"'"
+    }'
   ```
 
   ```bash CLI
@@ -110,12 +108,10 @@ To pin a session to a specific agent version, pass an object. This lets you cont
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: managed-agents-2026-04-01" \
     -H "content-type: application/json" \
-    -d @- <<EOF
-  {
-    "agent": {"type": "agent", "id": "$AGENT_ID", "version": 1},
-    "environment_id": "$ENVIRONMENT_ID"
-  }
-  EOF
+    -d '{
+      "agent": {"type": "agent", "id": "'"$AGENT_ID"'", "version": 1},
+      "environment_id": "'"$ENVIRONMENT_ID"'"
+    }'
   ```
 
   ```bash CLI
@@ -199,9 +195,9 @@ To pin a session to a specific agent version, pass an object. This lets you cont
 
 ### Seed the session with initial events
 
-You can create a session and start its work in one call. `initial_events` is an optional array of initial [events](https://platform.claude.com/docs/en/managed-agents/reference#event-types) to send to the session at creation, processed in order. It supports `user.message` and [`user.define_outcome`](https://platform.claude.com/docs/en/managed-agents/define-outcomes) events, and accepts a maximum of 50 events. A non-empty list starts the agent loop in the same call: the session is created directly in the `running` status, with no further request.
+You can create a session and start its work in one call. `initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`) is an optional array of initial [events](https://platform.claude.com/docs/en/managed-agents/reference#event-types) to send to the session at creation, processed in order. It supports `user.message` and [`user.define_outcome`](https://platform.claude.com/docs/en/managed-agents/define-outcomes) events, and accepts a maximum of 50 events. A non-empty list starts the agent loop in the same call: the session is created directly in the `running` status, with no further request.
 
-The following example creates a session with a single `user.message` in `initial_events`:
+The following example creates a session with a single `user.message` in `initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`):
 
 <CodeGroup>
   ```bash cURL
@@ -210,18 +206,16 @@ The following example creates a session with a single `user.message` in `initial
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: managed-agents-2026-04-01" \
     -H "content-type: application/json" \
-    -d @- <<EOF
-  {
-    "agent": "$AGENT_ID",
-    "environment_id": "$ENVIRONMENT_ID",
-    "initial_events": [
-      {
-        "type": "user.message",
-        "content": [{"type": "text", "text": "List the files in the working directory."}]
-      }
-    ]
-  }
-  EOF
+    -d '{
+      "agent": "'"$AGENT_ID"'",
+      "environment_id": "'"$ENVIRONMENT_ID"'",
+      "initial_events": [
+        {
+          "type": "user.message",
+          "content": [{"type": "text", "text": "List the files in the working directory."}]
+        }
+      ]
+    }'
   )
   SEEDED_SESSION_ID=$(jq -r '.id' <<< "$seeded_session")
 
@@ -449,9 +443,9 @@ The following example creates a session with a single `user.message` in `initial
   ```
 </CodeGroup>
 
-No other event type is accepted. Events that respond to an agent turn (`user.tool_confirmation`, `user.tool_result`, and `user.custom_tool_result`) aren't accepted because no agent turn exists yet, and `user.interrupt` isn't accepted because there is no turn to stop. Unlike `initial_events` on a scheduled deployment, a session's `initial_events` don't accept `system.message`.
+No other event type is accepted. Events that respond to an agent turn (`user.tool_confirmation`, `user.tool_result`, and `user.custom_tool_result`) aren't accepted because no agent turn exists yet, and `user.interrupt` isn't accepted because there is no turn to stop. Unlike `initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`) on a scheduled deployment, a session's `initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`) don't accept `system.message`.
 
-Each event in `initial_events` is validated and persisted before the create response returns, in list order, with a server-assigned ID, exactly as if you had posted it to the [send events](https://platform.claude.com/docs/en/managed-agents/events-and-streaming) endpoint immediately after creation. Per-event content rules are also the same as on that endpoint. An empty list is equivalent to omitting the field. Validation is all-or-nothing: if any event fails validation, the whole request is rejected and no session is created.
+Each event in `initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`) is validated and persisted before the create response returns, in list order, with a server-assigned ID, exactly as if you had posted it to the [send events](https://platform.claude.com/docs/en/managed-agents/events-and-streaming#send-events) endpoint immediately after creation. Per-event content rules are also the same as on that endpoint. An empty list is equivalent to omitting the field. Validation is all-or-nothing: if any event fails validation, the whole request is rejected and no session is created.
 
 The create request is rejected in the following cases:
 
@@ -462,28 +456,27 @@ The create request is rejected in the following cases:
 | More than 100 file-sourced [`document` content blocks](https://platform.claude.com/docs/en/build-with-claude/files#document-blocks) across the whole list | 400    |
 | A request body over 32 MB                                                                                                                                 | 413    |
 
-A `user.define_outcome` event in `initial_events` is accepted under the same conditions as sending one to an existing session; see [Define outcomes](https://platform.claude.com/docs/en/managed-agents/define-outcomes).
+A `user.define_outcome` event in `initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`) is accepted under the same conditions as sending one to an existing session; see [Define outcomes](https://platform.claude.com/docs/en/managed-agents/define-outcomes).
 
 ### Override agent configuration for a session
 
-You can pass `agent` in three forms: an agent ID string, a pinned-version object (`type: "agent"`), or an overrides object. The overrides form changes parts of the agent's configuration for a single session. Use it to try a different model or grant an extra tool in one session without versioning the agent. For the overrides form, set `type` to `agent_with_overrides` and pass the agent's `id` and optionally a `version` (omit `version` to use the agent's latest version). Then include any of `model`, `system`, `tools`, `mcp_servers`, or `skills` with the values the session should use.
+You can pass `agent` (csharp, go: `Agent`) in three forms: an agent ID string, a pinned-version object (`type: "agent"`), or an overrides object. The overrides form changes parts of the agent's configuration for a single session. Use it to try a different model or grant an extra tool in one session without versioning the agent. For the overrides form, set `type` to `agent_with_overrides` and pass the agent's `id` (csharp, go: `ID`) and optionally a `version` (csharp, go: `Version`) (omit `version` (csharp, go: `Version`) to use the agent's latest version). Then include any of `model` (csharp, go: `Model`), `system` (csharp, go: `System`; ruby: `system_`), `tools` (csharp, go: `Tools`), `mcp_servers` (java, php: `mcpServers`; csharp: `McpServers`; go: `MCPServers`), or `skills` (csharp, go: `Skills`) with the values the session should use.
 
 Each overridable field follows the same three rules:
 
 * **Omit the field:** The session inherits the value from the agent version it references.
 
-* **Set the field to `null`, or to an empty array for list fields:** The session runs with that field cleared. This rule applies in full to `system` and `skills`. There are three exceptions:
+* **Set the field to `null`, or to an empty array for list fields:** The session runs with that field cleared. This rule applies in full to `system` (csharp, go: `System`; ruby: `system_`) and `skills` (csharp, go: `Skills`). There are three exceptions:
 
   * `model` is never clearable. A session always needs a model, so `model: null` returns a 400 `agent_model_required` error.
-  * Clearing `tools` returns a 400 error when the session's effective `skills` is non-empty, because skills require the `read` tool. Otherwise, `tools: null` and `tools: []` clear the field.
-  * Clearing `mcp_servers` returns a 400 error when the session's effective `tools` still contains an `mcp_toolset` that references one of the agent's servers. Override `tools` in the same request to remove those `mcp_toolset` entries, then clear `mcp_servers`.
+  * Clearing `tools` returns a 400 error when the session's effective `skills` (csharp, go: `Skills`) is non-empty, because skills require the `read` tool. Otherwise, `tools: null` and `tools: []` clear the field.
+  * Clearing `mcp_servers` (java, php: `mcpServers`; csharp: `McpServers`; go: `MCPServers`) returns a 400 error when the session's effective `tools` (csharp, go: `Tools`) still contains an `mcp_toolset` that references one of the agent's servers. Override `tools` (csharp, go: `Tools`) in the same request to remove those `mcp_toolset` entries, then clear `mcp_servers` (java, php: `mcpServers`; csharp: `McpServers`; go: `MCPServers`).
 
-* **Set the field to a value:** The value replaces the agent's value in full. Overrides never merge with the agent's configuration, so a `tools` override must list every tool the session should have. There is one exception:
-  * An `effort` level inside a per-session `model` override isn't applied, and because the override replaces the agent's `model` object in full, the agent's own `effort` isn't carried over either: a session created with a `model` override runs at the model's default effort level. To run at a specific effort level, set `effort` on the [agent](https://platform.claude.com/docs/en/managed-agents/agent-setup#agent-configuration-fields) and don't override `model` for that session.
+* **Set the field to a value:** The value replaces the agent's value in full. Overrides never merge with the agent's configuration, so a `tools` (csharp, go: `Tools`) override must list every tool the session should have. Likewise, a `model` (csharp, go: `Model`) override replaces the agent's `model` (csharp, go: `Model`) object in full, so the agent's own `effort` (csharp, go: `Effort`) isn't carried over. To run the session at a specific effort level, set `effort` (csharp, go: `Effort`) inside the override's `model` (csharp, go: `Model`) object. A level the model doesn't support returns a 400 error, and a `model` (csharp, go: `Model`) override without `effort` (csharp, go: `Effort`) runs at that model's default effort level.
 
 Overrides apply only to the session you create. They do not modify the agent resource or create a new agent version, so other sessions that reference the same agent are unaffected.
 
-In the response, the `agent` object reflects the configuration the session runs with after the overrides are applied. Its `id` and `version` still identify the agent and version the overrides are applied to. This lets you trace a session back to its base agent.
+In the response, the `agent` (csharp, go: `Agent`) object reflects the configuration the session runs with after the overrides are applied. Its `id` (csharp, go: `ID`) and `version` (csharp, go: `Version`) still identify the agent and version the overrides are applied to. This lets you trace a session back to its base agent.
 
 The following example starts a session that overrides the model and clears the system prompt:
 
@@ -494,17 +487,15 @@ The following example starts a session that overrides the model and clears the s
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: managed-agents-2026-04-01" \
     -H "content-type: application/json" \
-    -d @- <<EOF
-  {
-    "agent": {
-      "type": "agent_with_overrides",
-      "id": "$AGENT_ID",
-      "model": {"id": "claude-sonnet-5"},
-      "system": null
-    },
-    "environment_id": "$ENVIRONMENT_ID"
-  }
-  EOF
+    -d '{
+      "agent": {
+        "type": "agent_with_overrides",
+        "id": "'"$AGENT_ID"'",
+        "model": {"id": "claude-sonnet-5-5"},
+        "system": null
+      },
+      "environment_id": "'"$ENVIRONMENT_ID"'"
+    }'
   ```
 
   ```bash CLI
@@ -515,7 +506,7 @@ The following example starts a session that overrides the model and clears the s
     type: agent_with_overrides
     id: $AGENT_ID
     model:
-      id: claude-sonnet-5
+      id: claude-sonnet-5-5
     system: null
   environment_id: $ENVIRONMENT_ID
   YAML
@@ -526,7 +517,7 @@ The following example starts a session that overrides the model and clears the s
       agent={
           "type": "agent_with_overrides",
           "id": agent.id,
-          "model": {"id": "claude-sonnet-5"},
+          "model": {"id": "claude-sonnet-5-5"},
           "system": None,  # clear the agent's system prompt for this session
       },
       environment_id=environment.id,
@@ -541,7 +532,7 @@ The following example starts a session that overrides the model and clears the s
     agent: {
       type: "agent_with_overrides",
       id: agent.id,
-      model: { id: "claude-sonnet-5" },
+      model: { id: "claude-sonnet-5-5" },
       system: null // clear the agent's system prompt for this session
     },
     environment_id: environment.id
@@ -560,7 +551,7 @@ The following example starts a session that overrides the model and clears the s
           ID = agent.ID,
           Model = new BetaManagedAgentsModelConfigParams
           {
-              ID = BetaManagedAgentsModel.ClaudeSonnet5,
+              ID = BetaManagedAgentsModel.ClaudeSonnet5_5,
           },
           System = null, // clear the agent's system prompt for this session
       },
@@ -578,7 +569,7 @@ The following example starts a session that overrides the model and clears the s
   			Type: anthropic.BetaManagedAgentsAgentWithOverridesParamsTypeAgentWithOverrides,
   			ID:   agent.ID,
   			Model: anthropic.BetaManagedAgentsModelConfigParams{
-  				ID: anthropic.BetaManagedAgentsModelClaudeSonnet5,
+  				ID: anthropic.BetaManagedAgentsModelClaudeSonnet5_5,
   			},
   			// Clear the agent's system prompt for this session.
   			System: param.Null[string](),
@@ -600,7 +591,7 @@ The following example starts a session that overrides the model and clears the s
           .type(BetaManagedAgentsAgentWithOverridesParams.Type.AGENT_WITH_OVERRIDES)
           .id(agent.id())
           .model(BetaManagedAgentsModelConfigParams.builder()
-              .id(BetaManagedAgentsModel.CLAUDE_SONNET_5)
+              .id(BetaManagedAgentsModel.CLAUDE_SONNET_5_5)
               .build())
           .system((String) null) // clear the agent's system prompt for this session
           .build())
@@ -615,7 +606,7 @@ The following example starts a session that overrides the model and clears the s
   $overrides = BetaManagedAgentsAgentWithOverridesParams::with(
       id: $agent->id,
       type: 'agent_with_overrides',
-      model: ['id' => 'claude-sonnet-5'],
+      model: ['id' => 'claude-sonnet-5-5'],
   );
   // Clear the system prompt for this session. Array access is load-bearing here:
   // create() strips nulls from raw arrays and ::with() treats null args as omitted.
@@ -637,7 +628,7 @@ The following example starts a session that overrides the model and clears the s
     agent: Anthropic::Beta::BetaManagedAgentsAgentWithOverridesParams.new(
       type: :agent_with_overrides,
       id: agent.id,
-      model: {id: "claude-sonnet-5"},
+      model: {id: "claude-sonnet-5-5"},
       system_: nil
     ),
     environment_id: environment.id
@@ -650,9 +641,9 @@ The following example starts a session that overrides the model and clears the s
 
 #### Pin the inference geo for a session
 
-Because a `model` override replaces the agent's `model` object in full, it also sets or clears the model's [`inference_geo`](https://platform.claude.com/docs/en/manage-claude/data-residency) pin for the session: an override that includes `inference_geo` pins the geography that serves the session's model requests, and one that omits it clears the agent's pin so the session follows the workspace's `default_inference_geo`. The overridden value is validated against the workspace's `allowed_inference_geos` when the session is created.
+Because a `model` (csharp, go: `Model`) override replaces the agent's `model` (csharp, go: `Model`) object in full, it also sets or clears the model's [inference geo](https://platform.claude.com/docs/en/manage-claude/data-residency) pin for the session: an override that includes `inference_geo` (java, php: `inferenceGeo`; csharp, go: `InferenceGeo`) pins the geography that serves the session's model requests, and one that omits it clears the agent's pin so the session follows the workspace's `default_inference_geo`. The overridden value is validated against the workspace's `allowed_inference_geos` when the session is created.
 
-The following example starts a session from an agent whose model has no geo pin, pins the session's model requests to US inference by including `inference_geo` in the `model` override, and prints the value echoed in the response's `agent.model`:
+The following example starts a session from an agent whose model has no geo pin, pins the session's model requests to US inference by including `inference_geo` (java, php: `inferenceGeo`; csharp, go: `InferenceGeo`) in the `model` (csharp, go: `Model`) override, and prints the value echoed in the response's `agent.model` (csharp, go: `Agent.Model`):
 
 <CodeGroup>
   ```bash cURL
@@ -662,16 +653,14 @@ The following example starts a session from an agent whose model has no geo pin,
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: managed-agents-2026-04-01" \
     -H "content-type: application/json" \
-    -d @- <<EOF
-  {
-    "agent": {
-      "type": "agent_with_overrides",
-      "id": "$AGENT_ID",
-      "model": {"id": "claude-opus-5", "inference_geo": "us"}
-    },
-    "environment_id": "$ENVIRONMENT_ID"
-  }
-  EOF
+    -d '{
+      "agent": {
+        "type": "agent_with_overrides",
+        "id": "'"$AGENT_ID"'",
+        "model": {"id": "claude-opus-5-5", "inference_geo": "us"}
+      },
+      "environment_id": "'"$ENVIRONMENT_ID"'"
+    }'
   )
   echo "Inference geo: $(jq -r '.agent.model.inference_geo' <<< "$session")"
   ```
@@ -683,7 +672,7 @@ The following example starts a session from an agent whose model has no geo pin,
     type: agent_with_overrides
     id: $AGENT_ID
     model:
-      id: claude-opus-5
+      id: claude-opus-5-5
       inference_geo: us
   environment_id: $ENVIRONMENT_ID
   YAML
@@ -697,7 +686,7 @@ The following example starts a session from an agent whose model has no geo pin,
           "type": "agent_with_overrides",
           "id": agent.id,
           # Replaces the agent's `model` in full: restate `id`, add `inference_geo` to pin.
-          "model": {"id": "claude-opus-5", "inference_geo": "us"},
+          "model": {"id": "claude-opus-5-5", "inference_geo": "us"},
       },
       environment_id=environment.id,
   )
@@ -710,7 +699,7 @@ The following example starts a session from an agent whose model has no geo pin,
       type: "agent_with_overrides",
       id: agent.id,
       // Replaces the agent's `model` in full: restate `id`, add `inference_geo` to pin.
-      model: { id: "claude-opus-5", inference_geo: "us" }
+      model: { id: "claude-opus-5-5", inference_geo: "us" }
     },
     environment_id: environment.id
   });
@@ -727,7 +716,7 @@ The following example starts a session from an agent whose model has no geo pin,
           // Replaces the agent's `model` in full: restate `id`, add `inference_geo` to pin.
           Model = new BetaManagedAgentsModelConfigParams
           {
-              ID = BetaManagedAgentsModel.ClaudeOpus5,
+              ID = BetaManagedAgentsModel.ClaudeOpus5_5,
               InferenceGeo = "us",
           },
       },
@@ -744,7 +733,7 @@ The following example starts a session from an agent whose model has no geo pin,
   			ID:   agent.ID,
   			// Replaces the agent's `model` in full: restate `id`, add `inference_geo` to pin.
   			Model: anthropic.BetaManagedAgentsModelConfigParams{
-  				ID:           anthropic.BetaManagedAgentsModelClaudeOpus5,
+  				ID:           anthropic.BetaManagedAgentsModelClaudeOpus5_5,
   				InferenceGeo: anthropic.String("us"),
   			},
   		},
@@ -764,7 +753,7 @@ The following example starts a session from an agent whose model has no geo pin,
           .id(agent.id())
           // Replaces the agent's `model` in full: restate `id`, add `inference_geo` to pin.
           .model(BetaManagedAgentsModelConfigParams.builder()
-              .id(BetaManagedAgentsModel.CLAUDE_OPUS_5)
+              .id(BetaManagedAgentsModel.CLAUDE_OPUS_5_5)
               .inferenceGeo("us")
               .build())
           .build())
@@ -780,7 +769,7 @@ The following example starts a session from an agent whose model has no geo pin,
           type: 'agent_with_overrides',
           // Replaces the agent's `model` in full: restate `id`, add `inference_geo` to pin.
           model: BetaManagedAgentsModelConfigParams::with(
-              id: 'claude-opus-5',
+              id: 'claude-opus-5-5',
               inferenceGeo: 'us',
           ),
       ),
@@ -795,7 +784,7 @@ The following example starts a session from an agent whose model has no geo pin,
       type: :agent_with_overrides,
       id: agent.id,
       # Replaces the agent's `model` in full: restate `id`, add `inference_geo` to pin.
-      model: {id: "claude-opus-5", inference_geo: "us"}
+      model: {id: "claude-opus-5-5", inference_geo: "us"}
     },
     environment_id: environment.id
   )
@@ -809,33 +798,138 @@ The following example starts a session from an agent whose model has no geo pin,
 
 ### Set a session budget
 
-To cap what a session can spend, pass the optional `budget` object when you create it. A budget is a hard ceiling on the session's list cost: the platform prices everything the session consumes at public list rates, and the session stops issuing new model requests once that running total reaches `max_list_cost`. Set `type` to `limit` and give `max_list_cost` an `amount` and a `currency`. `amount` is a whole number of US cents written as a string, such as `"2500"` for $25.00; the API takes a string rather than a number so no floating-point rounding is ever applied. `USD` is the only currency currently supported. When the session reaches the cap, it pauses and goes idle with the stop reason `budget_reached`. The cap is enforced between model requests, so the request that crosses it finishes first and the session's final list cost can land [a fraction past the cap](https://platform.claude.com/docs/en/managed-agents/budgets#when-a-session-reaches-its-budget). A budget can only be attached at creation: you can [change or remove](https://platform.claude.com/docs/en/managed-agents/session-operations#updating-the-session-budget) it later, but you can't add one to a session created without it.
+To cap what a session can spend, pass the optional `budget` (csharp, go: `Budget`) object when you create it. A budget is a hard ceiling on the session's list cost: the platform prices everything the session consumes at public list rates, and the session stops issuing new model requests once that running total reaches `max_list_cost` (java, php: `maxListCost`; csharp, go: `MaxListCost`). Set `type` (csharp, go: `Type`) to `limit` and give `max_list_cost` (java, php: `maxListCost`; csharp, go: `MaxListCost`) an `amount` (csharp, go: `Amount`) and a `currency` (csharp, go: `Currency`). `amount` (csharp, go: `Amount`) is a whole number of US cents written as a string, such as `"125"` for $1.25. The API takes a string rather than a number so no floating-point rounding is ever applied. `USD` is the only currency currently supported. When the session reaches the cap, it pauses and goes idle with the stop reason `budget_reached`. The cap is enforced between model requests, so the request that crosses it finishes first and the session's final list cost can land [a fraction past the cap](https://platform.claude.com/docs/en/managed-agents/budgets#when-a-session-reaches-its-budget). A budget can only be attached at creation: you can [change or remove](https://platform.claude.com/docs/en/managed-agents/session-operations#updating-the-session-budget) it later, but you can't add one to a session created without it.
 
-The following example creates a session with a $25.00 budget; the response echoes the `budget` on the session resource:
+The following example creates a session with a $1.25 budget:
 
-```bash cURL
-curl -fsSL https://api.anthropic.com/v1/sessions \
-  -H "x-api-key: $ANTHROPIC_API_KEY" \
-  -H "anthropic-version: 2023-06-01" \
-  -H "anthropic-beta: managed-agents-2026-04-01" \
-  -H "content-type: application/json" \
-  -d @- <<EOF
-{
-  "agent": "$AGENT_ID",
-  "environment_id": "$ENVIRONMENT_ID",
-  "budget": {
-    "type": "limit",
-    "max_list_cost": {"amount": "2500", "currency": "USD"}
+<CodeGroup>
+  ```bash cURL
+  curl -sS --fail-with-body https://api.anthropic.com/v1/sessions \
+    -H "x-api-key: $ANTHROPIC_API_KEY" \
+    -H "anthropic-version: 2023-06-01" \
+    -H "anthropic-beta: managed-agents-2026-04-01" \
+    -H "content-type: application/json" \
+    -d '{
+      "agent": "'"$AGENT_ID"'",
+      "environment_id": "'"$ENVIRONMENT_ID"'",
+      "budget": {
+        "type": "limit",
+        "max_list_cost": {"amount": "125", "currency": "USD"}
+      }
+    }'
+  ```
+
+  ```bash CLI
+  # Keep the amount quoted so it is sent as a string, not a number.
+  ant beta:sessions create \
+    --agent "$AGENT_ID" \
+    --environment-id "$ENVIRONMENT_ID" \
+    --budget '{type: limit, max_list_cost: {amount: "125", currency: USD}}'
+  ```
+
+  ```python Python
+  session = client.beta.sessions.create(
+      agent=agent.id,
+      environment_id=environment.id,
+      budget={
+          "type": "limit",
+          "max_list_cost": {"amount": "125", "currency": "USD"},
+      },
+  )
+  print(session.id, session.budget.max_list_cost.amount)  # sesn_01... 125
+  ```
+
+  ```typescript TypeScript
+  const session = await client.beta.sessions.create({
+    agent: agent.id,
+    environment_id: environment.id,
+    budget: {
+      type: "limit",
+      max_list_cost: { amount: "125", currency: "USD" }
+    }
+  });
+  console.log(session.id, session.budget?.max_list_cost.amount); // sesn_01... 125
+  ```
+
+  ```csharp C#
+  var session = await client.Beta.Sessions.Create(new()
+  {
+      Agent = agent.ID,
+      EnvironmentID = environment.ID,
+      Budget = new()
+      {
+          Type = BetaManagedAgentsBudgetLimitType.Limit,
+          MaxListCost = new() { Amount = "125", Currency = BetaCurrency.Usd },
+      },
+  });
+  Console.WriteLine($"{session.ID} {session.Budget?.MaxListCost.Amount}");  // sesn_01... 125
+  ```
+
+  ```go Go
+  session, err := client.Beta.Sessions.New(ctx, anthropic.BetaSessionNewParams{
+  	Agent: anthropic.BetaSessionNewParamsAgentUnion{
+  		OfString: anthropic.String(agent.ID),
+  	},
+  	EnvironmentID: environment.ID,
+  	Budget: anthropic.BetaManagedAgentsBudgetLimitParam{
+  		Type: anthropic.BetaManagedAgentsBudgetLimitTypeLimit,
+  		MaxListCost: anthropic.BetaMonetaryAmountParam{
+  			Amount:   "125",
+  			Currency: anthropic.BetaCurrencyUsd,
+  		},
+  	},
+  })
+  if err != nil {
+  	panic(err)
   }
-}
-EOF
-```
+  fmt.Println(session.ID, session.Budget.MaxListCost.Amount) // sesn_01... 125
+  ```
+
+  ```java Java
+  var session = client.beta().sessions().create(SessionCreateParams.builder()
+      .agent(agent.id())
+      .environmentId(environment.id())
+      .budget(BetaManagedAgentsBudgetLimit.builder()
+          .type(BetaManagedAgentsBudgetLimit.Type.LIMIT)
+          .maxListCost(BetaMonetaryAmount.builder()
+              .amount("125")
+              .currency(BetaCurrency.USD)
+              .build())
+          .build())
+      .build());
+  IO.println(session.id() + " " + session.budget().orElseThrow().maxListCost().amount());  // sesn_01... 125
+  ```
+
+  ```php PHP
+  $session = $client->beta->sessions->create(
+      agent: $agent->id,
+      environmentID: $environment->id,
+      budget: [
+          'type' => 'limit',
+          'max_list_cost' => ['amount' => '125', 'currency' => 'USD'],
+      ],
+  );
+  echo "{$session->id} {$session->budget->maxListCost->amount}\n"; // sesn_01... 125
+  ```
+
+  ```ruby Ruby
+  session = client.beta.sessions.create(
+    agent: agent.id,
+    environment_id: environment.id,
+    budget: {
+      type: "limit",
+      max_list_cost: {amount: "125", currency: "USD"}
+    }
+  )
+  puts "#{session.id} #{session.budget.max_list_cost.amount}" # sesn_01... 125
+  ```
+</CodeGroup>
 
 See [Session budgets](https://platform.claude.com/docs/en/managed-agents/budgets) for how enforcement works, what counts toward list cost, and how budgets behave in multiagent sessions.
 
 ## MCP authentication through vaults
 
-If your agent uses MCP tools that require authentication, pass `vault_ids` at session creation to reference a vault containing stored OAuth credentials. Anthropic manages token refresh on your behalf. See [Authenticate with vaults](https://platform.claude.com/docs/en/managed-agents/vaults) for how to create vaults and register credentials.
+If your agent uses MCP tools that require authentication, pass `vault_ids` (java: `vaultIds`; php: `vaultIDs`; csharp: `VaultIds`; go: `VaultIDs`) at session creation to reference a vault containing stored OAuth credentials. Anthropic manages token refresh on your behalf. See [Authenticate with vaults](https://platform.claude.com/docs/en/managed-agents/vaults) for how to create vaults and register credentials.
 
 <CodeGroup>
   ```bash cURL
@@ -844,13 +938,11 @@ If your agent uses MCP tools that require authentication, pass `vault_ids` at se
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: managed-agents-2026-04-01" \
     -H "content-type: application/json" \
-    -d @- <<EOF
-  {
-    "agent": "$AGENT_ID",
-    "environment_id": "$ENVIRONMENT_ID",
-    "vault_ids": ["$VAULT_ID"]
-  }
-  EOF
+    -d '{
+      "agent": "'"$AGENT_ID"'",
+      "environment_id": "'"$ENVIRONMENT_ID"'",
+      "vault_ids": ["'"$VAULT_ID"'"]
+    }'
   ```
 
   ```bash CLI
@@ -927,7 +1019,7 @@ If your agent uses MCP tools that require authentication, pass `vault_ids` at se
 
 ## Starting the session
 
-Creating a session without `initial_events` registers the session but does not start any work; the environment's sandbox begins provisioning as soon as the session is created, so the first tool call does not wait on it. To delegate a task, send events to the session using a [user event](https://platform.claude.com/docs/en/managed-agents/reference#event-types). To supply the first event in the create request instead, see [Seed the session with initial events](https://platform.claude.com/docs/en/managed-agents/sessions#seed-the-session-with-initial-events). The session acts as a state machine that tracks progress while events drive the actual execution.
+Creating a session without `initial_events` (java, php: `initialEvents`; csharp, go: `InitialEvents`) registers the session but does not start any work; the environment's sandbox begins provisioning as soon as the session is created, so the first tool call does not wait on it. To delegate a task, send events to the session using a [user event](https://platform.claude.com/docs/en/managed-agents/reference#event-types). To supply the first event in the create request instead, see [Seed the session with initial events](https://platform.claude.com/docs/en/managed-agents/sessions#seed-the-session-with-initial-events). The session acts as a state machine that tracks progress while events drive the actual execution.
 
 <CodeGroup>
   ```bash cURL
@@ -936,16 +1028,14 @@ Creating a session without `initial_events` registers the session but does not s
     -H "anthropic-version: 2023-06-01" \
     -H "anthropic-beta: managed-agents-2026-04-01" \
     -H "content-type: application/json" \
-    -d @- <<'EOF'
-  {
-    "events": [
-      {
-        "type": "user.message",
-        "content": [{"type": "text", "text": "List the files in the working directory."}]
-      }
-    ]
-  }
-  EOF
+    -d '{
+      "events": [
+        {
+          "type": "user.message",
+          "content": [{"type": "text", "text": "List the files in the working directory."}]
+        }
+      ]
+    }'
   ```
 
   ```bash CLI
